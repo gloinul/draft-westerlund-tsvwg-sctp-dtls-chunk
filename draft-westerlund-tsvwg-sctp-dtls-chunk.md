@@ -1,7 +1,7 @@
 ---
 docname: draft-westerlund-tsvwg-sctp-dtls-chunk-latest
-title: Stream Control Transmission Protocol (SCTP) CRYPTO Chunk
-abbrev: SCTP CRYPTO Chunk
+title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
+abbrev: SCTP DTLS Chunk
 obsoletes:
 cat: std
 ipr: trust200902
