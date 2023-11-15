@@ -12,7 +12,7 @@ submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 venue:
   group: Transport Area Working Group (tsvwg)
   mail: tsvwg@ietf.org
-  github: gloinul/draft-westerlund-tsvwg-sctp-crypto-chunk
+  github: gloinul/draft-westerlund-tsvwg-sctp-DTLS-chunk
 
 author:
 -
@@ -34,9 +34,9 @@ author:
 informative:
   RFC8446:
 
-  I-D.westerlund-tsvwg-sctp-crypto-dtls:
-    target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-crypto-dtls/"
-    title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) CRYPTO Chunk"
+  I-D.westerlund-tsvwg-sctp-DTLS-dtls:
+    target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-DTLS-dtls/"
+    title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
     author:
       -
        ins:  M. Westerlund
@@ -62,48 +62,40 @@ normative:
   RFC5061:
   RFC8126:
   RFC8174:
+  RFC9147:
   RFC9260:
 
 --- abstract
 
-This document describes a method for adding cryptographic protection
-to the Stream Control Transmission Protocol (SCTP). The SCTP CRYPTO
+This document describes a method for adding Cryptographic protection
+to the Stream Control Transmission Protocol (SCTP). The SCTP DTLS
 chunk defined in this document is intended to enable communications
 privacy for applications that use SCTP as their transport protocol and
 allows applications to communicate in a way that is designed to
 prevent eavesdropping and detect tampering or message forgery.
 
-The CRYPTO chunk defined here in is one half of a complete
-solution. Where a companion specification is required to define how
-the content of the CRYPTO chunk is protected, authenticated, and
-protected against replay, as well as how key management is
-accomplished.
-
-Applications using SCTP CRYPTO chunk can use all transport
+Applications using SCTP DTLS chunk can use all transport
 features provided by SCTP and its extensions but with some limitations.
 
 --- middle
 
 # Introduction {#introduction}
 
-   This document defines a CRYPTO chunk for the Stream Control
+   This document defines a DTLS chunk for the Stream Control
    Transmission Protocol (SCTP), as defined in {{RFC9260}}.
 
-   This specification defines the actual CRYPTO chunk. How to enable
+   This specification defines the actual DTLS chunk, how to enable
    it usage, how it interacts with the SCTP association establishment
-   to enable endpoint authentication, key-establishment, and other
-   features require a separate protection engine specification.
+   to enable endpoint authentication, key-establishment, and secret
+   updates.
 
    This specification is intended to be capable of enabling mutual
    authentication of endpoints, data confidentiality, data origin
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
-   established. The exact properties will depend on the companion
-   specification defining the protection engine used with the CRYPTO
-   chunk. The protection engine specification might be based on an
-   existing security protocol.
+   established.
 
-   Applications using SCTP CRYPTO chunk can use most transport features
+   Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions. However, there can be some
    limitations or additional requirements for them to function such as
    those noted for SCTP restart and use of Dynamic Address
@@ -114,24 +106,27 @@ features provided by SCTP and its extensions but with some limitations.
    or extensions that are possible to use between two SCTP peers with
    full security and SCTP association state.
 
+   DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
+   other versions are explicitely not part of this document.
+
 # Overview
 
 ## Protocol Overview {#protocol-overview}
 
-The CRYPTO chunk is defined as a method for secure and confidential
+The DTLS chunk is defined as a method for secure and confidential
 transfer for SCTP packets.  This is implemented inside the SCTP
 protocol, in a sublayer between the SCTP common header handling and
 the SCTP chunk handling.  Once an SCTP packet has been received and
 the SCTP common header has been used to identify the SCTP association,
-the CRYPTO chunk is sent to the chosen protection engine that will
+the DTLS chunk is sent to the DTLS protection operator that will
 return the SCTP payload containing the unprotected SCTP chunks, those
 chunks will then be handled according to their SCTP protocol
-specifications. {{sctp-Crypto-chunk-layering}} illustrates the CRYPTO
+specifications. {{sctp-DTLS-chunk-layering}} illustrates the DTLS
 chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +--------------------+
-|               | | Protection Engine  |  Keys
+|               | |       DTLS 1.3     |  Keys
 |      ULP      | |                    +-------------.
 |               | |   Key Management   |              |
 +---------------+-+---+----------------+              |
@@ -142,7 +137,7 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 |                     | +-- SCTP Unprotected Payload  |
 |                     |/                              |
 +---------------------+    +---------------------+    |
-|        CRYPTO       |    | Protection Engine   |    |
+|        DTLS         |    |       DTLS 1.3      |    |
 |        Chunk        |<-->|                     |<--'
 |       Handler       |    | Protection Operator |
 +---------------------+    +---------------------+
@@ -151,116 +146,94 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 |                     |
 +---------------------+
 ~~~~~~~~~~~
-{: #sctp-Crypto-chunk-layering title="CRYPTO Chunk Layering
+{: #sctp-DTLS-chunk-layering title="DTLS Chunk Layering
 in Regard to SCTP and ULP" artwork-align="center"}
 
-Use of the CRYPTO chunk is defined per SCTP association and a SCTP
-association uses a single protection engine. Different associations
-within the same SCTP endpoint may use or not use the CRYPTO chunk, and
-different associations may use different protection engines.
+Use of the DTLS chunk is defined per SCTP association.
 
 On the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
-that payload will be sent to the protection engine to be
-protected. The format of the protected payload depends on the
-protection engine but the unprotected payload will typically be
-encrypted and integrity tagged before being encapsulated in a CRYPTO
-chunk.
+that payload will be sent to the DTLS protection Operator to be
+protected. The format of the protected payloadis a DTLS 1.3 record
+encapsulated in a DTLS chunk.
 
-The SCTP protection engine performs protection operations on the whole
+The SCTP protection operator performs protection operations on the whole
 unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
-initial SCTP handshake, the SCTP common header, the SCTP CRYPTO chunk
+initial SCTP handshake, the SCTP common header, the SCTP DTLS chunk
 header and the SHUTDOWN-COMPLETE chunk.
 
-SCTP CRYPTO chunk capability is agreed by the peers at the
-initialization of the SCTP association, during that phase the peers
-exchange information about the protection engines available. Once the
-SCTP association is established and the peers have agreed on what
-protection to use, the SCTP endpoints may start sending Protection
-Engine's payloads in SCTP DATA chunks containing the initialization
-information related to the protection engine including key agreement
-and endpoint authentication. This is depending on the chosen
-protection engine thus is not being detailed in the current
-specification and may be done out-of-band of the SCTP association.
+SCTP DTLS chunk capability is agreed by the peers at the
+initialization of the SCTP association. Once the
+SCTP association is established, the SCTP endpoints may start sending DTLS
+records in SCTP DATA chunks containing the DTLS connection initial
+handshake.
 
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
 exchange data securely.
 
-CRYPTO chunks will never be retransmitted, retransmission is
+DTLS chunks will never be retransmitted, retransmission is
 implemented by SCTP endpoint at chunk level as in the legacy.  Duplicated
-CRYPTO chunks, whenever they will be accepted by the protection
-engine, will result in duplicated SCTP chunks and will be handled as
+DTLS chunks will result in duplicated SCTP chunks and will be handled as
 duplicated chunks by SCTP endpoint in the same way a duplicated SCTP packet
 with those SCTP chunks would have been.
 
 
-## Protection Engines Considerations {#protection-engines}
+## DTLS Considerations {#DTLS-engines}
 
-The protection engine, independently from the security
-characteristics, needs to be capable working on an unreliable
-transport mechanism same as UDP in regards to the payloads of the
-CRYPTO chunk, and have its own key management capability. SCTP is
-capable of providing reliable transport of key-management messages.
+DTLS 1.3 is assumed to be implemented by a key handler and a protection
+operator. The key handler implements the key management by means of
+handshake, it's properly configured using secrets. The way DTLS 1.3
+is configured with secrets is not part of the current document.
+The DTLS protection operator is the encryption engine of DTLS 1.3,
+it's configured with the needed keys by the key handler.
 
-SCTP CRYPTO chunk directly exploits the protection engine by
+SCTP DTLS chunk directly exploits DTLS 1.3 protection operator by
 requesting protection and unprotection of a buffer, in particular the
 protection buffer should never exceed the possible SCTP packet size
-thus protection engine needs to be aware of the PMTU (see {{pmtu}}).
+thus DTLS protection operator needs to be aware of the PMTU (see {{pmtu}}).
 
-The key management part of the protection engine is the set of data
+The key management part of the DTLS 1.3 is the set of data
 and procedures that take care of key distribution, verification, and
-update. SCTP CRYPTO provides support for in-band key management, on
+update. SCTP DTLS provides support for in-band key management, on
 those cases the Protection Engines uses SCTP DATA chunks identified
-with a dedicated Payload Protocol Identifier. The protection engine
-can specify if the transmission of any key-managment messages are
-non-reliable or reliable transmitted by SCTP.
+with a dedicated Payload Protocol Identifier.
 
 During protection engine initialization, that is after the SCTP
 association reaches the ESTABLISHED state (see {{RFC9260}} Section 4),
-but before protection engine key-management has completed and the
+but before DTLS 1.3 key-management has completed and the
 Protected Assocation Parameter Validation is completed, the in-band
-Key Management MAY use DATA chunks that SHALL use the Protection
-Engine PPID (see {{iana-payload-protection-id}}). These DATA chunks
+Key Management SHALL use DATA chunks that SHALL use the SCTP-DTLS
+PPID (see {{iana-payload-protection-id}}). These DATA chunks
 SHALL be sent unprotected by the protection engine as no keys have
 been established yet. As soon as the protection engine has been
-intialized and the validation has occured, any protection engine that
-uses in-band key management, i.e. sent using SCTP DATA chunks with the
-Protection Engine PPID, will have their message protected inside SCTP
-CRYPTO chunk protected with the currently established key.
-SCTP CRYPTO chunk state evolution is described in {{init-state-machine}}.
+intialized and the validation has occured, further DTLS 1.3 handshakes
+being sent using SCTP DATA chunks with the
+SCTP-DTLS PPID, will have their message protected inside SCTP
+DTLS chunk protected with the currently established key.
+SCTP DTLS chunk state evolution is described in {{init-state-machine}}.
 
-Key management MAY use other mechanism than what provided by SCTP CRYPTO
-chunks, in any case the mechanism for key management MUST be detailed
-in the specification for that protection engine.
-
-The protection engines MAY exploit the Flags byte provided by the
-CRYPTO chunk header (see {{sctp-Crypto-chunk-newchunk-crypt-struct}})
-for its needs. Details of the use of Flags, if different from what
-described in the current document, MUST be specified in the Protection
-Engine Specification document for that specific protection engine.
+DTLS related procedures MAY exploit the Flags byte provided by the
+DTLS chunk header (see {{sctp-DTLS-chunk-newchunk-crypt-struct}})
+for their needs. Details of the use of Flags are specified within
+this document in the relevant sections.
 
 The SCTP common header is assumed to be implicitly protected by the
 protection engine. This protection is based on the assumption that
 there will be a one-to-one mapping between SCTP association and
-individually established security contexts. If the protection engine
-does not meet that assumption further protection of the common header
-is likely required.
+individually established security contexts.
 
-An example of protection engine can be DTLS as specified in
-{{I-D.westerlund-tsvwg-sctp-crypto-dtls}}.
+## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
-## SCTP CRYPTO Chunk Buffering and Flow Control {#buffering}
-
-Protection engine and SCTP are asynchronous, meaning that the
-protection engine may deliver the decrypted SCTP Payload to the SCTP
+DTLS 1.3 operations and SCTP are asynchronous, meaning that the
+protection operator may deliver the decrypted SCTP Payload to the SCTP
 endpoint without respecting the reception order.  It's up to SCTP
 endpoint to reorder the chunks in the reception buffer and to take
 care of the flow control according to what specified in
-{{RFC9260}}. From SCTP perspective the CRYPTO chunk processing is part
+{{RFC9260}}. From SCTP perspective the DTLS chunk processing is part
 of the transport network.
 
 Even though the above allows the implementors to adopt a
@@ -271,23 +244,21 @@ retransmissions.
 
 ## PMTU Considerations {#pmtu}
 
-The addition of the CRYPTO chunk to SCTP reduces the room for payload,
-due to the size of the CRYPTO chunk header and plain text expansion
+The addition of the DTLS chunk to SCTP reduces the room for payload,
+due to the size of the DTLS chunk header and plain text expansion
 due to ciphering algorithm and any authentication tag.  Thus, the SCTP
 layer creating the plain text payload needs to know about the overhead
 to adjust its target payload size appropriately.
 
-On the other hand, the protection engine needs to be informed about
+On the other hand, the protection operator needs to be informed about
 the PMTU by removing from the value the sum of the common SCTP header
-and the CRYPTO chunk header. This implies that SCTP can propagate
-the computed PMTU at run time specifically. The way protection engine
-provides the primitive for PMTU communication shall be part of the
-protection engine specification.
+and the DTLS chunk header. This implies that SCTP can propagate
+the computed PMTU at run time specifically.
 
 From SCTP perspective, if there is a maximum size of plain text data
 that can be protected by the protection engine that must be
 communicated to SCTP. As such a limit will limit the PMTU for SCTP to
-the maximum plain text plus CRYPTO chunk and algorithm overhead plus
+the maximum plain text plus DTLS chunk and algorithm overhead plus
 the SCTP common header.
 
 ## Congestion Control Considerations {#congestion}
@@ -303,7 +274,7 @@ ignore them, although in-situ modification on the path of a packet
 resulting in discarding due to integrity failure will leave a gap, but
 has to be accepted as part of the path behavior.
 
-The protection engine shall not interfere with the SCTP congestion
+The protection operator shall not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
@@ -313,9 +284,9 @@ in {{RFC9260}}.
 The SCTP implementation will be responsible for handling ICMP messages
 and their validation as specified in {{RFC9260}} Section 10. This
 means that the ICMP validation needs to be done in relation to the
-actual sent SCTP packets with the CRYPTO chunk and not the unprotected
+actual sent SCTP packets with the DTLS chunk and not the unprotected
 payload. However, valid ICMP errors or information may indirectly be
-provided to the protection engine, such as an update to PMTU values
+provided to the protection operator, such as an update to PMTU values
 based on packet to big ICMP messages.
 
 ## Path Selection Considerations {#multipath}
@@ -323,62 +294,66 @@ based on packet to big ICMP messages.
 When an Association is multihomed there are multiple paths between Endpoints.
 The selection of the specific path to be used at a certain time belongs
 to SCTP protocol that will decide according to {{RFC9260}}.
-The Protection Engine shall not influence the path selection algorithm,
-actually the Protection Engine will not even know what path is being used.
+The Protection Operator shall not influence the path selection algorithm,
+actually the Protection Operator will not even know what path is being used.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
 When using Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
-association using CRYPTO Chunk the ASCONF chunk is protected, thus it
+association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
 relevant Association for being unprotected, Destination Address,
-Source and Destination ports and VTag shall be exploited. If the
+Source, Destination ports and VTag shall be exploited. If the
 combination of those parameters is not unique the implementor MAY
-choose to send the Crypto Chunk to all Associations that fit with the
+choose to send the DTLS Chunk to all Associations that fit with the
 parameters in order to find the right one. The association will
-attempt de-protection operations on the crypto chunk, and if that is
+attempt de-protection operations on the DTLS chunk, and if that is
 successful the ASCONF chunk can be processed.
 
-The recommendation {{RFC5061}} specifies (section 4.1.1 of
-{{RFC5061}}) that ASCONF message are required to be sent authenticated
-with SCTP-AUTH {{RFC4895}}. For SCTP associations using Crypto Chunks,
-when the Protection Engine provides strong Authentication such for
-instance in case of DTLS, results in the use of redundant mechanism
-for Authentication with both SCTP-AUTH and the Crypto Chunk. We
-recommend to amend {{RFC5061}} for including Crypto Chunks as
+The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
+required to be sent authenticated with SCTP-AUTH {{RFC4895}}.
+For SCTP associations using DTLS Chunks this
+results in the use of redundant mechanism
+for Authentication with both SCTP-AUTH and the DTLS Chunk. We
+recommend to amend {{RFC5061}} for including DTLS Chunks as
 Authentication mechanism for ASCONF chunks.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk during an
 Association lifetime as described in {{RFC9260}} section 5.2 The introduction of
-CRYPTO CHUNK opens for two alternatives depending on if the protection engine
-preserves its state (crypto context) or not.
+DTLS CHUNK opens for two alternatives depending on if the protection engine
+preserves its state (DTLS context) or not.
 
-When the encryption engine can preserve the crypto context, meaning that
+When the encryption engine can preserve the DTLS context, meaning that
 encrypted data belonging to the current Association can be encrypted and
-decrypted, the request for SCTP Restart SHOULD use INIT chunk in CRYPTO chunk.
+decrypted, the request for SCTP Restart SHOULD use INIT chunk in DTLS chunk.
 
-When the crypto context is not preserved, the SCTP Restart can only be
+When the DTLS context is not preserved, the SCTP Restart can only be
 accomplished by means of plain text INIT.  This opens to a man-in-the-middle
 attack where a malicious attacker may theoretically generate an INIT chunk with
 proper parameters and hijack the SCTP association.
 
-### INIT chunk in CRYPTO chunk
+The whole section related to SCTP Restart requires further work, though.
 
-If the crypto context has been preserved the peer aiming for a SCTP Restart can
-still send CRYPTO chunks that can be processed by the remote peer.  In such case
+### INIT chunk in DTLS chunk
+
+By principle this is not permitted by {{RFC9260}}, thus that part requires
+agreements and possibly a new approach.
+
+If the DTLS context has been preserved the peer aiming for a SCTP Restart can
+still send DTLS chunks that can be processed by the remote peer.  In such case
 the peer willing to restart the Association SHOULD send the INIT chunk in a
-CRYPTO chunk and encrypt it.  At reception of the CRYPTO chunk containing INIT,
+DTLS chunk and encrypt it.  At reception of the DTLS chunk containing INIT,
 the receiver will follow the procedure described in {{RFC9260}} section 5.2.2
-with the exception that all the chunks will be sent in CRYPTO chunks.
+with the exception that all the chunks will be sent in DTLS chunks.
 
-An endpoint supporting SCTP Association Restart and implementing Crypto Chunk
+An endpoint supporting SCTP Association Restart and implementing DTLS Chunk
 MUST accept receiving SCTP packets with a verification tag with value 0.  The
 endpoint will attempt to map the packet to an association based on source IP
 address, destination address and port. If the combination of those parameters is
-not unique the implementor MAY choose to send the Crypto Chunk to all
+not unique the implementor MAY choose to send the DTLS Chunk to all
 Associations that fit with the parameters in order to find the right one. Note
 that type of trial decrypting of the SCTP packets will increase the resource
 consumption per packet with the number of matching SCTP associations.
@@ -390,7 +365,7 @@ as possible to verify the peer identity.
 
 ### INIT chunk as plain text
 
-If the crypto context isn't preserved the peer aiming for a SCTP Restart can
+If the DTLS context isn't preserved the peer aiming for a SCTP Restart can
 only perform an INIT in plain text. Supporting this option opens up the SCTP
 association to an availability attack, where an capable attacker may be able to
 hijack the SCTP association. Therefore an implementation should only support and
@@ -408,7 +383,7 @@ failure.
 
 As mitigation an SCTP endpoint supporting Association Restart by means of plain
 text INIT SHOULD support is the following. The endpoint receiving an INIT
-should send HEARTBEATs protected by CRYPTO CHUNK to its peer to validate that
+should send HEARTBEATs protected by DTLS CHUNK to its peer to validate that
 the peer is unreachable. If the endpoint receive an HEARTBEAT ACK within a
 reasonable time (at least a couple of RTTs) the restart INIT SHOULD be discarded
 as the peer obviously can respond, and thus have no need for a restart. A
@@ -433,13 +408,13 @@ considered a protocol violation and will lead to Association Abort (see
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
-negotiate the use of the CRYPTO chunk and protection engines during
-association setup. {{sctp-Crypto-chunk-init-parameter}} illustrates
+negotiate the use of the DTLS chunk and protection engines during
+association setup. {{sctp-DTLS-chunk-init-parameter}} illustrates
 the new parameter type.
 
 | Parameter Type | Parameter Name |
 | 0x80xx | Protected Association |
-{: #sctp-Crypto-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
+{: #sctp-DTLS-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
 
 Note that the parameter format requires the receiver to ignore the
 parameter and continue processing if the parameter is not understood.
@@ -458,29 +433,22 @@ handshake.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x80XX    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                      Protection Engines                       |
-|                                                               |
-|                               +-------------------------------+
-|                               |            Padding            |
+|            Options            |            Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
+{: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
 
 {: vspace="0"}
 Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x80XX.
 
 Parameter Length: 16 bits (unsigned integer)
-: This value holds the length of the Protection Engines field in
+: This value holds the length of the Options field in
   bytes plus 4.
 
-Protection Engines: variable length
-: In the INIT chunk this holds the list of protection engines in descending order of preference,
-  i.e. the most preferred comes first, and the least preferred last in
-  this field. In the INIT-ACK chunk this holds a single chosen
-  protection engine. Each protection engine is specified by a 16-bit
-  unsigned integer.
+Options: 16 bits (unsigned integer)
+: This value is set by default to zero. It contains indication of
+  optional feature support.
 
 Padding: 0 or 16 bits
 : If the length of the Protection Engines field is not a multiple
@@ -493,27 +461,27 @@ value assigned by IANA and then remove this note.
 
 # New Chunk Types {#new-chunk-types}
 
-##  Crypto Chunk (CRYPTO) {#crypto-chunk}
+##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
 This section defines the new chunk type that will be used to
 transport protected SCTP payload.
-{{sctp-Crypto-chunk-newchunk-crypt}} illustrates the new chunk type.
+{{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
-| 0x4X | Crypto Chunk (CRYPTO) |
-{: #sctp-Crypto-chunk-newchunk-crypt title="CRYPTO Chunk Type" cols="r l"}
+| 0x4X | DTLS Chunk (DTLS) |
+{: #sctp-DTLS-chunk-newchunk-crypt title="DTLS Chunk Type" cols="r l"}
 
 RFC-Editor Note: Please replace 0x4x with the actual chunk type value
 assigned by IANA and then remove this note.
 
-It should be noted that the CRYPTO chunk format requires the receiver
+It should be noted that the DTLS chunk format requires the receiver
 stop processing this SCTP packet, discard the unrecognized chunk and
 all further chunks, and report the unrecognized chunk in an ERROR
 chunk using the 'Unrecognized Chunk Type' error cause.  This is
 accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
 the upper bits of the chunk type.
 
-The CRYPTO chunk is used to hold the protected payload of a plain SCTP
+The DTLS chunk is used to hold the protected payload of a plain SCTP
 packet.
 
 ~~~~~~~~~~~ aasvg
@@ -529,11 +497,11 @@ packet.
 |                               |           Padding             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-chunk-newchunk-crypt-struct title="CRYPTO Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
 
 {: vspace="0"}
 Chunk Type: 8 bits (unsigned integer)
-: This value MUST be set to 0x4X for all CRYPTO chunks.
+: This value MUST be set to 0x4X for all DTLS chunks.
 
 Chunk Flags: 8 bits
 : This is used by the protection engine and ignored by SCTP.
@@ -553,14 +521,14 @@ Padding: 0, 8, 16, or 24 bits
 ##  Protected Association Parameter Validation Chunk (PVALID) {#pvalid-chunk}
 
 This section defines the new chunk types that will be used to validate
-the negotiation of the protection engine selected for CRYPTO chunk.
+the negotiation of the protection engine selected for DTLS chunk.
 This to prevent down grade attacks on the negotiation of protection
-engines. {{sctp-Crypto-chunk-newchunk-pvalid-chunk}} illustrates the
+engines. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}} illustrates the
 new chunk type.
 
 | Chunk Type | Chunk Name |
 | 0x4X | Protected Association Parameter Validation (PVALID) |
-{: #sctp-Crypto-chunk-newchunk-pvalid-chunk title="PVALID Chunk Type" cols="r l"}
+{: #sctp-DTLS-chunk-newchunk-pvalid-chunk title="PVALID Chunk Type" cols="r l"}
 
 It should be noted that the PVALID chunk format requires the receiver
 stop processing this SCTP packet, discard the unrecognized chunk and
@@ -584,7 +552,7 @@ The PVALID chunk is used to hold the protection engines list.
 |                               |           Padding             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-chunk-newchunk-PVALID -struct title="PVALID Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-chunk-newchunk-PVALID -struct title="PVALID Chunk Structure" artwork-align="center"}
 
 {: vspace="0"}
 Chunk Type: 8 bits (unsigned integer)
@@ -596,11 +564,9 @@ Chunk Flags: 8 bits
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Protection Engines field in bytes plus 4.
 
-Protection Engines: variable length
-: This holds the list of protection engines where each protection engine is
-  specified by a 16-bit unsigned integer. The field MUST be identical to the
-  content of the Protected Association Parameter ({{protectedassoc-parameter}})
-  Protection Engines field that the endpoint sent in the INIT or INIT-ACK chunk.
+Options: 16 bits (unsigned integer)
+: This value is set by default to zero. It contains indication of
+  optional feature support.
 
 Padding: 0 or 16 bits
 : If the length of the
@@ -643,17 +609,17 @@ Information field.
 |    Missing Param Type #N-1    |     Missing Param Type #N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-init-chunk-missing-protected title="ERROR Missing Protected Association Paramater" artwork-align="center"}
+{: #sctp-DTLS-init-chunk-missing-protected title="ERROR Missing Protected Association Paramater" artwork-align="center"}
 
 Note: Cause Length is equal to the number of missing parameters 8 + N
 * 2 according to {{RFC9260}}, section 3.3.10.2. Also the Protection
 Association ID may be present in any of the N missing params, no order
 implied by the example in
-{{sctp-Crypto-init-chunk-missing-protected}}.
+{{sctp-DTLS-init-chunk-missing-protected}}.
 
 ## Error in Protection {#eprotect}
 
-A new Error Type is defined for Crypto Chunk, it's used for any
+A new Error Type is defined for DTLS Chunk, it's used for any
 error related to the Protection mechanism described in this
 document and has a structure that allows detailed information
 to be added as extra causes.
@@ -695,15 +661,6 @@ Editor's Note: Please replace TBA9 above with what is assigned by IANA.
 Below a number of defined Error Causes are defined, additional causes
 can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
 
-### No Supported Protection Engine {#eprotlist}
-
-If list of protection engines contained in the INIT signal doesn't
-contain at least an entry that fits the list of protection engines at
-the responder, the responder will reply with an ABORT chunk with error
-in protection cause code (specified in
-{{eprotect}}) and the "No Supported Protection
-Engine" extra cause code identifier 0x00.
-
 ### Error During Protection Handshake {#ekeyhandshake}
 
 If the protection engine specifies a handshake for example for
@@ -716,10 +673,10 @@ sent with error in protection cause code (specified in
 ### Failure in Protection Engines Validation {#evalidate}
 
 A Failure may occur during protection engine Validation, i.e. when the
-PVALID chunks {{pvalid-chunk}} are exchanged to validate the protection
-engine offered. In such case an ABORT chunk will be sent with error
+PVALID chunks {{pvalid-chunk}} are exchanged to validate the initialization.
+In such case an ABORT chunk will be sent with error
 in protection cause code (specified in {{eprotect}}) and extra cause
-"Failure in Protection Engines Validation" identifier 0x02 to indicate
+"Failure in Validation" identifier 0x02 to indicate
 this failure.
 
 ### Timeout During Protection Handshake or Validation {#etmout}
@@ -734,15 +691,14 @@ management is implemented in-band and the T-valid timeout occurs during
 the handshake the Cause-Specific code to add is "Error During
 Protection Handshake" identifier 0x01.  If the T-valid timeout occurs
 during the protection association parameter validation, the extra
-cause code to use is "Failure in Protection Engines Validation"
+cause code to use is "Failure in Validation"
 identifier 0x02.
 
-## Critical Error from Protection Engine {#eengine}
+## Critical Error from DTLS {#eengine}
 
-Protection engine MAY inform local SCTP endpoint about errors, in such
-case it's to be defined in the protection engine specification
-document.  When an Error in the protection engine compromises the
-protection mechanism, the protection engine may stop processing data
+DTLS 1.3 MAY inform local SCTP endpoint about errors.
+When an Error in the DTLS 1.3 compromises the
+protection mechanism, the protection operator may stop processing data
 altogether, thus the local SCTP endpoint will not be able to send or
 receive any chunk for the specified Association.  This will cause the
 Association to be closed by legacy timer-based mechanism. Since the
@@ -751,18 +707,16 @@ the remote peer will also experience timeout on the Association.
 
 ## Non-critical Error in the Protection Engine {#non-critical-errors}
 
-A non-critical error in the protection engine means that the
-protection engine is capable of recovering without the need
+A non-critical error in DTLS 1.3 means that the
+protection operator is capable of recovering without the need
 of the whole Association to be restarted.
 
 From SCTP perspective, a non-critical error will be perceived
 as a temporary problem in the transport and will be handled
 with retransmissions and SACKS according to {{RFC9260}}.
 
-When the protection engine will experience a non-critical error,
-an ABORT chunk SHALL NOT be sent. This way non-critical errors
-are handled and how the protection engine will recover from
-these errors is being described in the Protection Engine Specifications.
+When the protection operator will experience a non-critical error,
+an ABORT chunk SHALL NOT be sent.
 
 # Procedures {#procedures}
 
@@ -771,18 +725,12 @@ these errors is being described in the Protection Engine Specifications.
 An SCTP Endpoint acting as initiator willing to create a protected
 association shall send to the remote peer an INIT chunk containing the
 Protected Association parameter (see {{protectedassoc-parameter}})
-where all the supported Protection Engines are listed, given in
-descending order of preference (see
-{{sctp-Crypto-chunk-init-options}}).
+whith the optional information, if any (see
+{{sctp-DTLS-chunk-init-options}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
-with protected association parameter, will search the list of
-protection engines for the most preferred commonly supported choice
-and will reply with INIT-ACK containing the protected association
-parameter with the chosen protection engine. When the responder cannot
-find a supported protection engine, it will reply with ABORT
-containing Error in Protection with the extra cause code for "No
-Supported Protection Engine" ({{eprotlist}}).
+with protected association parameter, will reply with INIT-ACK
+with its own optional information.
 
 Additionally, an SCTP Endpoint acting as responder willing to
 support only protected associations shall consider INIT chunk not
@@ -792,11 +740,11 @@ will reply with an ABORT chunk according to what specified in
 association parameter is missing.
 
 When initiator and responder have agreed on a protected association by
-means of handshaking INIT/INIT-ACK with a common protection engine the
-SCTP association establishment continue until it has reached the
+means of handshaking INIT/INIT-ACK the
+SCTP association establishment continues until it has reached the
 ESTABLISHED state. However, before the SCTP assocation is protected by
-the Crypto Chunk and its protection engine some additional states
-needs to be passed. First the protection engine needs be initilizied
+the DTLS Chunk and DTLS 1.3 some additional states
+needs to be passed. First DTLS 1.3 needs be initializied
 in the PROTECTION INTILIZATION state. When that has been accomplished
 one enters the VALIDATION state where one validates the exchange of
 the Protected Association Parameter. If that is successful one enters
@@ -804,53 +752,46 @@ the PROTECTED state. This state sequence is depicted in
 {{init-state-machine}}.
 
 Until the procedure has reached the PROTECTED state the only usage
-of DATA Chunks that is accepted is DATA Chunks with the Protection
-Engine PPID. Any other DATA chunk being sent on a Protected
+of DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS
+PPID. Any other DATA chunk being sent on a Protected
 association SHALL be silently discarded.
 
-The Protection Engine may initialize itself by transferring its own
-messages as payload of the DATA chunk if necessary. The Crypto Chunk
-initialization SHOULD be supervised by a T-valid timer that depends on
-the protection engine and may also be further adjusted based on whether
+DTLS 1.3 initializes itself by transferring its own handshake
+messages as payload of the DATA chunk necessary. The DTLS Chunk
+initialization SHOULD be supervised by a T-valid timer that fits
+DTLS 1.3 handshake and may also be further adjusted based on whether
 expected RTT values are outside of the ones commonly occurring on the
 general Internet, see {{t-valid-considerations}}. At completion of
-Protection Engine initialization the setup of the Protected
+DTLS 1.3 initialization the setup of the Protected
 association is complete and one enters the VALIDATION state, and from
-that time on only CRYPTO chunks will be exchanged. Any plain text
+that time on only DTLS chunks will be exchanged. Any plain text
 chunk will be silently discarded.
 
-If protection engine key establishment is in-band, the protection
-engine will start the handshake with its peer and in case of failure
+DTLS 1.3 key establishment is in-band, thus it
+will start the handshake with its peer and in case of failure
 or T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
-The protection engine specification MUST specify when VALIDATION state
-can be entered for each endpoint. If key establishment is out-of-band,
-after starting T-valid timer the SCTP association will enter the
-VALIDATION state per protection engine specification when the
-necessary security context is in place.
-
 When entering the VALIDATION state, the initiator MUST send to the
 responder a PVALID chunk (see
-{{sctp-Crypto-chunk-newchunk-pvalid-chunk}}) containing the list of
-Protection Engines previously sent in the protected association
+{{sctp-DTLS-chunk-newchunk-pvalid-chunk}}) containing the Options
+previously sent in the protected association
 parameter of the INIT chunk. The transmission of the PVALID chunk MUST
 be done reliably. The responder receiving the PVALID chunk will
-compare the Protection Engines list with the one previously received
-in the INIT chunk, if they are exactly the same, with the same
-Protection engine in the same position, it will reply to the initiator
-with a PVALID chunk containing the chosen Protection Engine, otherwise
+compare the Options with the one previously received
+in the INIT chunk, if they are exactly the same, it will reply to the initiator
+with a PVALID chunk containing the chosen Options, otherwise
 it will reply with an ABORT chunk. ERROR CAUSE will indicate "Failure
-in Protection Engines Validation" and the SCTP association will be
+in Validation" and the SCTP association will be
 terminated. If the association was not aborted the protected
 association is considered successfully established and the PROTECTED
 state is entered.
 
 When the initiator receives the PVALID chunk, it will compare with the
-previous chosen Protection Engine and in case of mismatch with the one
+previous chosen Options and in case of mismatch with the one
 received previously in the protected association parameter in the
 INIT-ACK chunk, it will reply with ABORT with the ERROR CAUSE "Failure
-in Protection Engines Validation", otherwise the protected association
+in Validation", otherwise the protected association
 is successfully established and the initiator enters the PROTECTED
 state.
 
@@ -864,10 +805,9 @@ exchanged in the protected SCTP association.
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
-{{RFC9260}}, the protection engine SHALL ask SCTP endpoint for
+{{RFC9260}}, DTLS 1.3 SHALL ask SCTP endpoint for
 terminating an association when having an internal error or by
-detecting a security violation, using the procedure described
-in {{eengine}}.
+detecting a security violation.
 During the termination procedure all Control Chunks SHALL be protected
 except SHUTDOWN-COMPLETE. The internal design of Protection
 Engines and their capability is out of the scope of the current
@@ -890,7 +830,7 @@ document.
              |
              | start T-valid timer.
              |
-             | [CRYPTO SETUP]
+             | [DTLS SETUP]
              |-----------------
              | send and receive
              | protection engine handshake
@@ -903,30 +843,29 @@ document.
              |------------------------
              | send and receive
              | PVALID by means of
-             | CRYPTO chunk.
+             | DTLS chunk.
              v
      +---------------+
      |   PROTECTED   |
      +---------------+
 ~~~~~~~~~~~
-{: #sctp-Crypto-state-diagram title="Crypto Chunk State Diagram" artwork-align="center"}
+{: #sctp-DTLS-state-diagram title="DTLS Chunk State Diagram" artwork-align="center"}
 
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITILIZATION state, in-band key
-management shall exploit SCTP DATA chunk with the Protection Engine
+management shall exploit SCTP DATA chunk with the SCTP-DTLS
 PPID (see {{iana-payload-protection-id}}) that will be sent
 unencrypted.
 
-When the Association is in crypto chunk PROTECTED state and the SCTP
+When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management shall exploit SCTP
-DATA chunk that will be protected by the Protection Engine and
-encapsulated in CRYPTO chunks.
+DATA chunk that will be protected by the Protection Operator and
+encapsulated in DTLS chunks.
 
-In-band key management shall use a dedicated Payload Protocol
-Identifier assigned by IANA and defined in the specific Protection
-Engine Specification.
+In-band key management shall use a dedicated SCTP-DTLS Payload Protocol
+Identifier assigned by IANA.
 
 ## Consideration on T-valid {#t-valid-considerations}
 
@@ -935,27 +874,26 @@ the handshake is specified for the Protection Engine and also on
 the characteristics of the transport network.
 
 This specification recommends a default value of 30 seconds for
-T-valid. This value is expected to be superseded by recommendations in
-the Protection Engine Specification for each Protection Engine.
+T-valid.
 
 # Protected Data Chunk Handling {#protected-data-handling}
 
-With reference to the Crypto Chunk states and the state Diagram as
+With reference to the DTLS Chunk states and the state Diagram as
 shown in Figure 3 of {{RFC9260}}, the handling of Control chunks, Data
-chunks and Crypto chunks follows the rules defined below:
+chunks and DTLS chunks follows the rules defined below:
 
 - When the association is in states CLOSED, COOKIE-WAIT, and
 COOKIE-ECHOED, any Control chunk is sent unprotected (i.e. plain
 text). No DATA chunks shall be sent in these states and DATA chunks
 received shall be silently discarded.
 
-- When the Crypto Chunk is in state PROTECTED and the SCTP association
+- When the DTLS Chunk is in state PROTECTED and the SCTP association
 is in states ESTABLISHED or in the states for association shutdown,
 i.e. SHUTDOWN-PENDING, SHUTDOWN-SENT, SHUTDOWN-RECEIVED,
 SHUTDOWN-ACK-SENT as defined by {{RFC9260}}, any SCTP chunk including
-DATA chunks, but excluding CRYPTO chunk, will be used to create an
-SCTP payload that will be encrypted by the Protection Engine and the
-result from that encryption will be the used as payload for a CRYPTO
+DATA chunks, but excluding DTLS chunk, will be used to create an
+SCTP payload that will be encrypted by the Protection Operator and the
+result from that encryption will be the used as payload for a DTLS
 chunk that will be the only chunk in the SCTP packet to be sent. DATA
 chunks are accepted and handled according to section 4 of {{RFC9260}}.
 
@@ -972,11 +910,11 @@ chunks are accepted and handled according to section 4 of {{RFC9260}}.
 |                           Chunk #n                            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-encrypt-chunk-states-1 title="Plain Text SCTP Packet" artwork-align="center"}
+{: #sctp-DTLS-encrypt-chunk-states-1 title="Plain Text SCTP Packet" artwork-align="center"}
 
-The diagram shown in {{sctp-Crypto-encrypt-chunk-states-1}} describes
+The diagram shown in {{sctp-DTLS-encrypt-chunk-states-1}} describes
 the structure of any plain text SCTP packet being sent or received
-when the Crypto Chunk is not in VALIDATION or PROTECTED state.
+when the DTLS Chunk is not in VALIDATION or PROTECTED state.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -984,67 +922,55 @@ when the Crypto Chunk is not in VALIDATION or PROTECTED state.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                         Common Header                         |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                         CRYPTO Chunk                          |
+|                         DTLS Chunk                          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-Crypto-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
+{: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
-The diagram shown in {{sctp-Crypto-encrypt-chunk-states-2}} describes
-the structure of an SCTP packet being sent after the Crypto Chunk
+The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
+the structure of an SCTP packet being sent after the DTLS Chunk
 VALIDATION or PROTECTED state has been reached. Such packets are built
-with the SCTP common header. Only one CRYPTO chunk can be sent in
+with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.
 
 ## Protected Data Chunk Transmission {#data-sending}
 
-When the Crypto Chunk state machine hasn't reached the VALIDATION state, the
-protection enigne MAY perform protection engine key management in-band
-depending on how the specification for the chosen Protection Engine
-has been defined.  In such case, the CRYPTO chunk Handler will receive
+When the DTLS Chunk state machine hasn't reached the VALIDATION state,
+DTLS 1.3 SHALL perform key management in-band,
+thus the DTLS chunk Handler will receive
 plain control and DATA chunks from the SCTP chunk handler.
 
-When the Crypto Chunk has reached the VALIDATION and PROTECTED state,
-the CRYPTO chunk handler will receive control chunks and DATA chunks
+When DTLS Chunk has reached the VALIDATION and PROTECTED state,
+the DTLS chunk handler will receive control chunks and DATA chunks
 from the SCTP chunk handler as a complete SCTP payload with maximum
 size limited by PMTU reduced by the size of the SCTP common header and
-the CRYPTO chunk overhead.
+the DTLS chunk overhead.
 
-That plain payload will be sent to the protection engine in use for
-that specific association, the protection engine will return an
-encrypted payload.
+That plain payload will be sent to the protection operator in use for
+that specific association, the protection operator will return an
+encrypted DTLS 1.3 record.
 
-Depending on the specification for the chosen protection engine, when
-forming the CRYPTO chunk header the CRYPTO chunk handler MAY set the
-chunk header flags (see {{sctp-Crypto-chunk-newchunk-crypt-struct}}).
-
-An SCTP packet containing an SCTP CRYPTO chunk SHALL be delivered
+An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
 without delay and SCTP bundling SHALL NOT be performed.
 
 ## Protected Data Chunk Reception {#data-receiving}
 
-When the Crypto Chunk state machine hasn't reached the VALIDATION
-state, it MAY handle key management in-band depending on how the
-specification for the chosen protection engine has been defined.  In
-such case, the CRYPTO chunk handler will receive plain control chunks
-and DATA chunks with Protection Engine PPID from the SCTP Header
+When the DTLS Chunk state machine hasn't reached the VALIDATION
+state, it SHALL handle key management in-band. In
+such case, the DTLS chunk handler will receive plain control chunks
+and DATA chunks with SCTP-DTLS PPID from the SCTP Header
 Handler. Those plain control chunks will be forwarded to SCTP chunk
 handler.
 
-When the Crypto Chunk state machine has reached the VALIDATION or
-PROTECTED state, the CRYPTO chunk handler will receive CRYPTO chunks
-from the SCTP Header Handler.  Payload from CRYPTO chunks will be
-forwarded to the protection engine in use for that specific
-association for decryption, the protection engine will return a plain
+When the DTLS Chunk state machine has reached the VALIDATION or
+PROTECTED state, the DTLS chunk handler will receive DTLS chunks
+from the SCTP Header Handler.  Payload from DTLS chunks will be
+forwarded to the protection operator which will return a plain
 SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
 Handler that will split it in separated chunks and will handle them
 according to {{RFC9260}}.
 
-Depending on the specification for the chosen protection engine, when
-receiving the CRYPTO chunk header the CRYPTO Chunk Handler MAY handle
-the Flags (see {{sctp-Crypto-chunk-newchunk-crypt-struct}}) according
-to that specification.
-
-Meta data belonging to the SCTP packet received SHALL be tied to the
+Meta data belonging to the received SCTP packet SHALL be tied to the
 relevant chunks and forwarded transparently to the SCTP endpoint.
 
 ### SCTP Header Handler
@@ -1063,8 +989,8 @@ delivers it towards the lower transport layer.
 
 This document defines two new registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group that IANA
-maintains. Theses registries are for the protection engine identifiers
-and extra cause codes for protection related errors. It also adds
+maintains. Theses registries are for the extra cause codes for
+protection related errors and the Options. It also adds
 registry entries into several other registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group:
 
@@ -1076,19 +1002,16 @@ Transmission Protocol (SCTP) Parameters group:
 
 *  One new SCTP Payload Protocol Identifier
 
-## Protection Engine Identifier Registry {#iana-protection-engines}
+## DTLS Options Identifier Registry {#iana-dtls-options}
 
-IANA is requested to create a new registry called "CRYPTO Chunk
-Protection Engine Identifiers". This registry is part of the Stream
+IANA is requested to create a new registry called "DTLS Chunk
+Options Identifiers". This registry is part of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
-The purpose of this registry is to enable identification of different
-protection engines used by the CRYPTO chunk when performing the SCTP
-handshake and negotiating support. Entries in the registry requires a
-protection engine name, a reference to the specification for the
-protection engine, and a contact. Each entry will be assigned by IANA
-a unique 16-bit unsigned integer identifier for their protection
-engine. Values 0-65534 are available for assignment. Value 65535 is
+The purpose of this registry is to enable optional behaviors of
+DTLS Chunk. Values will be assigned by IANA
+a unique 16-bit unsigned integer is used.
+Values 0-65534 are available for assignment. Value 65535 is
 reserved for future extension. The proposed general form of the
 registry is depicted below in {{iana-protection-engine-identifier}}.
 
@@ -1107,7 +1030,7 @@ Cause Codes". This registry is part of the Stream Control Transmission
 Protocol (SCTP) Parameters grouping.
 
 The purpose of this registry is to enable identification of different
-protection related errors when using CRYPTO chunk and a protection
+protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
 be assigned by IANA a unique 16-bit unsigned integer identifier for
@@ -1137,7 +1060,7 @@ document. The registry at time of writing was available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1
 
 | ID Value | Chunk Type | Reference |
-| TBA6 | Crypto Chunk (CRYPTO) | RFC-To-Be |
+| TBA6 | DTLS Chunk (DTLS) | RFC-To-Be |
 | TBA7 | Protected Association Parameter Validation (PVALID) | RFC-To-Be |
 {: #iana-chunk-types title="New Chunk Types Registered" cols="r l l"}
 
@@ -1191,48 +1114,31 @@ used as the protection engine applies.
 
 ## Privacy Considerations
 
-Using a security protocol in the SCTP CRYPTO chunk might lower the
+Using a security protocol in the SCTP DTLS chunk might lower the
 privacy properties of the security protocol as the SCTP Verification
 Tag is an unique identifier for the association.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-The CRYPTO chunk provides a mechanism for preventing downgrade attacks
+The DTLS chunk provides a mechanism for preventing downgrade attacks
 that detects downgrading attempts between protection engines and
 terminates the association. The chosen protection engine is the same
 as if the peers had been communicating in the absence of an attacker.
 
 The protection engine initial handshake is verified before the
-Crypto Chunk is considered protected, thus no user data are sent before
+DTLS Chunk is considered protected, thus no user data are sent before
 validation.
 
 The downgrade protection is only as strong as the weakest of the
 supported protection engines as an active attacker can trick the
 endpoints to negotiate the weakest protection engine and then
-modify the weakly protected CRYPTO chunks to deceive the endpoints
+modify the weakly protected DTLS chunks to deceive the endpoints
 that the negotiation of the protection engines is validated. This
 is similar to the downgrade protection in TLS 1.3 specified in
 Section 4.1.3. of {{RFC8446}} where downgrade protection is not
 provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
 to only support a limited set of strongly profiled protection
 engines.
-
-# Requirements Towards the Protection Engines {#requirements}
-
-This section specifies what is to be specified in the description
-of a protection engine.
-
- * Define how to protect the plain text set of chunks and encapsulate
-   them in the CRYPTO Chunk payload.
-
- * Can define its usage of the 8-bit chunk Flags field in the CRYPTO
-   chunk
-
- * Is required to register the defined protection engine(s) with IANA
-   per {{iana-protection-engines}}.
-
- * Detail the state transition between PROTECTION INITILIZATION and
-   VALIDATION.
 
 # Acknowledgments
 
