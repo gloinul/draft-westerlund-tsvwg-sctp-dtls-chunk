@@ -400,32 +400,6 @@ as possible.  Also note that failure in handshaking of a new DTLS connection is
 considered a protocol violation and will lead to Association Abort (see
 {{ekeyhandshake}}).
 
-## Lifetime of the DTLS secured Association {#dtls-lifetime}
-The lifetime of an Association is not stated at establishment and the usage
-of SCTP for signaling may require the Association to remain established
-for quite a long.
-On the other perspective, DTLS 1.3 security best practice require frequent
-re-keying and it's anyhow not good to keep a DTLS 1.3 connection up for long time.
-DTLS 1.3 key manager is provided with the DTLS-SCTP PPID that can be
-exploited for re-keying but this also may not be sufficient for some use case
-requiring an high level of security.
-It is recommended that the lifetime of a DTLS 1.3 connection being used
-in DTLS Chunk is kept under control and a DTLS 1.3 connection that is lasting
-too long to be replaced with a new one.
-
-### Replacement of the DTLS 1.3 connection {#dtls-replacement}
-The period of re-keying and the lifetime of a DTLS 1.3 connection SHOULD be
-subject to control using a specific parameter on each.
-These periods shall be set in terms of data transfer, time or both.
-The data transfer threshold shall be set in kilobytes, whereas the time
-shall be set in seconds.
-At expiration of a threshold, the SCTP Association detecting the expiration
-shall close the esiting DTLS 1.3 connection and instantiate a new one.
-From SCTP perspective this will be experienced as an interruption in the network.
-The handshake for closing the old DTLS connection and the one used for establishing
-the new DTLS connection will exploit plain DATA Chunks being identified with
-the DTLS-SCTP PPID.
-
 
 # Conventions
 
