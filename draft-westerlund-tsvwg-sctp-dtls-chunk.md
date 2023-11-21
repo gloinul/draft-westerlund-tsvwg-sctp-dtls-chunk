@@ -65,6 +65,11 @@ normative:
   RFC9147:
   RFC9260:
 
+  TLS-CIPHER-SUITS:
+    target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
+    title: "TLS Cipher Suites"
+    date: November 2023
+
 --- abstract
 
 This document describes a method for adding Cryptographic protection
@@ -899,11 +904,12 @@ received shall be silently discarded.
 is in states ESTABLISHED or in the states for association shutdown,
 i.e. SHUTDOWN-PENDING, SHUTDOWN-SENT, SHUTDOWN-RECEIVED,
 SHUTDOWN-ACK-SENT as defined by {{RFC9260}}, any SCTP chunk including
-DATA chunks, but excluding DTLS chunk, will be used to create an
-SCTP payload that will be encrypted by the Protection Operator and the
-result from that encryption will be the used as payload for a DTLS
-chunk that will be the only chunk in the SCTP packet to be sent. DATA
-chunks are accepted and handled according to section 4 of {{RFC9260}}.
+DATA chunks, but excluding DTLS chunk, will be used to create an SCTP
+payload that will be encrypted by the DTLS 1.3 protection operation
+and the resulting DTLS record from that encryption will be the used as
+payload for a DTLS chunk that will be the only chunk in the SCTP
+packet to be sent. DATA chunks are accepted and handled according to
+section 4 of {{RFC9260}}.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -944,9 +950,9 @@ a SCTP packet.
 ## Protected Data Chunk Transmission {#data-sending}
 
 When the DTLS Chunk state machine hasn't reached the VALIDATION state,
-DTLS 1.3 SHALL perform key management in-band,
-thus the DTLS chunk Handler will receive
-plain control and DATA chunks from the SCTP chunk handler.
+DTLS 1.3 MAY perform key management in-band, thus the DTLS chunk
+Handler will receive plain control and DATA chunks from the SCTP chunk
+handler.
 
 When DTLS Chunk has reached the VALIDATION and PROTECTED state,
 the DTLS chunk handler will receive control chunks and DATA chunks
@@ -963,12 +969,12 @@ without delay and SCTP bundling SHALL NOT be performed.
 
 ## Protected Data Chunk Reception {#data-receiving}
 
-When the DTLS Chunk state machine hasn't reached the VALIDATION
-state, it SHALL handle key management in-band. In
-such case, the DTLS chunk handler will receive plain control chunks
-and DATA chunks with SCTP-DTLS PPID from the SCTP Header
-Handler. Those plain control chunks will be forwarded to SCTP chunk
-handler.
+When the DTLS Chunk state machine hasn't reached the VALIDATION state
+it MAY perform key management in-band. In such case, the DTLS chunk
+handler will receive plain control chunks and DATA chunks with
+SCTP-DTLS PPID from the SCTP Header Handler. Those plain text control
+chunks will be forwarded to SCTP chunk handler as well as the DATA
+chunk with the SCTP-DTLS PPID.
 
 When the DTLS Chunk state machine has reached the VALIDATION or
 PROTECTED state, the DTLS chunk handler will receive DTLS chunks
@@ -978,8 +984,9 @@ SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
 Handler that will split it in separated chunks and will handle them
 according to {{RFC9260}}.
 
-Meta data belonging to the received SCTP packet SHALL be tied to the
-relevant chunks and forwarded transparently to the SCTP endpoint.
+Meta data, such as ECN, source and destination address or path ID,
+belonging to the received SCTP packet SHALL be tied to the relevant
+set chunks and forwarded transparently to the SCTP endpoint.
 
 ### SCTP Header Handler
 
@@ -992,6 +999,82 @@ In the opposite direction it creates the SCTP common header and fills
 it with the relevant information for the specific association and
 delivers it towards the lower transport layer.
 
+# Abstract API
+
+This section describes and abstract API that is needed between a key
+establishment part and the DTLS 1.3 protection chunk.
+
+## Cipher Suit Capabilities
+
+The key-management function needs to know which cipher suits defined
+for usage with DTLS 1.3 that are supported by the DTLS chunk and its
+protection operations block. All TLS cipher suit that are defined are
+listed in the TLS cipher suit registry {{TLS-CIPHER-SUITS}} at IANA
+and are identified by a 2-byte value. Thus this needs to return a list
+of all supported cipher suits to the higher layer.
+
+## Establish Keying Material
+
+The DTLS Chunk can use one of out of multiple sets of cipher suit and
+corresponding key materials. Which has been used are explicitly
+indicated in the key-id field.
+
+The following information needs to be provided when setting Keying material:
+
+SCTP Assocation:
+: Reference to the relevant SCTP assocation to set the keying material for.
+
+Key ID:
+: The key ID value to establish (or overwrite)
+
+Cipher Suit:
+: 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+  to identify the operators to perform the DTLS record protection.
+
+client_write_key:
+: The key that will used by the DTLS 1.3 client to encrypt the
+  record. Binary arbitrary long object depending on the cipher suit
+  used.
+
+server_write_key:
+: The key that willb e used by the DTLS 1.3 server to encrypt the
+  record. Binary arbitrary long object depending on the cipher suit
+  used.
+
+Client_Nonce:
+: Nonce is normally initialized to zero at the start of each DTLS
+  connection. However, when restarting a SCTP assocation the per
+  direction nonce value might be non-zero.
+
+Server_Nonce:
+: Nonce is normally initialized to zero at the start of each DTLS
+  connection. However, when restarting a SCTP assocation the per
+  direction nonce value might be non-zero.
+
+## Destroying Keying Material
+
+A function to destory the keying material for a given key id for a
+given SCTP Association.
+
+## Set Key-ID to Use
+
+Set which Key-ID to use to protect the future SCTP packets sent by the
+SCTP Association.
+
+## Per Packet Information
+
+
+
+## Configure Replay Protection
+
+The DTLS replay protection in this usage is expected to be fairly
+robust. Its depth of handling is related to maximum network path
+reordering that the receiver expects to see during the SCTP
+association. However as the actual reordering in number of packets are
+a combination of how delayed one packet may be compared to another
+times the actual packet rate this can grow for some applications and
+may need to be tuned. Thus, having the potential for setting this a
+more suitable value depending on the use case should be considered.
 
 # IANA Considerations {#IANA-Consideration}
 
@@ -1128,25 +1211,25 @@ Tag is an unique identifier for the association.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-The DTLS chunk provides a mechanism for preventing downgrade attacks
-that detects downgrading attempts between protection engines and
-terminates the association. The chosen protection engine is the same
+The pvalid chunk provides a mechanism for preventing downgrade attacks
+that detects downgrading attempts between protection solutions and
+terminates the association. The chosen protection solution is the same
 as if the peers had been communicating in the absence of an attacker.
 
-The protection engine initial handshake is verified before the
+The initial handshake is verified before the
 DTLS Chunk is considered protected, thus no user data are sent before
 validation.
 
 The downgrade protection is only as strong as the weakest of the
-supported protection engines as an active attacker can trick the
-endpoints to negotiate the weakest protection engine and then
-modify the weakly protected DTLS chunks to deceive the endpoints
+supported protection solutions as an active attacker can trick the
+endpoints to negotiate the weakest protection solution and then
+modify the weakly protected pvalid chunks to deceive the endpoints
 that the negotiation of the protection engines is validated. This
 is similar to the downgrade protection in TLS 1.3 specified in
 Section 4.1.3. of {{RFC8446}} where downgrade protection is not
 provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
 to only support a limited set of strongly profiled protection
-engines.
+solutions.
 
 # Acknowledgments
 
