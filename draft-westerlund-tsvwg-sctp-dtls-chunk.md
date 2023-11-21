@@ -113,6 +113,10 @@ features provided by SCTP and its extensions but with some limitations.
    DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
    other versions are explicitely not part of this document.
 
+# Conventions
+
+{::boilerplate bcp14}
+
 # Overview
 
 ## Protocol Overview {#protocol-overview}
@@ -352,81 +356,84 @@ further work, though.
 
 ### INIT chunk in DTLS chunk
 
-This procedure updates {{RFC9260}}, thus this part requires
-agreements and possibly a new approach.
+This procedure as currently defined updates {{RFC9260}}, thus this
+part requires agreements and possibly a new approach.
 
-If the DTLS context has been preserved the peer aiming for a SCTP Restart can
-still send DTLS chunks that can be processed by the remote peer.  In such case
-the peer willing to restart the Association SHOULD send the INIT chunk in a
-DTLS chunk and encrypt it.  At reception of the DTLS chunk containing INIT,
-the receiver will follow the procedure described in {{RFC9260}} section 5.2.2
-with the exception that all the chunks will be sent in DTLS chunks.
+If the key material associated with the SCTP association has been
+preserved the peer aiming for a SCTP Restart can still send DTLS
+chunks that can be processed by the remote peer.  In such case the
+peer willing to restart the Association SHOULD send the INIT chunk in
+a DTLS chunk and encrypt it.  At reception of the DTLS chunk
+containing INIT, the receiver will follow the procedure described in
+{{RFC9260}} section 5.2.2 with the exception that all the chunks will
+be sent in DTLS chunks.
 
-An endpoint supporting SCTP Association Restart and implementing DTLS Chunk
-MUST accept receiving SCTP packets with a verification tag with value 0.  The
-endpoint will attempt to map the packet to an association based on source IP
-address, destination address and port. If the combination of those parameters is
-not unique the implementor MAY choose to send the DTLS Chunk to all
-Associations that fit with the parameters in order to find the right one. Note
-that type of trial decrypting of the SCTP packets will increase the resource
+An endpoint supporting SCTP Association Restart and implementing DTLS
+Chunk MUST accept receiving SCTP packets with a verification tag with
+value 0.  The endpoint will attempt to map the packet to an
+association based on source IP address, destination address and
+port. If the combination of those parameters is not unique the
+implementor MAY choose to send the DTLS Chunk to all Associations that
+fit with the parameters in order to find the right one. Note that type
+of trial decrypting of the SCTP packets will increase the resource
 consumption per packet with the number of matching SCTP associations.
 
-Note that the Association Restart will update the verification tags for both
-endpoints.  At the end of the unexpected INIT handshaking the receiver of INIT
-chunk SHALL trigger the creation of a new DTLS connection to be executed as soon
+Note that the Association Restart will update the verification tags
+for both endpoints.  At the end of the unexpected INIT handshaking the
+receiver of INIT chunk SHALL perform a rekeying as soon
 as possible to verify the peer identity.
 
 ### INIT chunk as plain text
 
-If the DTLS context isn't preserved the peer aiming for a SCTP Restart can
-only perform an INIT in plain text. Supporting this option opens up the SCTP
-association to an availability attack, where an capable attacker may be able to
-hijack the SCTP association. Therefore an implementation should only support and
-enable this option if restart is crucial.
+If the key material isn't preserved the peer aiming for a SCTP Restart
+can only perform an INIT in plain text. Supporting this option opens
+up the SCTP association to an availability attack, where an capable
+attacker may be able to hijack the SCTP association. Therefore an
+implementation should only support and enable this option if restart
+is crucial and only when a policy is explicit set to enable the
+function.
 
-To mount the attack the attacker needs to be able to process copies of packets
-sent from the target endpoint towards its peer for the targeted SCTP
-association. In addition the attacker needs to be able to send IP packets with
-a source address of the target's peer. If the attacker can send an SCTP INIT
-that appear to be from the peer, if the target is allowing this option it will
-generate an INIT ACK back, and assuming the attacker succesfully completes the
-restart handshake process the attack has managed to change the VTAG for the
-association and the peer will no longer respond, leading to a SCTP associatons
+To mount the attack the attacker needs to be able to process copies of
+packets sent from the target endpoint towards its peer for the
+targeted SCTP association. In addition the attacker needs to be able
+to send IP packets with a source address of the target's peer. If the
+attacker can send an SCTP INIT that appear to be from the peer, if the
+target is allowing this option it will generate an INIT ACK back, and
+assuming the attacker succesfully completes the restart handshake
+process the attack has managed to change the VTAG for the association
+and the peer will no longer respond, leading to a SCTP associatons
 failure.
 
-As mitigation an SCTP endpoint supporting Association Restart by means of plain
-text INIT SHOULD support is the following. The endpoint receiving an INIT
-should send HEARTBEATs protected by DTLS CHUNK to its peer to validate that
-the peer is unreachable. If the endpoint receive an HEARTBEAT ACK within a
-reasonable time (at least a couple of RTTs) the restart INIT SHOULD be discarded
-as the peer obviously can respond, and thus have no need for a restart. A
-capable attacker can still succeed in its attack supressing the HEARTBEAT(s)
-through packet filtering, congestion overload or any other method preventing the
-HEARTBEATS or there ACKs to reach their destination. If it has been validated
-that the peer is unreachable, the INIT chunk will trigger the procedure
-described in {{RFC9260}} section 5.2.2
+As mitigation an SCTP endpoint supporting Association Restart by means
+of plain text INIT SHOULD support is the following. The endpoint
+receiving an INIT should send HEARTBEATs protected by DTLS CHUNK to
+its peer to validate that the peer is unreachable. If the endpoint
+receive an HEARTBEAT ACK within a reasonable time (at least a couple
+of RTTs) the restart INIT SHOULD be discarded as the peer obviously
+can respond, and thus have no need for a restart. A capable attacker
+can still succeed in its attack supressing the HEARTBEAT(s) through
+packet filtering, congestion overload or any other method preventing
+the HEARTBEATS or there ACKs to reach their destination. If it has
+been validated that the peer is unreachable, the INIT chunk will
+trigger the procedure described in {{RFC9260}} section 5.2.2
 
-Note that the Association Restart will update the verification tags for both
-endpoints.  At the end of the unexpected INIT handshaking the receiver of INIT
-chunk SHALL trigger the creation of a new DTLS connection to be executed as soon
-as possible.  Also note that failure in handshaking of a new DTLS connection is
-considered a protocol violation and will lead to Association Abort (see
-{{ekeyhandshake}}).
+Note that the Association Restart will update the verification tags
+for both endpoints.  At the end of the unexpected INIT handshaking the
+receiver of INIT chunk SHALL trigger the creation of a new DTLS
+connection to be executed as soon as possible.  Also note that failure
+in handshaking of a new DTLS connection is considered a protocol
+violation and will lead to Association Abort (see {{ekeyhandshake}}).
 
-
-# Conventions
-
-{::boilerplate bcp14}
 
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
-negotiate the use of the DTLS chunk and protection engines during
+negotiate the use of the DTLS 1.3 chunk during
 association setup. {{sctp-DTLS-chunk-init-parameter}} illustrates
 the new parameter type.
 
 | Parameter Type | Parameter Name |
-| 0x80xx | Protected Association |
+| 0x80xx | DTLS 1.3 Chunk Protected Association |
 {: #sctp-DTLS-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
 
 Note that the parameter format requires the receiver to ignore the
@@ -436,9 +443,8 @@ the use of the upper bits of the parameter type.
 
 ## Protected Association Parameter {#protectedassoc-parameter}
 
-This parameter is used to carry the list of proposed protection
-engines and the chosen protection engine during INIT/INIT-ACK
-handshake.
+This parameter is only used to indicate the request and acknowledge of
+support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -446,7 +452,7 @@ handshake.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x80XX    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|            Options            |            Padding            |
+|    Options                    |       Padding                 |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
@@ -463,9 +469,8 @@ Options: 16 bits (unsigned integer)
 : This value is set by default to zero. It contains indication of
   optional feature support.
 
-Padding: 0 or 16 bits
-: If the length of the Protection Engines field is not a multiple
-  of 4 bytes, the sender MUST pad the chunk with all zero bytes
+Padding: 16 bits
+: The sender MUST pad the chunk with two all zero bytes
   to make the chunk 32-bit aligned. The Padding MUST NOT be longer
   than 2 bytes and it MUST be ignored by the receiver.
 
@@ -477,7 +482,7 @@ value assigned by IANA and then remove this note.
 ##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
 This section defines the new chunk type that will be used to
-transport protected SCTP payload.
+transport DTLS 1.3 Records containing SCTP payload.
 {{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
@@ -494,14 +499,14 @@ chunk using the 'Unrecognized Chunk Type' error cause.  This is
 accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
 the upper bits of the chunk type.
 
-The DTLS chunk is used to hold the protected payload of a plain SCTP
-packet.
+The DTLS chunk is used to hold the DTLS 1.3 record with the protected
+payload of a plain SCTP packet.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Type = 0x4X  |  Chunk Flags  |         Chunk Length          |
+|  Type = 0x4X  | Key ID        |         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -516,14 +521,15 @@ packet.
 Chunk Type: 8 bits (unsigned integer)
 : This value MUST be set to 0x4X for all DTLS chunks.
 
-Chunk Flags: 8 bits
-: This is used by the protection engine and ignored by SCTP.
+Key ID: 8 bits : This is used to indicate the set of Keys and other
+parameters used in the protection operation to form the DTLS record
+present in the Payload.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
 
 Payload: variable length
-: This holds the encrypted data.
+: This holds the encrypted data in one or more DTLS 1.3 Records {{RFC9147}}.
 
 Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
@@ -534,10 +540,10 @@ Padding: 0, 8, 16, or 24 bits
 ##  Protected Association Parameter Validation Chunk (PVALID) {#pvalid-chunk}
 
 This section defines the new chunk types that will be used to validate
-the negotiation of the protection engine selected for DTLS chunk.
-This to prevent down grade attacks on the negotiation of protection
-engines. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}} illustrates the
-new chunk type.
+the Init/Init-ACK negotiation that selected the DTLS 1.3 chunk.  This
+to prevent down grade attacks on the negotiation if other protection
+solutions where offered. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}}
+illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
 | 0x4X | Protected Association Parameter Validation (PVALID) |
@@ -550,7 +556,8 @@ chunk using the 'Unrecognized Chunk Type' error cause.  This is
 accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
 the upper bits of the chunk type.
 
-The PVALID chunk is used to hold the protection engines list.
+The PVALID chunk is used to hold a 32-bit vector of offered protection
+solutions in the INIT.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -558,11 +565,7 @@ The PVALID chunk is used to hold the protection engines list.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |  Type = 0x4X  |   Flags = 0   |         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                      Protection Engines                       |
-|                                                               |
-|                               +-------------------------------+
-|                               |           Padding             |
+|  Protection Solutions Indicator                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-newchunk-PVALID -struct title="PVALID Chunk Structure" artwork-align="center"}
@@ -577,16 +580,11 @@ Chunk Flags: 8 bits
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Protection Engines field in bytes plus 4.
 
-Options: 16 bits (unsigned integer)
-: This value is set by default to zero. It contains indication of
-  optional feature support.
-
-Padding: 0 or 16 bits
-: If the length of the
-  Protection Engines field is not a multiple of 4 bytes, the sender MUST
-  pad the chunk with all zero bytes to make the chunk 32-bit
-  aligned.  The Padding MUST NOT be longer than 2 bytes and it
-  MUST be ignored by the receiver.
+Protection Solutions Indicator: 32 bits (unsigned integer)
+: This value is set by default to zero. It uses the different
+  bit-values to indicate that the INIT contained an offer of the
+  indiacted protection solutions. Value 0x1 is used to indiacte that
+  one offered DTLS 1.3 Chunk.
 
 RFC-Editor Note: Please replace 0x4X with the actual chunk type value
 assigned by IANA and then remove this note.
