@@ -1013,12 +1013,12 @@ DTLS Chunk. Values will be assigned by IANA
 a unique 16-bit unsigned integer is used.
 Values 0-65534 are available for assignment. Value 65535 is
 reserved for future extension. The proposed general form of the
-registry is depicted below in {{iana-protection-engine-identifier}}.
+registry is depicted below in {{iana-protection-options-identifier}}.
 
 | ID Value | Name | Reference | Contact |
 | 0-65534 | Available for Assignment | RFC-To-Be | |
 | 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-engine-identifier title="Protection Engine Identifier Registry" cols="r l l l"}
+{: #iana-protection-options-identifier title="Protection Engine Identifier Registry" cols="r l l l"}
 
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
