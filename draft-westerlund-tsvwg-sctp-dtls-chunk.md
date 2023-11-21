@@ -441,7 +441,7 @@ parameter and continue processing if the parameter is not understood.
 This is accomplished (as described in {{RFC9260}}, Section 3.2.1.)  by
 the use of the upper bits of the parameter type.
 
-## Protected Association Parameter {#protectedassoc-parameter}
+## DTLS 1.3 Chunk Protected Association {#protectedassoc-parameter}
 
 This parameter is only used to indicate the request and acknowledge of
 support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
@@ -537,7 +537,7 @@ Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
-##  Protected Association Parameter Validation Chunk (PVALID) {#pvalid-chunk}
+##  Protection Solution Validation Chunk (PVALID) {#pvalid-chunk}
 
 This section defines the new chunk types that will be used to validate
 the Init/Init-ACK negotiation that selected the DTLS 1.3 chunk.  This
@@ -546,7 +546,7 @@ solutions where offered. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}}
 illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
-| 0x4X | Protected Association Parameter Validation (PVALID) |
+| 0x4X | Protection Solution Validation (PVALID) |
 {: #sctp-DTLS-chunk-newchunk-pvalid-chunk title="PVALID Chunk Type" cols="r l"}
 
 It should be noted that the PVALID chunk format requires the receiver
@@ -593,19 +593,19 @@ assigned by IANA and then remove this note.
 
 This specification introduces a new set of error causes that are to be
 used when SCTP endpoint detects a faulty condition. The special case is
-when the error is detected by the protection engine that may provide
+when the error is detected by the DTLS 1.3 Protection that may provide
 additional information.
 
 ## Mandatory Protected Association Parameter Missing {#enoprotected}
 
 When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the Protected Association parameter towards an SCTP endpoint
-that only accepts protected associations, the responder endpoint SHALL
-raise a Missing Mandatory Parameter error. The ERROR chunk will
-contain the cause code 'Missing Mandatory Parameter' (2) (see
-{{RFC9260}} Section 3.3.10.7) and the protected association parameter
-identifier {{protectedassoc-parameter}} in the missing param
-Information field.
+contain the DTLS 1.3 Chunk Protected Association or other protection
+solutions towards an SCTP endpoint that only accepts protected
+associations, the responder endpoint SHALL raise a Missing Mandatory
+Parameter error. The ERROR chunk will contain the cause code 'Missing
+Mandatory Parameter' (2) (see {{RFC9260}} Section 3.3.10.7) and the
+protected association parameter identifier
+{{protectedassoc-parameter}} in the missing param Information field.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -636,8 +636,7 @@ document and has a structure that allows detailed information
 to be added as extra causes.
 
 This specification describes some of the causes whilst the
-Protection Engine Specification MAY add further Causes related to the
-related Protection Engine.
+key establishment specification MAY add further causes.
 
 When detecting an error, SCTP will send an ABORT chunk containing
 the relevant Error Type and Causes.
@@ -674,49 +673,47 @@ can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
 
 ### Error During Protection Handshake {#ekeyhandshake}
 
-If the protection engine specifies a handshake for example for
-authentication, and key management is implemented in-band, it may happen
-that the procedure has errors. In such case an ABORT chunk will be
-sent with error in protection cause code (specified in
-{{eprotect}}) and extra cause
-"Error During Protection Handshake" identifier 0x01.
+If the protection specifies a handshake for example for
+authentication, and key management is implemented in-band, it may
+happen that the procedure has errors. In such case an ABORT chunk will
+be sent with error in protection cause code (specified in
+{{eprotect}}) and extra cause "Error During Protection Handshake"
+identifier 0x01.
 
-### Failure in Protection Engines Validation {#evalidate}
+### Failure in Protection Solution Validation {#evalidate}
 
-A Failure may occur during protection engine Validation, i.e. when the
-PVALID chunks {{pvalid-chunk}} are exchanged to validate the initialization.
-In such case an ABORT chunk will be sent with error
+A Failure may occur during protection solution validation, i.e. when
+the PVALID chunks {{pvalid-chunk}} are exchanged to validate the
+initialization.  In such case an ABORT chunk will be sent with error
 in protection cause code (specified in {{eprotect}}) and extra cause
-"Failure in Validation" identifier 0x02 to indicate
-this failure.
+"Failure in Validation" identifier 0x02 to indicate this failure.
 
 ### Timeout During Protection Handshake or Validation {#etmout}
 
 Whenever a T-valid timeout occurs, the SCTP endpoint will send an
 ABORT chunk with "Error in Protection" cause (specified in
-{{eprotect}}) and extra cause "Timeout During
-Protection Handshake or Validation" identifier 0x03 to indicate this
-failure.  To indicate in which phase the timeout occurred an additional
-extra cause code is added. If the protection engine specifies that key
-management is implemented in-band and the T-valid timeout occurs during
-the handshake the Cause-Specific code to add is "Error During
-Protection Handshake" identifier 0x01.  If the T-valid timeout occurs
-during the protection association parameter validation, the extra
-cause code to use is "Failure in Validation"
-identifier 0x02.
+{{eprotect}}) and extra cause "Timeout During Protection Handshake or
+Validation" identifier 0x03 to indicate this failure.  To indicate in
+which phase the timeout occurred an additional extra cause code is
+added. If the protection solution specifies that key management is
+implemented in-band and the T-valid timeout occurs during the
+handshake the Cause-Specific code to add is "Error During Protection
+Handshake" identifier 0x01.  If the T-valid timeout occurs during the
+protection association parameter validation, the extra cause code to
+use is "Failure in Validation" identifier 0x02.
 
 ## Critical Error from DTLS {#eengine}
 
-DTLS 1.3 MAY inform local SCTP endpoint about errors.
-When an Error in the DTLS 1.3 compromises the
-protection mechanism, the protection operator may stop processing data
-altogether, thus the local SCTP endpoint will not be able to send or
-receive any chunk for the specified Association.  This will cause the
-Association to be closed by legacy timer-based mechanism. Since the
-Association protection is compromised no further data will be sent and
-the remote peer will also experience timeout on the Association.
+DTLS 1.3 MAY inform local SCTP endpoint about errors.  When an Error
+in the DTLS 1.3 compromises the protection mechanism, the protection
+operator may stop processing data altogether, thus the local SCTP
+endpoint will not be able to send or receive any chunk for the
+specified Association.  This will cause the Association to be closed
+by legacy timer-based mechanism. Since the Association protection is
+compromised no further data will be sent and the remote peer will also
+experience timeout on the Association.
 
-## Non-critical Error in the Protection Engine {#non-critical-errors}
+## Non-critical Error in the Protection {#non-critical-errors}
 
 A non-critical error in DTLS 1.3 means that the
 protection operator is capable of recovering without the need
