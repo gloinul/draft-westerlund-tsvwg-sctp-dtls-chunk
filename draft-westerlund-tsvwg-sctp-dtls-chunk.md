@@ -34,8 +34,8 @@ author:
 informative:
   RFC8446:
 
-  I-D.westerlund-tsvwg-sctp-DTLS-dtls:
-    target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-DTLS-dtls/"
+  I-D.westerlund-tsvwg-sctp-DTLS-handshake:
+    target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
     title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
     author:
       -
@@ -86,14 +86,18 @@ features provided by SCTP and its extensions but with some limitations.
 
    This specification defines the actual DTLS chunk, how to enable
    it usage, how it interacts with the SCTP association establishment
-   to enable endpoint authentication, key-establishment, and secret
+   to enable endpoint authentication, key-establishment, and key
    updates.
 
    This specification is intended to be capable of enabling mutual
    authentication of endpoints, data confidentiality, data origin
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
-   established.
+   established. It is dependent on a Key Management function that is
+   defined seperately to achieve all these capabilities. The
+   keymanagement function uses an API to provision the SCTP
+   association's DTLS chunk protection with key material to enable and
+   rekey the protection operations.
 
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions. However, there can be some
@@ -129,7 +133,7 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 |               | |       DTLS 1.3     |  Keys
 |      ULP      | |                    +-------------.
 |               | |   Key Management   |              |
-+---------------+-+---+----------------+              |
++---------------+-+---+----------------+            --+-- API
 |                     |                 \    User     |
 |                     |                  +-- Level    |
 | SCTP Chunks Handler |                      Messages |
@@ -154,42 +158,48 @@ Use of the DTLS chunk is defined per SCTP association.
 On the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
 that payload will be sent to the DTLS protection Operator to be
-protected. The format of the protected payloadis a DTLS 1.3 record
+protected. The format of the protected payload is a DTLS 1.3 record
 encapsulated in a DTLS chunk.
 
-The SCTP protection operator performs protection operations on the whole
-unprotected SCTP packet payload, i.e., all chunks after the SCTP
+The SCTP protection operator performs protection operations on the
+whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
-initial SCTP handshake, the SCTP common header, the SCTP DTLS chunk
-header and the SHUTDOWN-COMPLETE chunk.
+initial SCTP handshake, initial DTLS handshake, the SCTP common
+header, the SCTP DTLS chunk header and the SHUTDOWN-COMPLETE chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
-initialization of the SCTP association. Once the
-SCTP association is established, the SCTP endpoints may start sending DTLS
-records in SCTP DATA chunks containing the DTLS connection initial
-handshake.
+initialization of the SCTP association. Until the DTLS protection has
+been keyed only plain text key-management traffic using a special PPID
+may be flow, no ULP traffic. The key management function uses an API
+to key the DTLS protection operation function. Usage of the DTLS 1.3
+handshake for initial mutual authentication and key establishment as
+well a periodic re-authentication and rekeying with Diffe-Hellman of
+the DTLS chunk protection is defied in a sepearte document
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
 exchange data securely.
 
-DTLS chunks will never be retransmitted, retransmission is
-implemented by SCTP endpoint at chunk level as in the legacy.  Duplicated
-DTLS chunks will result in duplicated SCTP chunks and will be handled as
-duplicated chunks by SCTP endpoint in the same way a duplicated SCTP packet
-with those SCTP chunks would have been.
+DTLS chunks will never be retransmitted, retransmission is implemented
+by SCTP endpoint at chunk level as in the legacy. DTLS replay
+protection will be used to supress duplicated DTLS chunks, however a
+failure to prevent replay will only result in duplicated SCTP chunks and
+will be handled as duplicated chunks by SCTP endpoint in the same way
+a duplicated SCTP packet with those SCTP chunks would have been.
 
 
 ## DTLS Considerations {#DTLS-engines}
 
-DTLS 1.3 is assumed to be implemented by a key handler and a protection
-operator. The key handler implements the key management by means of
-handshake, it's properly configured using secrets. The way DTLS 1.3
-is configured with secrets is not part of the current document.
-The DTLS protection operator is the encryption engine of DTLS 1.3,
-it's configured with the needed keys by the key handler.
+DTLS 1.3 is assumed to be implemented by a key handler and a
+protection operator. The key handler implements the key management by
+means of handshake, it's properly configured using secrets. The way
+DTLS 1.3 is configured with secrets is part of the another document
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. The DTLS protection
+operator is the encryption engine of DTLS 1.3, it's configured with
+the needed keys by the key handler.
 
 SCTP DTLS chunk directly exploits DTLS 1.3 protection operator by
 requesting protection and unprotection of a buffer, in particular the
@@ -239,8 +249,8 @@ of the transport network.
 Even though the above allows the implementors to adopt a
 multithreading design of the protection engines, the actual
 implementation should consider that out-of-order handling of SCTP
-chunks is not desired and may cause false congestions and
-retransmissions.
+chunks is not desired and may cause false congestion signals and
+trigger retransmissions.
 
 ## PMTU Considerations {#pmtu}
 
@@ -324,22 +334,25 @@ Authentication mechanism for ASCONF chunks.
 This section deals with the handling of an unexpected INIT chunk during an
 Association lifetime as described in {{RFC9260}} section 5.2 The introduction of
 DTLS CHUNK opens for two alternatives depending on if the protection engine
-preserves its state (DTLS context) or not.
+preserves its key material state or not.
 
-When the encryption engine can preserve the DTLS context, meaning that
+When the encryption engine can preserve the key material, meaning that
 encrypted data belonging to the current Association can be encrypted and
 decrypted, the request for SCTP Restart SHOULD use INIT chunk in DTLS chunk.
 
 When the DTLS context is not preserved, the SCTP Restart can only be
-accomplished by means of plain text INIT.  This opens to a man-in-the-middle
-attack where a malicious attacker may theoretically generate an INIT chunk with
-proper parameters and hijack the SCTP association.
+accomplished by means of plain text INIT.  This opens to a
+man-in-the-middle attack where a malicious attacker may theoretically
+generate an INIT chunk with proper parameters and hijack the SCTP
+association. This should only be allowed under explictly configured
+policy.
 
-The whole section related to SCTP Restart requires further work, though.
+Editors note: The whole section related to SCTP Restart requires
+further work, though.
 
 ### INIT chunk in DTLS chunk
 
-By principle this is not permitted by {{RFC9260}}, thus that part requires
+This procedure updates {{RFC9260}}, thus this part requires
 agreements and possibly a new approach.
 
 If the DTLS context has been preserved the peer aiming for a SCTP Restart can
