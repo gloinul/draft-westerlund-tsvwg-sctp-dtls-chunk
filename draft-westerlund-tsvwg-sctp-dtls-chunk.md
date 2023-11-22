@@ -1014,9 +1014,11 @@ and are identified by a 2-byte value. Thus this needs to return a list
 of all supported cipher suits to the higher layer.
 
 Request : Get Cipher Suit
+
 Parameters : none
 
 Reply   : Cipher Suit
+
 Parameters : list of cipher suits
 
 ## Establish Keying Material
@@ -1028,39 +1030,41 @@ indicated in the key-id field.
 The following information needs to be provided when setting Keying material:
 
 Request : Establish Key
+
 Paramters :
 
-SCTP Assocation:
+* SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-Key ID:
+* Key ID:
 : The key ID value to establish (or overwrite)
 
-Cipher Suit:
+* Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the operators to perform the DTLS record protection.
 
-client_write_key:
+* client_write_key:
 : The key that will used by the DTLS 1.3 client to encrypt the
   record. Binary arbitrary long object depending on the cipher suit
   used.
 
-server_write_key:
+* server_write_key:
 : The key that willb e used by the DTLS 1.3 server to encrypt the
   record. Binary arbitrary long object depending on the cipher suit
   used.
 
-Client_Nonce:
+* Client_Nonce:
 : Nonce is normally initialized to zero at the start of each DTLS
   connection. However, when restarting a SCTP assocation the per
   direction nonce value might be non-zero.
 
-Server_Nonce:
+* Server_Nonce:
 : Nonce is normally initialized to zero at the start of each DTLS
   connection. However, when restarting a SCTP assocation the per
   direction nonce value might be non-zero.
 
 Reply : Established
+
 Parameters : true or false
 
 ## Destroying Keying Material
@@ -1069,6 +1073,7 @@ A function to destory the keying material for a given key id for a
 given SCTP Association.
 
 Request : Destroy Key
+
 Paramters :
 
 * Key ID
@@ -1076,6 +1081,7 @@ Paramters :
 * SCTP Association
 
 Reply: Destroyed
+
 Parameters : true or false
 
 ## Set Key-ID to Use
@@ -1084,11 +1090,13 @@ Set which Key-ID to use to protect the future SCTP packets sent by the
 SCTP Association.
 
 Request : Set Key ID
+
 Paramters :
 
 * Key ID
 
 Reply: Key ID set
+
 Parameters : true or false
 
 ## Per Packet Information
@@ -1107,13 +1115,17 @@ may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
 
 Request : Configure Replay Protection
+
 Paramters :
 
 * Key ID
 
+* SCTP Association
+
 * Configuration parameters
 
 Reply: Replay Protection Configured
+
 Parameters : true or false
 
 
