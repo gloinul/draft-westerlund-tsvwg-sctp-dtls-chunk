@@ -1013,6 +1013,12 @@ listed in the TLS cipher suit registry {{TLS-CIPHER-SUITS}} at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
 of all supported cipher suits to the higher layer.
 
+Request : Get Cipher Suit
+Parameters : none
+
+Reply   : Cipher Suit
+Parameters : list of cipher suits
+
 ## Establish Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
@@ -1020,6 +1026,9 @@ corresponding key materials. Which has been used are explicitly
 indicated in the key-id field.
 
 The following information needs to be provided when setting Keying material:
+
+Request : Establish Key
+Paramters :
 
 SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
@@ -1051,15 +1060,36 @@ Server_Nonce:
   connection. However, when restarting a SCTP assocation the per
   direction nonce value might be non-zero.
 
+Reply : Established
+Parameters : true or false
+
 ## Destroying Keying Material
 
 A function to destory the keying material for a given key id for a
 given SCTP Association.
 
+Request : Destroy Key
+Paramters :
+
+* Key ID
+
+* SCTP Association
+
+Reply: Destroyed
+Parameters : true or false
+
 ## Set Key-ID to Use
 
 Set which Key-ID to use to protect the future SCTP packets sent by the
 SCTP Association.
+
+Request : Set Key ID
+Paramters :
+
+* Key ID
+
+Reply: Key ID set
+Parameters : true or false
 
 ## Per Packet Information
 
@@ -1075,6 +1105,17 @@ a combination of how delayed one packet may be compared to another
 times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
+
+Request : Configure Replay Protection
+Paramters :
+
+* Key ID
+
+* Configuration parameters
+
+Reply: Replay Protection Configured
+Parameters : true or false
+
 
 # IANA Considerations {#IANA-Consideration}
 
