@@ -1038,6 +1038,10 @@ Paramters :
 DCI:
 : The DTLS connection ID value to establish (or overwrite)
 
+Epoch:
+: The DTLS epoch these keys are valid for. Note that Epoch lower than
+  3 are note expected as they are used during DTLS handshake.
+
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the operators to perform the DTLS record protection.
@@ -1078,6 +1082,8 @@ Paramters :
 * DCI
 
 * SCTP Association
+
+* DTLS Epoch
 
 Reply: Destroyed
 
