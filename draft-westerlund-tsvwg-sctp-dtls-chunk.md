@@ -101,7 +101,7 @@ features provided by SCTP and its extensions but with some limitations.
    established. It is dependent on a Key Management function that is
    defined seperately to achieve all these capabilities. The
    keymanagement function uses an API to provision the SCTP
-   association's DTLS chunk protection with key material to enable and
+   association's DTLS chunk protection with key-material to enable and
    rekey the protection operations.
 
    Applications using SCTP DTLS chunk can use most transport features
@@ -224,13 +224,13 @@ with a dedicated Payload Protocol Identifier.
 During protection engine initialization, that is after the SCTP
 association reaches the ESTABLISHED state (see {{RFC9260}} Section 4),
 but before DTLS 1.3 key-management has completed and the
-Protected Assocation Parameter Validation is completed, the in-band
-Key Management SHALL use DATA chunks that SHALL use the SCTP-DTLS
+Protected Assocation Parameter Validation is completed, any in-band
+Key Management MAY use SCTP user message that SHALL use the SCTP-DTLS
 PPID (see {{iana-payload-protection-id}}). These DATA chunks
 SHALL be sent unprotected by the protection engine as no keys have
 been established yet. As soon as the protection engine has been
 intialized and the validation has occured, further DTLS 1.3 handshakes
-being sent using SCTP DATA chunks with the
+being sent using SCTP use messages with the
 SCTP-DTLS PPID, will have their message protected inside SCTP
 DTLS chunk protected with the currently established key.
 SCTP DTLS chunk state evolution is described in {{init-state-machine}}.
@@ -511,7 +511,7 @@ payload of a plain SCTP packet.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Type = 0x4X  | Key ID        |         Chunk Length          |
+|  Type = 0x4X  | DCI           |         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -526,7 +526,7 @@ payload of a plain SCTP packet.
 Chunk Type: 8 bits (unsigned integer)
 : This value MUST be set to 0x4X for all DTLS chunks.
 
-Key ID: 8 bits : This is used to indicate the set of Keys and other
+DTLS Connection ID (DCI): 8 bits : This is used to indicate the set of Keys and other
 parameters used in the protection operation to form the DTLS record
 present in the Payload.
 
@@ -760,7 +760,7 @@ the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
 states needs to be passed. First DTLS 1.3 Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
 procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, or
-through other methods that results in at least one Key ID has
+through other methods that results in at least one DCI has
 initialized state using the API. When that has been accomplished one
 enters the VALIDATION state where one validates the exchange of the
 DTLS 1.3 Chunk Protected Association Parameter and any alternative
@@ -870,14 +870,14 @@ document.
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITILIZATION state, in-band key
-management MAY exploit SCTP DATA chunk with the SCTP-DTLS PPID (see
+management MAY exploit SCTP user messages with the SCTP-DTLS PPID (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
 unencrypted.
 
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
-exploit SCTP DATA chunk for message transmission that will be
+exploit SCTP user messages for message transmission that will be
 protected by the DTLS 1.3 protected and encapsulated in DTLS chunks.
 
 ## Consideration on T-valid {#t-valid-considerations}
@@ -1025,7 +1025,7 @@ Parameters : list of cipher suits
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
 corresponding key materials. Which has been used are explicitly
-indicated in the key-id field.
+indicated in the DCI field.
 
 The following information needs to be provided when setting Keying material:
 
@@ -1036,8 +1036,8 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-* Key ID:
-: The key ID value to establish (or overwrite)
+DCI:
+: The DTLS connection ID value to establish (or overwrite)
 
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
@@ -1069,14 +1069,14 @@ Parameters : true or false
 
 ## Destroying Keying Material
 
-A function to destory the keying material for a given key id for a
+A function to destory the keying material for a given DCI for a
 given SCTP Association.
 
 Request : Destroy Key
 
 Paramters :
 
-* Key ID
+* DCI
 
 * SCTP Association
 
@@ -1084,9 +1084,9 @@ Reply: Destroyed
 
 Parameters : true or false
 
-## Set Key-ID to Use
+## Set DCI to Use
 
-Set which Key-ID to use to protect the future SCTP packets sent by the
+Set which key context (DCI) to use to protect the future SCTP packets sent by the
 SCTP Association.
 
 Request : Set Key ID
