@@ -1046,25 +1046,19 @@ Epoch:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the operators to perform the DTLS record protection.
 
-* client_write_key:
-: The key that will used by the DTLS 1.3 client to encrypt the
-  record. Binary arbitrary long object depending on the cipher suit
-  used.
+* client_application_traffic_secret:
 
-* server_write_key:
-: The key that willb e used by the DTLS 1.3 server to encrypt the
-  record. Binary arbitrary long object depending on the cipher suit
-  used.
+: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret will used by the DTLS 1.3 client to
+encrypt the record. Binary arbitrary long object depending on the
+cipher suit used.
 
-* Client_Nonce:
-: Nonce is normally initialized to zero at the start of each DTLS
-  connection. However, when restarting a SCTP assocation the per
-  direction nonce value might be non-zero.
+* server_application_traffic_secret:'
 
-* Server_Nonce:
-: Nonce is normally initialized to zero at the start of each DTLS
-  connection. However, when restarting a SCTP assocation the per
-  direction nonce value might be non-zero.
+: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret that will be used by
+the DTLS 1.3 server to encrypt the record. Binary arbitrary long
+object depending on the cipher suit used.
 
 Reply : Established
 
