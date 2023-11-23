@@ -1366,7 +1366,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
    it usage, how it interacts with the SCTP association establishment
    to enable endpoint authentication, key-establishment, and key
    updates.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This specification is intended to be capable of enabling mutual
+<p id="section-1-3">The DTLS chunk is designed to enable mutual
    authentication of endpoints, data confidentiality, data origin
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
@@ -1597,8 +1597,7 @@ trigger retransmissions.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-pmtu-considerations" class="section-name selfRef">PMTU Considerations</a>
         </h3>
 <p id="section-3.4-1">The addition of the DTLS chunk to SCTP reduces the room for payload,
-due to the size of the DTLS chunk header and plain text expansion
-due to ciphering algorithm and any authentication tag.  Thus, the SCTP
+due to the size of the DTLS chunk header, padding, and authentication tag.  Thus, the SCTP
 layer creating the plain text payload needs to know about the overhead
 to adjust its target payload size appropriately.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">On the other hand, the protection operator needs to be informed about
