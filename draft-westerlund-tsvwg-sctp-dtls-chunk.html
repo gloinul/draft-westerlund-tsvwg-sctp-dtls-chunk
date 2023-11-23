@@ -2974,6 +2974,12 @@ indicated in the DCI field.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
           <dd style="margin-left: 1.5em" id="section-9.2-6.2">
             <p id="section-9.2-6.2.1">The DTLS connection ID value to establish (or overwrite)<a href="#section-9.2-6.2.1" class="pilcrow">¶</a></p>
 </dd>
+          <dd class="break"></dd>
+<dt id="section-9.2-6.3">Epoch:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.2-6.4">
+            <p id="section-9.2-6.4.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.2-6.4.1" class="pilcrow">¶</a></p>
+</dd>
         <dd class="break"></dd>
 </dl>
 <ul class="normal">
@@ -2988,52 +2994,24 @@ to identify the operators to perform the DTLS record protection.<a href="#sectio
 </dl>
 </li>
           <li class="normal" id="section-9.2-7.2">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-7.2.1">
-              <dt id="section-9.2-7.2.1.1">client_write_key:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-7.2.1.2">
-                <p id="section-9.2-7.2.1.2.1">The key that will used by the DTLS 1.3 client to encrypt the
-record. Binary arbitrary long object depending on the cipher suit
-used.<a href="#section-9.2-7.2.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</li>
-          <li class="normal" id="section-9.2-7.3">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-7.3.1">
-              <dt id="section-9.2-7.3.1.1">server_write_key:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-7.3.1.2">
-                <p id="section-9.2-7.3.1.2.1">The key that willb e used by the DTLS 1.3 server to encrypt the
-record. Binary arbitrary long object depending on the cipher suit
-used.<a href="#section-9.2-7.3.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</li>
-          <li class="normal" id="section-9.2-7.4">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-7.4.1">
-              <dt id="section-9.2-7.4.1.1">Client_Nonce:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-7.4.1.2">
-                <p id="section-9.2-7.4.1.2.1">Nonce is normally initialized to zero at the start of each DTLS
-connection. However, when restarting a SCTP assocation the per
-direction nonce value might be non-zero.<a href="#section-9.2-7.4.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</li>
-          <li class="normal" id="section-9.2-7.5">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-7.5.1">
-              <dt id="section-9.2-7.5.1.1">Server_Nonce:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-7.5.1.2">
-                <p id="section-9.2-7.5.1.2.1">Nonce is normally initialized to zero at the start of each DTLS
-connection. However, when restarting a SCTP assocation the per
-direction nonce value might be non-zero.<a href="#section-9.2-7.5.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
+            <p id="section-9.2-7.2.1">client_application_traffic_secret:<a href="#section-9.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.2-8">Reply : Established<a href="#section-9.2-8" class="pilcrow">¶</a></p>
-<p id="section-9.2-9">Parameters : true or false<a href="#section-9.2-9" class="pilcrow">¶</a></p>
+<p id="section-9.2-8">: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret will used by the DTLS 1.3 client to
+encrypt the record. Binary arbitrary long object depending on the
+cipher suit used.<a href="#section-9.2-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-9.1">
+            <p id="section-9.2-9.1.1">server_application_traffic_secret:'<a href="#section-9.2-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.2-10">: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret that will be used by
+the DTLS 1.3 server to encrypt the record. Binary arbitrary long
+object depending on the cipher suit used.<a href="#section-9.2-10" class="pilcrow">¶</a></p>
+<p id="section-9.2-11">Reply : Established<a href="#section-9.2-11" class="pilcrow">¶</a></p>
+<p id="section-9.2-12">Parameters : true or false<a href="#section-9.2-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="destroying-keying-material">
@@ -3051,6 +3029,9 @@ given SCTP Association.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.3-4.2">
             <p id="section-9.3-4.2.1">SCTP Association<a href="#section-9.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.3-4.3">
+            <p id="section-9.3-4.3.1">DTLS Epoch<a href="#section-9.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.3-5">Reply: Destroyed<a href="#section-9.3-5" class="pilcrow">¶</a></p>
