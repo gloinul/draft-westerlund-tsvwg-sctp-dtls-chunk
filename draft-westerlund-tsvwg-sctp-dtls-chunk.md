@@ -210,7 +210,7 @@ DTLS 1.3 is configured with secrets is part of the another document
 operator is the encryption engine of DTLS 1.3, it's configured with
 the needed keys by the key handler.
 
-SCTP DTLS chunk directly exploits DTLS 1.3 protection operator by
+SCTP DTLS chunk directly uses DTLS 1.3 protection operator by
 requesting protection and unprotection of a buffer, in particular the
 protection buffer should never exceed the possible SCTP packet size
 thus DTLS protection operator needs to be aware of the PMTU (see {{pmtu}}).
@@ -235,7 +235,7 @@ SCTP-DTLS PPID, will have their message protected inside SCTP
 DTLS chunk protected with the currently established key.
 SCTP DTLS chunk state evolution is described in {{init-state-machine}}.
 
-DTLS related procedures MAY exploit the Flags byte provided by the
+DTLS related procedures MAY use the Flags byte provided by the
 DTLS chunk header (see {{sctp-DTLS-chunk-newchunk-crypt-struct}})
 for their needs. Details of the use of Flags are specified within
 this document in the relevant sections.
@@ -323,7 +323,7 @@ association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
 relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag shall be exploited. If the
+Source, Destination ports and VTag shall be used. If the
 combination of those parameters is not unique the implementor MAY
 choose to send the DTLS Chunk to all Associations that fit with the
 parameters in order to find the right one. The association will
@@ -870,14 +870,14 @@ document.
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITILIZATION state, in-band key
-management MAY exploit SCTP user messages with the SCTP-DTLS PPID (see
+management MAY use SCTP user messages with the SCTP-DTLS PPID (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
 unencrypted.
 
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
-exploit SCTP user messages for message transmission that will be
+use SCTP user messages for message transmission that will be
 protected by the DTLS 1.3 protected and encapsulated in DTLS chunks.
 
 ## Consideration on T-valid {#t-valid-considerations}
