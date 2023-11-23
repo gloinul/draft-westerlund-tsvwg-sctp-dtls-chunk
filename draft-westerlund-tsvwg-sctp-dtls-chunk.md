@@ -1089,13 +1089,13 @@ Parameters : true or false
 Set which key context (DCI) to use to protect the future SCTP packets sent by the
 SCTP Association.
 
-Request : Set Key ID
+Request : Set DCI used
 
 Paramters :
 
-* Key ID
+* DCI
 
-Reply: Key ID set
+Reply: DCI set
 
 Parameters : true or false
 
@@ -1118,7 +1118,7 @@ Request : Configure Replay Protection
 
 Paramters :
 
-* Key ID
+* DCI
 
 * SCTP Association
 
