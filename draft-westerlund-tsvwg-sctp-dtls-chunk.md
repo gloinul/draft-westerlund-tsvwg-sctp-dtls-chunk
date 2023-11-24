@@ -525,7 +525,7 @@ payload of a plain SCTP packet.
 Chunk Type: 8 bits (unsigned integer)
 : This value MUST be set to 0x4X for all DTLS chunks.
 
-DTLS Connection ID (DCI): 8 bits : This is used to indicate the set of Keys and other
+DTLS Connection Index (DCI): 8 bits : This is used to indicate the set of Keys and other
 parameters used in the protection operation to form the DTLS record
 present in the Payload.
 
@@ -1036,7 +1036,7 @@ Paramters :
 : Reference to the relevant SCTP assocation to set the keying material for.
 
 DCI:
-: The DTLS connection ID value to establish (or overwrite)
+: The DTLS connection index value to establish (or overwrite)
 
 Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
