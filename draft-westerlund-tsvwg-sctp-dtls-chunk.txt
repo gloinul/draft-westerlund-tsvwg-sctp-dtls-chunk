@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 26 May 2024                                            Ericsson
-                                                        23 November 2023
+Expires: 27 May 2024                                            Ericsson
+                                                        24 November 2023
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 May 2024.
+   This Internet-Draft will expire on 27 May 2024.
 
 Copyright Notice
 
@@ -579,9 +579,9 @@ Table of Contents
    Chunk Type: 8 bits (unsigned integer)
       This value MUST be set to 0x4X for all DTLS chunks.
 
-   DTLS Connection ID (DCI): 8 bits : This is used to indicate the set
-   of Keys and other parameters used in the protection operation to form
-   the DTLS record present in the Payload.
+   DTLS Connection Index (DCI): 8 bits : This is used to indicate the
+   set of Keys and other parameters used in the protection operation to
+   form the DTLS record present in the Payload.
 
    Chunk Length: 16 bits (unsigned integer)  This value holds the length
       of the Payload in bytes plus 4.
@@ -1084,7 +1084,7 @@ Table of Contents
    *  SCTP Assocation:  Reference to the relevant SCTP assocation to set
          the keying material for.
 
-   DCI:  The DTLS connection ID value to establish (or overwrite)
+   DCI:  The DTLS connection index value to establish (or overwrite)
 
    Epoch:  The DTLS epoch these keys are valid for.  Note that Epoch
       lower than 3 are note expected as they are used during DTLS
