@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 27 May 2024                                            Ericsson
-                                                        24 November 2023
+Expires: 30 May 2024                                            Ericsson
+                                                        27 November 2023
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 May 2024.
+   This Internet-Draft will expire on 30 May 2024.
 
 Copyright Notice
 
@@ -1121,9 +1121,9 @@ Table of Contents
 
    Paramters :
 
-   *  DCI
-
    *  SCTP Association
+
+   *  DCI
 
    *  DTLS Epoch
 
@@ -1139,6 +1139,8 @@ Table of Contents
    Request : Set DCI used
 
    Paramters :
+
+   *  SCTP Association
 
    *  DCI
 
