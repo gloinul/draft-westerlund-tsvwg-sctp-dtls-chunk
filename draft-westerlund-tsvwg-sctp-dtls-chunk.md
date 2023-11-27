@@ -1012,23 +1012,23 @@ listed in the TLS cipher suit registry {{TLS-CIPHER-SUITS}} at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
 of all supported cipher suits to the higher layer.
 
-Request : Get Cipher Suit
+Request : Get Cipher Suits
 
 Parameters : none
 
-Reply   : Cipher Suit
+Reply   : Cipher Suits
 
 Parameters : list of cipher suits
 
-## Establish Keying Material
+## Establish Client Write Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
 corresponding key materials. Which has been used are explicitly
 indicated in the DCI field.
 
-The following information needs to be provided when setting Keying material:
+The following information needs to be provided when setting Client Write (transmit) Keying material:
 
-Request : Establish Key
+Request : Establish Client Write Key and IV
 
 Paramters :
 
@@ -1044,16 +1044,17 @@ Paramters :
 
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-  to identify the operators to perform the DTLS record protection.
+  to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
 
-* client_application_traffic_secret:
+* Write Key:
 
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
 cipher suit used.
 
-* server_application_traffic_secret:'
+* Write IV:
 
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret that will be used by
@@ -1064,12 +1065,57 @@ Reply : Established
 
 Parameters : true or false
 
-## Destroy Read Keying Material
+## Establish Server Write Keying Material
 
-A function to destroy the read (recieve) keying material for a given epoch for a given
+The DTLS Chunk can use one of out of multiple sets of cipher suit and
+corresponding key materials. Which has been used are explicitly
+indicated in the DCI field.
+
+The following information needs to be provided when setting Server Write (transmit) Keying material:
+
+Request : Establish Server Write Key and IV
+
+Paramters :
+
+* SCTP Assocation:
+: Reference to the relevant SCTP assocation to set the keying material for.
+
+* DCI:
+: The DTLS connection index value to establish (or overwrite)
+
+* DTLS Epoch:
+: The DTLS epoch these keys are valid for. Note that Epoch lower than
+  3 are note expected as they are used during DTLS handshake.
+
+* Cipher Suit:
+: 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+  to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
+
+* Write Key:
+
+: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret will used by the DTLS 1.3 client to
+encrypt the record. Binary arbitrary long object depending on the
+cipher suit used.
+
+* Write IV:
+
+: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret that will be used by
+the DTLS 1.3 server to encrypt the record. Binary arbitrary long
+object depending on the cipher suit used.
+
+Reply : Established
+
+Parameters : true or false
+
+## Destroy Client Write Keying Material
+
+A function to destroy the Client Write (transmit) keying material for a given epoch for a given
 DCI for a given SCTP Association.
 
-Request : Destroy read key and IV
+Request : Destroy client write key and IV
 
 Paramters :
 
@@ -1083,12 +1129,12 @@ Reply: Destroyed
 
 Parameters : true or false
 
-## Destroy Write Keying Material
+## Destroy Server Write Keying Material
 
-A function to destroy the write (transmit) keying material for a given epoch for a given
+A function to destroy the Server Write (transmit) keying material for a given epoch for a given
 DCI for a given SCTP Association.
 
-Request : Destroy write key and IV
+Request : Destroy server write key and IV
 
 Paramters :
 
