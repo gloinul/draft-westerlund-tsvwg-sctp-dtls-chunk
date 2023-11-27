@@ -113,12 +113,13 @@ Table of Contents
    9.  Abstract API
      9.1.  Cipher Suit Capabilities
      9.2.  Establish Keying Material
-     9.3.  Destroying Keying Material
-     9.4.  Set DCI to Use
-     9.5.  Get q
-     9.6.  Get v
-     9.7.  Per Packet Information
-     9.8.  Configure Replay Protection
+     9.3.  Destroy Read Keying Material
+     9.4.  Destroy Write Keying Material
+     9.5.  Set DCI to Use
+     9.6.  Get q
+     9.7.  Get v
+     9.8.  Per Packet Information
+     9.9.  Configure Replay Protection
    10. IANA Considerations
      10.1.  DTLS Options Identifier Registry
      10.2.  Protection Error Cause Codes Registry
@@ -1114,12 +1115,12 @@ Table of Contents
 
    Parameters : true or false
 
-9.3.  Destroying Keying Material
+9.3.  Destroy Read Keying Material
 
-   A function to destory the keying material for a given epoch for a
-   given DCI for a given SCTP Association.
+   A function to destroy the read (recieve) keying material for a given
+   epoch for a given DCI for a given SCTP Association.
 
-   Request : Destroy Key
+   Request : Destroy read key and IV
 
    Paramters :
 
@@ -1133,7 +1134,26 @@ Table of Contents
 
    Parameters : true or false
 
-9.4.  Set DCI to Use
+9.4.  Destroy Write Keying Material
+
+   A function to destroy the write (transmit) keying material for a
+   given epoch for a given DCI for a given SCTP Association.
+
+   Request : Destroy write key and IV
+
+   Paramters :
+
+   *  SCTP Association
+
+   *  DCI
+
+   *  DTLS Epoch
+
+   Reply: Destroyed
+
+   Parameters : true or false
+
+9.5.  Set DCI to Use
 
    Set which key context (DCI) to use to protect the future SCTP packets
    sent by the SCTP Association.
@@ -1150,7 +1170,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.5.  Get q
+9.6.  Get q
 
    Get q, the number of protected messages (AEAD encryption invocations)
    for a given epoch.
@@ -1169,7 +1189,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.6.  Get v
+9.7.  Get v
 
    Get v, the number of attacker forgery attempts (failed AEAD
    decryption invocations) for a given epoch.
@@ -1188,9 +1208,9 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.7.  Per Packet Information
+9.8.  Per Packet Information
 
-9.8.  Configure Replay Protection
+9.9.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
