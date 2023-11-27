@@ -1073,9 +1073,9 @@ Request : Destroy Key
 
 Paramters :
 
-* DCI
-
 * SCTP Association
+
+* DCI
 
 * DTLS Epoch
 
@@ -1091,6 +1091,8 @@ SCTP Association.
 Request : Set DCI used
 
 Paramters :
+
+* SCTP Association
 
 * DCI
 
