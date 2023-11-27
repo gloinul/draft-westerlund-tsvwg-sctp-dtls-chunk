@@ -1066,8 +1066,8 @@ Parameters : true or false
 
 ## Destroying Keying Material
 
-A function to destory the keying material for a given DCI for a
-given SCTP Association.
+A function to destory the keying material for a given epoch for a given
+DCI for a given SCTP Association.
 
 Request : Destroy Key
 
@@ -1102,7 +1102,8 @@ Parameters : true or false
 
 ## Get q
 
-Get q, the number of protected messages (AEAD encryption invocations)
+Get q, the number of protected messages (AEAD encryption invocations) for
+a given epoch.
 
 Request : Get q
 
@@ -1120,7 +1121,8 @@ Parameters : non-negative integer
 
 ## Get v
 
-Get v, the number of attacker forgery attempts (failed AEAD decryption invocations)
+Get v, the number of attacker forgery attempts
+(failed AEAD decryption invocations) for a given epoch.
 
 Request : Get v
 
