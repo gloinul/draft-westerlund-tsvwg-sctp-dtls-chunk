@@ -1116,8 +1116,8 @@ Table of Contents
 
 9.3.  Destroying Keying Material
 
-   A function to destory the keying material for a given DCI for a given
-   SCTP Association.
+   A function to destory the keying material for a given epoch for a
+   given DCI for a given SCTP Association.
 
    Request : Destroy Key
 
@@ -1153,6 +1153,7 @@ Table of Contents
 9.5.  Get q
 
    Get q, the number of protected messages (AEAD encryption invocations)
+   for a given epoch.
 
    Request : Get q
 
@@ -1171,7 +1172,7 @@ Table of Contents
 9.6.  Get v
 
    Get v, the number of attacker forgery attempts (failed AEAD
-   decryption invocations)
+   decryption invocations) for a given epoch.
 
    Request : Get v
 

@@ -3029,8 +3029,8 @@ object depending on the cipher suit used.<a href="#section-9.2-8" class="pilcrow
         <h3 id="name-destroying-keying-material">
 <a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-destroying-keying-material" class="section-name selfRef">Destroying Keying Material</a>
         </h3>
-<p id="section-9.3-1">A function to destory the keying material for a given DCI for a
-given SCTP Association.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<p id="section-9.3-1">A function to destory the keying material for a given epoch for a given
+DCI for a given SCTP Association.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 <p id="section-9.3-2">Request : Destroy Key<a href="#section-9.3-2" class="pilcrow">¶</a></p>
 <p id="section-9.3-3">Paramters :<a href="#section-9.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3074,7 +3074,8 @@ SCTP Association.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
         <h3 id="name-get-q">
 <a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
         </h3>
-<p id="section-9.5-1">Get q, the number of protected messages (AEAD encryption invocations)<a href="#section-9.5-1" class="pilcrow">¶</a></p>
+<p id="section-9.5-1">Get q, the number of protected messages (AEAD encryption invocations) for
+a given epoch.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
 <p id="section-9.5-2">Request : Get q<a href="#section-9.5-2" class="pilcrow">¶</a></p>
 <p id="section-9.5-3">Paramters :<a href="#section-9.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3097,7 +3098,8 @@ SCTP Association.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
         <h3 id="name-get-v">
 <a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
         </h3>
-<p id="section-9.6-1">Get v, the number of attacker forgery attempts (failed AEAD decryption invocations)<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.6-1">Get v, the number of attacker forgery attempts
+(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
 <p id="section-9.6-2">Request : Get v<a href="#section-9.6-2" class="pilcrow">¶</a></p>
 <p id="section-9.6-3">Paramters :<a href="#section-9.6-3" class="pilcrow">¶</a></p>
 <ul class="normal">
