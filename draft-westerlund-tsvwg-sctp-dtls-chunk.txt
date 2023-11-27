@@ -115,8 +115,10 @@ Table of Contents
      9.2.  Establish Keying Material
      9.3.  Destroying Keying Material
      9.4.  Set DCI to Use
-     9.5.  Per Packet Information
-     9.6.  Configure Replay Protection
+     9.5.  Get q
+     9.6.  Get v
+     9.7.  Per Packet Information
+     9.8.  Configure Replay Protection
    10. IANA Considerations
      10.1.  DTLS Options Identifier Registry
      10.2.  Protection Error Cause Codes Registry
@@ -1148,9 +1150,46 @@ Table of Contents
 
    Parameters : true or false
 
-9.5.  Per Packet Information
+9.5.  Get q
 
-9.6.  Configure Replay Protection
+   Get q, the number of protected messages (AEAD encryption invocations)
+
+   Request : Get q
+
+   Paramters :
+
+   *  SCTP Association
+
+   *  DCI
+
+   *  DTLS Epoch
+
+   Reply: q
+
+   Parameters : non-negative integer
+
+9.6.  Get v
+
+   Get v, the number of attacker forgery attempts (failed AEAD
+   decryption invocations)
+
+   Request : Get v
+
+   Paramters :
+
+   *  SCTP Association
+
+   *  DCI
+
+   *  DTLS Epoch
+
+   Reply: v
+
+   Parameters : non-negative integer
+
+9.7.  Per Packet Information
+
+9.8.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
