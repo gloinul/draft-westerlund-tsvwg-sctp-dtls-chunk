@@ -1064,12 +1064,31 @@ Reply : Established
 
 Parameters : true or false
 
-## Destroying Keying Material
+## Destroy Read Keying Material
 
-A function to destory the keying material for a given epoch for a given
+A function to destroy the read (recieve) keying material for a given epoch for a given
 DCI for a given SCTP Association.
 
-Request : Destroy Key
+Request : Destroy read key and IV
+
+Paramters :
+
+* SCTP Association
+
+* DCI
+
+* DTLS Epoch
+
+Reply: Destroyed
+
+Parameters : true or false
+
+## Destroy Write Keying Material
+
+A function to destroy the write (transmit) keying material for a given epoch for a given
+DCI for a given SCTP Association.
+
+Request : Destroy write key and IV
 
 Paramters :
 
