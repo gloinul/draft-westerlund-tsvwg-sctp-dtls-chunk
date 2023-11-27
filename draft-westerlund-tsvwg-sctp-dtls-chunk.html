@@ -1284,28 +1284,31 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-cipher-suit-capabilities" class="internal xref">Cipher Suit Capabilities</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-establish-keying-material" class="internal xref">Establish Keying Material</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-establish-client-write-keyi" class="internal xref">Establish Client Write Keying Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-destroy-read-keying-materia" class="internal xref">Destroy Read Keying Material</a></p>
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-establish-server-write-keyi" class="internal xref">Establish Server Write Keying Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-destroy-write-keying-materi" class="internal xref">Destroy Write Keying Material</a></p>
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-destroy-client-write-keying" class="internal xref">Destroy Client Write Keying Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.5">
-                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-set-dci-to-use" class="internal xref">Set DCI to Use</a></p>
+                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-destroy-server-write-keying" class="internal xref">Destroy Server Write Keying Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.6">
-                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-get-q" class="internal xref">Get q</a></p>
+                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-set-dci-to-use" class="internal xref">Set DCI to Use</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.7">
-                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-get-v" class="internal xref">Get v</a></p>
+                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-get-q" class="internal xref">Get q</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.8">
-                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-per-packet-information" class="internal xref">Per Packet Information</a></p>
+                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-get-v" class="internal xref">Get v</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.9">
-                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
+                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-per-packet-information" class="internal xref">Per Packet Information</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.10">
+                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
 </li>
             </ul>
 </li>
@@ -2950,22 +2953,22 @@ protection operations block. All TLS cipher suit that are defined are
 listed in the TLS cipher suit registry <span>[<a href="#TLS-CIPHER-SUITS" class="cite xref">TLS-CIPHER-SUITS</a>]</span> at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
 of all supported cipher suits to the higher layer.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">Request : Get Cipher Suit<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">Request : Get Cipher Suits<a href="#section-9.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.1-3">Parameters : none<a href="#section-9.1-3" class="pilcrow">¶</a></p>
-<p id="section-9.1-4">Reply   : Cipher Suit<a href="#section-9.1-4" class="pilcrow">¶</a></p>
+<p id="section-9.1-4">Reply   : Cipher Suits<a href="#section-9.1-4" class="pilcrow">¶</a></p>
 <p id="section-9.1-5">Parameters : list of cipher suits<a href="#section-9.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="establish-keying-material">
+<div id="establish-client-write-keying-material">
 <section id="section-9.2">
-        <h3 id="name-establish-keying-material">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-establish-keying-material" class="section-name selfRef">Establish Keying Material</a>
+        <h3 id="name-establish-client-write-keyi">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-establish-client-write-keyi" class="section-name selfRef">Establish Client Write Keying Material</a>
         </h3>
 <p id="section-9.2-1">The DTLS Chunk can use one of out of multiple sets of cipher suit and
 corresponding key materials. Which has been used are explicitly
 indicated in the DCI field.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">The following information needs to be provided when setting Keying material:<a href="#section-9.2-2" class="pilcrow">¶</a></p>
-<p id="section-9.2-3">Request : Establish Key<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">The following information needs to be provided when setting Client Write (transmit) Keying material:<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.2-3">Request : Establish Client Write Key and IV<a href="#section-9.2-3" class="pilcrow">¶</a></p>
 <p id="section-9.2-4">Paramters :<a href="#section-9.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2-5.1">
@@ -3001,13 +3004,14 @@ indicated in the DCI field.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
               <dt id="section-9.2-5.4.1.1">Cipher Suit:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.4.1.2">
                 <p id="section-9.2-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the operators to perform the DTLS record protection.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.2-5.5">
-            <p id="section-9.2-5.5.1">client_application_traffic_secret:<a href="#section-9.2-5.5.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-5.5.1">Write Key:<a href="#section-9.2-5.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.2-6">: The cipher suit specific binary object containing all necessary
@@ -3016,7 +3020,7 @@ encrypt the record. Binary arbitrary long object depending on the
 cipher suit used.<a href="#section-9.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2-7.1">
-            <p id="section-9.2-7.1.1">server_application_traffic_secret:'<a href="#section-9.2-7.1.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-7.1.1">Write IV:<a href="#section-9.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.2-8">: The cipher suit specific binary object containing all necessary
@@ -3027,38 +3031,86 @@ object depending on the cipher suit used.<a href="#section-9.2-8" class="pilcrow
 <p id="section-9.2-10">Parameters : true or false<a href="#section-9.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="destroy-read-keying-material">
+<div id="establish-server-write-keying-material">
 <section id="section-9.3">
-        <h3 id="name-destroy-read-keying-materia">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-destroy-read-keying-materia" class="section-name selfRef">Destroy Read Keying Material</a>
+        <h3 id="name-establish-server-write-keyi">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-establish-server-write-keyi" class="section-name selfRef">Establish Server Write Keying Material</a>
         </h3>
-<p id="section-9.3-1">A function to destroy the read (recieve) keying material for a given epoch for a given
-DCI for a given SCTP Association.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
-<p id="section-9.3-2">Request : Destroy read key and IV<a href="#section-9.3-2" class="pilcrow">¶</a></p>
-<p id="section-9.3-3">Paramters :<a href="#section-9.3-3" class="pilcrow">¶</a></p>
+<p id="section-9.3-1">The DTLS Chunk can use one of out of multiple sets of cipher suit and
+corresponding key materials. Which has been used are explicitly
+indicated in the DCI field.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<p id="section-9.3-2">The following information needs to be provided when setting Server Write (transmit) Keying material:<a href="#section-9.3-2" class="pilcrow">¶</a></p>
+<p id="section-9.3-3">Request : Establish Server Write Key and IV<a href="#section-9.3-3" class="pilcrow">¶</a></p>
+<p id="section-9.3-4">Paramters :<a href="#section-9.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.3-4.1">
-            <p id="section-9.3-4.1.1">SCTP Association<a href="#section-9.3-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.3-5.1">
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.1.1">
+              <dt id="section-9.3-5.1.1.1">SCTP Assocation:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.1.1.2">
+                <p id="section-9.3-5.1.1.2.1">Reference to the relevant SCTP assocation to set the keying material for.<a href="#section-9.3-5.1.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
 </li>
-          <li class="normal" id="section-9.3-4.2">
-            <p id="section-9.3-4.2.1">DCI<a href="#section-9.3-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.3-5.2">
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.2.1">
+              <dt id="section-9.3-5.2.1.1">DCI:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.2.1.2">
+                <p id="section-9.3-5.2.1.2.1">The DTLS connection index value to establish (or overwrite)<a href="#section-9.3-5.2.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
 </li>
-          <li class="normal" id="section-9.3-4.3">
-            <p id="section-9.3-4.3.1">DTLS Epoch<a href="#section-9.3-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.3-5.3">
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.3.1">
+              <dt id="section-9.3-5.3.1.1">DTLS Epoch:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.3.1.2">
+                <p id="section-9.3-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.3-5.3.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.3-5.4">
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.4.1">
+              <dt id="section-9.3-5.4.1.1">Cipher Suit:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.4.1.2">
+                <p id="section-9.3-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.3-5.4.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.3-5.5">
+            <p id="section-9.3-5.5.1">Write Key:<a href="#section-9.3-5.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.3-5">Reply: Destroyed<a href="#section-9.3-5" class="pilcrow">¶</a></p>
-<p id="section-9.3-6">Parameters : true or false<a href="#section-9.3-6" class="pilcrow">¶</a></p>
+<p id="section-9.3-6">: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret will used by the DTLS 1.3 client to
+encrypt the record. Binary arbitrary long object depending on the
+cipher suit used.<a href="#section-9.3-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.3-7.1">
+            <p id="section-9.3-7.1.1">Write IV:<a href="#section-9.3-7.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.3-8">: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret that will be used by
+the DTLS 1.3 server to encrypt the record. Binary arbitrary long
+object depending on the cipher suit used.<a href="#section-9.3-8" class="pilcrow">¶</a></p>
+<p id="section-9.3-9">Reply : Established<a href="#section-9.3-9" class="pilcrow">¶</a></p>
+<p id="section-9.3-10">Parameters : true or false<a href="#section-9.3-10" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="destroy-write-keying-material">
+<div id="destroy-client-write-keying-material">
 <section id="section-9.4">
-        <h3 id="name-destroy-write-keying-materi">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-destroy-write-keying-materi" class="section-name selfRef">Destroy Write Keying Material</a>
+        <h3 id="name-destroy-client-write-keying">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-destroy-client-write-keying" class="section-name selfRef">Destroy Client Write Keying Material</a>
         </h3>
-<p id="section-9.4-1">A function to destroy the write (transmit) keying material for a given epoch for a given
+<p id="section-9.4-1">A function to destroy the Client Write (transmit) keying material for a given epoch for a given
 DCI for a given SCTP Association.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<p id="section-9.4-2">Request : Destroy write key and IV<a href="#section-9.4-2" class="pilcrow">¶</a></p>
+<p id="section-9.4-2">Request : Destroy client write key and IV<a href="#section-9.4-2" class="pilcrow">¶</a></p>
 <p id="section-9.4-3">Paramters :<a href="#section-9.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.4-4.1">
@@ -3075,14 +3127,14 @@ DCI for a given SCTP Association.<a href="#section-9.4-1" class="pilcrow">¶</a>
 <p id="section-9.4-6">Parameters : true or false<a href="#section-9.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="set-dci-to-use">
+<div id="destroy-server-write-keying-material">
 <section id="section-9.5">
-        <h3 id="name-set-dci-to-use">
-<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-set-dci-to-use" class="section-name selfRef">Set DCI to Use</a>
+        <h3 id="name-destroy-server-write-keying">
+<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-destroy-server-write-keying" class="section-name selfRef">Destroy Server Write Keying Material</a>
         </h3>
-<p id="section-9.5-1">Set which key context (DCI) to use to protect the future SCTP packets sent by the
-SCTP Association.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
-<p id="section-9.5-2">Request : Set DCI used<a href="#section-9.5-2" class="pilcrow">¶</a></p>
+<p id="section-9.5-1">A function to destroy the Server Write (transmit) keying material for a given epoch for a given
+DCI for a given SCTP Association.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
+<p id="section-9.5-2">Request : Destroy server write key and IV<a href="#section-9.5-2" class="pilcrow">¶</a></p>
 <p id="section-9.5-3">Paramters :<a href="#section-9.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.5-4.1">
@@ -3091,19 +3143,22 @@ SCTP Association.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
           <li class="normal" id="section-9.5-4.2">
             <p id="section-9.5-4.2.1">DCI<a href="#section-9.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
+          <li class="normal" id="section-9.5-4.3">
+            <p id="section-9.5-4.3.1">DTLS Epoch<a href="#section-9.5-4.3.1" class="pilcrow">¶</a></p>
+</li>
         </ul>
-<p id="section-9.5-5">Reply: DCI set<a href="#section-9.5-5" class="pilcrow">¶</a></p>
+<p id="section-9.5-5">Reply: Destroyed<a href="#section-9.5-5" class="pilcrow">¶</a></p>
 <p id="section-9.5-6">Parameters : true or false<a href="#section-9.5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-q">
+<div id="set-dci-to-use">
 <section id="section-9.6">
-        <h3 id="name-get-q">
-<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
+        <h3 id="name-set-dci-to-use">
+<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-set-dci-to-use" class="section-name selfRef">Set DCI to Use</a>
         </h3>
-<p id="section-9.6-1">Get q, the number of protected messages (AEAD encryption invocations) for
-a given epoch.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
-<p id="section-9.6-2">Request : Get q<a href="#section-9.6-2" class="pilcrow">¶</a></p>
+<p id="section-9.6-1">Set which key context (DCI) to use to protect the future SCTP packets sent by the
+SCTP Association.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.6-2">Request : Set DCI used<a href="#section-9.6-2" class="pilcrow">¶</a></p>
 <p id="section-9.6-3">Paramters :<a href="#section-9.6-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.6-4.1">
@@ -3112,22 +3167,19 @@ a given epoch.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
           <li class="normal" id="section-9.6-4.2">
             <p id="section-9.6-4.2.1">DCI<a href="#section-9.6-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.6-4.3">
-            <p id="section-9.6-4.3.1">DTLS Epoch<a href="#section-9.6-4.3.1" class="pilcrow">¶</a></p>
-</li>
         </ul>
-<p id="section-9.6-5">Reply: q<a href="#section-9.6-5" class="pilcrow">¶</a></p>
-<p id="section-9.6-6">Parameters : non-negative integer<a href="#section-9.6-6" class="pilcrow">¶</a></p>
+<p id="section-9.6-5">Reply: DCI set<a href="#section-9.6-5" class="pilcrow">¶</a></p>
+<p id="section-9.6-6">Parameters : true or false<a href="#section-9.6-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-v">
+<div id="get-q">
 <section id="section-9.7">
-        <h3 id="name-get-v">
-<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
+        <h3 id="name-get-q">
+<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
         </h3>
-<p id="section-9.7-1">Get v, the number of attacker forgery attempts
-(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
-<p id="section-9.7-2">Request : Get v<a href="#section-9.7-2" class="pilcrow">¶</a></p>
+<p id="section-9.7-1">Get q, the number of protected messages (AEAD encryption invocations) for
+a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
+<p id="section-9.7-2">Request : Get q<a href="#section-9.7-2" class="pilcrow">¶</a></p>
 <p id="section-9.7-3">Paramters :<a href="#section-9.7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.7-4.1">
@@ -3140,45 +3192,69 @@ a given epoch.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
             <p id="section-9.7-4.3.1">DTLS Epoch<a href="#section-9.7-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.7-5">Reply: v<a href="#section-9.7-5" class="pilcrow">¶</a></p>
+<p id="section-9.7-5">Reply: q<a href="#section-9.7-5" class="pilcrow">¶</a></p>
 <p id="section-9.7-6">Parameters : non-negative integer<a href="#section-9.7-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="per-packet-information">
+<div id="get-v">
 <section id="section-9.8">
+        <h3 id="name-get-v">
+<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
+        </h3>
+<p id="section-9.8-1">Get v, the number of attacker forgery attempts
+(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
+<p id="section-9.8-2">Request : Get v<a href="#section-9.8-2" class="pilcrow">¶</a></p>
+<p id="section-9.8-3">Paramters :<a href="#section-9.8-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.8-4.1">
+            <p id="section-9.8-4.1.1">SCTP Association<a href="#section-9.8-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.8-4.2">
+            <p id="section-9.8-4.2.1">DCI<a href="#section-9.8-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.8-4.3">
+            <p id="section-9.8-4.3.1">DTLS Epoch<a href="#section-9.8-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.8-5">Reply: v<a href="#section-9.8-5" class="pilcrow">¶</a></p>
+<p id="section-9.8-6">Parameters : non-negative integer<a href="#section-9.8-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="per-packet-information">
+<section id="section-9.9">
         <h3 id="name-per-packet-information">
-<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-per-packet-information" class="section-name selfRef">Per Packet Information</a>
+<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-per-packet-information" class="section-name selfRef">Per Packet Information</a>
       </h3>
 </section>
 </div>
 <div id="configure-replay-protection">
-<section id="section-9.9">
+<section id="section-9.10">
         <h3 id="name-configure-replay-protection">
-<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
         </h3>
-<p id="section-9.9-1">The DTLS replay protection in this usage is expected to be fairly
+<p id="section-9.10-1">The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets are
 a combination of how delayed one packet may be compared to another
 times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
-more suitable value depending on the use case should be considered.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
-<p id="section-9.9-2">Request : Configure Replay Protection<a href="#section-9.9-2" class="pilcrow">¶</a></p>
-<p id="section-9.9-3">Paramters :<a href="#section-9.9-3" class="pilcrow">¶</a></p>
+more suitable value depending on the use case should be considered.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
+<p id="section-9.10-2">Request : Configure Replay Protection<a href="#section-9.10-2" class="pilcrow">¶</a></p>
+<p id="section-9.10-3">Paramters :<a href="#section-9.10-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.9-4.1">
-            <p id="section-9.9-4.1.1">DCI<a href="#section-9.9-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.10-4.1">
+            <p id="section-9.10-4.1.1">DCI<a href="#section-9.10-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.9-4.2">
-            <p id="section-9.9-4.2.1">SCTP Association<a href="#section-9.9-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.10-4.2">
+            <p id="section-9.10-4.2.1">SCTP Association<a href="#section-9.10-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.9-4.3">
-            <p id="section-9.9-4.3.1">Configuration parameters<a href="#section-9.9-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.10-4.3">
+            <p id="section-9.10-4.3.1">Configuration parameters<a href="#section-9.10-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.9-5">Reply: Replay Protection Configured<a href="#section-9.9-5" class="pilcrow">¶</a></p>
-<p id="section-9.9-6">Parameters : true or false<a href="#section-9.9-6" class="pilcrow">¶</a></p>
+<p id="section-9.10-5">Reply: Replay Protection Configured<a href="#section-9.10-5" class="pilcrow">¶</a></p>
+<p id="section-9.10-6">Parameters : true or false<a href="#section-9.10-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
