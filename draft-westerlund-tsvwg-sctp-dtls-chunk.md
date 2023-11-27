@@ -1035,10 +1035,10 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-DCI:
+* DCI:
 : The DTLS connection index value to establish (or overwrite)
 
-Epoch:
+* DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are note expected as they are used during DTLS handshake.
 
