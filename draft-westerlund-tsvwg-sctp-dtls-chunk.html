@@ -2968,50 +2968,54 @@ indicated in the DCI field.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
             <dd class="break"></dd>
 </dl>
 </li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-9.2-6">
-          <dt id="section-9.2-6.1">DCI:</dt>
-          <dd style="margin-left: 1.5em" id="section-9.2-6.2">
-            <p id="section-9.2-6.2.1">The DTLS connection index value to establish (or overwrite)<a href="#section-9.2-6.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-9.2-6.3">Epoch:</dt>
-          <dd style="margin-left: 1.5em" id="section-9.2-6.4">
-            <p id="section-9.2-6.4.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
-3 are note expected as they are used during DTLS handshake.<a href="#section-9.2-6.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal">
-<li class="normal" id="section-9.2-7.1">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-7.1.1">
-              <dt id="section-9.2-7.1.1.1">Cipher Suit:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-7.1.1.2">
-                <p id="section-9.2-7.1.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the operators to perform the DTLS record protection.<a href="#section-9.2-7.1.1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.2-5.2">
+            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.2.1">
+              <dt id="section-9.2-5.2.1.1">DCI:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.2-5.2.1.2">
+                <p id="section-9.2-5.2.1.2.1">The DTLS connection index value to establish (or overwrite)<a href="#section-9.2-5.2.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
-          <li class="normal" id="section-9.2-7.2">
-            <p id="section-9.2-7.2.1">client_application_traffic_secret:<a href="#section-9.2-7.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.2-5.3">
+            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.3.1">
+              <dt id="section-9.2-5.3.1.1">DTLS Epoch:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.2-5.3.1.2">
+                <p id="section-9.2-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.2-5.3.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.2-5.4">
+            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.4.1">
+              <dt id="section-9.2-5.4.1.1">Cipher Suit:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.2-5.4.1.2">
+                <p id="section-9.2-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the operators to perform the DTLS record protection.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.2-5.5">
+            <p id="section-9.2-5.5.1">client_application_traffic_secret:<a href="#section-9.2-5.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.2-6">: The cipher suit specific binary object containing all necessary
+information for protection operations. The secret will used by the DTLS 1.3 client to
+encrypt the record. Binary arbitrary long object depending on the
+cipher suit used.<a href="#section-9.2-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-7.1">
+            <p id="section-9.2-7.1.1">server_application_traffic_secret:'<a href="#section-9.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.2-8">: The cipher suit specific binary object containing all necessary
-information for protection operations. The secret will used by the DTLS 1.3 client to
-encrypt the record. Binary arbitrary long object depending on the
-cipher suit used.<a href="#section-9.2-8" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.2-9.1">
-            <p id="section-9.2-9.1.1">server_application_traffic_secret:'<a href="#section-9.2-9.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-9.2-10">: The cipher suit specific binary object containing all necessary
 information for protection operations. The secret that will be used by
 the DTLS 1.3 server to encrypt the record. Binary arbitrary long
-object depending on the cipher suit used.<a href="#section-9.2-10" class="pilcrow">¶</a></p>
-<p id="section-9.2-11">Reply : Established<a href="#section-9.2-11" class="pilcrow">¶</a></p>
-<p id="section-9.2-12">Parameters : true or false<a href="#section-9.2-12" class="pilcrow">¶</a></p>
+object depending on the cipher suit used.<a href="#section-9.2-8" class="pilcrow">¶</a></p>
+<p id="section-9.2-9">Reply : Established<a href="#section-9.2-9" class="pilcrow">¶</a></p>
+<p id="section-9.2-10">Parameters : true or false<a href="#section-9.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="destroying-keying-material">
