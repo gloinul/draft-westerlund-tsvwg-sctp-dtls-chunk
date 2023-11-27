@@ -1100,6 +1100,43 @@ Reply: DCI set
 
 Parameters : true or false
 
+## Get q
+
+Get q, the number of protected messages (AEAD encryption invocations)
+
+Request : Get q
+
+Paramters :
+
+* SCTP Association
+
+* DCI
+
+* DTLS Epoch
+
+Reply: q
+
+Parameters : non-negative integer
+
+## Get v
+
+Get v, the number of attacker forgery attempts (failed AEAD decryption invocations)
+
+Request : Get v
+
+Paramters :
+
+* SCTP Association
+
+* DCI
+
+* DTLS Epoch
+
+Reply: v
+
+Parameters : non-negative integer
+
+
 ## Per Packet Information
 
 
