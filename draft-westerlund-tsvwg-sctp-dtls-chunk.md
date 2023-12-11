@@ -340,94 +340,38 @@ Authentication mechanism for ASCONF chunks.
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk during an
-Association lifetime as described in {{RFC9260}} section 5.2 The introduction of
-DTLS CHUNK opens for two alternatives depending on if the protection engine
-preserves its key material state or not.
+Association lifetime as described in {{RFC9260}} section 5.2
 
-When the encryption engine can preserve the key material, meaning that
-encrypted data belonging to the current Association can be encrypted and
-decrypted, the request for SCTP Restart SHOULD use INIT chunk in DTLS chunk.
+When using DTLS CHUNKS, an SCTP Endpoint willing to get an Association
+Restart SHALL preserve the key material, meaning that
+data belonging to the current Association can be encrypted and
+decrypted.
 
-When the DTLS context is not preserved, the SCTP Restart can only be
-accomplished by means of plain text INIT.  This opens to a
-man-in-the-middle attack where a malicious attacker may theoretically
-generate an INIT chunk with proper parameters and hijack the SCTP
-association. This should only be allowed under explictly configured
-policy.
+The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
+whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as encrypted DATA.
 
-Editors note: The whole section related to SCTP Restart requires
-further work, though.
+~~~~~~~~~~~ aasvg
 
-### INIT chunk in DTLS chunk
+Initiator                                     Responder
+    |                                             | -.
+    +--------------------[INIT]------------------>|   | Plain SCTP
+    |<-----------------[INIT-ACK]-----------------+   +-----------
+    |                                             | -'
+    |                                             | -.
+    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Encrypted
+    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +----------
+    |                                             | -'
 
-This procedure as currently defined updates {{RFC9260}}, thus this
-part requires agreements and possibly a new approach.
+~~~~~~~~~~~
+{: #DTLS-chunk-restart title="Handshake of SCTP Restart for DTLS in SCTP" artwork-align="center"}
 
-If the key material associated with the SCTP association has been
-preserved the peer aiming for a SCTP Restart can still send DTLS
-chunks that can be processed by the remote peer.  In such case the
-peer willing to restart the Association SHOULD send the INIT chunk in
-a DTLS chunk and encrypt it.  At reception of the DTLS chunk
-containing INIT, the receiver will follow the procedure described in
-{{RFC9260}} section 5.2.2 with the exception that all the chunks will
-be sent in DTLS chunks.
+The {{DTLS-chunk-restart}} shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.
 
-An endpoint supporting SCTP Association Restart and implementing DTLS
-Chunk MUST accept receiving SCTP packets with a verification tag with
-value 0.  The endpoint will attempt to map the packet to an
-association based on source IP address, destination address and
-port. If the combination of those parameters is not unique the
-implementor MAY choose to send the DTLS Chunk to all Associations that
-fit with the parameters in order to find the right one. Note that type
-of trial decrypting of the SCTP packets will increase the resource
-consumption per packet with the number of matching SCTP associations.
-
-Note that the Association Restart will update the verification tags
-for both endpoints.  At the end of the unexpected INIT handshaking the
-receiver of INIT chunk SHALL perform a rekeying as soon
-as possible to verify the peer identity.
-
-### INIT chunk as plain text
-
-If the key material isn't preserved the peer aiming for a SCTP Restart
-can only perform an INIT in plain text. Supporting this option opens
-up the SCTP association to an availability attack, where an capable
-attacker may be able to hijack the SCTP association. Therefore an
-implementation should only support and enable this option if restart
-is crucial and only when a policy is explicit set to enable the
-function.
-
-To mount the attack the attacker needs to be able to process copies of
-packets sent from the target endpoint towards its peer for the
-targeted SCTP association. In addition the attacker needs to be able
-to send IP packets with a source address of the target's peer. If the
-attacker can send an SCTP INIT that appear to be from the peer, if the
-target is allowing this option it will generate an INIT ACK back, and
-assuming the attacker succesfully completes the restart handshake
-process the attack has managed to change the VTAG for the association
-and the peer will no longer respond, leading to a SCTP associatons
-failure.
-
-As mitigation an SCTP endpoint supporting Association Restart by means
-of plain text INIT SHOULD support is the following. The endpoint
-receiving an INIT should send HEARTBEATs protected by DTLS CHUNK to
-its peer to validate that the peer is unreachable. If the endpoint
-receive an HEARTBEAT ACK within a reasonable time (at least a couple
-of RTTs) the restart INIT SHOULD be discarded as the peer obviously
-can respond, and thus have no need for a restart. A capable attacker
-can still succeed in its attack supressing the HEARTBEAT(s) through
-packet filtering, congestion overload or any other method preventing
-the HEARTBEATS or there ACKs to reach their destination. If it has
-been validated that the peer is unreachable, the INIT chunk will
-trigger the procedure described in {{RFC9260}} section 5.2.2
-
-Note that the Association Restart will update the verification tags
-for both endpoints.  At the end of the unexpected INIT handshaking the
-receiver of INIT chunk SHALL trigger the creation of a new DTLS
-connection to be executed as soon as possible.  Also note that failure
-in handshaking of a new DTLS connection is considered a protocol
-violation and will lead to Association Abort (see {{ekeyhandshake}}).
-
+Being INIT and INIT-ACK plain guarantees the compliance with
+the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
+and COOCKIE-ACK by means of DTLS CHUNK ensures that the
+peer requesting the Restart has been previously validated.
 
 # New Parameter Type {#new-parameter-type}
 
