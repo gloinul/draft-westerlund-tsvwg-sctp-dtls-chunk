@@ -28,13 +28,13 @@ features provided by SCTP and its extensions but with some limitations.
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 4.0.0
+    platformdirs 4.1.0
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
-    wcwidth 0.2.10
+    wcwidth 0.2.12
 -->
 <link href="draft-westerlund-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1033,11 +1033,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCTP DTLS Chunk</td>
-<td class="right">November 2023</td>
+<td class="right">December 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 30 May 2024</td>
+<td class="center">Expires 13 June 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1050,12 +1050,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-27" class="published">27 November 2023</time>
+<time datetime="2023-12-11" class="published">11 December 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-30">30 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-06-13">13 June 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1119,7 +1119,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1183,14 +1183,6 @@ features provided by SCTP and its extensions but with some limitations.<a href="
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9">
                 <p id="section-toc.1-1.3.2.9.1"><a href="#section-3.9" class="auto internal xref">3.9</a>.  <a href="#name-sctp-restart-considerations" class="internal xref">SCTP Restart Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9.2.1">
-                    <p id="section-toc.1-1.3.2.9.2.1.1"><a href="#section-3.9.1" class="auto internal xref">3.9.1</a>.  <a href="#name-init-chunk-in-dtls-chunk" class="internal xref">INIT chunk in DTLS chunk</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9.2.2">
-                    <p id="section-toc.1-1.3.2.9.2.2.1"><a href="#section-3.9.2" class="auto internal xref">3.9.2</a>.  <a href="#name-init-chunk-as-plain-text" class="internal xref">INIT chunk as plain text</a></p>
-</li>
-                </ul>
 </li>
             </ul>
 </li>
@@ -1575,7 +1567,7 @@ SCTP-DTLS PPID, will have their message protected inside SCTP
 DTLS chunk protected with the currently established key.
 SCTP DTLS chunk state evolution is described in <a href="#init-state-machine" class="auto internal xref">Section 7.3</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">DTLS related procedures MAY use the Flags byte provided by the
-DTLS chunk header (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>)
+DTLS chunk header (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>)
 for their needs. Details of the use of Flags are specified within
 this document in the relevant sections.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">The SCTP common header is assumed to be implicitly protected by the
@@ -1700,92 +1692,68 @@ Authentication mechanism for ASCONF chunks.<a href="#section-3.8-2" class="pilcr
 <a href="#section-3.9" class="section-number selfRef">3.9. </a><a href="#name-sctp-restart-considerations" class="section-name selfRef">SCTP Restart Considerations</a>
         </h3>
 <p id="section-3.9-1">This section deals with the handling of an unexpected INIT chunk during an
-Association lifetime as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section 5.2 The introduction of
-DTLS CHUNK opens for two alternatives depending on if the protection engine
-preserves its key material state or not.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
-<p id="section-3.9-2">When the encryption engine can preserve the key material, meaning that
-encrypted data belonging to the current Association can be encrypted and
-decrypted, the request for SCTP Restart SHOULD use INIT chunk in DTLS chunk.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
-<p id="section-3.9-3">When the DTLS context is not preserved, the SCTP Restart can only be
-accomplished by means of plain text INIT.  This opens to a
-man-in-the-middle attack where a malicious attacker may theoretically
-generate an INIT chunk with proper parameters and hijack the SCTP
-association. This should only be allowed under explictly configured
-policy.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
-<p id="section-3.9-4">Editors note: The whole section related to SCTP Restart requires
-further work, though.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
-<div id="init-chunk-in-dtls-chunk">
-<section id="section-3.9.1">
-          <h4 id="name-init-chunk-in-dtls-chunk">
-<a href="#section-3.9.1" class="section-number selfRef">3.9.1. </a><a href="#name-init-chunk-in-dtls-chunk" class="section-name selfRef">INIT chunk in DTLS chunk</a>
-          </h4>
-<p id="section-3.9.1-1">This procedure as currently defined updates <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, thus this
-part requires agreements and possibly a new approach.<a href="#section-3.9.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-2">If the key material associated with the SCTP association has been
-preserved the peer aiming for a SCTP Restart can still send DTLS
-chunks that can be processed by the remote peer.  In such case the
-peer willing to restart the Association SHOULD send the INIT chunk in
-a DTLS chunk and encrypt it.  At reception of the DTLS chunk
-containing INIT, the receiver will follow the procedure described in
-<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section 5.2.2 with the exception that all the chunks will
-be sent in DTLS chunks.<a href="#section-3.9.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-3">An endpoint supporting SCTP Association Restart and implementing DTLS
-Chunk MUST accept receiving SCTP packets with a verification tag with
-value 0.  The endpoint will attempt to map the packet to an
-association based on source IP address, destination address and
-port. If the combination of those parameters is not unique the
-implementor MAY choose to send the DTLS Chunk to all Associations that
-fit with the parameters in order to find the right one. Note that type
-of trial decrypting of the SCTP packets will increase the resource
-consumption per packet with the number of matching SCTP associations.<a href="#section-3.9.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-4">Note that the Association Restart will update the verification tags
-for both endpoints.  At the end of the unexpected INIT handshaking the
-receiver of INIT chunk SHALL perform a rekeying as soon
-as possible to verify the peer identity.<a href="#section-3.9.1-4" class="pilcrow">¶</a></p>
-</section>
+Association lifetime as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section 5.2<a href="#section-3.9-1" class="pilcrow">¶</a></p>
+<p id="section-3.9-2">When using DTLS CHUNKS, an SCTP Endpoint willing to get an Association
+Restart SHALL preserve the key material, meaning that
+data belonging to the current Association can be encrypted and
+decrypted.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
+<p id="section-3.9-3">The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
+whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as encrypted DATA.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+<span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
+<figure id="figure-2">
+          <div id="section-3.9-4.1">
+            <div class="alignCenter art-svg artwork" id="section-3.9-4.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="536" viewBox="0 0 536 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 40,48 L 40,160" fill="none" stroke="black"></path>
+                <path d="M 408,48 L 408,160" fill="none" stroke="black"></path>
+                <path d="M 440,64 L 440,80" fill="none" stroke="black"></path>
+                <path d="M 440,128 L 440,144" fill="none" stroke="black"></path>
+                <path d="M 40,64 L 200,64" fill="none" stroke="black"></path>
+                <path d="M 256,64 L 400,64" fill="none" stroke="black"></path>
+                <path d="M 48,80 L 184,80" fill="none" stroke="black"></path>
+                <path d="M 272,80 L 408,80" fill="none" stroke="black"></path>
+                <path d="M 440,80 L 528,80" fill="none" stroke="black"></path>
+                <path d="M 40,128 L 112,128" fill="none" stroke="black"></path>
+                <path d="M 320,128 L 400,128" fill="none" stroke="black"></path>
+                <path d="M 48,144 L 112,144" fill="none" stroke="black"></path>
+                <path d="M 312,144 L 408,144" fill="none" stroke="black"></path>
+                <path d="M 440,144 L 520,144" fill="none" stroke="black"></path>
+                <path d="M 424,48 C 432.83064,48 440,55.16936 440,64" fill="none" stroke="black"></path>
+                <path d="M 424,96 C 432.83064,96 440,88.83064 440,80" fill="none" stroke="black"></path>
+                <path d="M 424,112 C 432.83064,112 440,119.16936 440,128" fill="none" stroke="black"></path>
+                <path d="M 424,160 C 432.83064,160 440,152.83064 440,144" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="408,128 396,122.4 396,133.6" fill="black" transform="rotate(0,400,128)"></polygon>
+                <polygon class="arrowhead" points="408,64 396,58.4 396,69.6" fill="black" transform="rotate(0,400,64)"></polygon>
+                <polygon class="arrowhead" points="56,144 44,138.4 44,149.6" fill="black" transform="rotate(180,48,144)"></polygon>
+                <polygon class="arrowhead" points="56,80 44,74.4 44,85.6" fill="black" transform="rotate(180,48,80)"></polygon>
+                <g class="text">
+                  <text x="40" y="36">Initiator</text>
+                  <text x="408" y="36">Responder</text>
+                  <text x="228" y="68">[INIT]</text>
+                  <text x="472" y="68">Plain</text>
+                  <text x="516" y="68">SCTP</text>
+                  <text x="228" y="84">[INIT-ACK]</text>
+                  <text x="136" y="132">[DTLS</text>
+                  <text x="212" y="132">CHUNK(COOKIE</text>
+                  <text x="292" y="132">ECHO)]</text>
+                  <text x="488" y="132">Encrypted</text>
+                  <text x="136" y="148">[DTLS</text>
+                  <text x="212" y="148">CHUNK(COOKIE</text>
+                  <text x="288" y="148">ACK)]</text>
+                </g>
+              </svg><a href="#section-3.9-4.1.1" class="pilcrow">¶</a>
 </div>
-<div id="init-chunk-as-plain-text">
-<section id="section-3.9.2">
-          <h4 id="name-init-chunk-as-plain-text">
-<a href="#section-3.9.2" class="section-number selfRef">3.9.2. </a><a href="#name-init-chunk-as-plain-text" class="section-name selfRef">INIT chunk as plain text</a>
-          </h4>
-<p id="section-3.9.2-1">If the key material isn't preserved the peer aiming for a SCTP Restart
-can only perform an INIT in plain text. Supporting this option opens
-up the SCTP association to an availability attack, where an capable
-attacker may be able to hijack the SCTP association. Therefore an
-implementation should only support and enable this option if restart
-is crucial and only when a policy is explicit set to enable the
-function.<a href="#section-3.9.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.9.2-2">To mount the attack the attacker needs to be able to process copies of
-packets sent from the target endpoint towards its peer for the
-targeted SCTP association. In addition the attacker needs to be able
-to send IP packets with a source address of the target's peer. If the
-attacker can send an SCTP INIT that appear to be from the peer, if the
-target is allowing this option it will generate an INIT ACK back, and
-assuming the attacker succesfully completes the restart handshake
-process the attack has managed to change the VTAG for the association
-and the peer will no longer respond, leading to a SCTP associatons
-failure.<a href="#section-3.9.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.9.2-3">As mitigation an SCTP endpoint supporting Association Restart by means
-of plain text INIT SHOULD support is the following. The endpoint
-receiving an INIT should send HEARTBEATs protected by DTLS CHUNK to
-its peer to validate that the peer is unreachable. If the endpoint
-receive an HEARTBEAT ACK within a reasonable time (at least a couple
-of RTTs) the restart INIT SHOULD be discarded as the peer obviously
-can respond, and thus have no need for a restart. A capable attacker
-can still succeed in its attack supressing the HEARTBEAT(s) through
-packet filtering, congestion overload or any other method preventing
-the HEARTBEATS or there ACKs to reach their destination. If it has
-been validated that the peer is unreachable, the INIT chunk will
-trigger the procedure described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section 5.2.2<a href="#section-3.9.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.9.2-4">Note that the Association Restart will update the verification tags
-for both endpoints.  At the end of the unexpected INIT handshaking the
-receiver of INIT chunk SHALL trigger the creation of a new DTLS
-connection to be executed as soon as possible.  Also note that failure
-in handshaking of a new DTLS connection is considered a protocol
-violation and will lead to Association Abort (see <a href="#ekeyhandshake" class="auto internal xref">Section 6.2.1</a>).<a href="#section-3.9.2-4" class="pilcrow">¶</a></p>
-</section>
 </div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.9-5">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
+<p id="section-3.9-6">Being INIT and INIT-ACK plain guarantees the compliance with
+the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
+and COOCKIE-ACK by means of DTLS CHUNK ensures that the
+peer requesting the Restart has been previously validated.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1831,7 +1799,7 @@ the use of the upper bits of the parameter type.<a href="#section-4-3" class="pi
 <p id="section-4.1-1">This parameter is only used to indicate the request and acknowledge of
 support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <span id="name-protected-association-param"></span><div id="sctp-DTLS-chunk-init-options">
-<figure id="figure-2">
+<figure id="figure-3">
           <div id="section-4.1-2.1">
             <div class="alignCenter art-svg artwork" id="section-4.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="144" width="528" viewBox="0 0 528 144" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -1890,7 +1858,7 @@ support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.<a href="#section-4.1-1
               </svg><a href="#section-4.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-protected-association-param" class="selfRef">Protected Association Parameter</a>
           </figcaption></figure>
 </div>
@@ -1970,7 +1938,7 @@ the upper bits of the chunk type.<a href="#section-5.1-4" class="pilcrow">¶</a>
 <p id="section-5.1-5">The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain SCTP packet.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-structure"></span><div id="sctp-DTLS-chunk-newchunk-crypt-struct">
-<figure id="figure-3">
+<figure id="figure-4">
           <div id="section-5.1-6.1">
             <div class="alignCenter art-svg artwork" id="section-5.1-6.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2032,7 +2000,7 @@ payload of a plain SCTP packet.<a href="#section-5.1-5" class="pilcrow">¶</a></
               </svg><a href="#section-5.1-6.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-dtls-chunk-structure" class="selfRef">DTLS Chunk Structure</a>
           </figcaption></figure>
 </div>
@@ -2107,7 +2075,7 @@ the upper bits of the chunk type.<a href="#section-5.2-3" class="pilcrow">¶</a>
 <p id="section-5.2-4">The PVALID chunk is used to hold a 32-bit vector of offered protection
 solutions in the INIT.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <span id="name-pvalid-chunk-structure"></span><div id="sctp-DTLS-chunk-newchunk-PVALID">
-<figure id="figure-4">
+<figure id="figure-5">
           <div id="section-5.2-5.1">
             <div class="alignCenter art-svg artwork" id="section-5.2-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="144" width="528" viewBox="0 0 528 144" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2170,7 +2138,7 @@ solutions in the INIT.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
               </svg><a href="#section-5.2-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-pvalid-chunk-structure" class="selfRef">PVALID Chunk Structure</a>
           </figcaption></figure>
 </div>
@@ -2228,7 +2196,7 @@ Mandatory Parameter' (2) (see <span>[<a href="#RFC9260" class="cite xref">RFC926
 protected association parameter identifier
 <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> in the missing param Information field.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <span id="name-error-missing-protected-ass"></span><div id="sctp-DTLS-init-chunk-missing-protected">
-<figure id="figure-5">
+<figure id="figure-6">
           <div id="section-6.1-2.1">
             <div class="alignCenter art-svg artwork" id="section-6.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2309,7 +2277,7 @@ protected association parameter identifier
               </svg><a href="#section-6.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-error-missing-protected-ass" class="selfRef">ERROR Missing Protected Association Paramater</a>
           </figcaption></figure>
 </div>
@@ -2317,7 +2285,7 @@ protected association parameter identifier
 * 2 according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, section 3.3.10.2. Also the Protection
 Association ID may be present in any of the N missing params, no order
 implied by the example in
-<a href="#sctp-DTLS-init-chunk-missing-protected" class="auto internal xref">Figure 5</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<a href="#sctp-DTLS-init-chunk-missing-protected" class="auto internal xref">Figure 6</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="eprotect">
@@ -2334,7 +2302,7 @@ key establishment specification MAY add further causes.<a href="#section-6.2-2" 
 <p id="section-6.2-3">When detecting an error, SCTP will send an ABORT chunk containing
 the relevant Error Type and Causes.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <span id="name-error-in-protection-cause-f"></span><div id="sctp-eprotect-error-structure">
-<figure id="figure-6">
+<figure id="figure-7">
           <div id="section-6.2-4.1">
             <div class="alignCenter art-svg artwork" id="section-6.2-4.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="528" viewBox="0 0 528 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2404,7 +2372,7 @@ the relevant Error Type and Causes.<a href="#section-6.2-3" class="pilcrow">¶</
               </svg><a href="#section-6.2-4.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-error-in-protection-cause-f" class="selfRef">Error in Protection Cause Format</a>
           </figcaption></figure>
 </div>
@@ -2521,7 +2489,7 @@ an ABORT chunk SHALL NOT be sent.<a href="#section-6.4-3" class="pilcrow">¶</a>
 chunk protected association shall send to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
 (see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>) whith the optional information, if
-any (see <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 2</a>).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+any (see <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a>).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with DTLS 1.3 Chunk Protected Association parameter, will reply with
 INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
@@ -2612,7 +2580,7 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-protection-initialization-s" class="section-name selfRef">Protection Initialization State Machine</a>
         </h3>
 <span id="name-dtls-chunk-state-diagram"></span><div id="sctp-DTLS-state-diagram">
-<figure id="figure-7">
+<figure id="figure-8">
           <div id="section-7.3-1.1">
             <div class="alignCenter art-svg artwork" id="section-7.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="528" width="368" viewBox="0 0 368 528" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2678,7 +2646,7 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
               </svg><a href="#section-7.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-dtls-chunk-state-diagram" class="selfRef">DTLS Chunk State Diagram</a>
           </figcaption></figure>
 </div>
@@ -2743,7 +2711,7 @@ section 4 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a 
 </li>
       </ul>
 <span id="name-plain-text-sctp-packet"></span><div id="sctp-DTLS-encrypt-chunk-states-1">
-<figure id="figure-8">
+<figure id="figure-9">
         <div id="section-8-3.1">
           <div class="alignCenter art-svg artwork" id="section-8-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2804,15 +2772,15 @@ section 4 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a 
             </svg><a href="#section-8-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-plain-text-sctp-packet" class="selfRef">Plain Text SCTP Packet</a>
         </figcaption></figure>
 </div>
-<p id="section-8-4">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 8</a> describes
+<p id="section-8-4">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 9</a> describes
 the structure of any plain text SCTP packet being sent or received
 when the DTLS Chunk is not in VALIDATION or PROTECTED state.<a href="#section-8-4" class="pilcrow">¶</a></p>
 <span id="name-protected-sctp-packets"></span><div id="sctp-DTLS-encrypt-chunk-states-2">
-<figure id="figure-9">
+<figure id="figure-10">
         <div id="section-8-5.1">
           <div class="alignCenter art-svg artwork" id="section-8-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="144" width="528" viewBox="0 0 528 144" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2866,11 +2834,11 @@ when the DTLS Chunk is not in VALIDATION or PROTECTED state.<a href="#section-8-
             </svg><a href="#section-8-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-protected-sctp-packets" class="selfRef">Protected SCTP Packets</a>
         </figcaption></figure>
 </div>
-<p id="section-8-6">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 9</a> describes
+<p id="section-8-6">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 10</a> describes
 the structure of an SCTP packet being sent after the DTLS Chunk
 VALIDATION or PROTECTED state has been reached. Such packets are built
 with the SCTP common header. Only one DTLS chunk can be sent in
