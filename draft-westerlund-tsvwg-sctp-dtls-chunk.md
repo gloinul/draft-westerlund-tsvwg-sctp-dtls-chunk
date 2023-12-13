@@ -472,6 +472,13 @@ Chunk Type: 8 bits (unsigned integer)
 DTLS Connection Index (DCI): 8 bits : This is used to indicate the set of Keys and other
 parameters used in the protection operation to form the DTLS record
 present in the Payload.
+DCI bitmask is uuuuuRnn where:
+
+- u means unused/reserved
+
+- R indicates that this DCI is used for Restart Procedure
+
+- n indicates that this bit is part of the DCI number
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
