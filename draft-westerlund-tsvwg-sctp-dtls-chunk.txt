@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 13 June 2024                                           Ericsson
-                                                        11 December 2023
+Expires: 15 June 2024                                           Ericsson
+                                                        13 December 2023
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 June 2024.
+   This Internet-Draft will expire on 15 June 2024.
 
 Copyright Notice
 
@@ -522,7 +522,14 @@ Table of Contents
 
    DTLS Connection Index (DCI): 8 bits : This is used to indicate the
    set of Keys and other parameters used in the protection operation to
-   form the DTLS record present in the Payload.
+   form the DTLS record present in the Payload.  DCI bitmask is uuuuuRnn
+   where:
+
+   *  u means unused/reserved
+
+   *  R indicates that this DCI is used for Restart Procedure
+
+   *  n indicates that this bit is part of the DCI number
 
    Chunk Length: 16 bits (unsigned integer)  This value holds the length
       of the Payload in bytes plus 4.
