@@ -57,11 +57,9 @@ informative:
 
 
 normative:
-  RFC2119:
   RFC4895:
   RFC5061:
   RFC8126:
-  RFC8174:
   RFC9147:
   RFC9260:
 
@@ -454,7 +452,7 @@ payload of a plain SCTP packet.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Type = 0x4X  | DCI           |         Chunk Length          |
+| Type = 0x4x   |reserved |R|DCI|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -463,22 +461,29 @@ payload of a plain SCTP packet.
 |                               |           Padding             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure"}
 
-{: vspace="0"}
-Chunk Type: 8 bits (unsigned integer)
-: This value MUST be set to 0x4X for all DTLS chunks.
+reserved: 5 bits
 
-DTLS Connection Index (DCI): 8 bits : This is used to indicate the set of Keys and other
-parameters used in the protection operation to form the DTLS record
-present in the Payload.
-DCI bitmask is uuuuuRnn where:
+: Reserved bits for future use. Sender MUST set these bits to 0 and
+  MUST be ignored on reception.
 
-- u means unused/reserved
+R: 1 bit (boolean)
 
-- R indicates that this DCI is used for Restart Procedure
+: Restart indicator. If this bit is set this DTLS chunk is protected
+  with by an restart DTLS Connection with the index indicated by the
+  DCI. If not set, then a traffic DCI is indicated.
 
-- n indicates that this bit is part of the DCI number
+DCI: 2 bits (unsigned integer)
+
+: DTLS Connection Index is the lower two bits of an DTLS Connection
+   Index counter for the traffic or restart DTLS connection index.
+   This is a counter implemented in DTLS in
+   SCTP that is used to identify which DTLS connection instance that
+   is capable of processing any received packet or DTLS message over
+   an user message. This counter is recommended to be the lower part
+   of a larger variable.
+   DCI is unrelated to the DTLS Connection ID (DCI) {{RFC9147}}.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
