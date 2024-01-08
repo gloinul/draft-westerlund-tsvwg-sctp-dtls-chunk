@@ -1546,35 +1546,34 @@ DTLS 1.3 is configured with secrets is part of the another document
 operator is the encryption engine of DTLS 1.3, it's configured with
 the needed keys by the key handler.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">SCTP DTLS chunk directly uses DTLS 1.3 protection operator by
-requesting protection and unprotection of a buffer, in particular the
-protection buffer should never exceed the possible SCTP packet size
-thus DTLS protection operator needs to be aware of the PMTU (see <a href="#pmtu" class="auto internal xref">Section 3.4</a>).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+requesting protection and unprotection of a buffer adding
+overhead. Thus, there exist a need to coordinate between the
+protection operator and the SCTP chunk handler so that the SCTP packet
+payloads created are such that the final SCTP packet fits the path MTU
+(see <a href="#pmtu" class="auto internal xref">Section 3.4</a>).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">The key management part of the DTLS 1.3 is the set of data
 and procedures that take care of key distribution, verification, and
 update. SCTP DTLS provides support for in-band key management, on
 those cases the Protection Engines uses SCTP DATA chunks identified
 with a dedicated Payload Protocol Identifier.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">During protection engine initialization, that is after the SCTP
+<p id="section-3.2-4">During DTLS chunk protection initialization, that is after the SCTP
 association reaches the ESTABLISHED state (see <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> Section 4),
-but before DTLS 1.3 key-management has completed and the
-Protected Assocation Parameter Validation is completed, any in-band
-Key Management MAY use SCTP user message that SHALL use the SCTP-DTLS
-PPID (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>). These DATA chunks
-SHALL be sent unprotected by the protection engine as no keys have
-been established yet. As soon as the protection engine has been
-intialized and the validation has occured, further DTLS 1.3 handshakes
-being sent using SCTP use messages with the
-SCTP-DTLS PPID, will have their message protected inside SCTP
-DTLS chunk protected with the currently established key.
-SCTP DTLS chunk state evolution is described in <a href="#init-state-machine" class="auto internal xref">Section 7.3</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">DTLS related procedures MAY use the Flags byte provided by the
-DTLS chunk header (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>)
-for their needs. Details of the use of Flags are specified within
-this document in the relevant sections.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">The SCTP common header is assumed to be implicitly protected by the
+but before DTLS 1.3 key-management has completed and the Protected
+Assocation Parameter Validation is completed, the DTLS message
+exchange over the SCTP association's user messages SHALL use the
+SCTP-DTLS PPID (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>). These DATA chunks
+sent before VALIDATION state has been reached SHALL be sent
+unprotected by the protection engine as no keys have been established
+yet. As soon as the protection engine has been intialized and the
+validation has occured, further DTLS 1.3 handshakes being sent using
+SCTP use messages with the SCTP-DTLS PPID, will have their message
+protected inside SCTP DTLS chunk protected with the currently
+established key.  SCTP DTLS chunk state evolution is described in
+<a href="#init-state-machine" class="auto internal xref">Section 7.3</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">The SCTP common header is assumed to be implicitly protected by the
 protection engine. This protection is based on the assumption that
 there will be a one-to-one mapping between SCTP association and
-individually established security contexts.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+individually established security contexts.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="buffering">
