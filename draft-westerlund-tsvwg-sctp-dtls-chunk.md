@@ -53,7 +53,7 @@ informative:
        name: Claudio Porfiri
        org: Ericsson
        email: claudio.porfiri@ericsson.com
-    date: June 2023
+    date: Jan 2024
 
 
 normative:
@@ -96,9 +96,9 @@ features provided by SCTP and its extensions but with some limitations.
    authentication of endpoints, data confidentiality, data origin
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
-   established. It is dependent on a Key Management function that is
+   established. It is dependent on a key management function that is
    defined seperately to achieve all these capabilities. The
-   keymanagement function uses an API to provision the SCTP
+   key management function uses an API to provision the SCTP
    association's DTLS chunk protection with key-material to enable and
    rekey the protection operations.
 
@@ -166,23 +166,24 @@ On the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
 that payload will be sent to the DTLS protection Operator to be
 protected. The format of the protected payload is a DTLS 1.3 record
-encapsulated in a DTLS chunk.
+encapsulated in a SCTP chunk which is named the DTLS chunk.
 
 The SCTP protection operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
 initial SCTP handshake, initial DTLS handshake, the SCTP common
-header, the SCTP DTLS chunk header and the SHUTDOWN-COMPLETE chunk.
+header, the SCTP DTLS chunk header, the INIT and INIT-ACK of an SCTP
+association restart, and the SHUTDOWN-COMPLETE chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
 been keyed only plain text key-management traffic using a special PPID
-may be flow, no ULP traffic. The key management function uses an API
+may flow, no ULP traffic. The key management function uses an API
 to key the DTLS protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
 well a periodic re-authentication and rekeying with Diffe-Hellman of
-the DTLS chunk protection is defied in a sepearte document
+the DTLS chunk protection is defied in a seperate document
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 When the endpoint authentication and key establishment has been
@@ -488,7 +489,7 @@ DCI: 2 bits (unsigned integer)
    is capable of processing any received packet or DTLS message over
    an user message. This counter is recommended to be the lower part
    of a larger variable.
-   DCI is unrelated to the DTLS Connection ID (DCI) {{RFC9147}}.
+   DCI is unrelated to the DTLS Connection ID (CID) {{RFC9147}}.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
