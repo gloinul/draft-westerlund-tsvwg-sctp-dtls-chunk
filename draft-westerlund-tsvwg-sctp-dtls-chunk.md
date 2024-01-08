@@ -190,7 +190,7 @@ completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
 exchange data securely.
 
-DTLS chunks will never be retransmitted, retransmission is implemented
+A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as in the legacy. DTLS replay
 protection will be used to supress duplicated DTLS chunks, however a
 failure to prevent replay will only result in duplicated SCTP chunks and
@@ -328,25 +328,30 @@ attempt de-protection operations on the DTLS chunk, and if that is
 successful the ASCONF chunk can be processed.
 
 The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
-required to be sent authenticated with SCTP-AUTH {{RFC4895}}.
-For SCTP associations using DTLS Chunks this
-results in the use of redundant mechanism
-for Authentication with both SCTP-AUTH and the DTLS Chunk. We
-recommend to amend {{RFC5061}} for including DTLS Chunks as
-Authentication mechanism for ASCONF chunks.
+required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
+SCTP associations using DTLS Chunk this results in the use of
+redundant mechanism for Authentication with both SCTP-AUTH and the
+DTLS Chunk. We recommend to amend {{RFC5061}} for including DTLS
+Chunks as Authentication mechanism for ASCONF chunks.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk during an
 Association lifetime as described in {{RFC9260}} section 5.2
 
-When using DTLS CHUNKS, an SCTP Endpoint willing to get an Association
-Restart SHALL preserve the key material, meaning that
-data belonging to the current Association can be encrypted and
-decrypted.
+When using the DTLS chunk, an SCTP Endpoint willing to get an
+Association Restart SHALL create a restart DTLS connection and
+preserve its keying material. The restart DTLS connection is DTLS
+connection created for the sole purpose to enable restart. By not
+using it for any protection operations prior to a restart handshake
+both endpoint will be able to commit the keying material to permanent
+secure storage that can survice an endpoint restart. If it would be
+used there would be an issue with DTLS sequence numbers and replay
+window where actual used and stored would easily become out of synch.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as encrypted DATA.
+whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS protected using
+the restart DTLS connection.
 
 ~~~~~~~~~~~ aasvg
 
@@ -368,7 +373,7 @@ used for SCTP Association Restart are transported within DTLS in SCTP.
 
 Being INIT and INIT-ACK plain guarantees the compliance with
 the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
-and COOCKIE-ACK by means of DTLS CHUNK ensures that the
+and COOCKIE-ACK by means of DTLS chunk ensures that the
 peer requesting the Restart has been previously validated.
 
 # New Parameter Type {#new-parameter-type}
