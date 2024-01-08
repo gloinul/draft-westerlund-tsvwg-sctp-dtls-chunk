@@ -210,9 +210,11 @@ operator is the encryption engine of DTLS 1.3, it's configured with
 the needed keys by the key handler.
 
 SCTP DTLS chunk directly uses DTLS 1.3 protection operator by
-requesting protection and unprotection of a buffer, in particular the
-protection buffer should never exceed the possible SCTP packet size
-thus DTLS protection operator needs to be aware of the PMTU (see {{pmtu}}).
+requesting protection and unprotection of a buffer adding
+overhead. Thus, there exist a need to coordinate between the
+protection operator and the SCTP chunk handler so that the SCTP packet
+payloads created are such that the final SCTP packet fits the path MTU
+(see {{pmtu}}).
 
 The key management part of the DTLS 1.3 is the set of data
 and procedures that take care of key distribution, verification, and
@@ -220,24 +222,20 @@ update. SCTP DTLS provides support for in-band key management, on
 those cases the Protection Engines uses SCTP DATA chunks identified
 with a dedicated Payload Protocol Identifier.
 
-During protection engine initialization, that is after the SCTP
+During DTLS chunk protection initialization, that is after the SCTP
 association reaches the ESTABLISHED state (see {{RFC9260}} Section 4),
-but before DTLS 1.3 key-management has completed and the
-Protected Assocation Parameter Validation is completed, any in-band
-Key Management MAY use SCTP user message that SHALL use the SCTP-DTLS
-PPID (see {{iana-payload-protection-id}}). These DATA chunks
-SHALL be sent unprotected by the protection engine as no keys have
-been established yet. As soon as the protection engine has been
-intialized and the validation has occured, further DTLS 1.3 handshakes
-being sent using SCTP use messages with the
-SCTP-DTLS PPID, will have their message protected inside SCTP
-DTLS chunk protected with the currently established key.
-SCTP DTLS chunk state evolution is described in {{init-state-machine}}.
-
-DTLS related procedures MAY use the Flags byte provided by the
-DTLS chunk header (see {{sctp-DTLS-chunk-newchunk-crypt-struct}})
-for their needs. Details of the use of Flags are specified within
-this document in the relevant sections.
+but before DTLS 1.3 key-management has completed and the Protected
+Assocation Parameter Validation is completed, the DTLS message
+exchange over the SCTP association's user messages SHALL use the
+SCTP-DTLS PPID (see {{iana-payload-protection-id}}). These DATA chunks
+sent before VALIDATION state has been reached SHALL be sent
+unprotected by the protection engine as no keys have been established
+yet. As soon as the protection engine has been intialized and the
+validation has occured, further DTLS 1.3 handshakes being sent using
+SCTP use messages with the SCTP-DTLS PPID, will have their message
+protected inside SCTP DTLS chunk protected with the currently
+established key.  SCTP DTLS chunk state evolution is described in
+{{init-state-machine}}.
 
 The SCTP common header is assumed to be implicitly protected by the
 protection engine. This protection is based on the assumption that
