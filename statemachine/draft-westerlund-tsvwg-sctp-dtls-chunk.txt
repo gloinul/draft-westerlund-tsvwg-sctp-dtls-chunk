@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 20 June 2024                                           Ericsson
-                                                        18 December 2023
+Expires: 11 July 2024                                           Ericsson
+                                                          8 January 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,11 +55,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 June 2024.
+   This Internet-Draft will expire on 11 July 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -244,7 +244,7 @@ Table of Contents
    informed about that.  From this time on it's possible for the ULPs to
    exchange data securely.
 
-   DTLS chunks will never be retransmitted, retransmission is
+   A DTLS chunk will never be retransmitted, retransmission is
    implemented by SCTP endpoint at chunk level as in the legacy.  DTLS
    replay protection will be used to supress duplicated DTLS chunks,
    however a failure to prevent replay will only result in duplicated
@@ -384,7 +384,7 @@ Table of Contents
 
    The section 4.1.1 of [RFC5061] specifies that ASCONF message are
    required to be sent authenticated with SCTP-AUTH [RFC4895].  For SCTP
-   associations using DTLS Chunks this results in the use of redundant
+   associations using DTLS Chunk this results in the use of redundant
    mechanism for Authentication with both SCTP-AUTH and the DTLS Chunk.
    We recommend to amend [RFC5061] for including DTLS Chunks as
    Authentication mechanism for ASCONF chunks.
@@ -394,13 +394,19 @@ Table of Contents
    This section deals with the handling of an unexpected INIT chunk
    during an Association lifetime as described in [RFC9260] section 5.2
 
-   When using DTLS CHUNKS, an SCTP Endpoint willing to get an
-   Association Restart SHALL preserve the key material, meaning that
-   data belonging to the current Association can be encrypted and
-   decrypted.
+   When using the DTLS chunk, an SCTP Endpoint willing to get an
+   Association Restart SHALL create a restart DTLS connection and
+   preserve its keying material.  The restart DTLS connection is DTLS
+   connection created for the sole purpose to enable restart.  By not
+   using it for any protection operations prior to a restart handshake
+   both endpoint will be able to commit the keying material to permanent
+   secure storage that can survice an endpoint restart.  If it would be
+   used there would be an issue with DTLS sequence numbers and replay
+   window where actual used and stored would easily become out of synch.
 
    The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-   whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as encrypted DATA.
+   whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS protected using
+   the restart DTLS connection.
 
     Initiator                                     Responder
         |                                             | -.
@@ -419,7 +425,7 @@ Table of Contents
 
    Being INIT and INIT-ACK plain guarantees the compliance with the
    legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO and
-   COOCKIE-ACK by means of DTLS CHUNK ensures that the peer requesting
+   COOCKIE-ACK by means of DTLS chunk ensures that the peer requesting
    the Restart has been previously validated.
 
 4.  New Parameter Type
