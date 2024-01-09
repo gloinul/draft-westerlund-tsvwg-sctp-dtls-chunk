@@ -261,14 +261,14 @@ trigger retransmissions.
 ## PMTU Considerations {#pmtu}
 
 The addition of the DTLS chunk to SCTP reduces the room for payload,
-due to the size of the DTLS chunk header, padding, and authentication tag.  Thus, the SCTP
-layer creating the plain text payload needs to know about the overhead
-to adjust its target payload size appropriately.
+due to the size of the DTLS chunk header, padding, and authentication
+tag.  Thus, the SCTP layer creating the plain text payload needs to
+know about the overhead to adjust its target payload size
+appropriately.
 
-On the other hand, the protection operator needs to be informed about
-the PMTU by removing from the value the sum of the common SCTP header
-and the DTLS chunk header. This implies that SCTP can propagate
-the computed PMTU at run time specifically.
+A path MTU discovery function in SCTP will need to know the actual
+sent and received size of packets for the SCTP packets. This to
+correctly handle PMTUD probe packets.
 
 From SCTP perspective, if there is a maximum size of plain text data
 that can be protected by the protection engine that must be
@@ -289,7 +289,7 @@ ignore them, although in-situ modification on the path of a packet
 resulting in discarding due to integrity failure will leave a gap, but
 has to be accepted as part of the path behavior.
 
-The protection operator shall not interfere with the SCTP congestion
+The protection operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
@@ -306,11 +306,12 @@ based on packet to big ICMP messages.
 
 ## Path Selection Considerations {#multipath}
 
-When an Association is multihomed there are multiple paths between Endpoints.
-The selection of the specific path to be used at a certain time belongs
-to SCTP protocol that will decide according to {{RFC9260}}.
-The Protection Operator shall not influence the path selection algorithm,
-actually the Protection Operator will not even know what path is being used.
+When an Association is multihomed there are multiple paths between
+Endpoints.  The selection of the specific path to be used at a certain
+time belongs to SCTP protocol that will decide according to
+{{RFC9260}}.  The Protection Operator shall not influence the path
+selection algorithm, actually the Protection Operator will not even
+know what path is being used.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
@@ -335,22 +336,25 @@ Chunks as Authentication mechanism for ASCONF chunks.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
-This section deals with the handling of an unexpected INIT chunk during an
-Association lifetime as described in {{RFC9260}} section 5.2
+This section deals with the handling of an unexpected INIT chunk
+during an Association lifetime as described in {{RFC9260}} section
+5.2.
 
-When using the DTLS chunk, an SCTP Endpoint willing to get an
+When using the DTLS chunk, an SCTP Endpoint willing to support an
 Association Restart SHALL create a restart DTLS connection and
 preserve its keying material. The restart DTLS connection is DTLS
 connection created for the sole purpose to enable restart. By not
 using it for any protection operations prior to a restart handshake
 both endpoint will be able to commit the keying material to permanent
-secure storage that can survice an endpoint restart. If it would be
-used there would be an issue with DTLS sequence numbers and replay
-window where actual used and stored would easily become out of synch.
+secure storage that are persistent over an endpoint restart. If the
+restart DTLS connection would be used for other purposes there would
+be an issue with DTLS sequence numbers and replay window, for example
+which have actual been used and last stored sequence number could
+easily become out of synch.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS protected using
-the restart DTLS connection.
+whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
+using the keying material for the restart DTLS connection.
 
 ~~~~~~~~~~~ aasvg
 
