@@ -182,7 +182,7 @@ been keyed only plain text key-management traffic using a special PPID
 may flow, no ULP traffic. The key management function uses an API
 to key the DTLS protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
-well a periodic re-authentication and rekeying with Diffe-Hellman of
+well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defied in a seperate document
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
@@ -201,48 +201,34 @@ a duplicated SCTP packet with those SCTP chunks would have been.
 
 ## DTLS Considerations {#DTLS-engines}
 
-DTLS 1.3 is assumed to be implemented by a key handler and a
-protection operator. The key handler implements the key management by
-means of handshake, it's properly configured using secrets. The way
-DTLS 1.3 is configured with secrets is part of the another document
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. The DTLS protection
-operator is the encryption engine of DTLS 1.3, it's configured with
-the needed keys by the key handler.
+The DTLS Chunk architecture splits DTLS 1.3 as shown in
+{{sctp-DTLS-chunk-layering}}, where there's a Key Management functionality
+on top of SCTP Chunks Handler and a Protection operator functionality
+interfacing DTLS Chunk Handler.
 
-SCTP DTLS chunk directly uses DTLS 1.3 protection operator by
-requesting protection and unprotection of a buffer, in particular the
-protection buffer should never exceed the possible SCTP packet size
-thus DTLS protection operator needs to be aware of the PMTU (see {{pmtu}}).
+Key Management is the set of data and procedures that take care of key
+distribution, verification, and update, DTLS connection setup, update and
+maintenance.
 
-The key management part of the DTLS 1.3 is the set of data
-and procedures that take care of key distribution, verification, and
-update. SCTP DTLS provides support for in-band key management, on
-those cases the Protection Engines uses SCTP DATA chunks identified
-with a dedicated Payload Protocol Identifier.
+Protection Operator functionality is the set of data and procedures
+taking care of User Data encryption into DTLS Record and DTLS record
+decryption into User Data.
 
-During protection engine initialization, that is after the SCTP
-association reaches the ESTABLISHED state (see {{RFC9260}} Section 4),
-but before DTLS 1.3 key-management has completed and the
-Protected Assocation Parameter Validation is completed, any in-band
-Key Management MAY use SCTP user message that SHALL use the SCTP-DTLS
-PPID (see {{iana-payload-protection-id}}). These DATA chunks
-SHALL be sent unprotected by the protection engine as no keys have
-been established yet. As soon as the protection engine has been
-intialized and the validation has occured, further DTLS 1.3 handshakes
-being sent using SCTP use messages with the
-SCTP-DTLS PPID, will have their message protected inside SCTP
-DTLS chunk protected with the currently established key.
-SCTP DTLS chunk state evolution is described in {{init-state-machine}}.
+DTLS 1.3 operations requires to directly handshake messages
+with the remote peer for connection setup and other features,
+this kind of handshake is part of the Key Management functionality.
+Key Management function achieves these features behaving as a SCTP User.
+Key Management sends and receives its own data via the SCTP User Level interface.
+Key Management's own data are distinguished from any other data by
+means of a dedicated PPID (see {{iana-payload-protection-id}}).
 
-DTLS related procedures MAY use the Flags byte provided by the
-DTLS chunk header (see {{sctp-DTLS-chunk-newchunk-crypt-struct}})
-for their needs. Details of the use of Flags are specified within
-this document in the relevant sections.
+Once the Key Management has established the DTLS 1.3 connection,
+it can set the Protection Operator for User Data encryption/decription
+via the API shown in {{sctp-DTLS-chunk-layering}}.
 
-The SCTP common header is assumed to be implicitly protected by the
-protection engine. This protection is based on the assumption that
-there will be a one-to-one mapping between SCTP association and
-individually established security contexts.
+DTLS 1.3 expects that handshake messages, that is from SCTP
+User Data with dedicated PPID, to be sent and received as plain
+DATA chunks.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
