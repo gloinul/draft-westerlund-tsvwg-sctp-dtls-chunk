@@ -1701,10 +1701,11 @@ connection created for the sole purpose to enable restart. By not
 using it for any protection operations prior to a restart handshake
 both endpoint will be able to commit the keying material to permanent
 secure storage that are persistent over an endpoint restart. If the
-restart DTLS connection would be used for other purposes there would
-be an issue with DTLS sequence numbers and replay window, for example
-which have actual been used and last stored sequence number could
-easily become out of synch.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
+restart DTLS connection would be used for other purposes where the
+traffic DTLS connection would normally be used there would be an issue
+with DTLS sequence numbers and replay window, for example which have
+actual been used and last stored sequence number could easily become
+out of synch.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
 <p id="section-3.9-3">The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
 using the keying material for the restart DTLS connection.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
@@ -1885,8 +1886,8 @@ bytes plus 4.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-4.1-3.5">Options: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.6">
-            <p id="section-4.1-3.6.1">This value is set by default to zero. It contains indication of
-optional feature support.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-3.6.1">This value is set by default to zero. It may contain indication of
+optional feature support in the future.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-4.1-3.7">Padding: 16 bits</dt>
@@ -2183,7 +2184,8 @@ solutions in the INIT.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-5.2-6.5">Chunk Length: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-6.6">
-            <p id="section-5.2-6.6.1">This value holds the length of the Protection Engines field in bytes plus 4.<a href="#section-5.2-6.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-6.6.1">This value holds the length of the Protection Solutions Indicator
+field in bytes plus 4.<a href="#section-5.2-6.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-6.7">Protection Solutions Indicator: 32 bits (unsigned integer)</dt>
@@ -2221,8 +2223,11 @@ solutions towards an SCTP endpoint that only accepts protected
 associations, the responder endpoint SHALL raise a Missing Mandatory
 Parameter error. The ERROR chunk will contain the cause code 'Missing
 Mandatory Parameter' (2) (see <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> Section 3.3.10.7) and the
-protected association parameter identifier
-<a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> in the missing param Information field.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+DTLS 1.3 chunk protected association parameter identifier
+<a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> in the missing param Information
+field. It may also include additional parameters representing other
+supported protection mechanisms that are acceptable per endpoint
+security policy.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <span id="name-error-missing-protected-ass"></span><div id="sctp-DTLS-init-chunk-missing-protected">
 <figure id="figure-6">
           <div id="section-6.1-2.1">
@@ -2286,9 +2291,11 @@ protected association parameter identifier
                   <text x="316" y="116">params</text>
                   <text x="352" y="116">=</text>
                   <text x="368" y="116">N</text>
-                  <text x="72" y="148">Protected</text>
-                  <text x="160" y="148">Association</text>
-                  <text x="220" y="148">ID</text>
+                  <text x="44" y="148">DTLS</text>
+                  <text x="80" y="148">1.3</text>
+                  <text x="120" y="148">Chunk</text>
+                  <text x="184" y="148">Protected</text>
+                  <text x="240" y="148">Asc</text>
                   <text x="336" y="148">Missing</text>
                   <text x="392" y="148">Param</text>
                   <text x="436" y="148">Type</text>
@@ -2312,8 +2319,7 @@ protected association parameter identifier
 <p id="section-6.1-3">Note: Cause Length is equal to the number of missing parameters 8 + N
 * 2 according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, section 3.3.10.2. Also the Protection
 Association ID may be present in any of the N missing params, no order
-implied by the example in
-<a href="#sctp-DTLS-init-chunk-missing-protected" class="auto internal xref">Figure 6</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+implied by the example in <a href="#sctp-DTLS-init-chunk-missing-protected" class="auto internal xref">Figure 6</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="eprotect">
@@ -2524,15 +2530,16 @@ INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
 and any optional information.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider INIT chunk not containing
-the DTLS 1.3 Chunk Protected Association parameter as an error, thus
-it will reply with an ABORT chunk according to what specified in
+the DTLS 1.3 Chunk Protected Association parameter or another by
+security policy accepted security solution as an error, thus it will
+reply with an ABORT chunk according to what specified in
 <a href="#enoprotected" class="auto internal xref">Section 6.1</a> indicating that for this endpoint mandatory DTLS 1.3
 Chunk Protected Association parameter is missing.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">When initiator and responder have agreed on a protected association by
 means of handshaking INIT/INIT-ACK the SCTP association establishment
 continues until it has reached the ESTABLISHED state. However, before
 the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
-states needs to be passed. First DTLS 1.3 Chunk needs be initializied
+states needs to be passed. First DTLS Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
 procedure defined in <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>, or
 through other methods that results in at least one DCI has
@@ -2544,18 +2551,18 @@ state. This state sequence is depicted in <a href="#init-state-machine" class="a
 <p id="section-7.1-5">Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
 used to exchange in-band key establishment messages for DTLS. Any
-other DATA chunk being sent on a Protected association SHALL be
+other DATA chunk being received in a Protected association SHALL be
 silently discarded.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <p id="section-7.1-6">DTLS 1.3 initializes itself by transferring its own handshake messages
 as payload of the DATA chunk necessary
-<span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>. The DTLS 1.3 Chunk
+<span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>. The DTLS Chunk
 initialization SHOULD be supervised by a T-valid timer that fits DTLS
 1.3 handshake and may also be further adjusted based on whether
 expected RTT values are outside of the ones commonly occurring on the
 general Internet, see <a href="#t-valid-considerations" class="auto internal xref">Section 7.5</a>. At completion of
-DTLS 1.3 Chunk initialization the setup of the Protected association is
+DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
-only DTLS 1.3 chunks will be exchanged. Any plain text chunk will be
+only DTLS chunks will be exchanged. Any plain text chunk will be
 silently discarded.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <p id="section-7.1-7">In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in <a href="#ekeyhandshake" class="auto internal xref">Section 6.2.1</a>.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
