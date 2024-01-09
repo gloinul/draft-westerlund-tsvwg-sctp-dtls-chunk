@@ -1518,7 +1518,7 @@ been keyed only plain text key-management traffic using a special PPID
 may flow, no ULP traffic. The key management function uses an API
 to key the DTLS protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
-well a periodic re-authentication and rekeying with Diffe-Hellman of
+well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defied in a seperate document
 <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.1-7">When the endpoint authentication and key establishment has been
@@ -1538,42 +1538,29 @@ a duplicated SCTP packet with those SCTP chunks would have been.<a href="#sectio
         <h3 id="name-dtls-considerations">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-dtls-considerations" class="section-name selfRef">DTLS Considerations</a>
         </h3>
-<p id="section-3.2-1">DTLS 1.3 is assumed to be implemented by a key handler and a
-protection operator. The key handler implements the key management by
-means of handshake, it's properly configured using secrets. The way
-DTLS 1.3 is configured with secrets is part of the another document
-<span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>. The DTLS protection
-operator is the encryption engine of DTLS 1.3, it's configured with
-the needed keys by the key handler.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">SCTP DTLS chunk directly uses DTLS 1.3 protection operator by
-requesting protection and unprotection of a buffer adding
-overhead. Thus, there exist a need to coordinate between the
-protection operator and the SCTP chunk handler so that the SCTP packet
-payloads created are such that the final SCTP packet fits the path MTU
-(see <a href="#pmtu" class="auto internal xref">Section 3.4</a>).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">The key management part of the DTLS 1.3 is the set of data
-and procedures that take care of key distribution, verification, and
-update. SCTP DTLS provides support for in-band key management, on
-those cases the Protection Engines uses SCTP DATA chunks identified
-with a dedicated Payload Protocol Identifier.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">During DTLS chunk protection initialization, that is after the SCTP
-association reaches the ESTABLISHED state (see <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> Section 4),
-but before DTLS 1.3 key-management has completed and the Protected
-Assocation Parameter Validation is completed, the DTLS message
-exchange over the SCTP association's user messages SHALL use the
-SCTP-DTLS PPID (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>). These DATA chunks
-sent before VALIDATION state has been reached SHALL be sent
-unprotected by the protection engine as no keys have been established
-yet. As soon as the protection engine has been intialized and the
-validation has occured, further DTLS 1.3 handshakes being sent using
-SCTP use messages with the SCTP-DTLS PPID, will have their message
-protected inside SCTP DTLS chunk protected with the currently
-established key.  SCTP DTLS chunk state evolution is described in
-<a href="#init-state-machine" class="auto internal xref">Section 7.3</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">The SCTP common header is assumed to be implicitly protected by the
-protection engine. This protection is based on the assumption that
-there will be a one-to-one mapping between SCTP association and
-individually established security contexts.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The DTLS Chunk architecture splits DTLS 1.3 as shown in
+<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where there's a Key Management functionality
+on top of SCTP Chunks Handler and a Protection operator functionality
+interfacing DTLS Chunk Handler.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">Key Management is the set of data and procedures that take care of key
+distribution, verification, and update, DTLS connection setup, update and
+maintenance.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">Protection Operator functionality is the set of data and procedures
+taking care of User Data encryption into DTLS Record and DTLS record
+decryption into User Data.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">DTLS 1.3 operations requires to directly handshake messages
+with the remote peer for connection setup and other features,
+this kind of handshake is part of the Key Management functionality.
+Key Management function achieves these features behaving as a SCTP User.
+Key Management sends and receives its own data via the SCTP User Level interface.
+Key Management's own data are distinguished from any other data by
+means of a dedicated PPID (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Once the Key Management has established the DTLS 1.3 connection,
+it can set the Protection Operator for User Data encryption/decription
+via the API shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">DTLS 1.3 expects that handshake messages, that is from SCTP
+User Data with dedicated PPID, to be sent and received as plain
+DATA chunks.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="buffering">
@@ -2736,13 +2723,22 @@ received shall be silently discarded.<a href="#section-8-2.1.1" class="pilcrow">
           <p id="section-8-2.2.1">When the DTLS Chunk is in state PROTECTED and the SCTP association
 is in states ESTABLISHED or in the states for association shutdown,
 i.e. SHUTDOWN-PENDING, SHUTDOWN-SENT, SHUTDOWN-RECEIVED,
-SHUTDOWN-ACK-SENT as defined by <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, any SCTP chunk including
-DATA chunks, but excluding DTLS chunk, will be used to create an SCTP
-payload that will be encrypted by the DTLS 1.3 protection operation
-and the resulting DTLS record from that encryption will be the used as
-payload for a DTLS chunk that will be the only chunk in the SCTP
-packet to be sent. DATA chunks are accepted and handled according to
-section 4 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
+SHUTDOWN-ACK-SENT as defined by <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, any SCTP chunk
+including DATA chunks, but excluding DTLS chunk, will be used to
+create an SCTP payload that will be encrypted by the DTLS 1.3
+protection operation and the resulting DTLS record from that
+encryption will be the used as payload for a DTLS chunk that will be
+the only chunk in the SCTP packet to be sent. DATA chunks are
+accepted and handled according to section 4 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-8-2.3">
+          <p id="section-8-2.3.1">If an SCTP restart is occurring there are exception rules to the
+above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
+DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
+continuning to protect any SCTP chunks sent while being in SCTP
+state ESTABLISHED until the DTLS chunk state reaches VALIDATION,
+where a newely established traffic DCI SHALL be used instead for
+protecting future SCTP chunks.<a href="#section-8-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <span id="name-plain-text-sctp-packet"></span><div id="sctp-DTLS-encrypt-chunk-states-1">
@@ -3476,7 +3472,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
           <tbody>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBA8</td>
-              <td class="text-left" rowspan="1" colspan="1">Protected Association</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk Protected Association</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
