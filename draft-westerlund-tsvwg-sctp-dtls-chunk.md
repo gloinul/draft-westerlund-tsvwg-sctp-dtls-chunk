@@ -347,10 +347,11 @@ connection created for the sole purpose to enable restart. By not
 using it for any protection operations prior to a restart handshake
 both endpoint will be able to commit the keying material to permanent
 secure storage that are persistent over an endpoint restart. If the
-restart DTLS connection would be used for other purposes there would
-be an issue with DTLS sequence numbers and replay window, for example
-which have actual been used and last stored sequence number could
-easily become out of synch.
+restart DTLS connection would be used for other purposes where the
+traffic DTLS connection would normally be used there would be an issue
+with DTLS sequence numbers and replay window, for example which have
+actual been used and last stored sequence number could easily become
+out of synch.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
@@ -420,8 +421,8 @@ Parameter Length: 16 bits (unsigned integer)
   bytes plus 4.
 
 Options: 16 bits (unsigned integer)
-: This value is set by default to zero. It contains indication of
-  optional feature support.
+: This value is set by default to zero. It may contain indication of
+  optional feature support in the future.
 
 Padding: 16 bits
 : The sender MUST pad the chunk with two all zero bytes
@@ -546,7 +547,8 @@ Chunk Flags: 8 bits
 : MUST be set to zero on transmit and MUST be ignored on receipt.
 
 Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Protection Engines field in bytes plus 4.
+: This value holds the length of the Protection Solutions Indicator
+  field in bytes plus 4.
 
 Protection Solutions Indicator: 32 bits (unsigned integer)
 : This value is set by default to zero. It uses the different
@@ -572,8 +574,11 @@ solutions towards an SCTP endpoint that only accepts protected
 associations, the responder endpoint SHALL raise a Missing Mandatory
 Parameter error. The ERROR chunk will contain the cause code 'Missing
 Mandatory Parameter' (2) (see {{RFC9260}} Section 3.3.10.7) and the
-protected association parameter identifier
-{{protectedassoc-parameter}} in the missing param Information field.
+DTLS 1.3 chunk protected association parameter identifier
+{{protectedassoc-parameter}} in the missing param Information
+field. It may also include additional parameters representing other
+supported protection mechanisms that are acceptable per endpoint
+security policy.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -583,7 +588,7 @@ protected association parameter identifier
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                 Number of missing params = N                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|   Protected Association ID    |     Missing Param Type #2     |
+|  DTLS 1.3 Chunk Protected Asc |     Missing Param Type #2     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Missing Param Type #N-1    |     Missing Param Type #N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -593,8 +598,7 @@ protected association parameter identifier
 Note: Cause Length is equal to the number of missing parameters 8 + N
 * 2 according to {{RFC9260}}, section 3.3.10.2. Also the Protection
 Association ID may be present in any of the N missing params, no order
-implied by the example in
-{{sctp-DTLS-init-chunk-missing-protected}}.
+implied by the example in {{sctp-DTLS-init-chunk-missing-protected}}.
 
 ## Error in Protection {#eprotect}
 
@@ -711,8 +715,9 @@ and any optional information.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider INIT chunk not containing
-the DTLS 1.3 Chunk Protected Association parameter as an error, thus
-it will reply with an ABORT chunk according to what specified in
+the DTLS 1.3 Chunk Protected Association parameter or another by
+security policy accepted security solution as an error, thus it will
+reply with an ABORT chunk according to what specified in
 {{enoprotected}} indicating that for this endpoint mandatory DTLS 1.3
 Chunk Protected Association parameter is missing.
 
@@ -720,7 +725,7 @@ When initiator and responder have agreed on a protected association by
 means of handshaking INIT/INIT-ACK the SCTP association establishment
 continues until it has reached the ESTABLISHED state. However, before
 the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
-states needs to be passed. First DTLS 1.3 Chunk needs be initializied
+states needs to be passed. First DTLS Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
 procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, or
 through other methods that results in at least one DCI has
@@ -733,19 +738,19 @@ state. This state sequence is depicted in {{init-state-machine}}.
 Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
 used to exchange in-band key establishment messages for DTLS. Any
-other DATA chunk being sent on a Protected association SHALL be
+other DATA chunk being received in a Protected association SHALL be
 silently discarded.
 
 DTLS 1.3 initializes itself by transferring its own handshake messages
 as payload of the DATA chunk necessary
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. The DTLS 1.3 Chunk
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. The DTLS Chunk
 initialization SHOULD be supervised by a T-valid timer that fits DTLS
 1.3 handshake and may also be further adjusted based on whether
 expected RTT values are outside of the ones commonly occurring on the
 general Internet, see {{t-valid-considerations}}. At completion of
-DTLS 1.3 Chunk initialization the setup of the Protected association is
+DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
-only DTLS 1.3 chunks will be exchanged. Any plain text chunk will be
+only DTLS chunks will be exchanged. Any plain text chunk will be
 silently discarded.
 
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
