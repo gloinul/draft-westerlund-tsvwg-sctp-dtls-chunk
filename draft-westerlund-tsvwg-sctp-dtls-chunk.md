@@ -864,20 +864,28 @@ shown in Figure 3 of {{RFC9260}}, the handling of Control chunks, Data
 chunks and DTLS chunks follows the rules defined below:
 
 - When the association is in states CLOSED, COOKIE-WAIT, and
-COOKIE-ECHOED, any Control chunk is sent unprotected (i.e. plain
-text). No DATA chunks shall be sent in these states and DATA chunks
-received shall be silently discarded.
+  COOKIE-ECHOED, any Control chunk is sent unprotected (i.e. plain
+  text). No DATA chunks shall be sent in these states and DATA chunks
+  received shall be silently discarded.
 
 - When the DTLS Chunk is in state PROTECTED and the SCTP association
-is in states ESTABLISHED or in the states for association shutdown,
-i.e. SHUTDOWN-PENDING, SHUTDOWN-SENT, SHUTDOWN-RECEIVED,
-SHUTDOWN-ACK-SENT as defined by {{RFC9260}}, any SCTP chunk including
-DATA chunks, but excluding DTLS chunk, will be used to create an SCTP
-payload that will be encrypted by the DTLS 1.3 protection operation
-and the resulting DTLS record from that encryption will be the used as
-payload for a DTLS chunk that will be the only chunk in the SCTP
-packet to be sent. DATA chunks are accepted and handled according to
-section 4 of {{RFC9260}}.
+  is in states ESTABLISHED or in the states for association shutdown,
+  i.e. SHUTDOWN-PENDING, SHUTDOWN-SENT, SHUTDOWN-RECEIVED,
+  SHUTDOWN-ACK-SENT as defined by {{RFC9260}}, any SCTP chunk
+  including DATA chunks, but excluding DTLS chunk, will be used to
+  create an SCTP payload that will be encrypted by the DTLS 1.3
+  protection operation and the resulting DTLS record from that
+  encryption will be the used as payload for a DTLS chunk that will be
+  the only chunk in the SCTP packet to be sent. DATA chunks are
+  accepted and handled according to section 4 of {{RFC9260}}.
+
+- If an SCTP restart is occurring there are exception rules to the
+  above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
+  DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
+  continuning to protect any SCTP chunks sent while being in SCTP
+  state ESTABLISHED until the DTLS chunk state reaches VALIDATION,
+  where a newely established traffic DCI SHALL be used instead for
+  protecting future SCTP chunks.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -1293,7 +1301,7 @@ available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2
 
 | ID Value | Chunk Parameter Type | Reference |
-| TBA8 | Protected Association | RFC-To-Be |
+| TBA8 | DTLS 1.3 Chunk Protected Association | RFC-To-Be |
 {: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
 
 
