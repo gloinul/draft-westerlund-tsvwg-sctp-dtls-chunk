@@ -380,10 +380,10 @@ Table of Contents
    during an Association lifetime as described in [RFC9260] section 5.2
    with the purpose of achieving a Restart of the current Association.
 
-   The SCTP Restart procedure is not going to jeopardize the security
+   The SCTP Restart procedure is defined to maintain the security
    characteristics of a SCTP Association using DTLS Chunk, this requires
-   that SCTP Restart procedure is to be different than how described in
-   [RFC9260].
+   that SCTP Restart procedure is modified in regards to how it is
+   described in [RFC9260].
 
    In order to support SCTP Restart, the SCTP Endpoints shall allocate
    and maintain dedicated DTLS connections, those connection will be
@@ -410,9 +410,9 @@ Table of Contents
 
    A Restart DCI is identified by having the Restart Indicator bit set
    in the DTLS Chunk (see Figure 4).  There's exactly one active Restart
-   DCI at a time, whereas a number of Restart DTLS connection MAY exist
-   at the same time with the purpose of replace the aging active Restart
-   DTLS connection.
+   DCI at a time, the newest.  Whereas a number of Restart DTLS
+   connection MAY exist at the same time with the purpose of replace the
+   aging active Restart DTLS connection.
 
     Initiator                                     Responder
         |                                             | -.
@@ -429,17 +429,17 @@ Table of Contents
    The Figure 2 shows how the control chunks being used for SCTP
    Association Restart are transported within DTLS in SCTP.
 
-   Being INIT and INIT-ACK plain guarantees the compliance with the
-   legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO and
+   Sending INIT and INIT-ACK plain text guarantees the compliance with
+   the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO and
    COOCKIE-ACK by means of DTLS chunk ensures that the peer requesting
-   the Restart has been previously validated.
+   the restart has been previously validated.
 
    A restarted SCTP Association SHALL use the Restart DCI, thus the
    Restart DTLS connection, for User Traffic until a new traffic DTLS
-   connection will be available.  The implementors SHOULD guarantee that
-   new a replacement Restart DTLS connection as well as a new Restart
-   DCI are handshaked as soon as possible so that the time when no
-   Restart DCI are available is kept to a minimum.
+   connection is available.  The implementors SHOULD guarantee that new
+   a replacement traffic DTLS connection as well as a new Restart DCI
+   are handshaked as soon as possible so that the time when no Restart
+   DCI are available is kept to a minimum.
 
 4.  New Parameter Type
 
