@@ -1037,7 +1037,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 12 July 2024</td>
+<td class="center">Expires 13 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1050,12 +1050,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-01-09" class="published">9 January 2024</time>
+<time datetime="2024-01-10" class="published">10 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-07-12">12 July 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-13">13 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1119,7 +1119,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1680,26 +1680,41 @@ Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.8-2" cl
         </h3>
 <p id="section-3.9-1">This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section
-5.2.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
-<p id="section-3.9-2">When using the DTLS chunk, an SCTP Endpoint willing to support an
-Association Restart SHALL create a restart DTLS connection and
-preserve its keying material. The restart DTLS connection is DTLS
-connection created for the sole purpose to enable restart. By not
-using it for any protection operations prior to a restart handshake
-both endpoint will be able to commit the keying material to permanent
-secure storage that are persistent over an endpoint restart. If the
-restart DTLS connection would be used for other purposes where the
-traffic DTLS connection would normally be used there would be an issue
-with DTLS sequence numbers and replay window, for example which have
-actual been used and last stored sequence number could easily become
-out of synch.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
-<p id="section-3.9-3">The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
+5.2 with the purpose of achieving a Restart of the current Association.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
+<p id="section-3.9-2">The SCTP Restart procedure is not going to jeopardize the security
+characteristics of a SCTP Association using DTLS Chunk, this
+requires that SCTP Restart procedure is to be different than
+how described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
+<p id="section-3.9-3">In order to support SCTP Restart, the SCTP Endpoints shall
+allocate and maintain dedicated DTLS connections, those
+connection will be identified with specific DCIs.
+Both SCTP Endpoints shall guarantee that Restart DTLS connections
+and related keys are preserved for supporting the SCTP Restart
+use case.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+<p id="section-3.9-4">In order to be available for SCTP Restart purposes, the Restart
+DTLS connection must be kept in a well-known state so that
+both SCTP Endpoints are aware of the DTLS sequence numbers
+and replay window. An SCTP Endpoint SHALL NEVER use the
+SCTP Restart DTLS connection for any other use case than
+SCTP Restart.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
+<p id="section-3.9-5">The DTLS Restart Connections, the related key materials, the
+information related to the sequence numbers and replay window
+SHALL be stored in a safe way that survives the events that
+are causing SCTP Restart procedure to be used, for instance
+a Crash of the SCTP Stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
+<p id="section-3.9-6">The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+using the keying material for the restart DTLS connection,
+that is the DTLS Restart Connection and its DCI.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
+<p id="section-3.9-7">A Restart DCI is identified by having the Restart Indicator bit set in
+the DTLS Chunk (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).
+There's exactly one active Restart DCI at a time, whereas a number
+of Restart DTLS connection MAY exist at the same time with the
+purpose of replace the aging active Restart DTLS connection.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-2">
-          <div id="section-3.9-4.1">
-            <div class="alignCenter art-svg artwork" id="section-3.9-4.1.1">
+          <div id="section-3.9-8.1">
+            <div class="alignCenter art-svg artwork" id="section-3.9-8.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="536" viewBox="0 0 536 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 40,48 L 40,160" fill="none" stroke="black"></path>
                 <path d="M 408,48 L 408,160" fill="none" stroke="black"></path>
@@ -1738,19 +1753,26 @@ using the keying material for the restart DTLS connection.<a href="#section-3.9-
                   <text x="212" y="148">CHUNK(COOKIE</text>
                   <text x="288" y="148">ACK)]</text>
                 </g>
-              </svg><a href="#section-3.9-4.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-3.9-8.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
           </figcaption></figure>
 </div>
-<p id="section-3.9-5">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
-used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
-<p id="section-3.9-6">Being INIT and INIT-ACK plain guarantees the compliance with
+<p id="section-3.9-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-9" class="pilcrow">¶</a></p>
+<p id="section-3.9-10">Being INIT and INIT-ACK plain guarantees the compliance with
 the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
 and COOCKIE-ACK by means of DTLS chunk ensures that the
-peer requesting the Restart has been previously validated.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
+peer requesting the Restart has been previously validated.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
+<p id="section-3.9-11">A restarted SCTP Association SHALL use the Restart DCI, thus the
+Restart DTLS connection, for User Traffic until a new traffic
+DTLS connection will be available.
+The implementors SHOULD guarantee that new a replacement
+Restart DTLS connection as well as a new Restart DCI are handshaked
+as soon as possible so that the time when no Restart DCI are available
+is kept to a minimum.<a href="#section-3.9-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2990,27 +3012,36 @@ indicated in the DCI field.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-5.3">
             <span class="break"></span><dl class="dlParallel" id="section-9.2-5.3.1">
-              <dt id="section-9.2-5.3.1.1">DTLS Epoch:</dt>
+              <dt id="section-9.2-5.3.1.1">Restart indication:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.3.1.2">
-                <p id="section-9.2-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
-3 are note expected as they are used during DTLS handshake.<a href="#section-9.2-5.3.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.2-5.3.1.2.1">A bit indicating wheter the DCI is for restart purposes<a href="#section-9.2-5.3.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.2-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-9.2-5.4.1">
-              <dt id="section-9.2-5.4.1.1">Cipher Suit:</dt>
+              <dt id="section-9.2-5.4.1.1">DTLS Epoch:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.4.1.2">
-                <p id="section-9.2-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.2-5.4.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.2-5.5">
-            <p id="section-9.2-5.5.1">Write Key:<a href="#section-9.2-5.5.1" class="pilcrow">¶</a></p>
+            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.5.1">
+              <dt id="section-9.2-5.5.1.1">Cipher Suit:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.2-5.5.1.2">
+                <p id="section-9.2-5.5.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.2-5.5.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.2-5.6">
+            <p id="section-9.2-5.6.1">Write Key:<a href="#section-9.2-5.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.2-6">: The cipher suit specific binary object containing all necessary
@@ -3062,27 +3093,36 @@ indicated in the DCI field.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.3-5.3">
             <span class="break"></span><dl class="dlParallel" id="section-9.3-5.3.1">
-              <dt id="section-9.3-5.3.1.1">DTLS Epoch:</dt>
+              <dt id="section-9.3-5.3.1.1">Restart indication:</dt>
               <dd style="margin-left: 1.5em" id="section-9.3-5.3.1.2">
-                <p id="section-9.3-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
-3 are note expected as they are used during DTLS handshake.<a href="#section-9.3-5.3.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.3-5.3.1.2.1">A bit indicating wheter the DCI is for restart purposes<a href="#section-9.3-5.3.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.3-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-9.3-5.4.1">
-              <dt id="section-9.3-5.4.1.1">Cipher Suit:</dt>
+              <dt id="section-9.3-5.4.1.1">DTLS Epoch:</dt>
               <dd style="margin-left: 1.5em" id="section-9.3-5.4.1.2">
-                <p id="section-9.3-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.3-5.4.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.3-5.4.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.3-5.4.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.3-5.5">
-            <p id="section-9.3-5.5.1">Write Key:<a href="#section-9.3-5.5.1" class="pilcrow">¶</a></p>
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.5.1">
+              <dt id="section-9.3-5.5.1.1">Cipher Suit:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.5.1.2">
+                <p id="section-9.3-5.5.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Assocation, DCI) pair.<a href="#section-9.3-5.5.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-9.3-5.6">
+            <p id="section-9.3-5.6.1">Write Key:<a href="#section-9.3-5.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.3-6">: The cipher suit specific binary object containing all necessary
@@ -3119,7 +3159,10 @@ DCI for a given SCTP Association.<a href="#section-9.4-1" class="pilcrow">¶</a>
             <p id="section-9.4-4.2.1">DCI<a href="#section-9.4-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.4-4.3">
-            <p id="section-9.4-4.3.1">DTLS Epoch<a href="#section-9.4-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.4-4.3.1">Restart indication<a href="#section-9.4-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.4-4.4">
+            <p id="section-9.4-4.4.1">DTLS Epoch<a href="#section-9.4-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.4-5">Reply: Destroyed<a href="#section-9.4-5" class="pilcrow">¶</a></p>
@@ -3143,7 +3186,10 @@ DCI for a given SCTP Association.<a href="#section-9.5-1" class="pilcrow">¶</a>
             <p id="section-9.5-4.2.1">DCI<a href="#section-9.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.5-4.3">
-            <p id="section-9.5-4.3.1">DTLS Epoch<a href="#section-9.5-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.5-4.3.1">Restart indication<a href="#section-9.5-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.5-4.4">
+            <p id="section-9.5-4.4.1">DTLS Epoch<a href="#section-9.5-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.5-5">Reply: Destroyed<a href="#section-9.5-5" class="pilcrow">¶</a></p>
@@ -3165,6 +3211,9 @@ SCTP Association.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.6-4.2">
             <p id="section-9.6-4.2.1">DCI<a href="#section-9.6-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.6-4.3">
+            <p id="section-9.6-4.3.1">Restart indication<a href="#section-9.6-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.6-5">Reply: DCI set<a href="#section-9.6-5" class="pilcrow">¶</a></p>
@@ -3188,7 +3237,10 @@ a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
             <p id="section-9.7-4.2.1">DCI<a href="#section-9.7-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.7-4.3">
-            <p id="section-9.7-4.3.1">DTLS Epoch<a href="#section-9.7-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.7-4.3.1">Restart indication<a href="#section-9.7-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.7-4.4">
+            <p id="section-9.7-4.4.1">DTLS Epoch<a href="#section-9.7-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.7-5">Reply: q<a href="#section-9.7-5" class="pilcrow">¶</a></p>
@@ -3212,7 +3264,10 @@ a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
             <p id="section-9.8-4.2.1">DCI<a href="#section-9.8-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.8-4.3">
-            <p id="section-9.8-4.3.1">DTLS Epoch<a href="#section-9.8-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.8-4.3.1">Restart indication<a href="#section-9.8-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.8-4.4">
+            <p id="section-9.8-4.4.1">DTLS Epoch<a href="#section-9.8-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.8-5">Reply: v<a href="#section-9.8-5" class="pilcrow">¶</a></p>
@@ -3246,10 +3301,13 @@ more suitable value depending on the use case should be considered.<a href="#sec
             <p id="section-9.10-4.1.1">DCI<a href="#section-9.10-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.10-4.2">
-            <p id="section-9.10-4.2.1">SCTP Association<a href="#section-9.10-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-9.10-4.2.1">Restart indication<a href="#section-9.10-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.10-4.3">
-            <p id="section-9.10-4.3.1">Configuration parameters<a href="#section-9.10-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.10-4.3.1">SCTP Association<a href="#section-9.10-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.4">
+            <p id="section-9.10-4.4.1">Configuration parameters<a href="#section-9.10-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.10-5">Reply: Replay Protection Configured<a href="#section-9.10-5" class="pilcrow">¶</a></p>
