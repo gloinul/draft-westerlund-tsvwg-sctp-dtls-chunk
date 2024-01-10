@@ -326,24 +326,44 @@ Chunks as Authentication mechanism for ASCONF chunks.
 
 This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in {{RFC9260}} section
-5.2.
+5.2 with the purpose of achieving a Restart of the current Association.
 
-When using the DTLS chunk, an SCTP Endpoint willing to support an
-Association Restart SHALL create a restart DTLS connection and
-preserve its keying material. The restart DTLS connection is DTLS
-connection created for the sole purpose to enable restart. By not
-using it for any protection operations prior to a restart handshake
-both endpoint will be able to commit the keying material to permanent
-secure storage that are persistent over an endpoint restart. If the
-restart DTLS connection would be used for other purposes where the
-traffic DTLS connection would normally be used there would be an issue
-with DTLS sequence numbers and replay window, for example which have
-actual been used and last stored sequence number could easily become
-out of synch.
+The SCTP Restart procedure is not going to jeopardize the security
+characteristics of a SCTP Association using DTLS Chunk, this
+requires that SCTP Restart procedure is to be different than
+how described in {{RFC9260}}.
+
+In order to support SCTP Restart, the SCTP Endpoints shall
+allocate and maintain dedicated DTLS connections, those
+connection will be identified with specific DCIs.
+Both SCTP Endpoints shall guarantee that Restart DTLS connections
+and related keys are preserved for supporting the SCTP Restart
+use case.
+
+In order to be available for SCTP Restart purposes, the Restart
+DTLS connection must be kept in a well-known state so that
+both SCTP Endpoints are aware of the DTLS sequence numbers
+and replay window. An SCTP Endpoint SHALL NEVER use the
+SCTP Restart DTLS connection for any other use case than
+SCTP Restart.
+
+The DTLS Restart Connections, the related key materials, the
+information related to the sequence numbers and replay window
+SHALL be stored in a safe way that survives the events that
+are causing SCTP Restart procedure to be used, for instance
+a Crash of the SCTP Stack.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection.
+using the keying material for the restart DTLS connection,
+that is the DTLS Restart Connection and its DCI.
+
+A Restart DCI is identified by having the Restart Indicator bit set in
+the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
+There's exactly one active Restart DCI at a time, whereas a number
+of Restart DTLS connection MAY exist at the same time with the
+purpose of replace the aging active Restart DTLS connection.
+
 
 ~~~~~~~~~~~ aasvg
 
@@ -367,6 +387,14 @@ Being INIT and INIT-ACK plain guarantees the compliance with
 the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
 and COOCKIE-ACK by means of DTLS chunk ensures that the
 peer requesting the Restart has been previously validated.
+
+A restarted SCTP Association SHALL use the Restart DCI, thus the
+Restart DTLS connection, for User Traffic until a new traffic
+DTLS connection will be available.
+The implementors SHOULD guarantee that new a replacement
+Restart DTLS connection as well as a new Restart DCI are handshaked
+as soon as possible so that the time when no Restart DCI are available
+is kept to a minimum.
 
 # New Parameter Type {#new-parameter-type}
 
@@ -1003,6 +1031,9 @@ Paramters :
 * DCI:
 : The DTLS connection index value to establish (or overwrite)
 
+* Restart indication:
+: A bit indicating wheter the DCI is for restart purposes
+
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are note expected as they are used during DTLS handshake.
@@ -1048,6 +1079,9 @@ Paramters :
 * DCI:
 : The DTLS connection index value to establish (or overwrite)
 
+* Restart indication:
+: A bit indicating wheter the DCI is for restart purposes
+
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are note expected as they are used during DTLS handshake.
@@ -1088,6 +1122,8 @@ Paramters :
 
 * DCI
 
+* Restart indication
+
 * DTLS Epoch
 
 Reply: Destroyed
@@ -1106,6 +1142,8 @@ Paramters :
 * SCTP Association
 
 * DCI
+
+* Restart indication
 
 * DTLS Epoch
 
@@ -1126,6 +1164,8 @@ Paramters :
 
 * DCI
 
+* Restart indication
+
 Reply: DCI set
 
 Parameters : true or false
@@ -1142,6 +1182,8 @@ Paramters :
 * SCTP Association
 
 * DCI
+
+* Restart indication
 
 * DTLS Epoch
 
@@ -1161,6 +1203,8 @@ Paramters :
 * SCTP Association
 
 * DCI
+
+* Restart indication
 
 * DTLS Epoch
 
@@ -1189,6 +1233,8 @@ Request : Configure Replay Protection
 Paramters :
 
 * DCI
+
+* Restart indication
 
 * SCTP Association
 
