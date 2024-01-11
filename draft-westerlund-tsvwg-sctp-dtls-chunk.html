@@ -1212,7 +1212,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-mandatory-protected-associa" class="internal xref">Mandatory Protected Association Parameter Missing</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-error-in-protection" class="internal xref">Error in Protection</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-error-in-dtls-chunk" class="internal xref">Error in DTLS Chunk</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
                     <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-error-during-protection-han" class="internal xref">Error During Protection Handshake</a></p>
@@ -2328,18 +2328,18 @@ implied by the example in <a href="#sctp-DTLS-init-chunk-missing-protected" clas
 </div>
 <div id="eprotect">
 <section id="section-6.2">
-        <h3 id="name-error-in-protection">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-error-in-protection" class="section-name selfRef">Error in Protection</a>
+        <h3 id="name-error-in-dtls-chunk">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-error-in-dtls-chunk" class="section-name selfRef">Error in DTLS Chunk</a>
         </h3>
-<p id="section-6.2-1">A new Error Type is defined for DTLS Chunk, it's used for any
-error related to the Protection mechanism described in this
-document and has a structure that allows detailed information
-to be added as extra causes.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">This specification describes some of the causes whilst the
-key establishment specification MAY add further causes.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">A new Error Type is defined for DTLS Chunk, it's used for any error
+related to the DTLS chunk's protection mechanism described in this
+document and has a structure that allows detailed information to be
+added as extra causes.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">This specification describes some of the causes whilst the key
+establishment specification MAY add further causes.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2-3">When detecting an error, SCTP will send an ABORT chunk containing
 the relevant Error Type and Causes.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<span id="name-error-in-protection-cause-f"></span><div id="sctp-eprotect-error-structure">
+<span id="name-error-in-dtls-chunk-cause-f"></span><div id="sctp-eprotect-error-structure">
 <figure id="figure-7">
           <div id="section-6.2-4.1">
             <div class="alignCenter art-svg artwork" id="section-6.2-4.1.1">
@@ -2411,7 +2411,7 @@ the relevant Error Type and Causes.<a href="#section-6.2-3" class="pilcrow">¶</
 </div>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-error-in-protection-cause-f" class="selfRef">Error in Protection Cause Format</a>
+<a href="#name-error-in-dtls-chunk-cause-f" class="selfRef">Error in DTLS Chunk Cause Format</a>
           </figcaption></figure>
 </div>
 <span class="break"></span><dl class="dlNewline" id="section-6.2-5">

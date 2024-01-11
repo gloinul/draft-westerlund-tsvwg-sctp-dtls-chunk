@@ -92,7 +92,7 @@ Table of Contents
      5.2.  Protection Solution Validation Chunk (PVALID)
    6.  Error Handling
      6.1.  Mandatory Protected Association Parameter Missing
-     6.2.  Error in Protection
+     6.2.  Error in DTLS Chunk
        6.2.1.  Error During Protection Handshake
        6.2.2.  Failure in Protection Solution Validation
        6.2.3.  Timeout During Protection Handshake or Validation
@@ -656,12 +656,12 @@ Table of Contents
    Association ID may be present in any of the N missing params, no
    order implied by the example in Figure 6.
 
-6.2.  Error in Protection
+6.2.  Error in DTLS Chunk
 
    A new Error Type is defined for DTLS Chunk, it's used for any error
-   related to the Protection mechanism described in this document and
-   has a structure that allows detailed information to be added as extra
-   causes.
+   related to the DTLS chunk's protection mechanism described in this
+   document and has a structure that allows detailed information to be
+   added as extra causes.
 
    This specification describes some of the causes whilst the key
    establishment specification MAY add further causes.
@@ -679,7 +679,7 @@ Table of Contents
      |        Extra Cause #N-1       |         Extra Cause #N        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 7: Error in Protection Cause Format
+                 Figure 7: Error in DTLS Chunk Cause Format
 
    Cause Code: 16 bits (unsigned integer)
       The SCTP Error Chunk Cause Code indicating "Error in Protection"
