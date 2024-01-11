@@ -611,15 +611,15 @@ Note: Cause Length is equal to the number of missing parameters 8 + N
 Association ID may be present in any of the N missing params, no order
 implied by the example in {{sctp-DTLS-init-chunk-missing-protected}}.
 
-## Error in Protection {#eprotect}
+## Error in DTLS Chunk  {#eprotect}
 
-A new Error Type is defined for DTLS Chunk, it's used for any
-error related to the Protection mechanism described in this
-document and has a structure that allows detailed information
-to be added as extra causes.
+A new Error Type is defined for DTLS Chunk, it's used for any error
+related to the DTLS chunk's protection mechanism described in this
+document and has a structure that allows detailed information to be
+added as extra causes.
 
-This specification describes some of the causes whilst the
-key establishment specification MAY add further causes.
+This specification describes some of the causes whilst the key
+establishment specification MAY add further causes.
 
 When detecting an error, SCTP will send an ABORT chunk containing
 the relevant Error Type and Causes.
@@ -635,7 +635,7 @@ the relevant Error Type and Causes.
 |        Extra Cause #N-1       |         Extra Cause #N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-eprotect-error-structure title="Error in Protection Cause Format" artwork-align="center"}
+{: #sctp-eprotect-error-structure title="Error in DTLS Chunk Cause Format" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
