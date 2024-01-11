@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-09T00:46:16.939037+00:00",
+  "timestamp": "2024-01-11T00:46:50.989569+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -73,6 +73,22 @@
           "updatedAt": "2023-11-28T08:35:47Z"
         }
       ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKszxDc57gLRq",
+      "title": "PVALID needs to define how it is reliability mechanism works",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/3",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-01-09T10:01:45Z",
+      "updatedAt": "2024-01-09T10:01:45Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -114,6 +130,61 @@
           "body": "Did we add an authentication tag?",
           "createdAt": "2023-11-23T14:14:26Z",
           "updatedAt": "2023-11-23T14:14:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOKszxDc5jlCe0",
+      "title": "SCTP Restart handling that is secure and efficient using dedicated restart DTLS connection",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/4",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Also contains some other editorial fixes. ",
+      "createdAt": "2024-01-09T13:36:24Z",
+      "updatedAt": "2024-01-10T15:19:56Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "cba1d0abad19c0b30bb817459b5b2ceac11640d5",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "statemachine",
+      "headRefOid": "fe43760acd04d213107f1bdb90696bbfd1e114da",
+      "closedAt": "2024-01-10T15:17:40Z",
+      "mergedAt": "2024-01-10T15:17:40Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "7f1053654b066545df297270c8b23ad8a9dd5877"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc5r9Hce",
+          "commit": {
+            "abbreviatedOid": "894a882"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-01-09T13:47:18Z",
+          "updatedAt": "2024-01-09T13:47:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc5r9ICg",
+          "commit": {
+            "abbreviatedOid": "894a882"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-01-09T13:48:43Z",
+          "updatedAt": "2024-01-09T13:48:43Z",
           "comments": []
         }
       ]
