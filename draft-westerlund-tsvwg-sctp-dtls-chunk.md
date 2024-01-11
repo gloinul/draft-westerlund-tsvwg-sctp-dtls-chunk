@@ -129,7 +129,7 @@ transfer for SCTP packets.  This is implemented inside the SCTP
 protocol, in a sublayer between the SCTP common header handling and
 the SCTP chunk handling.  Once an SCTP packet has been received and
 the SCTP common header has been used to identify the SCTP association,
-the DTLS chunk is sent to the DTLS protection operator that will
+the DTLS chunk is sent to the DTLS Protection Operator that will
 return the SCTP payload containing the unprotected SCTP chunks, those
 chunks will then be handled according to their SCTP protocol
 specifications. {{sctp-DTLS-chunk-layering}} illustrates the DTLS
@@ -164,15 +164,15 @@ Use of the DTLS chunk is defined per SCTP association.
 
 On the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
-that payload will be sent to the DTLS protection Operator to be
+that payload will be sent to the DTLS Protection Operator to be
 protected. The format of the protected payload is a DTLS 1.3 record
 encapsulated in a SCTP chunk which is named the DTLS chunk.
 
-The SCTP protection operator performs protection operations on the
+The SCTP Protection Operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
-initial SCTP handshake, initial DTLS handshake, the SCTP common
+initial SCTP handshake, DTLS handshake, the SCTP common
 header, the SCTP DTLS chunk header, the INIT and INIT-ACK of an SCTP
 association restart, and the SHUTDOWN-COMPLETE chunk.
 
@@ -192,7 +192,7 @@ informed about that. From this time on it's possible for the ULPs to
 exchange data securely.
 
 A DTLS chunk will never be retransmitted, retransmission is implemented
-by SCTP endpoint at chunk level as in the legacy. DTLS replay
+by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
 protection will be used to supress duplicated DTLS chunks, however a
 failure to prevent replay will only result in duplicated SCTP chunks and
 will be handled as duplicated chunks by SCTP endpoint in the same way
@@ -203,7 +203,7 @@ a duplicated SCTP packet with those SCTP chunks would have been.
 
 The DTLS Chunk architecture splits DTLS 1.3 as shown in
 {{sctp-DTLS-chunk-layering}}, where there's a Key Management functionality
-on top of SCTP Chunks Handler and a Protection operator functionality
+on top of SCTP Chunks Handler and a Protection Operator functionality
 interfacing DTLS Chunk Handler.
 
 Key Management is the set of data and procedures that take care of key
@@ -233,7 +233,7 @@ DATA chunks.
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
 DTLS 1.3 operations and SCTP are asynchronous, meaning that the
-protection operator may deliver the decrypted SCTP Payload to the SCTP
+Protection Operator may deliver the decrypted SCTP Payload to the SCTP
 endpoint without respecting the reception order.  It's up to SCTP
 endpoint to reorder the chunks in the reception buffer and to take
 care of the flow control according to what specified in
@@ -241,7 +241,7 @@ care of the flow control according to what specified in
 of the transport network.
 
 Even though the above allows the implementors to adopt a
-multithreading design of the protection engines, the actual
+multithreading design of the Protection Operators, the actual
 implementation should consider that out-of-order handling of SCTP
 chunks is not desired and may cause false congestion signals and
 trigger retransmissions.
@@ -259,7 +259,7 @@ sent and received size of packets for the SCTP packets. This to
 correctly handle PMTUD probe packets.
 
 From SCTP perspective, if there is a maximum size of plain text data
-that can be protected by the protection engine that must be
+that can be protected by the Protection Operator that must be
 communicated to SCTP. As such a limit will limit the PMTU for SCTP to
 the maximum plain text plus DTLS chunk and algorithm overhead plus
 the SCTP common header.
@@ -270,14 +270,14 @@ The SCTP mechanism for handling congestion control does depend on
 successful data transfer for enlarging or reducing the congestion
 window CWND (see {{RFC9260}} Section 7.2).
 
-It may happen that protection engine discards packets due to internal
+It may happen that Protection Operator discards packets due to internal
 checks or because it has detected a malicious attempt. As those
 packets do not represent what the peer sent, it is acceptable to
 ignore them, although in-situ modification on the path of a packet
 resulting in discarding due to integrity failure will leave a gap, but
 has to be accepted as part of the path behavior.
 
-The protection operator will not interfere with the SCTP congestion
+The Protection Operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
@@ -289,8 +289,8 @@ and their validation as specified in {{RFC9260}} Section 10. This
 means that the ICMP validation needs to be done in relation to the
 actual sent SCTP packets with the DTLS chunk and not the unprotected
 payload. However, valid ICMP errors or information may indirectly be
-provided to the protection operator, such as an update to PMTU values
-based on packet to big ICMP messages.
+provided to the Protection Operator, such as an update to PMTU values
+based on packet too big ICMP messages.
 
 ## Path Selection Considerations {#multipath}
 
@@ -391,7 +391,7 @@ peer requesting the Restart has been previously validated.
 A restarted SCTP Association SHALL use the Restart DCI, thus the
 Restart DTLS connection, for User Traffic until a new traffic
 DTLS connection will be available.
-The implementors SHOULD guarantee that new a replacement
+The implementors SHOULD guarantee that a new replacement
 Restart DTLS connection as well as a new Restart DCI are handshaked
 as soon as possible so that the time when no Restart DCI are available
 is kept to a minimum.
@@ -569,7 +569,7 @@ Chunk Length: 16 bits (unsigned integer)
 Protection Solutions Indicator: 32 bits (unsigned integer)
 : This value is set by default to zero. It uses the different
   bit-values to indicate that the INIT contained an offer of the
-  indiacted protection solutions. Value 0x1 is used to indiacte that
+  indiacted protection solutions. Value 0x1 is used to indicate that
   one offered DTLS 1.3 Chunk.
 
 RFC-Editor Note: Please replace 0x4X with the actual chunk type value
@@ -643,7 +643,7 @@ the relevant Error Type and Causes.
 {: #sctp-eprotect-error-structure title="Error in Protection Cause Format" artwork-align="center"}
 
 {: vspace="0"}
-Casuse Code: 16 bits (unsigned integer)
+Cause Code: 16 bits (unsigned integer)
 : The SCTP Error Chunk Cause Code indicating "Error in Protection" is TBA9.
 
 Cause Length: 16 bits (unsigned integer)
@@ -662,7 +662,7 @@ can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
 ### Error During Protection Handshake {#ekeyhandshake}
 
 If the protection specifies a handshake for example for
-authentication, and key management is implemented in-band, it may
+authentication, it may
 happen that the procedure has errors. In such case an ABORT chunk will
 be sent with error in protection cause code (specified in
 {{eprotect}}) and extra cause "Error During Protection Handshake"
@@ -704,14 +704,14 @@ experience timeout on the Association.
 ## Non-critical Error in the Protection {#non-critical-errors}
 
 A non-critical error in DTLS 1.3 means that the
-protection operator is capable of recovering without the need
+Protection Operator is capable of recovering without the need
 of the whole Association to be restarted.
 
 From SCTP perspective, a non-critical error will be perceived
 as a temporary problem in the transport and will be handled
 with retransmissions and SACKS according to {{RFC9260}}.
 
-When the protection operator will experience a non-critical error,
+When the Protection Operator will experience a non-critical error,
 an ABORT chunk SHALL NOT be sent.
 
 # Procedures {#procedures}
@@ -802,6 +802,9 @@ generate an ABORT chunk.  The ERROR handling follows what specified in
 In the PROTECTED state any ULP SCTP messages for any PPID MAY be
 exchanged in the protected SCTP association.
 
+When entering the PROTECTED state, a Restart DTLS connection
+SHOULD be created.
+
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
@@ -833,7 +836,7 @@ document.
              | [DTLS SETUP]
              |-----------------
              | send and receive
-             | protection engine handshake
+             | DTLS handshake
              v
  +----------------------+
  |      VALIDATION      |
@@ -861,8 +864,8 @@ unencrypted.
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
-use SCTP user messages for message transmission that will be
-protected by the DTLS 1.3 protected and encapsulated in DTLS chunks.
+use SCTP Data chunk with dedicated PPID, those chunks will be
+sent and received unencrypted.
 
 ## Consideration on T-valid {#t-valid-considerations}
 
@@ -894,6 +897,8 @@ chunks and DTLS chunks follows the rules defined below:
   encryption will be the used as payload for a DTLS chunk that will be
   the only chunk in the SCTP packet to be sent. DATA chunks are
   accepted and handled according to section 4 of {{RFC9260}}.
+  Data chunk with dedicated PPID will be sent and received
+  unencrypted.
 
 - If an SCTP restart is occurring there are exception rules to the
   above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
@@ -952,8 +957,8 @@ from the SCTP chunk handler as a complete SCTP payload with maximum
 size limited by PMTU reduced by the size of the SCTP common header and
 the DTLS chunk overhead.
 
-That plain payload will be sent to the protection operator in use for
-that specific association, the protection operator will return an
+That plain payload will be sent to the Protection Operator in use for
+that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
@@ -971,7 +976,7 @@ chunk with the SCTP-DTLS PPID.
 When the DTLS Chunk state machine has reached the VALIDATION or
 PROTECTED state, the DTLS chunk handler will receive DTLS chunks
 from the SCTP Header Handler.  Payload from DTLS chunks will be
-forwarded to the protection operator which will return a plain
+forwarded to the Protection Operator which will return a plain
 SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
 Handler that will split it in separated chunks and will handle them
 according to {{RFC9260}}.
@@ -985,7 +990,7 @@ set chunks and forwarded transparently to the SCTP endpoint.
 The SCTP Header Handler is responsible for correctness of the SCTP
 common header, it receives the SCTP packet from the lower transport
 layer, discriminates among associations and forwards the payload and
-relevant data to the SCTP protection engine for handling.
+relevant data to the SCTP Protection Operator for handling.
 
 In the opposite direction it creates the SCTP common header and fills
 it with the relevant information for the specific association and
@@ -1278,7 +1283,7 @@ registry is depicted below in {{iana-protection-options-identifier}}.
 | ID Value | Name | Reference | Contact |
 | 0-65534 | Available for Assignment | RFC-To-Be | |
 | 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-options-identifier title="Protection Engine Identifier Registry" cols="r l l l"}
+{: #iana-protection-options-identifier title="Protection Operator Identifier Registry" cols="r l l l"}
 
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
@@ -1294,15 +1299,15 @@ protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
 be assigned by IANA a unique 16-bit unsigned integer identifier for
-their protection engine. Values 0-65534 are available for
+their Protection Operator. Values 0-65534 are available for
 assignment. Value 65535 is reserved for future extension. The proposed
 general form of the registry is depicted below in
 {{iana-protection-error-cause}}.
 
 | Cause Code | Meaning | Reference | Contact |
-| 0 | Error in the Protection Engine List | RFC-To-Be | Authors |
+| 0 | Error in the Protection Operator List | RFC-To-Be | Authors |
 | 1 | Error During Protection Handshake | RFC-To-Be | Authors|
-| 2 | Failure in Protection Engines Validation | RFC-To-Be | Authors |
+| 2 | Failure in Protection Operators Validation | RFC-To-Be | Authors |
 | 3 | Timeout During KEY Handshake or Validation | RFC-To-Be | Authors |
 | 4-65534 | Available for Assignment | RFC-To-Be | Authors |
 | 65535 | Reserved | RFC-To-Be | Authors |
@@ -1349,7 +1354,7 @@ available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24
 
 | ID Value | Error Cause Codes | Reference |
-| TBA9 | Protection Engine Error | RFC-To-Be |
+| TBA9 | Protection Operator Error | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
@@ -1363,14 +1368,14 @@ available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
 
 | ID Value | SCTP Payload Protocol Identifier | Reference |
-| TBA10 | Protection Engine Protocol Identifier | RFC-To-Be |
-{: #iana-payload-protection-id title="Protection Engine Protocol Identifier Registered" cols="r l l"}
+| TBA10 | Protection Operator Protocol Identifier | RFC-To-Be |
+{: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
 
 
 # Security Considerations {#Security-Considerations}
 
 All the security and privacy considerations of the security protocol
-used as the protection engine applies.
+used as the Protection Operator applies.
 
 ## Privacy Considerations
 
@@ -1393,7 +1398,7 @@ The downgrade protection is only as strong as the weakest of the
 supported protection solutions as an active attacker can trick the
 endpoints to negotiate the weakest protection solution and then
 modify the weakly protected pvalid chunks to deceive the endpoints
-that the negotiation of the protection engines is validated. This
+that the negotiation of the Protection Operators is validated. This
 is similar to the downgrade protection in TLS 1.3 specified in
 Section 4.1.3. of {{RFC8446}} where downgrade protection is not
 provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
@@ -1404,4 +1409,4 @@ solutions.
 
    The authors thank Michael Tüxen for his invaluable comments
    helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Engine architecture.
+   restructuring the Protection Operator architecture.
