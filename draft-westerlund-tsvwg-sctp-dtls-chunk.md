@@ -288,9 +288,7 @@ The SCTP implementation will be responsible for handling ICMP messages
 and their validation as specified in {{RFC9260}} Section 10. This
 means that the ICMP validation needs to be done in relation to the
 actual sent SCTP packets with the DTLS chunk and not the unprotected
-payload. However, valid ICMP errors or information may indirectly be
-provided to the Protection Operator, such as an update to PMTU values
-based on packet too big ICMP messages.
+payload.
 
 ## Path Selection Considerations {#multipath}
 
@@ -1280,7 +1278,7 @@ registry is depicted below in {{iana-protection-options-identifier}}.
 | ID Value | Name | Reference | Contact |
 | 0-65534 | Available for Assignment | RFC-To-Be | |
 | 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-options-identifier title="Protection Operator Identifier Registry" cols="r l l l"}
+{: #iana-protection-options-identifier title="DTLS Options Identifier Registry" cols="r l l l"}
 
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
@@ -1295,11 +1293,10 @@ The purpose of this registry is to enable identification of different
 protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
-be assigned by IANA a unique 16-bit unsigned integer identifier for
-their Protection Operator. Values 0-65534 are available for
-assignment. Value 65535 is reserved for future extension. The proposed
-general form of the registry is depicted below in
-{{iana-protection-error-cause}}.
+be assigned by IANA a unique 16-bit unsigned integer
+identifier. Values 0-65534 are available for assignment. Value 65535
+is reserved for future extension. The proposed general form of the
+registry is depicted below in {{iana-protection-error-cause}}.
 
 | Cause Code | Meaning | Reference | Contact |
 | 0 | Error in the Protection Operator List | RFC-To-Be | Authors |
@@ -1351,7 +1348,7 @@ available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24
 
 | ID Value | Error Cause Codes | Reference |
-| TBA9 | Protection Operator Error | RFC-To-Be |
+| TBA9 | DTLS Chunk Error | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
