@@ -325,44 +325,41 @@ Chunks as Authentication mechanism for ASCONF chunks.
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk
-during an Association lifetime as described in {{RFC9260}} section
-5.2 with the purpose of achieving a Restart of the current Association.
+during an Association lifetime as described in {{RFC9260}} section 5.2
+with the purpose of achieving a Restart of the current Association.
 
-The SCTP Restart procedure is not going to jeopardize the security
-characteristics of a SCTP Association using DTLS Chunk, this
-requires that SCTP Restart procedure is to be different than
-how described in {{RFC9260}}.
+The SCTP Restart procedure is defined to maintain the security
+characteristics of a SCTP Association using DTLS Chunk, this requires
+that SCTP Restart procedure is modified in regards to how it is
+described in {{RFC9260}}.
 
-In order to support SCTP Restart, the SCTP Endpoints shall
-allocate and maintain dedicated DTLS connections, those
-connection will be identified with specific DCIs.
-Both SCTP Endpoints shall guarantee that Restart DTLS connections
-and related keys are preserved for supporting the SCTP Restart
-use case.
+In order to support SCTP Restart, the SCTP Endpoints shall allocate
+and maintain dedicated DTLS connections, those connection will be
+identified with specific DCIs.  Both SCTP Endpoints shall guarantee
+that Restart DTLS connections and related keys are preserved for
+supporting the SCTP Restart use case.
 
-In order to be available for SCTP Restart purposes, the Restart
-DTLS connection must be kept in a well-known state so that
-both SCTP Endpoints are aware of the DTLS sequence numbers
-and replay window. An SCTP Endpoint SHALL NEVER use the
-SCTP Restart DTLS connection for any other use case than
-SCTP Restart.
+In order to be available for SCTP Restart purposes, the Restart DTLS
+connection must be kept in a well-known state so that both SCTP
+Endpoints are aware of the DTLS sequence numbers and replay window. An
+SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS connection for any
+other use case than SCTP Restart.
 
 The DTLS Restart Connections, the related key materials, the
-information related to the sequence numbers and replay window
-SHALL be stored in a safe way that survives the events that
-are causing SCTP Restart procedure to be used, for instance
-a Crash of the SCTP Stack.
+information related to the sequence numbers and replay window SHALL be
+stored in a safe way that survives the events that are causing SCTP
+Restart procedure to be used, for instance a Crash of the SCTP Stack.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection,
-that is the DTLS Restart Connection and its DCI.
+using the keying material for the restart DTLS connection, that is the
+DTLS Restart Connection and its DCI.
 
 A Restart DCI is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
-There's exactly one active Restart DCI at a time, whereas a number
-of Restart DTLS connection MAY exist at the same time with the
-purpose of replace the aging active Restart DTLS connection.
+There's exactly one active Restart DCI at a time, the newest. Whereas
+a number of Restart DTLS connection MAY exist at the same time with
+the purpose of replace the aging active Restart DTLS connection.
 
 
 ~~~~~~~~~~~ aasvg
@@ -383,10 +380,10 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.
 
-Being INIT and INIT-ACK plain guarantees the compliance with
+Sending INIT and INIT-ACK plain text guarantees the compliance with
 the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
 and COOCKIE-ACK by means of DTLS chunk ensures that the
-peer requesting the Restart has been previously validated.
+peer requesting the restart has been previously validated.
 
 A restarted SCTP Association SHALL use the Restart DCI, thus the
 Restart DTLS connection, for User Traffic until a new traffic
