@@ -340,9 +340,7 @@ Table of Contents
    messages and their validation as specified in [RFC9260] Section 10.
    This means that the ICMP validation needs to be done in relation to
    the actual sent SCTP packets with the DTLS chunk and not the
-   unprotected payload.  However, valid ICMP errors or information may
-   indirectly be provided to the Protection Operator, such as an update
-   to PMTU values based on packet too big ICMP messages.
+   unprotected payload.
 
 3.7.  Path Selection Considerations
 
@@ -1318,7 +1316,7 @@ Table of Contents
        |    65535 | Reserved                 | RFC-To-Be | Authors |
        +----------+--------------------------+-----------+---------+
 
-              Table 4: Protection Operator Identifier Registry
+                 Table 4: DTLS Options Identifier Registry
 
    New entries are registered following the Specification Required
    policy as defined by [RFC8126].
@@ -1333,10 +1331,10 @@ Table of Contents
    protection related errors when using DTLS chunk and a protection
    engine.  Entries in the registry requires a Meaning, a reference to
    the specification defining the error, and a contact.  Each entry will
-   be assigned by IANA a unique 16-bit unsigned integer identifier for
-   their Protection Operator.  Values 0-65534 are available for
-   assignment.  Value 65535 is reserved for future extension.  The
-   proposed general form of the registry is depicted below in Table 5.
+   be assigned by IANA a unique 16-bit unsigned integer identifier.
+   Values 0-65534 are available for assignment.  Value 65535 is reserved
+   for future extension.  The proposed general form of the registry is
+   depicted below in Table 5.
 
       +============+=========================+===========+=========+
       | Cause Code | Meaning                 | Reference | Contact |
@@ -1410,13 +1408,14 @@ Table of Contents
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-24
 
-           +==========+===========================+===========+
-           | ID Value | Error Cause Codes         | Reference |
-           +==========+===========================+===========+
-           |     TBA9 | Protection Operator Error | RFC-To-Be |
-           +----------+---------------------------+-----------+
+               +==========+===================+===========+
+               | ID Value | Error Cause Codes | Reference |
+               +==========+===================+===========+
+               |     TBA9 | DTLS Chunk Error  | RFC-To-Be |
+               +----------+-------------------+-----------+
 
-             Table 8: Error Cause Codes Parameters Registered
+                  Table 8: Error Cause Codes Parameters
+                                Registered
 
 10.6.  SCTP Payload Protocol Identifier
 

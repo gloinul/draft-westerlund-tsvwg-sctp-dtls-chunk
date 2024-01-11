@@ -1631,9 +1631,7 @@ in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#sec
 and their validation as specified in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> Section 10. This
 means that the ICMP validation needs to be done in relation to the
 actual sent SCTP packets with the DTLS chunk and not the unprotected
-payload. However, valid ICMP errors or information may indirectly be
-provided to the Protection Operator, such as an update to PMTU values
-based on packet too big ICMP messages.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+payload.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="multipath">
@@ -3355,11 +3353,11 @@ a unique 16-bit unsigned integer is used.
 Values 0-65534 are available for assignment. Value 65535 is
 reserved for future extension. The proposed general form of the
 registry is depicted below in <a href="#iana-protection-options-identifier" class="auto internal xref">Table 4</a>.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
-<span id="name-protection-operator-identif"></span><div id="iana-protection-options-identifier">
+<span id="name-dtls-options-identifier-regi"></span><div id="iana-protection-options-identifier">
 <table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-protection-operator-identif" class="selfRef">Protection Operator Identifier Registry</a>
+<a href="#name-dtls-options-identifier-regi" class="selfRef">DTLS Options Identifier Registry</a>
           </caption>
 <thead>
             <tr>
@@ -3401,11 +3399,10 @@ Protocol (SCTP) Parameters grouping.<a href="#section-10.2-1" class="pilcrow">¶
 protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
-be assigned by IANA a unique 16-bit unsigned integer identifier for
-their Protection Operator. Values 0-65534 are available for
-assignment. Value 65535 is reserved for future extension. The proposed
-general form of the registry is depicted below in
-<a href="#iana-protection-error-cause" class="auto internal xref">Table 5</a>.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
+be assigned by IANA a unique 16-bit unsigned integer
+identifier. Values 0-65534 are available for assignment. Value 65535
+is reserved for future extension. The proposed general form of the
+registry is depicted below in <a href="#iana-protection-error-cause" class="auto internal xref">Table 5</a>.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
 <span id="name-protection-error-cause-code-2"></span><div id="iana-protection-error-cause">
 <table class="center" id="table-5">
           <caption>
@@ -3565,7 +3562,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
           <tbody>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBA9</td>
-              <td class="text-left" rowspan="1" colspan="1">Protection Operator Error</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS Chunk Error</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
