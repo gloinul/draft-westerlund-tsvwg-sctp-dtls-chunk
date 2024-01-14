@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-11T00:46:50.989569+00:00",
+  "timestamp": "2024-01-14T00:51:14.016983+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -87,6 +87,22 @@
       "body": "",
       "createdAt": "2024-01-09T10:01:45Z",
       "updatedAt": "2024-01-09T10:01:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKszxDc57x9Yj",
+      "title": "Split DTLS Options Identifier space info safe to ignore, ignore and report, fail types. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/5",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The DTLS options in the parameter is not split into categories where one can define them as being possible to ignore or need to be understood. That should be done by splitting the spaces based on the higher bits like for other SCTP code points.",
+      "createdAt": "2024-01-11T13:43:30Z",
+      "updatedAt": "2024-01-11T13:43:30Z",
       "closedAt": null,
       "comments": []
     }
