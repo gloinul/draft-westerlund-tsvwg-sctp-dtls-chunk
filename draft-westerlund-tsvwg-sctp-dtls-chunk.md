@@ -136,14 +136,17 @@ specifications. {{sctp-DTLS-chunk-layering}} illustrates the DTLS
 chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 
 ~~~~~~~~~~~ aasvg
-+---------------+ +--------------------+
-|               | |       DTLS 1.3     |  Keys
-|      ULP      | |                    +-------------.
-|               | |   Key Management   |              |
-+---------------+-+---+----------------+            --+-- API
-|                     |                 \    User     |
+   socket API       DTLS chunk API
++==============+=======================+
+|              |    DTLS Control       |
+|              |  +--------------------+
+|              |  |       DTLS 1.3     |  Keys
+|              |  |                    +-------------.
+|      SCTP    |  |   Key Management   |              |
+|     Chunks   +--+---+----------------+            --+-- API
+|     Handler         |                 \    User     |
 |                     |                  +-- Level    |
-| SCTP Chunks Handler |                      Messages |
+|                     |                      Messages |
 |                     |                               |
 |                     | +-- SCTP Unprotected Payload  |
 |                     |/                              |
@@ -390,6 +393,165 @@ The implementors SHOULD guarantee that a new replacement
 Restart DTLS connection as well as a new Restart DCI are handshaked
 as soon as possible so that the time when no Restart DCI are available
 is kept to a minimum.
+
+# DTLS chunk API {#newPrimitives}
+
+DTLS Chunk adds a new set of primitives that can be used by the
+SCTP User for creating and maintaining a secured Association.
+
+This section provides an high-level description of the primitives
+as coding depends on the actual implementation.
+
+## Secure INIT
+
+Secure Init is a primitive that allows the instantiation of a secure
+SCTP Association towards a remote SCTP peer acting as server.
+Secure INIT requires that the secrets are known to the local SCTP Host,
+or being provided by the Secure INIT primitive itself.
+
+Secure INIT is from the SCTP User
+
+## Secure SETUP-INDICATION
+
+Secure SETUP-INDICATION is a primitive that indicates to the SCTP User
+that a Secure Association has been established either because
+the local SCTP User has used a Secure INIT or because a remote peer
+has requested a Secure Association.
+
+Secure SETUP-INDICATION is is towards the SCTP User
+
+Secure SETUP-INDICATION provides the following information:
+
+* Current CID
+
+* Restart
+
+## Add DTLS Connection
+
+Add DTLS Connection is a primitive that allows a SCTP User to
+add a DTLS connection to an existing Secure Association.
+
+Add DTLS Connection is from SCTP User
+
+Add DTLS Connection provides the following information:
+
+* Association Id
+
+* Restart
+
+## DTLS-CONNECTION-INDICATION
+
+DTLS-CONNECTION-INDICATION is a primitive that informs the
+SCTP User that a new DTLS connection has been added to an
+existing Association
+
+DTLS-CONNECTION-INDICATION is is towards the SCTP User
+
+DTLS-CONNECTION-INDICATION provides the following information:
+
+* Association Id
+
+* New CID
+
+* Restart
+
+## Remove DTLS Connection
+
+Remove DTLS Connection is a primitive that allows removing a
+DTLS connection from a Secure Association
+
+Remove DTLS Connection is from the SCTP User
+
+Remove DTLS Connection provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+## DTLS Connection Removed
+
+DTLS Connection Removed is a primitive that informs the SCTP User
+that a DTLS Connection has been removed.
+
+DTLS Connection Removed is towards the SCTP User
+
+DTLS Connection Removed provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+## Enable CID
+
+Enable CID primitive allows an SCTP User to set a specific DTLS connection
+for encryptiion by selecting its CID
+
+Enable CID is from SCTP User
+
+Enable CID provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+## ENABLED-CID
+
+ENABLED-CID primitive informs an SCTP User that the specified association
+has began to use another DTLS connection indicated by CID
+
+ENABLED-CID is towards the SCTP User
+
+ENABLED-CID provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+## Set CID limits
+
+Set CID limits primitive provide the SCTP User the possibility to set
+a limit in time or in datasize or both for a DTLS connection
+
+Set CID limits is from the SCTP User
+
+Set CID limits provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+* Time
+
+* Datasize
+
+## CID-LIMITS-EXPIRED
+
+CID-LIMITS-EXPIRED informs the SCTP User that the limits previously set
+for a DTLS connection has expired
+
+CID-LIMITS-EXPIRED is towards the SCTP User
+
+CID-LIMITS-EXPIRED provides the following information:
+
+* Association Id
+
+* CID
+
+* Restart
+
+* Time-expired
+
+* Datasize-expired
 
 # New Parameter Type {#new-parameter-type}
 
