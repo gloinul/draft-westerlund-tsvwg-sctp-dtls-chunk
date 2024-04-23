@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-04-21T00:48:15.870184+00:00",
+  "timestamp": "2024-04-23T00:44:21.042844+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -103,6 +103,22 @@
       "body": "The DTLS options in the parameter is not split into categories where one can define them as being possible to ignore or need to be understood. That should be done by splitting the spaces based on the higher bits like for other SCTP code points.",
       "createdAt": "2024-01-11T13:43:30Z",
       "updatedAt": "2024-01-11T13:43:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKszxDc6GfDZj",
+      "title": "Update PPID registration",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/6",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This draft has gotten a PPID assigned:\r\n4242    DTLS Chunk Key-Management Messages      [draft-westerlund-tsvwg-sctp-dtls-chunk-01]\r\n\r\nNeed to update the draft.",
+      "createdAt": "2024-04-22T11:25:33Z",
+      "updatedAt": "2024-04-22T11:25:33Z",
       "closedAt": null,
       "comments": []
     }
