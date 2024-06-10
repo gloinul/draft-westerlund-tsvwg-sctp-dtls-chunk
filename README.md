@@ -1,4 +1,4 @@
-# Stream Control Transmission Protocol (SCTP) CRYPTO Chunk
+# Stream Control Transmission Protocol (SCTP) DTLS Chunk
 
 This is the working area for the individual Internet-Draft, "Stream Control Transmission Protocol (SCTP) CRYPTO Chunk".
 
