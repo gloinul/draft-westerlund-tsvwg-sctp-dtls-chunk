@@ -178,13 +178,13 @@ association restart, and the SHUTDOWN-COMPLETE chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
-been keyed only plain text key-management traffic using a special PPID
-may flow, no ULP traffic. The key management function uses an API
-to key the DTLS protection operation function. Usage of the DTLS 1.3
-handshake for initial mutual authentication and key establishment as
-well as periodic re-authentication and rekeying with Diffe-Hellman of
-the DTLS chunk protection is defied in a seperate document
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+been keyed only plain text key-management traffic using a designated
+PPID (4242) may flow, no ULP traffic. The key management function uses
+an API to key the DTLS protection operation function. Usage of the
+DTLS 1.3 handshake for initial mutual authentication and key
+establishment as well as periodic re-authentication and rekeying with
+Diffe-Hellman of the DTLS chunk protection is defied in a seperate
+document {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
@@ -220,14 +220,14 @@ this kind of handshake is part of the Key Management functionality.
 Key Management function achieves these features behaving as a SCTP User.
 Key Management sends and receives its own data via the SCTP User Level interface.
 Key Management's own data are distinguished from any other data by
-means of a dedicated PPID (see {{iana-payload-protection-id}}).
+means of a dedicated PPID using the value 4242 (see {{iana-payload-protection-id}}).
 
 Once the Key Management has established the DTLS 1.3 connection,
 it can set the Protection Operator for User Data encryption/decription
 via the API shown in {{sctp-DTLS-chunk-layering}}.
 
 DTLS 1.3 expects that handshake messages, that is from SCTP
-User Data with dedicated PPID, to be sent and received as plain
+User Data with dedicated PPID = 4242, to be sent and received as plain
 DATA chunks.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
@@ -737,9 +737,9 @@ state. This state sequence is depicted in {{init-state-machine}}.
 
 Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
-used to exchange in-band key establishment messages for DTLS. Any
-other DATA chunk being received in a Protected association SHALL be
-silently discarded.
+value 4242 used to exchange in-band key establishment messages for
+DTLS. Any other DATA chunk being received in a Protected association
+SHALL be silently discarded.
 
 DTLS 1.3 initializes itself by transferring its own handshake messages
 as payload of the DATA chunk necessary
@@ -845,9 +845,9 @@ document.
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITILIZATION state, in-band key
-management MAY use SCTP user messages with the SCTP-DTLS PPID (see
-{{iana-payload-protection-id}}) for message transfer that will be sent
-unencrypted.
+management MAY use SCTP user messages with the SCTP-DTLS PPID value =
+4242 (see {{iana-payload-protection-id}}) for message transfer that
+will be sent unencrypted.
 
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
@@ -885,7 +885,7 @@ chunks and DTLS chunks follows the rules defined below:
   encryption will be the used as payload for a DTLS chunk that will be
   the only chunk in the SCTP packet to be sent. DATA chunks are
   accepted and handled according to section 4 of {{RFC9260}}.
-  Data chunk with dedicated PPID will be sent and received
+  Data chunk with dedicated PPID (4242) will be sent and received
   unencrypted.
 
 - If an SCTP restart is occurring there are exception rules to the
@@ -959,7 +959,7 @@ it MAY perform key management in-band. In such case, the DTLS chunk
 handler will receive plain control chunks and DATA chunks with
 SCTP-DTLS PPID from the SCTP Header Handler. Those plain text control
 chunks will be forwarded to SCTP chunk handler as well as the DATA
-chunk with the SCTP-DTLS PPID.
+chunk with the SCTP-DTLS PPID value of 4242.
 
 When the DTLS Chunk state machine has reached the VALIDATION or
 PROTECTED state, the DTLS chunk handler will receive DTLS chunks
@@ -971,7 +971,7 @@ according to {{RFC9260}}.
 
 Meta data, such as ECN, source and destination address or path ID,
 belonging to the received SCTP packet SHALL be tied to the relevant
-set chunks and forwarded transparently to the SCTP endpoint.
+set of chunks and forwarded transparently to the SCTP endpoint.
 
 ### SCTP Header Handler
 
@@ -1323,14 +1323,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 ## SCTP Payload Protocol Identifier
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Payload Protocol Identifiers" registry, IANA is requested to add the new
+"Payload Protocol Identifiers" registry, IANA is requested to update the
 entry depicted below in in {{iana-payload-protection-id}} with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
 
 | ID Value | SCTP Payload Protocol Identifier | Reference |
-| TBA10 | Protection Operator Protocol Identifier | RFC-To-Be |
+| 4242 | DTLS Chunk Key-Management Messages | RFC-To-Be |
 {: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
 
 
