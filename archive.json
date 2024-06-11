@@ -1,0 +1,227 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-06-11T00:49:43.702681+00:00",
+  "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOKszxDc54CeKV",
+      "title": "Turning off DTLS replay protection is typically a major security problem",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/2",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "emanjon"
+      ],
+      "labels": [],
+      "body": "https://mailarchive.ietf.org/arch/msg/tls/f990CfKIRDQKTa4tAkIrgHcKqWc/\r\n\r\n---------------------------\r\n\r\nHi,\r\n\r\nReading RFC 9147 (DTLS 1.3) I cannot find any other interpretation than that replay protection may be disabled for all records. This is not a problem for the initial lock-step handshake, alerts, KeyUpdate, and ACKs. It seems to be a major problem for NewSessionTicket, NewConnectionId, RequestConnectionId, and Post-handshake client authentication as the lack of replay protection might significantly affect availability. It seems to me that DTLS 1.3 forgot to update replay protection based on the new post-handshake messages. Let me know if I miss something.\r\n\r\nIt is a bit surprising that DTLS 1.3 published in 2022 allows the application to turn off replay protection at all. This very far from current best practice for security protocols. There are very good reasons why Datagram QUIC mandates replay protection and why TLS 1.3 has several pages discussing security considerations for 0-RTT data, which lacks replay protection. In general, turning off replay protection (even just for application data) might lead to loss of confidentiality, integrity, and availability, i.e., the whole CIA triad.\r\n\r\nApplications cannot be expected to understand the severe consequences of not having replay protection or understand how to fix it on the application layer. I also don't see any need for turning off replay protection except RFC 6083 which is a bit of a special case, and which turned out to have replay issues.\r\nhttps://datatracker.ietf.org/meeting/115/materials/slides-115-tsvwg-sctp-auth-security-issues-00\r\n\r\nI would strongly recommend all DTLS 1.3 libraries to completely remove the option to disable replay protection.\r\n\r\nAn easy fix for the post-handshake messages is to \"clarify\" that replay protection must not be turned off for anything else than application data. I you agree I can submit an \u201cerratum\u201d for RFC 9147. But this does not solve the general issue that turning off replay protection would be a major security problem in almost all applications.\r\n\r\nCheers,\r\nJohn Preu\u00df Mattsson\r\n",
+      "createdAt": "2023-11-28T08:32:30Z",
+      "updatedAt": "2024-06-10T13:30:03Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am very sceptical to the option to turn of the DTLS replay protection. Is this needed for anything? I would recommend removing it. Otherwise a lot of analysis and considerations are likely needed.",
+          "createdAt": "2023-11-28T08:35:47Z",
+          "updatedAt": "2023-11-28T08:35:47Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKszxDc57gLRq",
+      "title": "PVALID needs to define how it is reliability mechanism works",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/3",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-01-09T10:01:45Z",
+      "updatedAt": "2024-01-09T10:01:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKszxDc57x9Yj",
+      "title": "Split DTLS Options Identifier space info safe to ignore, ignore and report, fail types. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/5",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The DTLS options in the parameter is not split into categories where one can define them as being possible to ignore or need to be understood. That should be done by splitting the spaces based on the higher bits like for other SCTP code points.",
+      "createdAt": "2024-01-11T13:43:30Z",
+      "updatedAt": "2024-01-11T13:43:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKszxDc6GfDZj",
+      "title": "Update PPID registration",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/6",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This draft has gotten a PPID assigned:\r\n4242    DTLS Chunk Key-Management Messages      [draft-westerlund-tsvwg-sctp-dtls-chunk-01]\r\n\r\nNeed to update the draft.",
+      "createdAt": "2024-04-22T11:25:33Z",
+      "updatedAt": "2024-04-22T11:25:33Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOKszxDc5gO-Y_",
+      "title": "Update draft-westerlund-tsvwg-sctp-dtls-chunk.md",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/1",
+      "state": "MERGED",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-11-23T14:10:51Z",
+      "updatedAt": "2023-11-23T14:18:05Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4cd2ae0e339297e1da5bd88e2a7c2e21ecbff0b7",
+      "headRepository": "emanjon/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "patch-1",
+      "headRefOid": "c4722a02812f98ea4e5700d12f1b8cfd69054151",
+      "closedAt": "2023-11-23T14:18:01Z",
+      "mergedAt": "2023-11-23T14:18:01Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "07c2c4470cb142a1834d35066c214f272ddf7e08"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc5oGkQ-",
+          "commit": {
+            "abbreviatedOid": "c4722a0"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Did we add an authentication tag?",
+          "createdAt": "2023-11-23T14:14:26Z",
+          "updatedAt": "2023-11-23T14:14:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOKszxDc5jlCe0",
+      "title": "SCTP Restart handling that is secure and efficient using dedicated restart DTLS connection",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/4",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Also contains some other editorial fixes. ",
+      "createdAt": "2024-01-09T13:36:24Z",
+      "updatedAt": "2024-01-10T15:19:56Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "cba1d0abad19c0b30bb817459b5b2ceac11640d5",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "statemachine",
+      "headRefOid": "fe43760acd04d213107f1bdb90696bbfd1e114da",
+      "closedAt": "2024-01-10T15:17:40Z",
+      "mergedAt": "2024-01-10T15:17:40Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "7f1053654b066545df297270c8b23ad8a9dd5877"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc5r9Hce",
+          "commit": {
+            "abbreviatedOid": "894a882"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-01-09T13:47:18Z",
+          "updatedAt": "2024-01-09T13:47:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc5r9ICg",
+          "commit": {
+            "abbreviatedOid": "894a882"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-01-09T13:48:43Z",
+          "updatedAt": "2024-01-09T13:48:43Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
