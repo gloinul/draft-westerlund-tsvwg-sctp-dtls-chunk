@@ -418,8 +418,7 @@ support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x80XX    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Options                    |       Padding                 |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
 
@@ -428,17 +427,7 @@ Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x80XX.
 
 Parameter Length: 16 bits (unsigned integer)
-: This value holds the length of the Options field in
-  bytes plus 4.
-
-Options: 16 bits (unsigned integer)
-: This value is set by default to zero. It may contain indication of
-  optional feature support in the future.
-
-Padding: 16 bits
-: The sender MUST pad the chunk with two all zero bytes
-  to make the chunk 32-bit aligned. The Padding MUST NOT be longer
-  than 2 bytes and it MUST be ignored by the receiver.
+: This field has value equal to 4.
 
 RFC-Editor Note: Please replace 0x08XX with the actual parameter type
 value assigned by IANA and then remove this note.
@@ -789,6 +778,10 @@ previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
 established and the initiator enters the PROTECTED state.
+
+PVALID chunk will be sent by the initiator every RTO time (see section
+6.3.1 of {{RFC9260}}) until a PVALID or an ABORT chunk is received
+from the responder or T-valid timer expires.
 
 If T-valid timer expires either at initiator or responder, it will
 generate an ABORT chunk.  The ERROR handling follows what specified in
@@ -1213,10 +1206,6 @@ Reply: v
 Parameters : non-negative integer
 
 
-## Per Packet Information
-
-
-
 ## Configure Replay Protection
 
 The DTLS replay protection in this usage is expected to be fairly
@@ -1261,27 +1250,6 @@ Transmission Protocol (SCTP) Parameters group:
 *  One new SCTP Error Cause Codes
 
 *  One new SCTP Payload Protocol Identifier
-
-## DTLS Options Identifier Registry {#iana-dtls-options}
-
-IANA is requested to create a new registry called "DTLS Chunk
-Options Identifiers". This registry is part of the Stream
-Control Transmission Protocol (SCTP) Parameters grouping.
-
-The purpose of this registry is to enable optional behaviors of
-DTLS Chunk. Values will be assigned by IANA
-a unique 16-bit unsigned integer is used.
-Values 0-65534 are available for assignment. Value 65535 is
-reserved for future extension. The proposed general form of the
-registry is depicted below in {{iana-protection-options-identifier}}.
-
-| ID Value | Name | Reference | Contact |
-| 0-65534 | Available for Assignment | RFC-To-Be | |
-| 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-options-identifier title="DTLS Options Identifier Registry" cols="r l l l"}
-
-New entries are registered following the Specification Required policy
-as defined by {{RFC8126}}.
 
 ## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
 
