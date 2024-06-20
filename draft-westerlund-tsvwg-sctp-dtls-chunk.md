@@ -1339,7 +1339,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 All the security and privacy considerations of the security protocol
 used as the Protection Operator applies.
 
-DTLS replay protection MUST NOT be turned off. 
+DTLS replay protection MUST NOT be turned off.
 
 ## Privacy Considerations
 
