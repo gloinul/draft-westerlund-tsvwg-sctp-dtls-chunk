@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 13 December 2024                                       Ericsson
-                                                            11 June 2024
+Expires: 22 December 2024                                       Ericsson
+                                                            20 June 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 December 2024.
+   This Internet-Draft will expire on 22 December 2024.
 
 Copyright Notice
 
@@ -1406,6 +1406,8 @@ Table of Contents
 
    All the security and privacy considerations of the security protocol
    used as the Protection Operator applies.
+
+   DTLS replay protection MUST NOT be turned off.
 
 11.1.  Privacy Considerations
 
