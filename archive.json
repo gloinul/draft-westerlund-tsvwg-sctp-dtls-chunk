@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-20T00:47:51.217087+00:00",
+  "timestamp": "2024-06-23T00:52:51.671190+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -55,7 +55,7 @@
       "id": "I_kwDOKszxDc54CeKV",
       "title": "Turning off DTLS replay protection is typically a major security problem",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -64,8 +64,8 @@
       "labels": [],
       "body": "https://mailarchive.ietf.org/arch/msg/tls/f990CfKIRDQKTa4tAkIrgHcKqWc/\r\n\r\n---------------------------\r\n\r\nHi,\r\n\r\nReading RFC 9147 (DTLS 1.3) I cannot find any other interpretation than that replay protection may be disabled for all records. This is not a problem for the initial lock-step handshake, alerts, KeyUpdate, and ACKs. It seems to be a major problem for NewSessionTicket, NewConnectionId, RequestConnectionId, and Post-handshake client authentication as the lack of replay protection might significantly affect availability. It seems to me that DTLS 1.3 forgot to update replay protection based on the new post-handshake messages. Let me know if I miss something.\r\n\r\nIt is a bit surprising that DTLS 1.3 published in 2022 allows the application to turn off replay protection at all. This very far from current best practice for security protocols. There are very good reasons why Datagram QUIC mandates replay protection and why TLS 1.3 has several pages discussing security considerations for 0-RTT data, which lacks replay protection. In general, turning off replay protection (even just for application data) might lead to loss of confidentiality, integrity, and availability, i.e., the whole CIA triad.\r\n\r\nApplications cannot be expected to understand the severe consequences of not having replay protection or understand how to fix it on the application layer. I also don't see any need for turning off replay protection except RFC 6083 which is a bit of a special case, and which turned out to have replay issues.\r\nhttps://datatracker.ietf.org/meeting/115/materials/slides-115-tsvwg-sctp-auth-security-issues-00\r\n\r\nI would strongly recommend all DTLS 1.3 libraries to completely remove the option to disable replay protection.\r\n\r\nAn easy fix for the post-handshake messages is to \"clarify\" that replay protection must not be turned off for anything else than application data. I you agree I can submit an \u201cerratum\u201d for RFC 9147. But this does not solve the general issue that turning off replay protection would be a major security problem in almost all applications.\r\n\r\nCheers,\r\nJohn Preu\u00df Mattsson\r\n",
       "createdAt": "2023-11-28T08:32:30Z",
-      "updatedAt": "2024-06-10T13:30:03Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-20T09:51:34Z",
+      "closedAt": "2024-06-20T09:51:34Z",
       "comments": [
         {
           "author": "emanjon",
