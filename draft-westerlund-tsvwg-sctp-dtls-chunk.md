@@ -1281,7 +1281,32 @@ registry is depicted below in {{iana-protection-error-cause}}.
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
 
+## PVALID Protection Solution Indicators ##
 
+IANA is requested to create a new registry called "PVALID Protection
+Solution Indicators". This regsitry is part of the of the Stream
+Control Transmission Protocol (SCTP) Parameters grouping.
+
+The purpose of this registry is to assign indicator bits for any
+security solution that could be offered as an alternative to DTLS
+chunk or themselves want to use the PVALID chunk mechanism to detect
+downgrade attacks. Any security solution that is offered through a
+parameter exchange during the SCTP handshake are potential to be
+included here.
+
+Each entry will be assigned a bit-postion starting from the most
+significant first bit (bit 0) in the PVALID Protection Solutions
+Indicator field. Each application should be assigned the next
+available bit postion, especially avoiding to assign in the next 32
+bit position prior to having assigned all previous values.
+
+| Bit Position | Solution Name | Reference | Contact |
+| 0 | DTLS 1.3 Chunk | RFC-TBD | Draft Authors |
+| 1 | SCTP-AUTH | draft-ietf-tsvwg-rfc4895-bis-02 | Draft Authors |
+{: #iana-pvalid-psi title="PVALID Protection Solution Indicators" cols="r l l l"}
+
+New entries are registered following the Specification Required policy
+as defined by {{RFC8126}}.
 
 ## SCTP Chunk Types
 
