@@ -333,9 +333,10 @@ described in {{RFC9260}}.
 
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
 and maintain dedicated DTLS connections, those connection will be
-identified with specific DCIs.  Both SCTP Endpoints shall guarantee
-that Restart DTLS connections and related keys are preserved for
-supporting the SCTP Restart use case.
+identified in the DTLS chunk with DCIs with the R (restart) bit set
+(see {{DTLS-chunk}}).  Both SCTP Endpoints shall guarantee that
+Restart DTLS connections and related keys are preserved for supporting
+the SCTP Restart use case.
 
 In order to be available for SCTP Restart purposes, the Restart DTLS
 connection must be kept in a well-known state so that both SCTP
@@ -346,7 +347,7 @@ other use case than SCTP Restart.
 The DTLS Restart Connections, the related key materials, the
 information related to the sequence numbers and replay window SHALL be
 stored in a safe way that survives the events that are causing SCTP
-Restart procedure to be used, for instance a Crash of the SCTP Stack.
+Restart procedure to be used, for instance a crash of the SCTP stack.
 
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
@@ -765,7 +766,7 @@ Association parameter was included. The transmission of the PVALID
 chunk MUST be done reliably. The responder receiving the PVALID chunk
 will compare the indicated solutions with the ones previously received
 as parameters in the INIT chunk, if they are exactly the same, it will
-reply to the initiator with a PVALID chunk containing the chose
+reply to the initiator with a PVALID chunk containing the chosen
 proteciton solution, otherwise it will reply with an ABORT
 chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
 association will be terminated. If the association was not aborted the
@@ -773,7 +774,7 @@ protected association is considered successfully established and the
 PROTECTED state is entered.
 
 When the initiator receives the PVALID chunk, it will compare with the
-previous chosen Options and in case of mismatch with the one received
+previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
@@ -812,8 +813,8 @@ document.
      |  ESTABLISHED  |
      +-------+-------+
              |
-             | If INIT/INIT-ACK has Protected
-             | Association Parameter
+             | If INIT/INIT-ACK has DTLS 1.3 Chunk
+             | Protected Association Parameter
              v
 +--------------------------+
 | PROTECTION INITILIZATION |
@@ -844,10 +845,11 @@ document.
 
 ## Considerations on Key Management {#key-management-considerations}
 
-When the Association is in PROTECTION INITILIZATION state, in-band key
-management MAY use SCTP user messages with the SCTP-DTLS PPID value =
-4242 (see {{iana-payload-protection-id}}) for message transfer that
-will be sent unencrypted.
+When the Association is in PROTECTION INITILIZATION state, in-band
+DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} MAY
+use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
+{{iana-payload-protection-id}}) for message transfer that will be sent
+unencrypted.
 
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
@@ -1029,7 +1031,7 @@ Paramters :
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
-  3 are note expected as they are used during DTLS handshake.
+  3 are not expected as they are used during DTLS handshake.
 
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
@@ -1239,9 +1241,10 @@ Parameters : true or false
 This document defines two new registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group that IANA
 maintains. Theses registries are for the extra cause codes for
-protection related errors and the Options. It also adds
-registry entries into several other registries in the Stream Control
-Transmission Protocol (SCTP) Parameters group:
+protection related errors and the Protection Options identifiers for
+the PVALID chunk. It also adds registry entries into several other
+registries in the Stream Control Transmission Protocol (SCTP)
+Parameters group:
 
 *  Two new SCTP Chunk Types
 
@@ -1277,6 +1280,8 @@ registry is depicted below in {{iana-protection-error-cause}}.
 
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
+
+
 
 ## SCTP Chunk Types
 
