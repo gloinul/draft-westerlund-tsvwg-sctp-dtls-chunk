@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 22 December 2024                                       Ericsson
-                                                            20 June 2024
+Expires: 3 January 2025                                         Ericsson
+                                                             2 July 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 December 2024.
+   This Internet-Draft will expire on 3 January 2025.
 
 Copyright Notice
 
@@ -385,9 +385,10 @@ Table of Contents
 
    In order to support SCTP Restart, the SCTP Endpoints shall allocate
    and maintain dedicated DTLS connections, those connection will be
-   identified with specific DCIs.  Both SCTP Endpoints shall guarantee
-   that Restart DTLS connections and related keys are preserved for
-   supporting the SCTP Restart use case.
+   identified in the DTLS chunk with DCIs with the R (restart) bit set
+   (see Section 5.1).  Both SCTP Endpoints shall guarantee that Restart
+   DTLS connections and related keys are preserved for supporting the
+   SCTP Restart use case.
 
    In order to be available for SCTP Restart purposes, the Restart DTLS
    connection must be kept in a well-known state so that both SCTP
@@ -398,8 +399,8 @@ Table of Contents
    The DTLS Restart Connections, the related key materials, the
    information related to the sequence numbers and replay window SHALL
    be stored in a safe way that survives the events that are causing
-   SCTP Restart procedure to be used, for instance a Crash of the SCTP
-   Stack.
+   SCTP Restart procedure to be used, for instance a crash of the SCTP
+   stack.
 
    The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
    whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
@@ -810,14 +811,14 @@ Table of Contents
    chunk will compare the indicated solutions with the ones previously
    received as parameters in the INIT chunk, if they are exactly the
    same, it will reply to the initiator with a PVALID chunk containing
-   the chose proteciton solution, otherwise it will reply with an ABORT
+   the chosen proteciton solution, otherwise it will reply with an ABORT
    chunk.  ERROR CAUSE will indicate "Failure in Validation" and the
    SCTP association will be terminated.  If the association was not
    aborted the protected association is considered successfully
    established and the PROTECTED state is entered.
 
    When the initiator receives the PVALID chunk, it will compare with
-   the previous chosen Options and in case of mismatch with the one
+   the previous chosen option and in case of mismatch with the one
    received previously in the protected association parameter in the
    INIT-ACK chunk, it will reply with ABORT with the ERROR CAUSE
    "Failure in Validation", otherwise the protected association is
@@ -850,46 +851,46 @@ Table of Contents
 
 7.3.  Protection Initialization State Machine
 
-                    +---------------+
-                    |  ESTABLISHED  |
-                    +-------+-------+
-                            |
-                            | If INIT/INIT-ACK has Protected
-                            | Association Parameter
-                            v
-               +--------------------------+
-               | PROTECTION INITILIZATION |
-               +------------+-------------+
-                            |
-                            | start T-valid timer.
-                            |
-                            | [DTLS SETUP]
-                            |-----------------
-                            | send and receive
-                            | DTLS handshake
-                            v
-                +----------------------+
-                |      VALIDATION      |
-                +-----------+----------+
-                            |
-                            | [ENDPOINT VALIDATION]
-                            |------------------------
-                            | send and receive
-                            | PVALID by means of
-                            | DTLS chunk.
-                            v
-                    +---------------+
-                    |   PROTECTED   |
-                    +---------------+
+                 +---------------+
+                 |  ESTABLISHED  |
+                 +-------+-------+
+                         |
+                         | If INIT/INIT-ACK has DTLS 1.3 Chunk
+                         | Protected Association Parameter
+                         v
+            +--------------------------+
+            | PROTECTION INITILIZATION |
+            +------------+-------------+
+                         |
+                         | start T-valid timer.
+                         |
+                         | [DTLS SETUP]
+                         |-----------------
+                         | send and receive
+                         | DTLS handshake
+                         v
+             +----------------------+
+             |      VALIDATION      |
+             +-----------+----------+
+                         |
+                         | [ENDPOINT VALIDATION]
+                         |------------------------
+                         | send and receive
+                         | PVALID by means of
+                         | DTLS chunk.
+                         v
+                 +---------------+
+                 |   PROTECTED   |
+                 +---------------+
 
                      Figure 8: DTLS Chunk State Diagram
 
 7.4.  Considerations on Key Management
 
    When the Association is in PROTECTION INITILIZATION state, in-band
-   key management MAY use SCTP user messages with the SCTP-DTLS PPID
-   value = 4242 (see Table 8) for message transfer that will be sent
-   unencrypted.
+   DTLS key management [I-D.westerlund-tsvwg-sctp-DTLS-handshake] MAY
+   use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
+   Table 8) for message transfer that will be sent unencrypted.
 
    When the Association is in DTLS chunk PROTECTED state and the SCTP
    assocation is in ESTABLISHED or any of the states that can be reached
@@ -1067,7 +1068,7 @@ Table of Contents
          restart purposes
 
    *  DTLS Epoch:  The DTLS epoch these keys are valid for.  Note that
-         Epoch lower than 3 are note expected as they are used during
+         Epoch lower than 3 are not expected as they are used during
          DTLS handshake.
 
    *  Cipher Suit:  2 bytes cipher suit identification for the DTLS 1.3
@@ -1277,9 +1278,9 @@ Table of Contents
    This document defines two new registries in the Stream Control
    Transmission Protocol (SCTP) Parameters group that IANA maintains.
    Theses registries are for the extra cause codes for protection
-   related errors and the Options.  It also adds registry entries into
-   several other registries in the Stream Control Transmission Protocol
-   (SCTP) Parameters group:
+   related errors and the Protection Options identifiers for the PVALID
+   chunk.  It also adds registry entries into several other registries
+   in the Stream Control Transmission Protocol (SCTP) Parameters group:
 
    *  Two new SCTP Chunk Types
 
