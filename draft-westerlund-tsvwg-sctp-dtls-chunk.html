@@ -1308,16 +1308,19 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-protection-error-cause-code" class="internal xref">Protection Error Cause Codes Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-sctp-chunk-types" class="internal xref">SCTP Chunk Types</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-pvalid-protection-solution-" class="internal xref">PVALID Protection Solution Indicators</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
-                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-sctp-chunk-parameter-types" class="internal xref">SCTP Chunk Parameter Types</a></p>
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-sctp-chunk-types" class="internal xref">SCTP Chunk Types</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
-                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-sctp-error-cause-codes" class="internal xref">SCTP Error Cause Codes</a></p>
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-sctp-chunk-parameter-types" class="internal xref">SCTP Chunk Parameter Types</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
-                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-sctp-payload-protocol-ident" class="internal xref">SCTP Payload Protocol Identifier</a></p>
+                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-sctp-error-cause-codes" class="internal xref">SCTP Error Cause Codes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.6">
+                <p id="section-toc.1-1.10.2.6.1"><a href="#section-10.6" class="auto internal xref">10.6</a>.  <a href="#name-sctp-payload-protocol-ident" class="internal xref">SCTP Payload Protocol Identifier</a></p>
 </li>
             </ul>
 </li>
@@ -1548,7 +1551,7 @@ this kind of handshake is part of the Key Management functionality.
 Key Management function achieves these features behaving as a SCTP User.
 Key Management sends and receives its own data via the SCTP User Level interface.
 Key Management's own data are distinguished from any other data by
-means of a dedicated PPID using the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+means of a dedicated PPID using the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">Once the Key Management has established the DTLS 1.3 connection,
 it can set the Protection Operator for User Data encryption/decription
 via the API shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
@@ -2684,7 +2687,7 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-1">When the Association is in PROTECTION INITILIZATION state, in-band
 DTLS key management <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span> MAY
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
-<a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>) for message transfer that will be sent
+<a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>) for message transfer that will be sent
 unencrypted.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
@@ -3392,20 +3395,73 @@ registry is depicted below in <a href="#iana-protection-error-cause" class="auto
 as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-10.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sctp-chunk-types">
+<div id="pvalid-protection-solution-indicators">
 <section id="section-10.2">
-        <h3 id="name-sctp-chunk-types">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-sctp-chunk-types" class="section-name selfRef">SCTP Chunk Types</a>
+        <h3 id="name-pvalid-protection-solution-">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-pvalid-protection-solution-" class="section-name selfRef">PVALID Protection Solution Indicators</a>
         </h3>
-<p id="section-10.2-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Types" registry, IANA is requested to add the two new entries
-depicted below in in <a href="#iana-chunk-types" class="auto internal xref">Table 5</a> with a reference to this
-document. The registry at time of writing was available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1<a href="#section-10.2-1" class="pilcrow">¶</a></p>
-<span id="name-new-chunk-types-registered"></span><div id="iana-chunk-types">
+<p id="section-10.2-1">IANA is requested to create a new registry called "PVALID Protection
+Solution Indicators". This regsitry is part of the of the Stream
+Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<p id="section-10.2-2">The purpose of this registry is to assign indicator bits for any
+security solution that could be offered as an alternative to DTLS
+chunk or themselves want to use the PVALID chunk mechanism to detect
+downgrade attacks. Any security solution that is offered through a
+parameter exchange during the SCTP handshake are potential to be
+included here.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
+<p id="section-10.2-3">Each entry will be assigned a bit-postion starting from the most
+significant first bit (bit 0) in the PVALID Protection Solutions
+Indicator field. Each application should be assigned the next
+available bit postion, especially avoiding to assign in the next 32
+bit position prior to having assigned all previous values.<a href="#section-10.2-3" class="pilcrow">¶</a></p>
+<span id="name-pvalid-protection-solution-i"></span><div id="iana-pvalid-psi">
 <table class="center" id="table-5">
           <caption>
 <a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-pvalid-protection-solution-i" class="selfRef">PVALID Protection Solution Indicators</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Bit Position</th>
+              <th class="text-left" rowspan="1" colspan="1">Solution Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+              <th class="text-left" rowspan="1" colspan="1">Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">SCTP-AUTH</td>
+              <td class="text-left" rowspan="1" colspan="1">draft-ietf-tsvwg-rfc4895-bis-02</td>
+              <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-10.2-5">New entries are registered following the Specification Required policy
+as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-10.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sctp-chunk-types">
+<section id="section-10.3">
+        <h3 id="name-sctp-chunk-types">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-sctp-chunk-types" class="section-name selfRef">SCTP Chunk Types</a>
+        </h3>
+<p id="section-10.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+"Chunk Types" registry, IANA is requested to add the two new entries
+depicted below in in <a href="#iana-chunk-types" class="auto internal xref">Table 6</a> with a reference to this
+document. The registry at time of writing was available at:
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<span id="name-new-chunk-types-registered"></span><div id="iana-chunk-types">
+<table class="center" id="table-6">
+          <caption>
+<a href="#table-6" class="selfRef">Table 6</a>:
 <a href="#name-new-chunk-types-registered" class="selfRef">New Chunk Types Registered</a>
           </caption>
 <thead>
@@ -3432,20 +3488,20 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-chunk-parameter-types">
-<section id="section-10.3">
+<section id="section-10.4">
         <h3 id="name-sctp-chunk-parameter-types">
-<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-sctp-chunk-parameter-types" class="section-name selfRef">SCTP Chunk Parameter Types</a>
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-sctp-chunk-parameter-types" class="section-name selfRef">SCTP Chunk Parameter Types</a>
         </h3>
-<p id="section-10.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-10.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Parameter Types" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 6</a> with a
+entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 7</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-10.4-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-type-parameters-r"></span><div id="iana-chunk-parameter-types">
-<table class="center" id="table-6">
+<table class="center" id="table-7">
           <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#table-7" class="selfRef">Table 7</a>:
 <a href="#name-new-chunk-type-parameters-r" class="selfRef">New Chunk Type Parameters Registered</a>
           </caption>
 <thead>
@@ -3467,20 +3523,20 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-error-cause-codes">
-<section id="section-10.4">
+<section id="section-10.5">
         <h3 id="name-sctp-error-cause-codes">
-<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-sctp-error-cause-codes" class="section-name selfRef">SCTP Error Cause Codes</a>
+<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-sctp-error-cause-codes" class="section-name selfRef">SCTP Error Cause Codes</a>
         </h3>
-<p id="section-10.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-10.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 7</a> with a
+entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 8</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-10.5-1" class="pilcrow">¶</a></p>
 <span id="name-error-cause-codes-parameter"></span><div id="iana-error-cause-codes">
-<table class="center" id="table-7">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-error-cause-codes-parameter" class="selfRef">Error Cause Codes Parameters Registered</a>
           </caption>
 <thead>
@@ -3502,20 +3558,20 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-payload-protocol-identifier">
-<section id="section-10.5">
+<section id="section-10.6">
         <h3 id="name-sctp-payload-protocol-ident">
-<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-sctp-payload-protocol-ident" class="section-name selfRef">SCTP Payload Protocol Identifier</a>
+<a href="#section-10.6" class="section-number selfRef">10.6. </a><a href="#name-sctp-payload-protocol-ident" class="section-name selfRef">SCTP Payload Protocol Identifier</a>
         </h3>
-<p id="section-10.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-10.6-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
-entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a> with a
+entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-10.5-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-10.6-1" class="pilcrow">¶</a></p>
 <span id="name-protection-operator-protoco"></span><div id="iana-payload-protection-id">
-<table class="center" id="table-8">
+<table class="center" id="table-9">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#table-9" class="selfRef">Table 9</a>:
 <a href="#name-protection-operator-protoco" class="selfRef">Protection Operator Protocol Identifier Registered</a>
           </caption>
 <thead>
