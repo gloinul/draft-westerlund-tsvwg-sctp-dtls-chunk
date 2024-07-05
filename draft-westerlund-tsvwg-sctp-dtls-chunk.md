@@ -226,8 +226,8 @@ Once the Key Management has established the DTLS 1.3 connection,
 it can set the Protection Operator for User Data encryption/decription
 via the API shown in {{sctp-DTLS-chunk-layering}}.
 
-DTLS 1.3 expects that handshake messages, that is from SCTP
-User Data with dedicated PPID = 4242, to be sent and received as plain
+DTLS 1.3 handshake messages, that are transported as SCTP
+User Data with dedicated PPID = 4242, SHALL be sent and received as plain
 DATA chunks.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
@@ -298,6 +298,10 @@ time belongs to SCTP protocol that will decide according to
 {{RFC9260}}.  The Protection Operator shall not influence the path
 selection algorithm, actually the Protection Operator will not even
 know what path is being used.
+
+Replay window for DTLS Sequence Number will need to take into account that
+HB chunks are sent concurrently over all paths in multihomed Associations,
+thus it needs to be large enough to accomodate latency differencies.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
@@ -551,8 +555,9 @@ Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Protection Solutions Indicator
   field in bytes plus 4.
 
-Protection Solutions Indicator: 32 bits (unsigned integer)
-: This value is set by default to zero. It uses the different
+Protection Solutions Indicator: array of 32 bits (unsigned integer)
+: The array has at least one element.
+  The value is set by default to zero. It uses the different
   bit-values to indicate that the INIT contained an offer of the
   indiacted protection solutions. Value 0x1 is used to indicate that
   one offered DTLS 1.3 Chunk.
@@ -651,7 +656,9 @@ authentication, it may
 happen that the procedure has errors. In such case an ABORT chunk will
 be sent with error in protection cause code (specified in
 {{eprotect}}) and extra cause "Error During Protection Handshake"
-identifier 0x01.
+identifier 0x01. DTLS may provide a more granular information
+detailing the reason that drove the protection to fail.
+Such granular information can be added to the Error List.
 
 ### Failure in Protection Solution Validation {#evalidate}
 
@@ -730,7 +737,7 @@ states needs to be passed. First DTLS Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
 procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, or
 through other methods that results in at least one DCI has
-initialized state using the API. When that has been accomplished one
+initialized state. When that has been accomplished one
 enters the VALIDATION state where one validates the exchange of the
 DTLS 1.3 Chunk Protected Association Parameter and any alternative
 protection solutions. If that is successful one enters the PROTECTED
@@ -849,7 +856,7 @@ When the Association is in PROTECTION INITILIZATION state, in-band
 DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} MAY
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
-unencrypted.
+and received unencrypted.
 
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
@@ -1052,9 +1059,8 @@ information for protection operations. The secret that will be used by
 the DTLS 1.3 server to encrypt the record. Binary arbitrary long
 object depending on the cipher suit used.
 
-Reply : Established
+Reply : Established or Failed
 
-Parameters : true or false
 
 ## Establish Server Write Keying Material
 
@@ -1100,9 +1106,8 @@ information for protection operations. The secret that will be used by
 the DTLS 1.3 server to encrypt the record. Binary arbitrary long
 object depending on the cipher suit used.
 
-Reply : Established
+Reply : Established or Failed
 
-Parameters : true or false
 
 ## Destroy Client Write Keying Material
 
