@@ -1045,19 +1045,13 @@ Paramters :
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
 
-* Write Key:
+* Write Key and IV:
 
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
 cipher suit used.
 
-* Write IV:
-
-: The cipher suit specific binary object containing all necessary
-information for protection operations. The secret that will be used by
-the DTLS 1.3 server to encrypt the record. Binary arbitrary long
-object depending on the cipher suit used.
 
 Reply : Established or Failed
 
@@ -1092,19 +1086,13 @@ Paramters :
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
 
-* Write Key:
+* Write Key and IV:
 
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
 cipher suit used.
 
-* Write IV:
-
-: The cipher suit specific binary object containing all necessary
-information for protection operations. The secret that will be used by
-the DTLS 1.3 server to encrypt the record. Binary arbitrary long
-object depending on the cipher suit used.
 
 Reply : Established or Failed
 
