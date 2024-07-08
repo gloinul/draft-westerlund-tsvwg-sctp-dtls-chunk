@@ -53,7 +53,7 @@ informative:
        name: Claudio Porfiri
        org: Ericsson
        email: claudio.porfiri@ericsson.com
-    date: Jan 2024
+    date: Jul 2024
 
 
 normative:
