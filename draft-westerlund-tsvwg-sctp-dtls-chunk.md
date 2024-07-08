@@ -443,7 +443,7 @@ value assigned by IANA and then remove this note.
 ##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
 This section defines the new chunk type that will be used to
-transport DTLS 1.3 Records containing SCTP payload.
+transport the DTLS 1.3 record containing protected SCTP payload.
 {{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
@@ -504,7 +504,7 @@ Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
 
 Payload: variable length
-: This holds the encrypted data in one or more DTLS 1.3 Records {{RFC9147}}.
+: This holds the encrypted data as one DTLS 1.3 Records {{RFC9147}}.
 
 Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
@@ -652,14 +652,14 @@ can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
 
 ### Error During Protection Handshake {#ekeyhandshake}
 
-If the protection specifies a handshake for example for
-authentication, it may
-happen that the procedure has errors. In such case an ABORT chunk will
-be sent with error in protection cause code (specified in
-{{eprotect}}) and extra cause "Error During Protection Handshake"
-identifier 0x01. DTLS may provide a more granular information
-detailing the reason that drove the protection to fail.
-Such granular information can be added to the Error List.
+The usage of the DTLS Chunk can specify a handshake, for example
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, in which case that
+procedure may encounter an error. In such case an ABORT chunk will be
+sent with error in protection cause code (specified in {{eprotect}})
+and extra cause "Error During Protection Handshake" identifier
+0x01. DTLS may provide a more granular information detailing the
+reason that drove the protection to fail.  Such granular information
+can be added to the Error List.
 
 ### Failure in Protection Solution Validation {#evalidate}
 
@@ -960,7 +960,9 @@ that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP bundling SHALL NOT be performed.
+without delay and SCTP bundling SHALL NOT be performed. If a SCTP
+packet with bundling is received the receiver SHALL ignore any
+subsequent chunk.
 
 ## Protected Data Chunk Reception {#data-receiving}
 
