@@ -178,7 +178,7 @@ association restart, and the SHUTDOWN-COMPLETE chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
-been keyed only plain text key-management traffic using a designated
+been keyed only plain text key-management traffic using a dedicated
 PPID (4242) may flow, no ULP traffic. The key management function uses
 an API to key the DTLS protection operation function. Usage of the
 DTLS 1.3 handshake for initial mutual authentication and key
@@ -299,9 +299,10 @@ time belongs to SCTP protocol that will decide according to
 selection algorithm, actually the Protection Operator will not even
 know what path is being used.
 
-Replay window for DTLS Sequence Number will need to take into account that
-HB chunks are sent concurrently over all paths in multihomed Associations,
-thus it needs to be large enough to accomodate latency differencies.
+Replay window for DTLS Sequence Number will need to take into account
+that heartbeat (HB) chunks are sent concurrently over all paths in
+multihomed Associations, thus it needs to be large enough to
+accomodate latency differencies.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
