@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-07T00:54:47.505971+00:00",
+  "timestamp": "2024-07-09T00:50:57.397508+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -81,46 +81,118 @@
       "id": "I_kwDOKszxDc57gLRq",
       "title": "PVALID needs to define how it is reliability mechanism works",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-01-09T10:01:45Z",
-      "updatedAt": "2024-01-09T10:01:45Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-07-08T16:03:58Z",
+      "closedAt": "2024-07-08T16:03:58Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Has been added, using RTO based retransmission. ",
+          "createdAt": "2024-07-08T16:03:58Z",
+          "updatedAt": "2024-07-08T16:03:58Z"
+        }
+      ]
     },
     {
       "number": 5,
       "id": "I_kwDOKszxDc57x9Yj",
       "title": "Split DTLS Options Identifier space info safe to ignore, ignore and report, fail types. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "The DTLS options in the parameter is not split into categories where one can define them as being possible to ignore or need to be understood. That should be done by splitting the spaces based on the higher bits like for other SCTP code points.",
       "createdAt": "2024-01-11T13:43:30Z",
-      "updatedAt": "2024-01-11T13:43:30Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-07-08T16:03:38Z",
+      "closedAt": "2024-07-08T16:03:38Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The DTLS options have been removed to no longer relevant. ",
+          "createdAt": "2024-07-08T16:03:38Z",
+          "updatedAt": "2024-07-08T16:03:38Z"
+        }
+      ]
     },
     {
       "number": 6,
       "id": "I_kwDOKszxDc6GfDZj",
       "title": "Update PPID registration",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This draft has gotten a PPID assigned:\r\n4242    DTLS Chunk Key-Management Messages      [draft-westerlund-tsvwg-sctp-dtls-chunk-01]\r\n\r\nNeed to update the draft.",
       "createdAt": "2024-04-22T11:25:33Z",
-      "updatedAt": "2024-04-22T11:25:33Z",
+      "updatedAt": "2024-07-08T16:03:11Z",
+      "closedAt": "2024-07-08T16:03:11Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Has been accomplished. ",
+          "createdAt": "2024-07-08T16:03:11Z",
+          "updatedAt": "2024-07-08T16:03:11Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKszxDc6O0I60",
+      "title": "Are there benefits to encrypt PPID 4242 when possible",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/7",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "As currently defined the DTLS Keymanagement messages in Data chunk with PPID=4242 will always be sent unencrypted. This is simple and avoids error cases if keys expires or are removed for the DTLS Chunk. However, are there any security benefits to encrypting them when one can? It will make targeted attacks against the key-managment harder for established associations, the the actual message itself is protected, but identifiable. However, one can never prevent denial in general through packet dropping. Also it makes the key-management sensitive to synchronization issues in case of failures or key-limit expiration requiring fallback behaviors. \r\n\r\nSo the main question is if extra complexities to have different choices and fallback handling is worth the potential limited benefit of encrypting. ",
+      "createdAt": "2024-07-08T16:09:42Z",
+      "updatedAt": "2024-07-08T16:09:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOKszxDc6O0Jxe",
+      "title": "Does the API need a: Set Q limit call?",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/8",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Does the API need an call for setting the invocation limit (Q) on R,DCI, epoch to prevent over usage of key?",
+      "createdAt": "2024-07-08T16:11:17Z",
+      "updatedAt": "2024-07-08T16:11:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOKszxDc6O0K7_",
+      "title": "Clarify privacy properties impact",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/9",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "\"Using a security protocol in the SCTP DTLS chunk might lower the privacy properties of the security protocol as the SCTP Verification Tag is an unique identifier for the association.\"\r\n\r\nThis text is unclear on what impact is referred to. \r\n",
+      "createdAt": "2024-07-08T16:13:28Z",
+      "updatedAt": "2024-07-08T16:13:28Z",
       "closedAt": null,
       "comments": []
     }
