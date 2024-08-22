@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-20T00:52:21.527203+00:00",
+  "timestamp": "2024-08-22T00:53:39.066776+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -193,6 +193,22 @@
       "body": "\"Using a security protocol in the SCTP DTLS chunk might lower the privacy properties of the security protocol as the SCTP Verification Tag is an unique identifier for the association.\"\r\n\r\nThis text is unclear on what impact is referred to. \r\n",
       "createdAt": "2024-07-08T16:13:28Z",
       "updatedAt": "2024-07-08T16:13:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOKszxDc6TibbW",
+      "title": "Clarify the case when Endpoints allow reverting to rfc6083",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/10",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It is possible that the Endpoint wants to advertise the peer that it can handle rfc6083 in INIT by using the set of INIT parameters specified in rfc6083, together with the DTLS-CHUNK.\r\nIn case the peer cannot handle DTLS-CHUNK, the Association would be set using DTLS/SCTP according to rfc6083.\r\nSince rfc6083 has known packet size limitations and security weaknesses, we need to explain that the combination of rfc6083 as revert solution for DTLS-CHUNK is not viable and that such combination should no be accepted in any case.",
+      "createdAt": "2024-08-20T10:22:00Z",
+      "updatedAt": "2024-08-20T10:22:00Z",
       "closedAt": null,
       "comments": []
     }
