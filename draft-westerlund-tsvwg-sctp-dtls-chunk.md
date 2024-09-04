@@ -759,8 +759,15 @@ expected RTT values are outside of the ones commonly occurring on the
 general Internet, see {{t-valid-considerations}}. At completion of
 DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
-only DTLS chunks will be exchanged. Any plain text chunk will be
-silently discarded.
+only DTLS chunks will be exchanged.
+
+The Assocation initiator enters the VALIDATION state when the keys
+are installed. From this time on the initiator will only handle DTLS
+Chunks and silently discard all other chunks.
+The Association responder will enter the VALIDATION state when
+the keys are installed and PVALID chunk is received from the initiator.
+From this time on the initiator will only handle DTLS
+Chunks and silently discard all other chunks.
 
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
