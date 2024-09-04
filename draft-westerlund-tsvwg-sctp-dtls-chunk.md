@@ -59,6 +59,7 @@ informative:
 normative:
   RFC4895:
   RFC5061:
+  RFC6083:
   RFC8126:
   RFC9147:
   RFC9260:
@@ -1383,6 +1384,10 @@ as if the peers had been communicating in the absence of an attacker.
 The initial handshake is verified before the
 DTLS Chunk is considered protected, thus no user data are sent before
 validation.
+
+A possibility for permitting a downgrade towards {{RFC6083}} is
+to include in INIT/INIT-ACK also the set of parameters that
+are used for identification of a DTLS/SCTP Association.
 
 The downgrade protection is only as strong as the weakest of the
 supported protection solutions as an active attacker can trick the
