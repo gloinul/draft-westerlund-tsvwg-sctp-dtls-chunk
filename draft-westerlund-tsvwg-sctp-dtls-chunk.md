@@ -761,7 +761,7 @@ DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
 only DTLS chunks will be exchanged.
 
-The Assocation initiator enters the VALIDATION state when the keys
+The Assocation initiator will enter the VALIDATION state when the keys
 are installed. From this time on the initiator will only handle DTLS
 Chunks and silently discard all other chunks.
 The Association responder will enter the VALIDATION state when
