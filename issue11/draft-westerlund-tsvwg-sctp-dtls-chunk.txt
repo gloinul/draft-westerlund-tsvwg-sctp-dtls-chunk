@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 8 March 2025                                           Ericsson
-                                                        4 September 2024
+Expires: 10 March 2025                                          Ericsson
+                                                        6 September 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 March 2025.
+   This Internet-Draft will expire on 10 March 2025.
 
 Copyright Notice
 
@@ -808,31 +808,31 @@ Table of Contents
    one enters the VALIDATION state, and from that time on only DTLS
    chunks will be exchanged.
 
-   The Assocation initiator will enter the VALIDATION state when the
-   keys are installed.  From this time on the initiator will only handle
-   DTLS Chunks and silently discard all other chunks.  The Association
-   responder will enter the VALIDATION state when the keys are installed
-   and PVALID chunk is received from the initiator.  From this time on
-   the initiator will only handle DTLS Chunks and silently discard all
-   other chunks.
+   The Association responder will enter the VALIDATION state when the
+   keys are installed and PVALID chunk is received from the initiator.
+   From this time on the responder will only handle DTLS Chunks and
+   silently discard all other chunks.  The Assocation initiator will
+   enter the VALIDATION state when PVALID chunk is received from the
+   responder.  Until this time, initiator will keep the capability of
+   handling plain chunks.
 
    In case of T-valid timeout, the endpoint will generate an ABORT
    chunk.  The ERROR handling follows what specified in Section 6.2.1.
 
-   When entering the VALIDATION state, the initiator MUST send to the
-   responder a PVALID chunk (see Table 3) containing indication of all
-   offered protection solutions previously sent in the INIT chunk,
-   including the 0x1 value indicating that DTLS 1.3 Chunk Protected
-   Association parameter was included.  The transmission of the PVALID
-   chunk MUST be done reliably.  The responder receiving the PVALID
-   chunk will compare the indicated solutions with the ones previously
-   received as parameters in the INIT chunk, if they are exactly the
-   same, it will reply to the initiator with a PVALID chunk containing
-   the chosen proteciton solution, otherwise it will reply with an ABORT
-   chunk.  ERROR CAUSE will indicate "Failure in Validation" and the
-   SCTP association will be terminated.  If the association was not
-   aborted the protected association is considered successfully
-   established and the PROTECTED state is entered.
+   When keys are installed, the initiator MUST send to the responder a
+   PVALID chunk (see Table 3) containing indication of all offered
+   protection solutions previously sent in the INIT chunk, including the
+   0x1 value indicating that DTLS 1.3 Chunk Protected Association
+   parameter was included.  The transmission of the PVALID chunk MUST be
+   done reliably.  The responder receiving the PVALID chunk will compare
+   the indicated solutions with the ones previously received as
+   parameters in the INIT chunk, if they are exactly the same, it will
+   reply to the initiator with a PVALID chunk containing the chosen
+   proteciton solution, otherwise it will reply with an ABORT chunk.
+   ERROR CAUSE will indicate "Failure in Validation" and the SCTP
+   association will be terminated.  If the association was not aborted
+   the protected association is considered successfully established and
+   the PROTECTED state is entered.
 
    When the initiator receives the PVALID chunk, it will compare with
    the previous chosen option and in case of mismatch with the one
