@@ -761,18 +761,19 @@ DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
 only DTLS chunks will be exchanged.
 
-The Assocation initiator will enter the VALIDATION state when the keys
-are installed. From this time on the initiator will only handle DTLS
-Chunks and silently discard all other chunks.
 The Association responder will enter the VALIDATION state when
 the keys are installed and PVALID chunk is received from the initiator.
-From this time on the initiator will only handle DTLS
+From this time on the responder will only handle DTLS
 Chunks and silently discard all other chunks.
+The Assocation initiator will enter the VALIDATION state when
+PVALID chunk is received from the responder.
+Until this time, initiator will keep the capability of handling
+plain chunks.
 
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
-When entering the VALIDATION state, the initiator MUST send to the
+When keys are installed, the initiator MUST send to the
 responder a PVALID chunk (see
 {{sctp-DTLS-chunk-newchunk-pvalid-chunk}}) containing indication of
 all offered protection solutions previously sent in the INIT chunk,
