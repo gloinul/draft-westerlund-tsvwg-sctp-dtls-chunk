@@ -774,8 +774,11 @@ including the 0x1 value indicating that DTLS 1.3 Chunk Protected
 Association parameter was included. The transmission of the PVALID
 chunk MUST be done reliably. The responder receiving the PVALID chunk
 will compare the indicated solutions with the ones previously received
-as parameters in the INIT chunk, if they are exactly the same, it will
-reply to the initiator with a PVALID chunk containing the chosen
+as parameters in the INIT chunk. The responder will ignore unknown
+parameters and security solutions. For the supported solutions if the
+parameters in the INIT matches what is listed in the PVALID and there
+are no additional by the endpoint supported solution in the PVALID, it
+will reply to the initiator with a PVALID chunk containing the chosen
 proteciton solution, otherwise it will reply with an ABORT
 chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
 association will be terminated. If the association was not aborted the
@@ -791,7 +794,11 @@ established and the initiator enters the PROTECTED state.
 
 PVALID chunk will be sent by the initiator every RTO time (see section
 6.3.1 of {{RFC9260}}) until a PVALID or an ABORT chunk is received
-from the responder or T-valid timer expires.
+from the responder or T-valid timer expires. To optimize the completion
+of the validation in case the PVALID from the responder is lost, in
+case the initiator receives other chunks protected the DTLS chunk
+it MAY immediately, or with a small delay to ensure that no-reorder
+has occurred, restransmit its PVALID chunk.
 
 If T-valid timer expires either at initiator or responder, it will
 generate an ABORT chunk.  The ERROR handling follows what specified in
@@ -802,6 +809,33 @@ exchanged in the protected SCTP association.
 
 When entering the PROTECTED state, a Restart DTLS connection
 SHOULD be created.
+
+### Offering Multiple Security Solutions
+
+An initiator of an SCTP association may want to offer multiple
+different security solutions in addition to DTLS 1.3 chunks for the
+SCTP association. This can be done but need to consider the down grade
+attack risks (see {{Downgrade-Attacks}}).
+
+The initiator MAY include in its INIT additional security solutions
+that are compatible to offer in parallel with DTLS 1.3 Chunks. This
+includes {{RFC6083}} or more likely its replacement. This will result
+in that a number of different SCTP parameters may be included that are
+not possible to use simultanous. Instead the responder needs to parse
+these parameters to figure out which sets of solutions that are
+offered that the implementation support, and apply its security
+policies to select the most approriate. For example an offer of DTLS
+1.3 Chunks and RFC 6083, can be interpreted as three different
+solutions with different properties, namely DTLS 1.3 Chunks,
+DTLS/SCTP, and SCTP-AUTH only.
+
+The responder selects one or possibly more of compatible security
+solutions that can be used simultanously and include them in the
+response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
+will later send the PVALID chunk indicating all the offered
+solutions. This to prevent downgrade attacks where sent solution have
+been removed on-path.
+
 
 ## Termination of a Protected Association {#termination-procedure}
 
@@ -1384,10 +1418,6 @@ as if the peers had been communicating in the absence of an attacker.
 The initial handshake is verified before the
 DTLS Chunk is considered protected, thus no user data are sent before
 validation.
-
-A possibility for permitting a downgrade towards {{RFC6083}} is
-to include in INIT/INIT-ACK also the set of parameters that
-are used for identification of a DTLS/SCTP Association.
 
 The downgrade protection is only as strong as the weakest of the
 supported protection solutions as an active attacker can trick the
