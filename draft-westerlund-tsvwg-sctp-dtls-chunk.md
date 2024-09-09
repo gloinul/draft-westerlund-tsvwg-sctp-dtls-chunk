@@ -785,6 +785,12 @@ association will be terminated. If the association was not aborted the
 protected association is considered successfully established and the
 PROTECTED state is entered.
 
+When entering PROTECTED state, the initiator and the responder
+independently SHALL stop handling plain chunks, i.e. those
+chunks will be silently discarded. PVALID chunks received in
+PROTECTED state will be threated as retransmission, thus they will
+be silently discarded.
+
 When the initiator receives the PVALID chunk, it will compare with the
 previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
