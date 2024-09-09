@@ -763,7 +763,7 @@ only DTLS chunks will be exchanged.
 
 The Association initiator and responder will independently enter
 VALIDATION state when the keys are locally installed.
-During VALIDATION state both initiator and responder shall handle
+During VALIDATION state both initiator and responder SHALL handle
 plain chunks as well as DTLS chunks.
 
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
