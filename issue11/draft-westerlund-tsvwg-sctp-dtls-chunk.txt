@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 10 March 2025                                          Ericsson
-                                                        6 September 2024
+Expires: 13 March 2025                                          Ericsson
+                                                        9 September 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 March 2025.
+   This Internet-Draft will expire on 13 March 2025.
 
 Copyright Notice
 
@@ -808,13 +808,10 @@ Table of Contents
    one enters the VALIDATION state, and from that time on only DTLS
    chunks will be exchanged.
 
-   The Association responder will enter the VALIDATION state when the
-   keys are installed and PVALID chunk is received from the initiator.
-   From this time on the responder will only handle DTLS Chunks and
-   silently discard all other chunks.  The Assocation initiator will
-   enter the VALIDATION state when PVALID chunk is received from the
-   responder.  Until this time, initiator will keep the capability of
-   handling plain chunks.
+   The Association initiator and responder will independently enter
+   VALIDATION state when the keys are locally installed.  During
+   VALIDATION state both initiator and responder shall handle plain
+   chunks as well as DTLS chunks.
 
    In case of T-valid timeout, the endpoint will generate an ABORT
    chunk.  The ERROR handling follows what specified in Section 6.2.1.
