@@ -2575,22 +2575,30 @@ chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
 association will be terminated. If the association was not aborted the
 protected association is considered successfully established and the
 PROTECTED state is entered.<a href="#section-7.1-9" class="pilcrow">¶</a></p>
-<p id="section-7.1-10">When the initiator receives the PVALID chunk, it will compare with the
+<p id="section-7.1-10">When entering PROTECTED state, the initiator and the responder
+independently SHALL stop handling plain chunks, i.e. those
+chunks will be silently discarded. PVALID chunks received in
+PROTECTED state will be threated as retransmission, thus the
+initiator receiving a PVALID in PROTECTED state SHALL ignore it,
+whereas the responder receiving a PVALID state in PROTECTED
+state SHALL properly reply with PVALID chunk as described
+above.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
+<p id="section-7.1-11">When the initiator receives the PVALID chunk, it will compare with the
 previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
-established and the initiator enters the PROTECTED state.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
-<p id="section-7.1-11">PVALID chunk will be sent by the initiator every RTO time (see section
+established and the initiator enters the PROTECTED state.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
+<p id="section-7.1-12">PVALID chunk will be sent by the initiator every RTO time (see section
 6.3.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>) until a PVALID or an ABORT chunk is received
-from the responder or T-valid timer expires.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
-<p id="section-7.1-12">If T-valid timer expires either at initiator or responder, it will
+from the responder or T-valid timer expires.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
+<p id="section-7.1-13">If T-valid timer expires either at initiator or responder, it will
 generate an ABORT chunk.  The ERROR handling follows what specified in
-<a href="#etmout" class="auto internal xref">Section 6.2.3</a>.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
-<p id="section-7.1-13">In the PROTECTED state any ULP SCTP messages for any PPID MAY be
-exchanged in the protected SCTP association.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
-<p id="section-7.1-14">When entering the PROTECTED state, a Restart DTLS connection
-SHOULD be created.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+<a href="#etmout" class="auto internal xref">Section 6.2.3</a>.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
+<p id="section-7.1-14">In the PROTECTED state any ULP SCTP messages for any PPID MAY be
+exchanged in the protected SCTP association.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+<p id="section-7.1-15">When entering the PROTECTED state, a Restart DTLS connection
+SHOULD be created.<a href="#section-7.1-15" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="termination-procedure">
