@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-08T00:59:37.773222+00:00",
+  "timestamp": "2024-09-10T00:55:40.848132+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -405,19 +405,40 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-09-06T07:47:15Z",
-      "updatedAt": "2024-09-06T13:09:58Z",
+      "updatedAt": "2024-09-09T12:22:51Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "1057dc3016cef4e8e9b8aa86301e7799a4824879",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue11",
-      "headRefOid": "741fe35cfc8c21e35e33cb5e9413b6ef074e88c2",
+      "headRefOid": "28a9a4864dc9db87a27d706f6ccec096f298f196",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6IeI3x",
+          "commit": {
+            "abbreviatedOid": "58ce6c8"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "I also think there are missing text to make clearify better that when PROTECTED state is entered the endpoint MUST NOT accept plain text chunks. ",
+          "createdAt": "2024-09-09T11:14:41Z",
+          "updatedAt": "2024-09-09T11:17:28Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "SHALL",
+              "createdAt": "2024-09-09T11:14:41Z",
+              "updatedAt": "2024-09-09T11:17:28Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
