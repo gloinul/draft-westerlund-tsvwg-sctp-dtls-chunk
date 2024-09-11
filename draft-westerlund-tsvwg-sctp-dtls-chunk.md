@@ -228,7 +228,10 @@ via the API shown in {{sctp-DTLS-chunk-layering}}.
 
 DTLS 1.3 handshake messages, that are transported as SCTP
 User Data with dedicated PPID = 4242, SHALL be sent and received as plain
-DATA chunks.
+DATA chunks until the Association has reached the PROTECTED state.
+From that time on, DTLS 1.3 handshake messages SHALL be
+transported as SCTP User Data with dedicated PPID = 4242
+within DTLS chunks, same as ULP data traffic.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -796,7 +799,7 @@ If T-valid timer expires either at initiator or responder, it will
 generate an ABORT chunk.  The ERROR handling follows what specified in
 {{etmout}}.
 
-In the PROTECTED state any ULP SCTP messages for any PPID MAY be
+In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.
 
 When entering the PROTECTED state, a Restart DTLS connection
@@ -854,7 +857,7 @@ document.
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITILIZATION state, in-band
-DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} MAY
+DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
 and received unencrypted.
@@ -862,8 +865,20 @@ and received unencrypted.
 When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
-use SCTP Data chunk with dedicated PPID, those chunks will be
-sent and received unencrypted.
+use SCTP Data chunk with dedicated PPID value = 4242, those chunks SHALL be
+sent and received using DTLS Chunks with the current CID.
+
+The use of plain DATA chunk with PPID value = 4242 before the
+association reaches the PROTECTED state cannot be avoided as
+no valid DTLS CID exist until that state.
+Further in-band key management SHALL not use plain DATA chunks
+as this would allow attackers to inject overlapping DATA chunks
+with protected and impact the content of the SACK block.
+Based on that, as soon as the initiator or responder
+independently enter PROTECTED state, they will silently discard
+any plain chunks. Plain chunks that were sent but not
+received yet will also be discarded as the SCTP protocol
+does guarantee the needed retransmissions.
 
 ## Consideration on T-valid {#t-valid-considerations}
 
