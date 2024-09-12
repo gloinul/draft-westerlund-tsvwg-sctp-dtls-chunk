@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-10T00:55:40.848132+00:00",
+  "timestamp": "2024-09-12T00:55:29.325679+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -156,11 +156,13 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "teiclap"
+      ],
       "labels": [],
       "body": "As currently defined the DTLS Keymanagement messages in Data chunk with PPID=4242 will always be sent unencrypted. This is simple and avoids error cases if keys expires or are removed for the DTLS Chunk. However, are there any security benefits to encrypting them when one can? It will make targeted attacks against the key-managment harder for established associations, the the actual message itself is protected, but identifiable. However, one can never prevent denial in general through packet dropping. Also it makes the key-management sensitive to synchronization issues in case of failures or key-limit expiration requiring fallback behaviors. \r\n\r\nSo the main question is if extra complexities to have different choices and fallback handling is worth the potential limited benefit of encrypting. ",
       "createdAt": "2024-07-08T16:09:42Z",
-      "updatedAt": "2024-08-30T08:46:37Z",
+      "updatedAt": "2024-09-10T12:46:05Z",
       "closedAt": null,
       "comments": [
         {
@@ -169,6 +171,13 @@
           "body": "Allowing unprotected packets with DATA chunks actually create one significant weakness. It allows attackers capable of injecting packets to attempt to impact the DATA chunk tracking process, inject overlapping DATA chunks with protected and impact the content of the SACK block. Thus, it is likely simplest to always require using protected packets. If there would be a serious issue with keys, one can perform a SCTP association restart using the restart DTLS session context. This is disruptive, but the failure case to not have a valid key are also fairly major and should not be happening in associations. ",
           "createdAt": "2024-08-30T08:46:36Z",
           "updatedAt": "2024-08-30T08:46:36Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Authors have decided to not allow plain text data. Need text change. ",
+          "createdAt": "2024-09-10T12:46:04Z",
+          "updatedAt": "2024-09-10T12:46:04Z"
         }
       ]
     },
@@ -180,13 +189,23 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "emanjon"
+      ],
       "labels": [],
       "body": "Does the API need an call for setting the invocation limit (Q) on R,DCI, epoch to prevent over usage of key?",
       "createdAt": "2024-07-08T16:11:17Z",
-      "updatedAt": "2024-07-08T16:11:17Z",
+      "updatedAt": "2024-09-10T12:56:11Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Follow TLS here, we don't need a strict limit. It is sufficient to check if the limit is passed, and this can be implememted by periodic polling, or a callback. Suggestion to clarify that there are alternative implementation in the draft. Lets reveiw and improvet text on limits.",
+          "createdAt": "2024-09-10T12:56:10Z",
+          "updatedAt": "2024-09-10T12:56:10Z"
+        }
+      ]
     },
     {
       "number": 9,
@@ -196,13 +215,23 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "emanjon"
+      ],
       "labels": [],
       "body": "\"Using a security protocol in the SCTP DTLS chunk might lower the privacy properties of the security protocol as the SCTP Verification Tag is an unique identifier for the association.\"\r\n\r\nThis text is unclear on what impact is referred to. \r\n",
       "createdAt": "2024-07-08T16:13:28Z",
-      "updatedAt": "2024-07-08T16:13:28Z",
+      "updatedAt": "2024-09-10T13:01:21Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Clarify this from DTLS perspective. The SCTP association will anyway be identifiable based on 5-tuple where destination IP and port and fixed for an assocation per direction. ",
+          "createdAt": "2024-09-10T13:01:20Z",
+          "updatedAt": "2024-09-10T13:01:20Z"
+        }
+      ]
     },
     {
       "number": 10,
@@ -252,13 +281,23 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "gloinul"
+      ],
       "labels": [],
       "body": "So when the client role sends the PVALID it will retransmit after one RTO. However, if the clients PVALID reached the server and it was the response PVALID that was lost, the client may receive additional SCTP packets with DTLS protected chunks. This indicate to the client that a likely loss of the server-> client PVALID chunk. The caveat is network reordering, thus a short delay could prevent unnecessary retransmissions. However, I don't see an issue with triggering one retransmission immediately, and restart the RTO timer. The whole goal of this is speeding up the time until the association on both sides reaches PROTECTED state.",
       "createdAt": "2024-09-06T07:32:50Z",
-      "updatedAt": "2024-09-06T07:32:50Z",
+      "updatedAt": "2024-09-10T13:13:48Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "We need to add also that initiator should drop received DATA Chunks that are not PPID=4242 until PVALID response have been received. \r\n ",
+          "createdAt": "2024-09-10T13:13:46Z",
+          "updatedAt": "2024-09-10T13:13:46Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -439,6 +478,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOKszxDc57JEWn",
+      "title": "Introduced the changes due to issue #7",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/15",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-09-11T10:35:23Z",
+      "updatedAt": "2024-09-11T10:35:24Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "1057dc3016cef4e8e9b8aa86301e7799a4824879",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue7",
+      "headRefOid": "7b8d10a4084fda74ed7339ddb486276488b3c873",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
