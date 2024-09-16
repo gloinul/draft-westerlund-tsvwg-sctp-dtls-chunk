@@ -1,6 +1,6 @@
 # Stream Control Transmission Protocol (SCTP) DTLS Chunk
 
-This is the working area for the individual Internet-Draft, "Stream Control Transmission Protocol (SCTP) CRYPTO Chunk".
+This is the working area for the individual Internet-Draft, "Stream Control Transmission Protocol (SCTP) DTLS Chunk".
 
 * [Editor's Copy](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/#go.draft-westerlund-tsvwg-sctp-dtls-chunk.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-chunk)
