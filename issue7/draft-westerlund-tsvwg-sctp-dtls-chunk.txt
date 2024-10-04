@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 15 March 2025                                          Ericsson
-                                                       11 September 2024
+Expires: 7 April 2025                                           Ericsson
+                                                          4 October 2024
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 March 2025.
+   This Internet-Draft will expire on 7 April 2025.
 
 Copyright Notice
 
@@ -915,7 +915,7 @@ Table of Contents
    The use of plain DATA chunk with PPID value = 4242 before the
    association reaches the PROTECTED state cannot be avoided as no valid
    DTLS CID exist until that state.  Further in-band key management
-   SHALL not use plain DATA chunks as this would allow attackers to
+   SHALL NOT use plain DATA chunks as this would allow attackers to
    inject overlapping DATA chunks with protected and impact the content
    of the SACK block.  Based on that, as soon as the initiator or
    responder independently enter PROTECTED state, they will silently
