@@ -2558,11 +2558,14 @@ expected RTT values are outside of the ones commonly occurring on the
 general Internet, see <a href="#t-valid-considerations" class="auto internal xref">Section 7.5</a>. At completion of
 DTLS Chunk initialization the setup of the Protected association is
 complete and one enters the VALIDATION state, and from that time on
-only DTLS chunks will be exchanged. Any plain text chunk will be
-silently discarded.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
-<p id="section-7.1-7">In case of T-valid timeout, the endpoint will generate an ABORT chunk.
-The ERROR handling follows what specified in <a href="#ekeyhandshake" class="auto internal xref">Section 6.2.1</a>.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.1-8">When entering the VALIDATION state, the initiator MUST send to the
+only DTLS chunks will be exchanged.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+<p id="section-7.1-7">The Association initiator and responder will independently enter
+VALIDATION state when the keys are locally installed.
+During VALIDATION state both initiator and responder SHALL handle
+plain chunks as well as DTLS chunks.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
+<p id="section-7.1-8">In case of T-valid timeout, the endpoint will generate an ABORT chunk.
+The ERROR handling follows what specified in <a href="#ekeyhandshake" class="auto internal xref">Section 6.2.1</a>.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.1-9">When keys are installed, the initiator MUST send to the
 responder a PVALID chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-pvalid-chunk" class="auto internal xref">Table 3</a>) containing indication of
 all offered protection solutions previously sent in the INIT chunk,
@@ -2579,27 +2582,35 @@ proteciton solution, otherwise it will reply with an ABORT
 chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
 association will be terminated. If the association was not aborted the
 protected association is considered successfully established and the
-PROTECTED state is entered.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
-<p id="section-7.1-9">When the initiator receives the PVALID chunk, it will compare with the
+PROTECTED state is entered.<a href="#section-7.1-9" class="pilcrow">¶</a></p>
+<p id="section-7.1-10">When entering PROTECTED state, the initiator and the responder
+independently SHALL stop handling plain chunks, i.e. those
+chunks will be silently discarded. PVALID chunks received in
+PROTECTED state will be threated as retransmission, thus the
+initiator receiving a PVALID in PROTECTED state SHALL ignore it,
+whereas the responder receiving a PVALID state in PROTECTED
+state SHALL properly reply with PVALID chunk as described
+above.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
+<p id="section-7.1-11">When the initiator receives the PVALID chunk, it will compare with the
 previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
-established and the initiator enters the PROTECTED state.<a href="#section-7.1-9" class="pilcrow">¶</a></p>
-<p id="section-7.1-10">PVALID chunk will be sent by the initiator every RTO time (see section
+established and the initiator enters the PROTECTED state.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
+<p id="section-7.1-12">PVALID chunk will be sent by the initiator every RTO time (see section
 6.3.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>) until a PVALID or an ABORT chunk is received
 from the responder or T-valid timer expires. To optimize the completion
 of the validation in case the PVALID from the responder is lost, in
 case the initiator receives other chunks protected the DTLS chunk
 it MAY immediately, or with a small delay to ensure that no-reorder
-has occurred, restransmit its PVALID chunk.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
-<p id="section-7.1-11">If T-valid timer expires either at initiator or responder, it will
+has occurred, restransmit its PVALID chunk.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
+<p id="section-7.1-13">If T-valid timer expires either at initiator or responder, it will
 generate an ABORT chunk.  The ERROR handling follows what specified in
-<a href="#etmout" class="auto internal xref">Section 6.2.3</a>.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
-<p id="section-7.1-12">In the PROTECTED state any ULP SCTP messages for any PPID MAY be
-exchanged in the protected SCTP association.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
-<p id="section-7.1-13">When entering the PROTECTED state, a Restart DTLS connection
-SHOULD be created.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
+<a href="#etmout" class="auto internal xref">Section 6.2.3</a>.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
+<p id="section-7.1-14">In the PROTECTED state any ULP SCTP messages for any PPID MAY be
+exchanged in the protected SCTP association.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+<p id="section-7.1-15">When entering the PROTECTED state, a Restart DTLS connection
+SHOULD be created.<a href="#section-7.1-15" class="pilcrow">¶</a></p>
 <div id="offering-multiple-security-solutions">
 <section id="section-7.1.1">
           <h4 id="name-offering-multiple-security-">
