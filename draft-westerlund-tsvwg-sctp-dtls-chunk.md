@@ -754,46 +754,43 @@ value 4242 used to exchange in-band key establishment messages for
 DTLS. Any other DATA chunk being received in a Protected association
 SHALL be silently discarded.
 
-DTLS 1.3 initializes itself by transferring its own handshake messages
-as payload of the DATA chunk necessary
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. The DTLS Chunk
-initialization SHOULD be supervised by a T-valid timer that fits DTLS
-1.3 handshake and may also be further adjusted based on whether
-expected RTT values are outside of the ones commonly occurring on the
-general Internet, see {{t-valid-considerations}}. At completion of
-DTLS Chunk initialization the setup of the Protected association is
-complete and one enters the VALIDATION state, and from that time on
-only DTLS chunks will be exchanged.
-
-The Association initiator and responder will independently enter
-VALIDATION state when the keys are locally installed.
-During VALIDATION state both initiator and responder SHALL handle
-plain chunks as well as DTLS chunks.
+If in-band DTLS handshake {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}
+is used to establish the security parameters for the DTLS Chunks, DTLS
+1.3 initializes itself by transferring its own handshake messages as
+payload of the DATA chunk. The DTLS Chunk initialization SHOULD be
+supervised by a T-valid timer that accomodates DTLS 1.3 handshake and
+may also be further adjusted based on whether expected RTT values are
+outside of the ones commonly occurring on the general Internet, see
+{{t-valid-considerations}}. The Association initiator and responder
+will independently enter VALIDATION state when the security parameters
+are locally installed for the DTLS chunk. During VALIDATION state
+both initiator and responder SHALL handle plain text chunks as well as
+DTLS chunks.
 
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
-When keys are installed, the initiator MUST send to the
-responder a PVALID chunk (see
-{{sctp-DTLS-chunk-newchunk-pvalid-chunk}}) containing indication of
-all offered protection solutions previously sent in the INIT chunk,
-including the 0x1 value indicating that DTLS 1.3 Chunk Protected
-Association parameter was included. The transmission of the PVALID
-chunk MUST be done reliably. The responder receiving the PVALID chunk
-will compare the indicated solutions with the ones previously received
-as parameters in the INIT chunk. The responder will ignore unknown
-parameters and security solutions. For the supported solutions if the
-parameters in the INIT matches what is listed in the PVALID and there
-are no additional by the endpoint supported solution in the PVALID, it
-will reply to the initiator with a PVALID chunk containing the chosen
-proteciton solution, otherwise it will reply with an ABORT
+When keys are installed, the initiator MUST send to the responder a
+PVALID chunk (see {{sctp-DTLS-chunk-newchunk-pvalid-chunk}})
+containing indication of all offered protection solutions previously
+sent in the INIT chunk, including the 0x1 value indicating that DTLS
+1.3 Chunk Protected Association parameter was included. The
+transmission of the PVALID chunk will be done reliably using an RTO
+timeout based mechanism, see below. The responder receiving the PVALID
+chunk will compare the indicated solutions with the ones previously
+received as parameters in the INIT chunk. The responder will ignore
+unknown parameters and security solutions. For the supported solutions
+if the parameters in the INIT matches what is listed in the PVALID and
+there are no additional by the endpoint supported solution in the
+PVALID, it will reply to the initiator with a PVALID chunk containing
+the chosen proteciton solution, otherwise it will reply with an ABORT
 chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
 association will be terminated. If the association was not aborted the
 protected association is considered successfully established and the
 PROTECTED state is entered.
 
 When entering PROTECTED state, the initiator and the responder
-independently SHALL stop handling plain chunks, i.e. those
+independently SHALL stop handling plain text chunks, i.e. those
 chunks will be silently discarded. PVALID chunks received in
 PROTECTED state will be threated as retransmission, thus the
 initiator receiving a PVALID in PROTECTED state SHALL ignore it,
