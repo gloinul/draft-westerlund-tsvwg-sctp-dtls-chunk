@@ -871,7 +871,7 @@ sent and received using DTLS Chunks with the current CID.
 The use of plain DATA chunk with PPID value = 4242 before the
 association reaches the PROTECTED state cannot be avoided as
 no valid DTLS CID exist until that state.
-Further in-band key management SHALL not use plain DATA chunks
+Further in-band key management SHALL NOT use plain DATA chunks
 as this would allow attackers to inject overlapping DATA chunks
 with protected and impact the content of the SACK block.
 Based on that, as soon as the initiator or responder
