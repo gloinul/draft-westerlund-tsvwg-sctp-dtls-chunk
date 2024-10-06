@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-03T00:58:07.509458+00:00",
+  "timestamp": "2024-10-06T01:02:34.188008+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -153,7 +153,7 @@
       "id": "I_kwDOKszxDc6O0I60",
       "title": "Are there benefits to encrypt PPID 4242 when possible",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -162,8 +162,8 @@
       "labels": [],
       "body": "As currently defined the DTLS Keymanagement messages in Data chunk with PPID=4242 will always be sent unencrypted. This is simple and avoids error cases if keys expires or are removed for the DTLS Chunk. However, are there any security benefits to encrypting them when one can? It will make targeted attacks against the key-managment harder for established associations, the the actual message itself is protected, but identifiable. However, one can never prevent denial in general through packet dropping. Also it makes the key-management sensitive to synchronization issues in case of failures or key-limit expiration requiring fallback behaviors. \r\n\r\nSo the main question is if extra complexities to have different choices and fallback handling is worth the potential limited benefit of encrypting. ",
       "createdAt": "2024-07-08T16:09:42Z",
-      "updatedAt": "2024-09-10T12:46:05Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-04T07:47:54Z",
+      "closedAt": "2024-10-04T07:47:54Z",
       "comments": [
         {
           "author": "gloinul",
@@ -178,6 +178,13 @@
           "body": "Authors have decided to not allow plain text data. Need text change. ",
           "createdAt": "2024-09-10T12:46:04Z",
           "updatedAt": "2024-09-10T12:46:04Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "By requiring to allways use DTLS Chunk after reaching PROTECTED state this issue have been resolved.",
+          "createdAt": "2024-10-04T07:47:54Z",
+          "updatedAt": "2024-10-04T07:47:54Z"
         }
       ]
     },
@@ -238,15 +245,15 @@
       "id": "I_kwDOKszxDc6TibbW",
       "title": "Clarify the case when Endpoints allow reverting to rfc6083",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "It is possible that the Endpoint wants to advertise the peer that it can handle rfc6083 in INIT by using the set of INIT parameters specified in rfc6083, together with the DTLS-CHUNK.\r\nIn case the peer cannot handle DTLS-CHUNK, the Association would be set using DTLS/SCTP according to rfc6083.\r\nSince rfc6083 has known packet size limitations and security weaknesses, we need to explain that the combination of rfc6083 as revert solution for DTLS-CHUNK is not viable and that such combination should no be accepted in any case.",
       "createdAt": "2024-08-20T10:22:00Z",
-      "updatedAt": "2024-09-06T08:44:34Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-04T08:23:03Z",
+      "closedAt": "2024-10-04T08:23:03Z",
       "comments": [
         {
           "author": "gloinul",
@@ -254,6 +261,13 @@
           "body": "I think we need to clarify the process of using PVALID and when to send the error. So for example if the client offers DTLS chunk and DTLS/SCTP and the server only knows DTLS Chunk, is that a PVALID error. Or is it only if there are missing security solutions it does recognize? \r\n\r\nIn addition I think the handling of other solutions needs to be written into a procedure or new section, rather than just the security considerations on downgrade. ",
           "createdAt": "2024-09-06T08:44:33Z",
           "updatedAt": "2024-09-06T08:44:33Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Text has been added to address this issue. ",
+          "createdAt": "2024-10-04T08:23:03Z",
+          "updatedAt": "2024-10-04T08:23:03Z"
         }
       ]
     },
@@ -262,23 +276,31 @@
       "id": "I_kwDOKszxDc6Uzyy3",
       "title": "Avoiding deadlock in Initial key-establishment",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "During implementation we realized we have a potential for a deadlock in the key establishment process. This would occur if the DTLS server configures and starts using the first DCI as soon as possible. With Diffie-Hellman key-exchange the client can first generate the full set of keying material when it has received the servers ServerHello message. This being delivered using unprotected DATA chunks using PPID=4242 requires that the server are certain that this has been delivered to the client before the server starts transmitting and requiring any incoming packets to be protected. \r\n\r\nTo simplify for the server's state handling an initial proposal to deal with this is the below. So when the server has gotten far along the process to have keys, it will install the created DCI. However, it will not use it for outgoing nor require it to be used, i.e. still accept unprotected traffic. It falls on the client to not enter the Validation state and start that process until it is certain that it self and the server have the DCI in place. The server will when receiving the protected PVALID chunk move to Protected and at that stage use protected traffic going forward. \r\n\r\n```\r\n     +---------------+\r\n     |  ESTABLISHED  |\r\n     +-------+-------+\r\n             |\r\n             | If INIT/INIT-ACK has DTLS 1.3 Chunk\r\n             | Protected Association Parameter\r\n             v\r\n+--------------------------+\r\n| PROTECTION INITILIZATION |\r\n+------------+-------------+\r\n             |\r\n             | start T-valid timer.\r\n             |\r\n             | [DTLS SETUP]\r\n             |-----------------\r\n             | send and receive\r\n             | DTLS handshake\r\n             v\r\n +----------------------+\r\n |  VALIDATION INIT     |\r\n +-----------+----------+\r\n             | Client and Server: Init DCI, Don't use it for transmission\r\n\t     | \r\n\t     | Client: Go to next state\r\n\t     | Server: Wait for Protected PVALID from Client\r\n             V\r\n +----------------------+\r\n |      VALIDATION      |\r\n +-----------+----------+\r\n             | \r\n             | [ENDPOINT VALIDATION]\r\n             | Require use of DTLS Chunk    \r\n             |------------------------\r\n             | send and receive\r\n             | PVALID by means of\r\n             | DTLS chunk.\r\n             v\r\n     +---------------+\r\n     |   PROTECTED   | \r\n     +---------------+\r\n ```",
       "createdAt": "2024-08-30T08:41:03Z",
-      "updatedAt": "2024-08-30T08:41:03Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-10-04T08:22:25Z",
+      "closedAt": "2024-10-04T08:22:25Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The procedure have been clarified to avoid deadlock, especially the need for accepting plain text chunks during validation to ensure ",
+          "createdAt": "2024-10-04T08:22:25Z",
+          "updatedAt": "2024-10-04T08:22:25Z"
+        }
+      ]
     },
     {
       "number": 12,
       "id": "I_kwDOKszxDc6Vl3j1",
       "title": "PVALID retransmission optimisation",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -287,8 +309,8 @@
       "labels": [],
       "body": "So when the client role sends the PVALID it will retransmit after one RTO. However, if the clients PVALID reached the server and it was the response PVALID that was lost, the client may receive additional SCTP packets with DTLS protected chunks. This indicate to the client that a likely loss of the server-> client PVALID chunk. The caveat is network reordering, thus a short delay could prevent unnecessary retransmissions. However, I don't see an issue with triggering one retransmission immediately, and restart the RTO timer. The whole goal of this is speeding up the time until the association on both sides reaches PROTECTED state.",
       "createdAt": "2024-09-06T07:32:50Z",
-      "updatedAt": "2024-09-10T13:13:48Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-04T07:54:49Z",
+      "closedAt": "2024-10-04T07:54:49Z",
       "comments": [
         {
           "author": "gloinul",
@@ -296,6 +318,13 @@
           "body": "We need to add also that initiator should drop received DATA Chunks that are not PPID=4242 until PVALID response have been received. \r\n ",
           "createdAt": "2024-09-10T13:13:46Z",
           "updatedAt": "2024-09-10T13:13:46Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This issue have been resolved with clarification per PR #13 on immediate retransmission. ",
+          "createdAt": "2024-10-04T07:54:49Z",
+          "updatedAt": "2024-10-04T07:54:49Z"
         }
       ]
     }
@@ -403,24 +432,26 @@
       "id": "PR_kwDOKszxDc56oYxQ",
       "title": "Issue #10 - described the downgrade towards rfc6083",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/13",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-09-06T07:46:55Z",
-      "updatedAt": "2024-09-16T11:59:57Z",
+      "updatedAt": "2024-10-04T07:39:50Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "1057dc3016cef4e8e9b8aa86301e7799a4824879",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue10",
       "headRefOid": "67c86ebfdfff62d882c306b27d7dcdbf26e8f55f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-04T07:39:50Z",
+      "mergedAt": "2024-10-04T07:39:50Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "e8afaaf081da54697cce258a06d2891a9ae7099d"
+      },
       "comments": [
         {
           "author": "gloinul",
@@ -430,31 +461,47 @@
           "updatedAt": "2024-09-06T12:30:24Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6L6coq",
+          "commit": {
+            "abbreviatedOid": "67c86eb"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-04T07:39:34Z",
+          "updatedAt": "2024-10-04T07:39:34Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 14,
       "id": "PR_kwDOKszxDc56oY5K",
       "title": "Issue11",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/14",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-09-06T07:47:15Z",
-      "updatedAt": "2024-09-09T12:22:51Z",
+      "updatedAt": "2024-10-04T07:42:45Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "1057dc3016cef4e8e9b8aa86301e7799a4824879",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue11",
       "headRefOid": "28a9a4864dc9db87a27d706f6ccec096f298f196",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-04T07:42:44Z",
+      "mergedAt": "2024-10-04T07:42:44Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "a56ea81a57c93889937796785ee5031192f12188"
+      },
       "comments": [],
       "reviews": [
         {
@@ -476,6 +523,19 @@
               "updatedAt": "2024-09-09T11:17:28Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6L6eDF",
+          "commit": {
+            "abbreviatedOid": "28a9a48"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-04T07:42:37Z",
+          "updatedAt": "2024-10-04T07:42:37Z",
+          "comments": []
         }
       ]
     },
@@ -484,26 +544,42 @@
       "id": "PR_kwDOKszxDc57JEWn",
       "title": "Introduced the changes due to issue #7",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/15",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-09-11T10:35:23Z",
-      "updatedAt": "2024-09-11T10:35:24Z",
+      "updatedAt": "2024-10-04T07:46:57Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "1057dc3016cef4e8e9b8aa86301e7799a4824879",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue7",
-      "headRefOid": "7b8d10a4084fda74ed7339ddb486276488b3c873",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "aab1ce30e98d4e2eab50f9e5ca756d42a6846b7f",
+      "closedAt": "2024-10-04T07:46:57Z",
+      "mergedAt": "2024-10-04T07:46:57Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "4f0cdf391731faec50112afa09f668d2eeb151e5"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6L6f7w",
+          "commit": {
+            "abbreviatedOid": "aab1ce3"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-04T07:46:43Z",
+          "updatedAt": "2024-10-04T07:46:43Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
