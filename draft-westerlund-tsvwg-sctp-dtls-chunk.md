@@ -1430,9 +1430,12 @@ DTLS replay protection MUST NOT be turned off.
 
 ## Privacy Considerations
 
-Using a security protocol in the SCTP DTLS chunk might lower the
-privacy properties of the security protocol as the SCTP Verification
-Tag is an unique identifier for the association.
+Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
+data and much of the SCTP control signaling. The SCTP association is
+identifiable based on the 5-tuple where the destination IP and
+port are fixed for each direction. Advanced privacy features such
+as changing Connection ID and sequence number encryption might
+therefore have limited effect.
 
 ## AEAD Limit Considerations
 
