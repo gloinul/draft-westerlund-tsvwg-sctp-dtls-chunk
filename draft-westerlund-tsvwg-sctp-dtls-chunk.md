@@ -1059,7 +1059,8 @@ delivers it towards the lower transport layer.
 # Abstract API
 
 This section describes and abstract API that is needed between a key
-establishment part and the DTLS 1.3 protection chunk.
+establishment part and the DTLS 1.3 protection chunk. This is an
+example API and there are alternative implementations.
 
 ## Cipher Suit Capabilities
 
@@ -1432,6 +1433,16 @@ DTLS replay protection MUST NOT be turned off.
 Using a security protocol in the SCTP DTLS chunk might lower the
 privacy properties of the security protocol as the SCTP Verification
 Tag is an unique identifier for the association.
+
+## AEAD Limit Considerations
+
+Section 4.5.3 of {{RFC9147}} defines limits on the number of records
+q that can be protected using the same key as well as limits on the
+number of received packets v that fail authentication with each key.
+To adhere to these limits the key management function can
+periodically poll the DTLS protection operation function to see
+when a limit have been reached or is closed to being reached.
+Instead of periodic polling, a callback can be used.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
