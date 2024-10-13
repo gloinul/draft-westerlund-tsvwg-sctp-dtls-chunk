@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-10T00:57:45.296134+00:00",
+  "timestamp": "2024-10-13T01:02:19.770842+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -193,7 +193,7 @@
       "id": "I_kwDOKszxDc6O0Jxe",
       "title": "Does the API need a: Set Q limit call?",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -202,8 +202,8 @@
       "labels": [],
       "body": "Does the API need an call for setting the invocation limit (Q) on R,DCI, epoch to prevent over usage of key?",
       "createdAt": "2024-07-08T16:11:17Z",
-      "updatedAt": "2024-09-10T12:56:11Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-10T08:31:22Z",
+      "closedAt": "2024-10-10T08:31:22Z",
       "comments": [
         {
           "author": "gloinul",
@@ -219,7 +219,7 @@
       "id": "I_kwDOKszxDc6O0K7_",
       "title": "Clarify privacy properties impact",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -228,8 +228,8 @@
       "labels": [],
       "body": "\"Using a security protocol in the SCTP DTLS chunk might lower the privacy properties of the security protocol as the SCTP Verification Tag is an unique identifier for the association.\"\r\n\r\nThis text is unclear on what impact is referred to. \r\n",
       "createdAt": "2024-07-08T16:13:28Z",
-      "updatedAt": "2024-09-10T13:01:21Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-10T09:03:59Z",
+      "closedAt": "2024-10-10T09:03:59Z",
       "comments": [
         {
           "author": "gloinul",
@@ -577,6 +577,90 @@
           "body": "",
           "createdAt": "2024-10-04T07:46:43Z",
           "updatedAt": "2024-10-04T07:46:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOKszxDc5-Lq_Y",
+      "title": "API AEAD limit considerations",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/16",
+      "state": "MERGED",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "#8",
+      "createdAt": "2024-10-10T08:17:02Z",
+      "updatedAt": "2024-10-10T08:31:21Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "8e1d5cdb58532c2f1840ec3f8461b9c32c0ba427",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "API-AEAD-limit-considerations",
+      "headRefOid": "39d0cf96b7975a7457378ab94663ab0ae6c1fafb",
+      "closedAt": "2024-10-10T08:31:21Z",
+      "mergedAt": "2024-10-10T08:31:21Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "4522cae6e59e25db4d980aa5135c7a4199e940c4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6MoqzE",
+          "commit": {
+            "abbreviatedOid": "39d0cf9"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-10T08:20:11Z",
+          "updatedAt": "2024-10-10T08:20:11Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOKszxDc5-L_tz",
+      "title": "Privacy Considerations",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/17",
+      "state": "MERGED",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "#9",
+      "createdAt": "2024-10-10T08:55:00Z",
+      "updatedAt": "2024-10-10T09:03:58Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4522cae6e59e25db4d980aa5135c7a4199e940c4",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "Privacy-Considerations",
+      "headRefOid": "010ac9cfe25ccf4fe65c8725322fa43910efd395",
+      "closedAt": "2024-10-10T09:03:58Z",
+      "mergedAt": "2024-10-10T09:03:58Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "4ef02a6dbb55f1354cdf30727fd91095afa35845"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6MpCB6",
+          "commit": {
+            "abbreviatedOid": "010ac9c"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-10T08:58:00Z",
+          "updatedAt": "2024-10-10T08:58:00Z",
           "comments": []
         }
       ]
