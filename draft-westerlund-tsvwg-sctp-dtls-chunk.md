@@ -508,7 +508,7 @@ Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
 
 Payload: variable length
-: This holds the encrypted data as one DTLS 1.3 Records {{RFC9147}}.
+: This holds the encrypted data as one DTLS 1.3 Record {{RFC9147}}.
 
 Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
