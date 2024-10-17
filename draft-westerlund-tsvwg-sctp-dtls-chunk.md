@@ -215,24 +215,25 @@ Protection Operator functionality is the set of data and procedures
 taking care of User Data encryption into DTLS Record and DTLS record
 decryption into User Data.
 
-DTLS 1.3 operations requires to directly handshake messages
-with the remote peer for connection setup and other features,
-this kind of handshake is part of the Key Management functionality.
-Key Management function achieves these features behaving as a SCTP User.
-Key Management sends and receives its own data via the SCTP User Level interface.
-Key Management's own data are distinguished from any other data by
-means of a dedicated PPID using the value 4242 (see {{iana-payload-protection-id}}).
+DTLS 1.3 operations requires to directly handshake messages with the
+remote peer for connection setup and other features, this kind of
+handshake is part of the Key Management functionality.  Key Management
+function achieves these features behaving as a SCTP User.  Key
+Management sends and receives its own data via the SCTP User Level
+interface.  Key Management's own data are distinguished from any other
+data by means of a dedicated PPID using the value 4242 (see
+{{iana-payload-protection-id}}).
 
 Once the Key Management has established the DTLS 1.3 connection,
 it can set the Protection Operator for User Data encryption/decription
 via the API shown in {{sctp-DTLS-chunk-layering}}.
 
-DTLS 1.3 handshake messages, that are transported as SCTP
-User Data with dedicated PPID = 4242, SHALL be sent and received as plain
-DATA chunks until the Association has reached the PROTECTED state.
-From that time on, DTLS 1.3 handshake messages SHALL be
-transported as SCTP User Data with dedicated PPID = 4242
-within DTLS chunks, same as ULP data traffic.
+DTLS 1.3 handshake messages, that are transported as SCTP User Data
+with dedicated PPID = 4242, SHALL be sent and received as plain DATA
+chunks until the Association has reached the PROTECTED state
+({{init-state-machine}}).  From that time on, DTLS 1.3 handshake
+messages SHALL be transported as SCTP User Data with dedicated PPID =
+4242 within DTLS chunks, same as ULP data traffic.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -343,7 +344,7 @@ described in {{RFC9260}}.
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
 and maintain dedicated DTLS connections, those connection will be
 identified in the DTLS chunk with DCIs with the R (restart) bit set
-(see {{DTLS-chunk}}).  Both SCTP Endpoints shall guarantee that
+(see {{DTLS-chunk}}).  Both SCTP Endpoints shall ensure that
 Restart DTLS connections and related keys are preserved for supporting
 the SCTP Restart use case.
 
@@ -394,12 +395,11 @@ and COOCKIE-ACK by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.
 
 A restarted SCTP Association SHALL use the Restart DCI, thus the
-Restart DTLS connection, for User Traffic until a new traffic
-DTLS connection will be available.
-The implementors SHOULD guarantee that a new replacement
-Restart DTLS connection as well as a new Restart DCI are handshaked
-as soon as possible so that the time when no Restart DCI are available
-is kept to a minimum.
+Restart DTLS connection, for User Traffic until a new traffic DTLS
+connection will be available.  The implementors SHOULD initiate two
+new DTLS connection as soon as possible, one as replacement restart
+DCI, the other as a new traffic DCI, so that the time when no Restart
+DCI are available is kept to a minimum.
 
 # New Parameter Type {#new-parameter-type}
 
