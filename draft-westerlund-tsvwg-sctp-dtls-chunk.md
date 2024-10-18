@@ -651,8 +651,9 @@ Extra Cause: 16 bits (unsigned integer)
 
 Editor's Note: Please replace TBA9 above with what is assigned by IANA.
 
-Below a number of defined Error Causes are defined, additional causes
-can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
+Below a number of defined Error Causes (Extra Cause above) are
+defined, additional causes can be registered with IANA following the
+rules in {{IANA-Extra-Cause}}.
 
 ### Error During Protection Handshake {#ekeyhandshake}
 
@@ -693,10 +694,10 @@ DTLS 1.3 MAY inform local SCTP endpoint about errors.  When an Error
 in the DTLS 1.3 compromises the protection mechanism, the protection
 operator may stop processing data altogether, thus the local SCTP
 endpoint will not be able to send or receive any chunk for the
-specified Association.  This will cause the Association to be closed
-by legacy timer-based mechanism. Since the Association protection is
-compromised no further data will be sent and the remote peer will also
-experience timeout on the Association.
+specified Association.  This will cause the Association to
+be closed by legacy timer-based mechanism. Since the Association
+protection is compromised no further data will be sent and the remote
+peer will also experience timeout on the Association.
 
 ## Non-critical Error in the Protection {#non-critical-errors}
 
@@ -808,14 +809,14 @@ established and the initiator enters the PROTECTED state.
 PVALID chunk will be sent by the initiator every RTO time (see section
 6.3.1 of {{RFC9260}}) until a PVALID or an ABORT chunk is received
 from the responder or T-valid timer expires. To optimize the completion
-of the validation in case the PVALID from the responder is lost, in
-case the initiator receives other chunks protected the DTLS chunk
+of the validation in case the PVALID from the responder is lost, if
+the initiator receives other chunks protected the DTLS chunk
 it MAY immediately, or with a small delay to ensure that no-reorder
 has occurred, restransmit its PVALID chunk.
 
-If T-valid timer expires either at initiator or responder, it will
-generate an ABORT chunk.  The ERROR handling follows what specified in
-{{etmout}}.
+If T-valid timer expires either at initiator or responder, the
+endpoint will generate an ABORT chunk.  The ERROR handling follows
+what specified in {{etmout}}.
 
 In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.
@@ -827,7 +828,7 @@ SHOULD be created.
 
 An initiator of an SCTP association may want to offer multiple
 different security solutions in addition to DTLS 1.3 chunks for the
-SCTP association. This can be done but need to consider the down grade
+SCTP association. This can be done but need to consider the downgrade
 attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
