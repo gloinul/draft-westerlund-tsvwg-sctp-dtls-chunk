@@ -873,9 +873,9 @@ document.
              | If INIT/INIT-ACK has DTLS 1.3 Chunk
              | Protected Association Parameter
              v
-+--------------------------+
-| PROTECTION INITILIZATION |
-+------------+-------------+
++---------------------------+
+| PROTECTION INITIALIZATION |
++------------+--------------+
              |
              | start T-valid timer.
              |
@@ -902,7 +902,7 @@ document.
 
 ## Considerations on Key Management {#key-management-considerations}
 
-When the Association is in PROTECTION INITILIZATION state, in-band
+When the Association is in PROTECTION INITIALIZATION state, in-band
 DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
@@ -982,7 +982,7 @@ chunks and DTLS chunks follows the rules defined below:
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-1}} describes
 the structure of any plain text SCTP packet being sent or received
-when the DTLS Chunk is in PROTECTION INITILIZATION, and VALIDATION
+when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
 (for retransmissions).
 
 ~~~~~~~~~~~ aasvg
@@ -1297,7 +1297,7 @@ Parameters group:
 
 *  One new SCTP Error Cause Codes
 
-And finaly the update of one registred SCTP Paylod Protocol
+And finally the update of one registred SCTP Paylod Protocol
 Identifier.
 
 ## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
