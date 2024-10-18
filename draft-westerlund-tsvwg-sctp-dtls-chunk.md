@@ -1297,7 +1297,8 @@ Parameters group:
 
 *  One new SCTP Error Cause Codes
 
-*  One new SCTP Payload Protocol Identifier
+And finaly the update of one registred SCTP Paylod Protocol
+Identifier.
 
 ## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
 
