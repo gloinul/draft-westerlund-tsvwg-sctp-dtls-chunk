@@ -2681,11 +2681,11 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
                 <path d="M 176,32 L 176,64" fill="none" stroke="black"></path>
                 <path d="M 176,480 L 176,512" fill="none" stroke="black"></path>
                 <path d="M 200,320 L 200,352" fill="none" stroke="black"></path>
-                <path d="M 224,144 L 224,176" fill="none" stroke="black"></path>
+                <path d="M 232,144 L 232,176" fill="none" stroke="black"></path>
                 <path d="M 48,32 L 176,32" fill="none" stroke="black"></path>
                 <path d="M 48,64 L 176,64" fill="none" stroke="black"></path>
-                <path d="M 8,144 L 224,144" fill="none" stroke="black"></path>
-                <path d="M 8,176 L 224,176" fill="none" stroke="black"></path>
+                <path d="M 8,144 L 232,144" fill="none" stroke="black"></path>
+                <path d="M 8,176 L 232,176" fill="none" stroke="black"></path>
                 <path d="M 120,256 L 248,256" fill="none" stroke="black"></path>
                 <path d="M 16,320 L 200,320" fill="none" stroke="black"></path>
                 <path d="M 16,352 L 200,352" fill="none" stroke="black"></path>
@@ -2707,7 +2707,7 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
                   <text x="248" y="116">Association</text>
                   <text x="336" y="116">Parameter</text>
                   <text x="60" y="164">PROTECTION</text>
-                  <text x="160" y="164">INITILIZATION</text>
+                  <text x="164" y="164">INITIALIZATION</text>
                   <text x="144" y="212">start</text>
                   <text x="200" y="212">T-valid</text>
                   <text x="260" y="212">timer.</text>
@@ -2746,7 +2746,7 @@ document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
         <h3 id="name-considerations-on-key-manag">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-considerations-on-key-manag" class="section-name selfRef">Considerations on Key Management</a>
         </h3>
-<p id="section-7.4-1">When the Association is in PROTECTION INITILIZATION state, in-band
+<p id="section-7.4-1">When the Association is in PROTECTION INITIALIZATION state, in-band
 DTLS key management <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span> SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>) for message transfer that will be sent
@@ -2888,7 +2888,7 @@ future SCTP chunks.<a href="#section-8-2.3.1" class="pilcrow">¶</a></p>
 </div>
 <p id="section-8-4">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 9</a> describes
 the structure of any plain text SCTP packet being sent or received
-when the DTLS Chunk is in PROTECTION INITILIZATION, and VALIDATION
+when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
 (for retransmissions).<a href="#section-8-4" class="pilcrow">¶</a></p>
 <span id="name-protected-sctp-packets"></span><div id="sctp-DTLS-encrypt-chunk-states-2">
 <figure id="figure-10">
@@ -3363,7 +3363,7 @@ Parameters group:<a href="#section-10-1" class="pilcrow">¶</a></p>
           <p id="section-10-2.3.1">One new SCTP Error Cause Codes<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-10-3">And finaly the update of one registred SCTP Paylod Protocol
+<p id="section-10-3">And finally the update of one registred SCTP Paylod Protocol
 Identifier.<a href="#section-10-3" class="pilcrow">¶</a></p>
 <div id="IANA-Extra-Cause">
 <section id="section-10.1">
