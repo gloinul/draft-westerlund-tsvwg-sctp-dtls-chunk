@@ -943,8 +943,8 @@ chunks and DTLS chunks follows the rules defined below:
 
 - When the association is in states CLOSED, COOKIE-WAIT, and
   COOKIE-ECHOED, any Control chunk is sent unprotected (i.e. plain
-  text). No DATA chunks shall be sent in these states and DATA chunks
-  received shall be silently discarded.
+  text). No DATA chunks are sent in these states and DATA chunks
+  received are silently discarded, see {{RFC9260}}.
 
 - When the DTLS Chunk is in state PROTECTED and the SCTP association
   is in states ESTABLISHED or in the states for association shutdown,
@@ -956,16 +956,14 @@ chunks and DTLS chunks follows the rules defined below:
   encryption will be the used as payload for a DTLS chunk that will be
   the only chunk in the SCTP packet to be sent. DATA chunks are
   accepted and handled according to section 4 of {{RFC9260}}.
-  Data chunk with dedicated PPID (4242) will be sent and received
-  unencrypted.
 
 - If an SCTP restart is occurring there are exception rules to the
   above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
   DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
   continuning to protect any SCTP chunks sent while being in SCTP
-  state ESTABLISHED until the DTLS chunk state reaches VALIDATION,
-  where a newely established traffic DCI SHALL be used instead for
-  protecting future SCTP chunks.
+  state ESTABLISHED, VALIDATION and PROTECTED, until a newely
+  established traffic DCI are ready to be used instead to protect
+  future SCTP chunks.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -984,7 +982,8 @@ chunks and DTLS chunks follows the rules defined below:
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-1}} describes
 the structure of any plain text SCTP packet being sent or received
-when the DTLS Chunk is not in VALIDATION or PROTECTED state.
+when the DTLS Chunk is in PROTECTION INITILIZATION, and VALIDATION
+(for retransmissions).
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -998,17 +997,12 @@ when the DTLS Chunk is not in VALIDATION or PROTECTED state.
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of an SCTP packet being sent after the DTLS Chunk
-VALIDATION or PROTECTED state has been reached. Such packets are built
-with the SCTP common header. Only one DTLS chunk can be sent in
+the structure of an protected SCTP packet being sent after the DTLS
+Chunk VALIDATION or PROTECTED state has been reached. Such packets are
+built with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.
 
 ## Protected Data Chunk Transmission {#data-sending}
-
-When the DTLS Chunk state machine hasn't reached the VALIDATION state,
-DTLS 1.3 MAY perform key management in-band, thus the DTLS chunk
-Handler will receive plain control and DATA chunks from the SCTP chunk
-handler.
 
 When DTLS Chunk has reached the VALIDATION and PROTECTED state,
 the DTLS chunk handler will receive control chunks and DATA chunks
@@ -1021,18 +1015,11 @@ that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP bundling SHALL NOT be performed. If a SCTP
-packet with bundling is received the receiver SHALL ignore any
-subsequent chunk.
+without delay and SCTP chunk bundling {{RFC9260}} SHALL NOT be
+performed. If a SCTP packet with chunk bundling is received the
+receiver SHALL ignore any subsequent chunk.
 
 ## Protected Data Chunk Reception {#data-receiving}
-
-When the DTLS Chunk state machine hasn't reached the VALIDATION state
-it MAY perform key management in-band. In such case, the DTLS chunk
-handler will receive plain control chunks and DATA chunks with
-SCTP-DTLS PPID from the SCTP Header Handler. Those plain text control
-chunks will be forwarded to SCTP chunk handler as well as the DATA
-chunk with the SCTP-DTLS PPID value of 4242.
 
 When the DTLS Chunk state machine has reached the VALIDATION or
 PROTECTED state, the DTLS chunk handler will receive DTLS chunks
