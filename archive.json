@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-17T00:58:11.799903+00:00",
+  "timestamp": "2024-10-20T01:03:30.021130+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -661,6 +661,111 @@
           "body": "",
           "createdAt": "2024-10-10T08:58:00Z",
           "updatedAt": "2024-10-10T08:58:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOKszxDc5_Geoz",
+      "title": "Various edits to address inconsistencies and improve the text. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/18",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-18T12:59:27Z",
+      "updatedAt": "2024-10-18T13:35:08Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4ef02a6dbb55f1354cdf30727fd91095afa35845",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "mw-edits",
+      "headRefOid": "b5d5f368282126839f9e4aae75687d7930c1c727",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6Nvon4",
+          "commit": {
+            "abbreviatedOid": "1d33b3e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T13:26:12Z",
+          "updatedAt": "2024-10-18T13:26:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6Nvowm",
+          "commit": {
+            "abbreviatedOid": "1d33b3e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T13:26:26Z",
+          "updatedAt": "2024-10-18T13:26:26Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6NvpY6",
+          "commit": {
+            "abbreviatedOid": "1d33b3e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T13:27:34Z",
+          "updatedAt": "2024-10-18T13:27:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6Nvpw4",
+          "commit": {
+            "abbreviatedOid": "1d33b3e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Shouldn't be \"finally\"?",
+          "createdAt": "2024-10-18T13:28:12Z",
+          "updatedAt": "2024-10-18T13:28:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6NvqxN",
+          "commit": {
+            "abbreviatedOid": "1d33b3e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Line 985 : PROTECTION INITILIZATION is PROTECTION INITIALIZATION",
+          "createdAt": "2024-10-18T13:29:55Z",
+          "updatedAt": "2024-10-18T13:29:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6NvtuH",
+          "commit": {
+            "abbreviatedOid": "b5d5f36"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T13:35:08Z",
+          "updatedAt": "2024-10-18T13:35:08Z",
           "comments": []
         }
       ]
