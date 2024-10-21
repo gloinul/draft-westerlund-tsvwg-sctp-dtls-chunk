@@ -1593,7 +1593,7 @@ Table of Contents
    [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
               Westerlund, M., Preuß Mattsson, J., and C. Porfiri,
               "Datagram Transport Layer Security (DTLS) in the Stream
-              Control Transmission Protocol (SCTP) DTLS Chunk", July
+              Control Transmission Protocol (SCTP) DTLS Chunk", October
               2024, <https://datatracker.ietf.org/doc/draft-westerlund-
               tsvwg-sctp-dtls-handshake/>.
 
