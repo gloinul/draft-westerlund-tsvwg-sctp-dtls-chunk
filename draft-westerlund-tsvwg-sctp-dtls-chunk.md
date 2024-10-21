@@ -215,24 +215,25 @@ Protection Operator functionality is the set of data and procedures
 taking care of User Data encryption into DTLS Record and DTLS record
 decryption into User Data.
 
-DTLS 1.3 operations requires to directly handshake messages
-with the remote peer for connection setup and other features,
-this kind of handshake is part of the Key Management functionality.
-Key Management function achieves these features behaving as a SCTP User.
-Key Management sends and receives its own data via the SCTP User Level interface.
-Key Management's own data are distinguished from any other data by
-means of a dedicated PPID using the value 4242 (see {{iana-payload-protection-id}}).
+DTLS 1.3 operations requires to directly handshake messages with the
+remote peer for connection setup and other features, this kind of
+handshake is part of the Key Management functionality.  Key Management
+function achieves these features behaving as a SCTP User.  Key
+Management sends and receives its own data via the SCTP User Level
+interface.  Key Management's own data are distinguished from any other
+data by means of a dedicated PPID using the value 4242 (see
+{{iana-payload-protection-id}}).
 
 Once the Key Management has established the DTLS 1.3 connection,
 it can set the Protection Operator for User Data encryption/decription
 via the API shown in {{sctp-DTLS-chunk-layering}}.
 
-DTLS 1.3 handshake messages, that are transported as SCTP
-User Data with dedicated PPID = 4242, SHALL be sent and received as plain
-DATA chunks until the Association has reached the PROTECTED state.
-From that time on, DTLS 1.3 handshake messages SHALL be
-transported as SCTP User Data with dedicated PPID = 4242
-within DTLS chunks, same as ULP data traffic.
+DTLS 1.3 handshake messages, that are transported as SCTP User Data
+with dedicated PPID = 4242, SHALL be sent and received as plain DATA
+chunks until the Association has reached the PROTECTED state
+({{init-state-machine}}).  From that time on, DTLS 1.3 handshake
+messages SHALL be transported as SCTP User Data with dedicated PPID =
+4242 within DTLS chunks, same as ULP data traffic.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -343,7 +344,7 @@ described in {{RFC9260}}.
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
 and maintain dedicated DTLS connections, those connection will be
 identified in the DTLS chunk with DCIs with the R (restart) bit set
-(see {{DTLS-chunk}}).  Both SCTP Endpoints shall guarantee that
+(see {{DTLS-chunk}}).  Both SCTP Endpoints shall ensure that
 Restart DTLS connections and related keys are preserved for supporting
 the SCTP Restart use case.
 
@@ -394,12 +395,11 @@ and COOCKIE-ACK by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.
 
 A restarted SCTP Association SHALL use the Restart DCI, thus the
-Restart DTLS connection, for User Traffic until a new traffic
-DTLS connection will be available.
-The implementors SHOULD guarantee that a new replacement
-Restart DTLS connection as well as a new Restart DCI are handshaked
-as soon as possible so that the time when no Restart DCI are available
-is kept to a minimum.
+Restart DTLS connection, for User Traffic until a new traffic DTLS
+connection will be available.  The implementors SHOULD initiate two
+new DTLS connection as soon as possible, one as replacement restart
+DCI, the other as a new traffic DCI, so that the time when no Restart
+DCI are available is kept to a minimum.
 
 # New Parameter Type {#new-parameter-type}
 
@@ -508,7 +508,7 @@ Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
 
 Payload: variable length
-: This holds the encrypted data as one DTLS 1.3 Records {{RFC9147}}.
+: This holds the encrypted data as one DTLS 1.3 Record {{RFC9147}}.
 
 Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
@@ -651,8 +651,9 @@ Extra Cause: 16 bits (unsigned integer)
 
 Editor's Note: Please replace TBA9 above with what is assigned by IANA.
 
-Below a number of defined Error Causes are defined, additional causes
-can be registered with IANA following the rules in {{IANA-Extra-Cause}}.
+Below a number of defined Error Causes (Extra Cause above) are
+defined, additional causes can be registered with IANA following the
+rules in {{IANA-Extra-Cause}}.
 
 ### Error During Protection Handshake {#ekeyhandshake}
 
@@ -693,10 +694,10 @@ DTLS 1.3 MAY inform local SCTP endpoint about errors.  When an Error
 in the DTLS 1.3 compromises the protection mechanism, the protection
 operator may stop processing data altogether, thus the local SCTP
 endpoint will not be able to send or receive any chunk for the
-specified Association.  This will cause the Association to be closed
-by legacy timer-based mechanism. Since the Association protection is
-compromised no further data will be sent and the remote peer will also
-experience timeout on the Association.
+specified Association.  This will cause the Association to
+be closed by legacy timer-based mechanism. Since the Association
+protection is compromised no further data will be sent and the remote
+peer will also experience timeout on the Association.
 
 ## Non-critical Error in the Protection {#non-critical-errors}
 
@@ -808,14 +809,14 @@ established and the initiator enters the PROTECTED state.
 PVALID chunk will be sent by the initiator every RTO time (see section
 6.3.1 of {{RFC9260}}) until a PVALID or an ABORT chunk is received
 from the responder or T-valid timer expires. To optimize the completion
-of the validation in case the PVALID from the responder is lost, in
-case the initiator receives other chunks protected the DTLS chunk
+of the validation in case the PVALID from the responder is lost, if
+the initiator receives other chunks protected the DTLS chunk
 it MAY immediately, or with a small delay to ensure that no-reorder
 has occurred, restransmit its PVALID chunk.
 
-If T-valid timer expires either at initiator or responder, it will
-generate an ABORT chunk.  The ERROR handling follows what specified in
-{{etmout}}.
+If T-valid timer expires either at initiator or responder, the
+endpoint will generate an ABORT chunk.  The ERROR handling follows
+what specified in {{etmout}}.
 
 In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.
@@ -827,7 +828,7 @@ SHOULD be created.
 
 An initiator of an SCTP association may want to offer multiple
 different security solutions in addition to DTLS 1.3 chunks for the
-SCTP association. This can be done but need to consider the down grade
+SCTP association. This can be done but need to consider the downgrade
 attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
@@ -872,9 +873,9 @@ document.
              | If INIT/INIT-ACK has DTLS 1.3 Chunk
              | Protected Association Parameter
              v
-+--------------------------+
-| PROTECTION INITILIZATION |
-+------------+-------------+
++---------------------------+
+| PROTECTION INITIALIZATION |
++------------+--------------+
              |
              | start T-valid timer.
              |
@@ -901,7 +902,7 @@ document.
 
 ## Considerations on Key Management {#key-management-considerations}
 
-When the Association is in PROTECTION INITILIZATION state, in-band
+When the Association is in PROTECTION INITIALIZATION state, in-band
 DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
@@ -942,8 +943,8 @@ chunks and DTLS chunks follows the rules defined below:
 
 - When the association is in states CLOSED, COOKIE-WAIT, and
   COOKIE-ECHOED, any Control chunk is sent unprotected (i.e. plain
-  text). No DATA chunks shall be sent in these states and DATA chunks
-  received shall be silently discarded.
+  text). No DATA chunks are sent in these states and DATA chunks
+  received are silently discarded, see {{RFC9260}}.
 
 - When the DTLS Chunk is in state PROTECTED and the SCTP association
   is in states ESTABLISHED or in the states for association shutdown,
@@ -955,16 +956,14 @@ chunks and DTLS chunks follows the rules defined below:
   encryption will be the used as payload for a DTLS chunk that will be
   the only chunk in the SCTP packet to be sent. DATA chunks are
   accepted and handled according to section 4 of {{RFC9260}}.
-  Data chunk with dedicated PPID (4242) will be sent and received
-  unencrypted.
 
 - If an SCTP restart is occurring there are exception rules to the
   above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
   DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
   continuning to protect any SCTP chunks sent while being in SCTP
-  state ESTABLISHED until the DTLS chunk state reaches VALIDATION,
-  where a newely established traffic DCI SHALL be used instead for
-  protecting future SCTP chunks.
+  state ESTABLISHED, VALIDATION and PROTECTED, until a newely
+  established traffic DCI are ready to be used instead to protect
+  future SCTP chunks.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -983,7 +982,8 @@ chunks and DTLS chunks follows the rules defined below:
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-1}} describes
 the structure of any plain text SCTP packet being sent or received
-when the DTLS Chunk is not in VALIDATION or PROTECTED state.
+when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
+(for retransmissions).
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -997,17 +997,12 @@ when the DTLS Chunk is not in VALIDATION or PROTECTED state.
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of an SCTP packet being sent after the DTLS Chunk
-VALIDATION or PROTECTED state has been reached. Such packets are built
-with the SCTP common header. Only one DTLS chunk can be sent in
+the structure of an protected SCTP packet being sent after the DTLS
+Chunk VALIDATION or PROTECTED state has been reached. Such packets are
+built with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.
 
 ## Protected Data Chunk Transmission {#data-sending}
-
-When the DTLS Chunk state machine hasn't reached the VALIDATION state,
-DTLS 1.3 MAY perform key management in-band, thus the DTLS chunk
-Handler will receive plain control and DATA chunks from the SCTP chunk
-handler.
 
 When DTLS Chunk has reached the VALIDATION and PROTECTED state,
 the DTLS chunk handler will receive control chunks and DATA chunks
@@ -1020,18 +1015,11 @@ that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP bundling SHALL NOT be performed. If a SCTP
-packet with bundling is received the receiver SHALL ignore any
-subsequent chunk.
+without delay and SCTP chunk bundling {{RFC9260}} SHALL NOT be
+performed. If a SCTP packet with chunk bundling is received the
+receiver SHALL ignore any subsequent chunk.
 
 ## Protected Data Chunk Reception {#data-receiving}
-
-When the DTLS Chunk state machine hasn't reached the VALIDATION state
-it MAY perform key management in-band. In such case, the DTLS chunk
-handler will receive plain control chunks and DATA chunks with
-SCTP-DTLS PPID from the SCTP Header Handler. Those plain text control
-chunks will be forwarded to SCTP chunk handler as well as the DATA
-chunk with the SCTP-DTLS PPID value of 4242.
 
 When the DTLS Chunk state machine has reached the VALIDATION or
 PROTECTED state, the DTLS chunk handler will receive DTLS chunks
@@ -1309,7 +1297,8 @@ Parameters group:
 
 *  One new SCTP Error Cause Codes
 
-*  One new SCTP Payload Protocol Identifier
+And finally the update of one registred SCTP Paylod Protocol
+Identifier.
 
 ## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
 
