@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-20T01:03:30.021130+00:00",
+  "timestamp": "2024-10-22T00:59:13.237791+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -670,24 +670,26 @@
       "id": "PR_kwDOKszxDc5_Geoz",
       "title": "Various edits to address inconsistencies and improve the text. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/18",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-10-18T12:59:27Z",
-      "updatedAt": "2024-10-18T13:35:08Z",
+      "updatedAt": "2024-10-21T12:21:50Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4ef02a6dbb55f1354cdf30727fd91095afa35845",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "mw-edits",
       "headRefOid": "b5d5f368282126839f9e4aae75687d7930c1c727",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-21T12:21:45Z",
+      "mergedAt": "2024-10-21T12:21:45Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "ca13c0c5784452f7eeaa3e333c963c74aeae3d83"
+      },
       "comments": [],
       "reviews": [
         {
@@ -766,6 +768,19 @@
           "body": "",
           "createdAt": "2024-10-18T13:35:08Z",
           "updatedAt": "2024-10-18T13:35:08Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6N-MFp",
+          "commit": {
+            "abbreviatedOid": "b5d5f36"
+          },
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-21T12:20:48Z",
+          "updatedAt": "2024-10-21T12:20:48Z",
           "comments": []
         }
       ]
