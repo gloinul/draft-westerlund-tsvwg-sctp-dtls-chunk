@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-31T00:59:23.234367+00:00",
+  "timestamp": "2024-11-03T01:03:03.522307+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -327,6 +327,22 @@
           "updatedAt": "2024-10-04T07:54:49Z"
         }
       ]
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOKszxDc6cvCDK",
+      "title": "IANA early review noted that there are no upper limit in regestry definition",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/19",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "IANA did an early review and commented:\r\n\r\nIn Section 10.2, what\u2019s the upper numeric boundary (e.g., 31) for the \u201cbit position\u201d field?\r\n\r\nThis should be clarified as we allow for multiple 32-bit words. So the limit are likely the maximum of words in a parameter. ",
+      "createdAt": "2024-11-01T17:53:54Z",
+      "updatedAt": "2024-11-01T17:53:54Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
