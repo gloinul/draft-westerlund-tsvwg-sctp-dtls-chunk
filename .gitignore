@@ -7,9 +7,9 @@
 *~
 .tags
 /*-[0-9][0-9].xml
+/.*.mk
 /.gems/
 /.refcache
-/.targets.mk
 /.venv/
 /.vscode/
 /lib
@@ -17,9 +17,7 @@
 /versioned/
 Gemfile.lock
 archive.json
-draft-westerlund-tsvwg-sctp-crypto-chunk.xml
 draft-westerlund-tsvwg-sctp-dtls-chunk.xml
-lib
 package-lock.json
 report.xml
 !requirements.txt
