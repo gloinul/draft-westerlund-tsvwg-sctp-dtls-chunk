@@ -1463,4 +1463,5 @@ solutions.
 
    The authors thank Michael Tüxen for his invaluable comments
    helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Operator architecture.
+   restructuring the Protection Operator architecture. We also like
+   to thank Amanda Baber with IANA for feedback on our IANA registry.
