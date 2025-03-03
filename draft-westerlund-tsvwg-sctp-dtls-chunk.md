@@ -1293,7 +1293,7 @@ synchronize the DTLS record protection operations usage of nonce
 values to avoid reuse and replay protection. With this realization the
 nonce state is kept by the DTLS chunk function. When the handshake
 function needs to send a DTLS message, e.g. key_update, which uses
-epoch 2 or higher, it uses the DTLS chunk protection operation. The
+DTLS epoch=3 or higher, it uses the DTLS chunk protection operation. The
 protected DTLS record is returned to the DTLS handshake
 implementation, which then sends it as SCTP user data.
 
@@ -1320,7 +1320,7 @@ Optional API function that can be one way to handle the need to
 synchronize the DTLS record protection operations usage of nonce
 values to avoid reuse and ensure replay protection. This funciton
 takes a protected DTLS record that the handshake has been received as
-SCTP user data using an Epoch of 2 or higher for this DTLS connection.
+SCTP user data using an DTLS epoch= 3 or higher for this DTLS connection.
 The function attempts to decrypt, verify integrity and check replay
 protection and if successful return the plain text payload,
 alternatively indicate the invalidity of the payload.
@@ -1344,7 +1344,7 @@ Reply: Plain Text DTLS message or failure indicator
 
 For each DTLS connection, there are certain crypto state infomration
 that needs to be handled thread safe to avoid nonce re-use and correct
-replay protection. This arises as the key materials for epoch 2 and higher
+replay protection. This arises as the key materials for DTLS epoch=3 and higher
 are shared between the DTLS chunk and the DTLS handshake parts.
 
 This issue is primarily for implementations of SCTP implementation
