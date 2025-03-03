@@ -138,8 +138,8 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +--------------------+
-|               | |       DTLS 1.3     |  Keys
-|      ULP      | |                    +-------------.
+|               | |       DTLS 1.3     |  Keys, Messages
+|      ULP      | |                    +<------------.
 |               | |   Key Management   |              |
 +---------------+-+---+----------------+            --+-- API
 |                     |                 \    User     |
@@ -224,9 +224,14 @@ interface.  Key Management's own data are distinguished from any other
 data by means of a dedicated PPID using the value 4242 (see
 {{iana-payload-protection-id}}).
 
-Once the Key Management has established the DTLS 1.3 connection,
-it can set the Protection Operator for User Data encryption/decription
-via the API shown in {{sctp-DTLS-chunk-layering}}.
+Once the Key Management has established the DTLS 1.3 connection, it
+can set the Protection Operator for User Data encryption/decription
+via the API shown in {{sctp-DTLS-chunk-layering}}. At this stage the
+Key Management functions usage of protection operation on it's DTLS
+plain text messages needs to be synchronized with the DTLS chunk's
+protection operations to avoid nonce re-usage and replay
+protection. Alternatively the key management can use the DTLS chunk's
+session instance to protect it's messages.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
@@ -1044,7 +1049,7 @@ In the opposite direction it creates the SCTP common header and fills
 it with the relevant information for the specific association and
 delivers it towards the lower transport layer.
 
-# Abstract API
+# Abstract API  {#abstract-api}
 
 This section describes and abstract API that is needed between a key
 establishment part and the DTLS 1.3 protection chunk. This is an
@@ -1279,6 +1284,88 @@ Paramters :
 Reply: Replay Protection Configured
 
 Parameters : true or false
+
+
+## Protect Handshake Message
+
+Optional API function that can be one way to handle the need to
+synchronize the DTLS record protection operations usage of nonce
+values to avoid reuse and replay protection. With this realization the
+nonce state is kept by the DTLS chunk function. When the handshake
+function needs to send a DTLS message, e.g. key_update, which uses
+epoch 2 or higher, it uses the DTLS chunk protection operation. The
+protected DTLS record is returned to the DTLS handshake
+implementation, which then sends it as SCTP user data.
+
+Request : Protect Handshake message
+
+Paramters :
+
+* SCTP Association
+
+* DCI
+
+* Restart indication
+
+* Epoch
+
+* Plain Text Message
+
+Reply: Protected DTLS record.
+
+
+## Deprotect Handshake Message
+
+Optional API function that can be one way to handle the need to
+synchronize the DTLS record protection operations usage of nonce
+values to avoid reuse and ensure replay protection. This funciton
+takes a protected DTLS record that the handshake has been received as
+SCTP user data using an Epoch of 2 or higher for this DTLS connection.
+The function attempts to decrypt, verify integrity and check replay
+protection and if successful return the plain text payload,
+alternatively indicate the invalidity of the payload.
+
+
+Request : Deprotect Handshake message
+
+Paramters :
+
+* SCTP Association
+
+* DCI
+
+* Restart indication
+
+* DTLS record
+
+Reply: Plain Text DTLS message or failure indicator
+
+# Implementation Considerations
+
+For each DTLS connection, there are certain crypto state infomration
+that needs to be handled thread safe to avoid nonce re-use and correct
+replay protection. This arises as the key materials for epoch 2 and higher
+are shared between the DTLS chunk and the DTLS handshake parts.
+
+This issue is primiarily for implementations of SCTP implementation
+and thus the DTLS chunk implementation reside in kernel space, and the
+DTLS handshake resides in user space. For user space implementations
+where both DTLS handshake messages and SCTP message protection can directly
+call the same DTLS implementation instance the issue is avoided.
+
+The abstract API {{abstract-api}} include a proposal for how to handle
+this challenge by using an API function call to protect the plain text
+message, and another for decrypting and verifying the integrity.
+
+It needs to be noted that DTLS handshake messages sent after DTLS
+connection establishment will be protected twice. First before being
+sent as SCTP user data, and then a second time as part of DATA Chunks
+in SCTP packets. The extra overhead is minimal as the number of these
+messages are very few. However, care needs to be take with the replay
+protection, as the when deprotecting the DTLS message that DTLS record
+sequence number will be lower than the latest received for an SCTP
+message.
+
 
 
 # IANA Considerations {#IANA-Consideration}
