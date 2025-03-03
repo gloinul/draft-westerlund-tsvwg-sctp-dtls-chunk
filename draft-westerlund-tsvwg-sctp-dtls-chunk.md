@@ -138,7 +138,7 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +--------------------+
-|               | |       DTLS 1.3     |  Keys, Messages
+|               | |       DTLS 1.3     |  Keys
 |      ULP      | |                    +<------------.
 |               | |   Key Management   |              |
 +---------------+-+---+----------------+            --+-- API
