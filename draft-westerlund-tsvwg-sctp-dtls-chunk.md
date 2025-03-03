@@ -1347,13 +1347,13 @@ that needs to be handled thread safe to avoid nonce re-use and correct
 replay protection. This arises as the key materials for epoch 2 and higher
 are shared between the DTLS chunk and the DTLS handshake parts.
 
-This issue is primiarily for implementations of SCTP implementation
-and thus the DTLS chunk implementation reside in kernel space, and the
+This issue is primarily for implementations of SCTP implementation
+and thus the DTLS chunk implementation resides in kernel space, and the
 DTLS handshake resides in user space. For user space implementations
 where both DTLS handshake messages and SCTP message protection can directly
 call the same DTLS implementation instance the issue is avoided.
 
-The abstract API {{abstract-api}} include a proposal for how to handle
+The abstract API {{abstract-api}} includes a proposal for how to handle
 this challenge by using an API function call to protect the plain text
 message, and another for decrypting and verifying the integrity.
 
@@ -1361,8 +1361,8 @@ It needs to be noted that DTLS handshake messages sent after DTLS
 connection establishment will be protected twice. First before being
 sent as SCTP user data, and then a second time as part of DATA Chunks
 in SCTP packets. The extra overhead is minimal as the number of these
-messages are very few. However, care needs to be take with the replay
-protection, as the when deprotecting the DTLS message that DTLS record
+messages are very limited. However, care needs to be take with the replay
+protection, as when deprotecting the DTLS message that DTLS record
 sequence number will be lower than the latest received for an SCTP
 message.
 
