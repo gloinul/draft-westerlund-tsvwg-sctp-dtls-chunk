@@ -619,10 +619,11 @@ Table of Contents
 
    Protection Solutions Indicator: array of 32 bits (unsigned
    integer)
-      The array has at least one element.  The value is set by default
-      to zero.  It uses the different bit-values to indicate that the
-      INIT contained an offer of the indiacted protection solutions.
-      Value 0x1 is used to indicate that one offered DTLS 1.3 Chunk.
+      The array has at least one element and a maximum of 32.  The value
+      is set by default to zero.  It uses the different bit-values to
+      indicate that the INIT contained an offer of the indiacted
+      protection solutions.  Value 0x1 is used to indicate that one
+      offered DTLS 1.3 Chunk.
 
    RFC-Editor Note: Please replace 0x4X with the actual chunk type value
    assigned by IANA and then remove this note.
@@ -1482,18 +1483,22 @@ Table of Contents
    available bit postion, especially avoiding to assign in the next 32
    bit position prior to having assigned all previous values.
 
-   +==========+===========+=================================+=========+
-   |      Bit | Solution  | Reference                       | Contact |
-   | Position | Name      |                                 |         |
-   +==========+===========+=================================+=========+
-   |        0 | DTLS 1.3  | RFC-TBD                         | Draft   |
-   |          | Chunk     |                                 | Authors |
-   +----------+-----------+---------------------------------+---------+
-   |        1 | SCTP-AUTH | draft-ietf-tsvwg-rfc4895-bis-02 | Draft   |
-   |          |           |                                 | Authors |
-   +----------+-----------+---------------------------------+---------+
+    +==========+============+=================================+=======+
+    |      Bit | Solution   | Reference                       |Contact|
+    | Position | Name       |                                 |       |
+    +==========+============+=================================+=======+
+    |        0 | DTLS 1.3   | RFC-TBD                         |Draft  |
+    |          | Chunk      |                                 |Authors|
+    +----------+------------+---------------------------------+-------+
+    |        1 | SCTP-AUTH  | draft-ietf-tsvwg-rfc4895-bis-02 |Draft  |
+    |          |            |                                 |Authors|
+    +----------+------------+---------------------------------+-------+
+    |   2-1023 | Available  |                                 |       |
+    |          | for        |                                 |       |
+    |          | Assignmnet |                                 |       |
+    +----------+------------+---------------------------------+-------+
 
-              Table 5: PVALID Protection Solution Indicators
+               Table 5: PVALID Protection Solution Indicators
 
    New entries are registered following the Specification Required
    policy as defined by [RFC8126].
@@ -1621,7 +1626,8 @@ Table of Contents
 
    The authors thank Michael Tüxen for his invaluable comments helping
    to cope with Association Restart, ASCONF handling and restructuring
-   the Protection Operator architecture.
+   the Protection Operator architecture.  We also like to thank Amanda
+   Baber with IANA for feedback on our IANA registry.
 
 14.  References
 

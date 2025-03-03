@@ -2224,7 +2224,7 @@ field in bytes plus 4.<a href="#section-5.2-6.6.1" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-5.2-6.7">Protection Solutions Indicator: array of 32 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-6.8">
-            <p id="section-5.2-6.8.1">The array has at least one element.
+            <p id="section-5.2-6.8.1">The array has at least one element and a maximum of 32.
 The value is set by default to zero. It uses the different
 bit-values to indicate that the INIT contained an offer of the
 indiacted protection solutions. Value 0x1 is used to indicate that
@@ -3614,6 +3614,12 @@ bit position prior to having assigned all previous values.<a href="#section-11.2
               <td class="text-left" rowspan="1" colspan="1">draft-ietf-tsvwg-rfc4895-bis-02</td>
               <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
             </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">2-1023</td>
+              <td class="text-left" rowspan="1" colspan="1">Available for Assignmnet</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
           </tbody>
         </table>
 </div>
@@ -3835,7 +3841,8 @@ solutions.<a href="#section-12.3-3" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-13-1">The authors thank Michael Tüxen for his invaluable comments
    helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Operator architecture.<a href="#section-13-1" class="pilcrow">¶</a></p>
+   restructuring the Protection Operator architecture. We also like
+   to thank Amanda Baber with IANA for feedback on our IANA registry.<a href="#section-13-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
