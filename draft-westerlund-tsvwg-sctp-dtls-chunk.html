@@ -18,11 +18,11 @@ prevent eavesdropping and detect tampering or message forgery.
        Applications using SCTP DTLS chunk can use all transport
 features provided by SCTP and its extensions but with some limitations. 
     " name="description">
-<meta content="xml2rfc 3.25.0" name="generator">
+<meta content="xml2rfc 3.28.0" name="generator">
 <meta content="draft-westerlund-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.25.0
-    Python 3.12.8
+  xml2rfc 3.28.0
+    Python 3.12.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -443,7 +443,7 @@ dl {
     margin-bottom: 0;
   }
 }
-dl > dt {
+dl:not(.dlNewline) > dt {
   float: left;
   margin-right: 2ch;
   min-width: 8ch;
@@ -1052,11 +1052,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCTP DTLS Chunk</td>
-<td class="right">January 2025</td>
+<td class="right">March 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 12 July 2025</td>
+<td class="center">Expires 4 September 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-08" class="published">8 January 2025</time>
+<time datetime="2025-03-03" class="published">3 March 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-12">12 July 2025</time></dd>
+<dd class="expires"><time datetime="2025-09-04">4 September 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1323,61 +1323,70 @@ features provided by SCTP and its extensions but with some limitations.<a href="
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.9">
                 <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.10">
+                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-protect-handshake-message" class="internal xref">Protect Handshake Message</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.11">
+                <p id="section-toc.1-1.9.2.11.1"><a href="#section-9.11" class="auto internal xref">9.11</a>. <a href="#name-deprotect-handshake-message" class="internal xref">Deprotect Handshake Message</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-protection-error-cause-code" class="internal xref">Protection Error Cause Codes Registry</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-pvalid-protection-solution-" class="internal xref">PVALID Protection Solution Indicators</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
-                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-sctp-chunk-types" class="internal xref">SCTP Chunk Types</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
-                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-sctp-chunk-parameter-types" class="internal xref">SCTP Chunk Parameter Types</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
-                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-sctp-error-cause-codes" class="internal xref">SCTP Error Cause Codes</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.6">
-                <p id="section-toc.1-1.10.2.6.1"><a href="#section-10.6" class="auto internal xref">10.6</a>.  <a href="#name-sctp-payload-protocol-ident" class="internal xref">SCTP Payload Protocol Identifier</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-implementation-consideratio" class="internal xref">Implementation Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-protection-error-cause-code" class="internal xref">Protection Error Cause Codes Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-aead-limit-considerations" class="internal xref">AEAD Limit Considerations</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-pvalid-protection-solution-" class="internal xref">PVALID Protection Solution Indicators</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
-                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-downgrade-attacks" class="internal xref">Downgrade Attacks</a></p>
+                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-sctp-chunk-types" class="internal xref">SCTP Chunk Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.4">
+                <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="auto internal xref">11.4</a>.  <a href="#name-sctp-chunk-parameter-types" class="internal xref">SCTP Chunk Parameter Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.5">
+                <p id="section-toc.1-1.11.2.5.1"><a href="#section-11.5" class="auto internal xref">11.5</a>.  <a href="#name-sctp-error-cause-codes" class="internal xref">SCTP Error Cause Codes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.6">
+                <p id="section-toc.1-1.11.2.6.1"><a href="#section-11.6" class="auto internal xref">11.6</a>.  <a href="#name-sctp-payload-protocol-ident" class="internal xref">SCTP Payload Protocol Identifier</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref">13.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-aead-limit-considerations" class="internal xref">AEAD Limit Considerations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
+                <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-downgrade-attacks" class="internal xref">Downgrade Attacks</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
+                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="auto internal xref">14.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
+                <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="auto internal xref">14.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1464,7 +1473,7 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).<a href="#se
                 <path d="M 440,80 L 440,224" fill="none" stroke="black"></path>
                 <path d="M 8,32 L 136,32" fill="none" stroke="black"></path>
                 <path d="M 152,32 L 320,32" fill="none" stroke="black"></path>
-                <path d="M 320,64 L 424,64" fill="none" stroke="black"></path>
+                <path d="M 328,64 L 424,64" fill="none" stroke="black"></path>
                 <path d="M 8,96 L 320,96" fill="none" stroke="black"></path>
                 <path d="M 424,96 L 456,96" fill="none" stroke="black"></path>
                 <path d="M 336,128 L 352,128" fill="none" stroke="black"></path>
@@ -1483,6 +1492,7 @@ chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).<a href="#se
                 <path d="M 424,64 C 432.83064,64 440,71.16936 440,80" fill="none" stroke="black"></path>
                 <path d="M 424,240 C 432.83064,240 440,232.83064 440,224" fill="none" stroke="black"></path>
                 <polygon class="arrowhead" points="416,240 404,234.4 404,245.6" fill="black" transform="rotate(180,408,240)"></polygon>
+                <polygon class="arrowhead" points="336,64 324,58.4 324,69.6" fill="black" transform="rotate(180,328,64)"></polygon>
                 <polygon class="arrowhead" points="224,240 212,234.4 212,245.6" fill="black" transform="rotate(0,216,240)"></polygon>
                 <polygon class="arrowhead" points="200,240 188,234.4 188,245.6" fill="black" transform="rotate(180,192,240)"></polygon>
                 <g class="text">
@@ -1580,9 +1590,14 @@ Management sends and receives its own data via the SCTP User Level
 interface.  Key Management's own data are distinguished from any other
 data by means of a dedicated PPID using the value 4242 (see
 <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">Once the Key Management has established the DTLS 1.3 connection,
-it can set the Protection Operator for User Data encryption/decription
-via the API shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Once the Key Management has established the DTLS 1.3 connection, it
+can set the Protection Operator for User Data encryption/decription
+via the API shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>. At this stage the
+Key Management functions usage of protection operation on it's DTLS
+plain text messages needs to be synchronized with the DTLS chunk's
+protection operations to avoid nonce re-usage and replay
+protection. Alternatively the key management can use the DTLS chunk's
+session instance to protect it's messages.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
 chunks until the Association has reached the PROTECTED state
@@ -2452,7 +2467,7 @@ cause field in the ERROR Chunk (A maximum of 32764).<a href="#section-6.2-5.6.1"
 <p id="section-6.2-6">Editor's Note: Please replace TBA9 above with what is assigned by IANA.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
 <p id="section-6.2-7">Below a number of defined Error Causes (Extra Cause above) are
 defined, additional causes can be registered with IANA following the
-rules in <a href="#IANA-Extra-Cause" class="auto internal xref">Section 10.1</a>.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+rules in <a href="#IANA-Extra-Cause" class="auto internal xref">Section 11.1</a>.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
 <div id="ekeyhandshake">
 <section id="section-6.2.1">
           <h4 id="name-error-during-protection-han">
@@ -2644,7 +2659,7 @@ SHOULD be created.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
 <p id="section-7.1.1-1">An initiator of an SCTP association may want to offer multiple
 different security solutions in addition to DTLS 1.3 chunks for the
 SCTP association. This can be done but need to consider the downgrade
-attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Section 11.3</a>).<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
+attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Section 12.3</a>).<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1.1-2">The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
 includes <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> or more likely its replacement. This will result
@@ -3358,49 +3373,143 @@ more suitable value depending on the use case should be considered.<a href="#sec
 <p id="section-9.9-6">Parameters : true or false<a href="#section-9.9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="protect-handshake-message">
+<section id="section-9.10">
+        <h3 id="name-protect-handshake-message">
+<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-protect-handshake-message" class="section-name selfRef">Protect Handshake Message</a>
+        </h3>
+<p id="section-9.10-1">Optional API function that can be one way to handle the need to
+synchronize the DTLS record protection operations usage of nonce
+values to avoid reuse and replay protection. With this realization the
+nonce state is kept by the DTLS chunk function. When the handshake
+function needs to send a DTLS message, e.g. key_update, which uses
+DTLS epoch=3 or higher, it uses the DTLS chunk protection operation. The
+protected DTLS record is returned to the DTLS handshake
+implementation, which then sends it as SCTP user data.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
+<p id="section-9.10-2">Request : Protect Handshake message<a href="#section-9.10-2" class="pilcrow">¶</a></p>
+<p id="section-9.10-3">Paramters :<a href="#section-9.10-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.10-4.1">
+            <p id="section-9.10-4.1.1">SCTP Association<a href="#section-9.10-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.2">
+            <p id="section-9.10-4.2.1">DCI<a href="#section-9.10-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.3">
+            <p id="section-9.10-4.3.1">Restart indication<a href="#section-9.10-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.4">
+            <p id="section-9.10-4.4.1">Epoch<a href="#section-9.10-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.5">
+            <p id="section-9.10-4.5.1">Plain Text Message<a href="#section-9.10-4.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.10-5">Reply: Protected DTLS record.<a href="#section-9.10-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="deprotect-handshake-message">
+<section id="section-9.11">
+        <h3 id="name-deprotect-handshake-message">
+<a href="#section-9.11" class="section-number selfRef">9.11. </a><a href="#name-deprotect-handshake-message" class="section-name selfRef">Deprotect Handshake Message</a>
+        </h3>
+<p id="section-9.11-1">Optional API function that can be one way to handle the need to
+synchronize the DTLS record protection operations usage of nonce
+values to avoid reuse and ensure replay protection. This funciton
+takes a protected DTLS record that the handshake has been received as
+SCTP user data using an DTLS epoch= 3 or higher for this DTLS connection.
+The function attempts to decrypt, verify integrity and check replay
+protection and if successful return the plain text payload,
+alternatively indicate the invalidity of the payload.<a href="#section-9.11-1" class="pilcrow">¶</a></p>
+<p id="section-9.11-2">Request : Deprotect Handshake message<a href="#section-9.11-2" class="pilcrow">¶</a></p>
+<p id="section-9.11-3">Paramters :<a href="#section-9.11-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.11-4.1">
+            <p id="section-9.11-4.1.1">SCTP Association<a href="#section-9.11-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.11-4.2">
+            <p id="section-9.11-4.2.1">DCI<a href="#section-9.11-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.11-4.3">
+            <p id="section-9.11-4.3.1">Restart indication<a href="#section-9.11-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.11-4.4">
+            <p id="section-9.11-4.4.1">DTLS record<a href="#section-9.11-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.11-5">Reply: Plain Text DTLS message or failure indicator<a href="#section-9.11-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="implementation-considerations">
+<section id="section-10">
+      <h2 id="name-implementation-consideratio">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-implementation-consideratio" class="section-name selfRef">Implementation Considerations</a>
+      </h2>
+<p id="section-10-1">For each DTLS connection, there are certain crypto state infomration
+that needs to be handled thread safe to avoid nonce re-use and correct
+replay protection. This arises as the key materials for DTLS epoch=3 and higher
+are shared between the DTLS chunk and the DTLS handshake parts.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-2">This issue is primarily for implementations of SCTP implementation
+and thus the DTLS chunk implementation resides in kernel space, and the
+DTLS handshake resides in user space. For user space implementations
+where both DTLS handshake messages and SCTP message protection can directly
+call the same DTLS implementation instance the issue is avoided.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-3">The abstract API <a href="#abstract-api" class="auto internal xref">Section 9</a> includes a proposal for how to handle
+this challenge by using an API function call to protect the plain text
+message, and another for decrypting and verifying the integrity.<a href="#section-10-3" class="pilcrow">¶</a></p>
+<p id="section-10-4">It needs to be noted that DTLS handshake messages sent after DTLS
+connection establishment will be protected twice. First before being
+sent as SCTP user data, and then a second time as part of DATA Chunks
+in SCTP packets. The extra overhead is minimal as the number of these
+messages are very limited. However, care needs to be take with the replay
+protection, as when deprotecting the DTLS message that DTLS record
+sequence number will be lower than the latest received for an SCTP
+message.<a href="#section-10-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="IANA-Consideration">
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-iana-considerations">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-10-1">This document defines two new registries in the Stream Control
+<p id="section-11-1">This document defines two new registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group that IANA
 maintains. Theses registries are for the extra cause codes for
 protection related errors and the Protection Options identifiers for
 the PVALID chunk. It also adds registry entries into several other
 registries in the Stream Control Transmission Protocol (SCTP)
-Parameters group:<a href="#section-10-1" class="pilcrow">¶</a></p>
+Parameters group:<a href="#section-11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-10-2.1">
-          <p id="section-10-2.1.1">Two new SCTP Chunk Types<a href="#section-10-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-11-2.1">
+          <p id="section-11-2.1.1">Two new SCTP Chunk Types<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-2.2">
-          <p id="section-10-2.2.1">One new SCTP Chunk Parameter Type<a href="#section-10-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-11-2.2">
+          <p id="section-11-2.2.1">One new SCTP Chunk Parameter Type<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-2.3">
-          <p id="section-10-2.3.1">One new SCTP Error Cause Codes<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-11-2.3">
+          <p id="section-11-2.3.1">One new SCTP Error Cause Codes<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-10-3">And finally the update of one registred SCTP Paylod Protocol
-Identifier.<a href="#section-10-3" class="pilcrow">¶</a></p>
+<p id="section-11-3">And finally the update of one registred SCTP Paylod Protocol
+Identifier.<a href="#section-11-3" class="pilcrow">¶</a></p>
 <div id="IANA-Extra-Cause">
-<section id="section-10.1">
+<section id="section-11.1">
         <h3 id="name-protection-error-cause-code">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-protection-error-cause-code" class="section-name selfRef">Protection Error Cause Codes Registry</a>
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-protection-error-cause-code" class="section-name selfRef">Protection Error Cause Codes Registry</a>
         </h3>
-<p id="section-10.1-1">IANA is requested to create a new registry called "Protection Error
+<p id="section-11.1-1">IANA is requested to create a new registry called "Protection Error
 Cause Codes". This registry is part of the Stream Control Transmission
-Protocol (SCTP) Parameters grouping.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
-<p id="section-10.1-2">The purpose of this registry is to enable identification of different
+Protocol (SCTP) Parameters grouping.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<p id="section-11.1-2">The purpose of this registry is to enable identification of different
 protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
 be assigned by IANA a unique 16-bit unsigned integer
 identifier. Values 0-65534 are available for assignment. Value 65535
 is reserved for future extension. The proposed general form of the
-registry is depicted below in <a href="#iana-protection-error-cause" class="auto internal xref">Table 4</a>.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
+registry is depicted below in <a href="#iana-protection-error-cause" class="auto internal xref">Table 4</a>.<a href="#section-11.1-2" class="pilcrow">¶</a></p>
 <span id="name-protection-error-cause-code-2"></span><div id="iana-protection-error-cause">
 <table class="center" id="table-4">
           <caption>
@@ -3455,29 +3564,29 @@ registry is depicted below in <a href="#iana-protection-error-cause" class="auto
           </tbody>
         </table>
 </div>
-<p id="section-10.1-4">New entries are registered following the Specification Required policy
-as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-10.1-4" class="pilcrow">¶</a></p>
+<p id="section-11.1-4">New entries are registered following the Specification Required policy
+as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-11.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pvalid-protection-solution-indicators">
-<section id="section-10.2">
+<section id="section-11.2">
         <h3 id="name-pvalid-protection-solution-">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-pvalid-protection-solution-" class="section-name selfRef">PVALID Protection Solution Indicators</a>
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-pvalid-protection-solution-" class="section-name selfRef">PVALID Protection Solution Indicators</a>
         </h3>
-<p id="section-10.2-1">IANA is requested to create a new registry called "PVALID Protection
+<p id="section-11.2-1">IANA is requested to create a new registry called "PVALID Protection
 Solution Indicators". This regsitry is part of the of the Stream
-Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
-<p id="section-10.2-2">The purpose of this registry is to assign indicator bits for any
+Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<p id="section-11.2-2">The purpose of this registry is to assign indicator bits for any
 security solution that could be offered as an alternative to DTLS
 chunk or themselves want to use the PVALID chunk mechanism to detect
 downgrade attacks. Any security solution that is offered through a
 parameter exchange during the SCTP handshake are potential to be
-included here.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
-<p id="section-10.2-3">Each entry will be assigned a bit-postion starting from the most
+included here.<a href="#section-11.2-2" class="pilcrow">¶</a></p>
+<p id="section-11.2-3">Each entry will be assigned a bit-postion starting from the most
 significant first bit (bit 0) in the PVALID Protection Solutions
 Indicator field. Each application should be assigned the next
 available bit postion, especially avoiding to assign in the next 32
-bit position prior to having assigned all previous values.<a href="#section-10.2-3" class="pilcrow">¶</a></p>
+bit position prior to having assigned all previous values.<a href="#section-11.2-3" class="pilcrow">¶</a></p>
 <span id="name-pvalid-protection-solution-i"></span><div id="iana-pvalid-psi">
 <table class="center" id="table-5">
           <caption>
@@ -3508,20 +3617,20 @@ bit position prior to having assigned all previous values.<a href="#section-10.2
           </tbody>
         </table>
 </div>
-<p id="section-10.2-5">New entries are registered following the Specification Required policy
-as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-10.2-5" class="pilcrow">¶</a></p>
+<p id="section-11.2-5">New entries are registered following the Specification Required policy
+as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-11.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-chunk-types">
-<section id="section-10.3">
+<section id="section-11.3">
         <h3 id="name-sctp-chunk-types">
-<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-sctp-chunk-types" class="section-name selfRef">SCTP Chunk Types</a>
+<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-sctp-chunk-types" class="section-name selfRef">SCTP Chunk Types</a>
         </h3>
-<p id="section-10.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-11.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Types" registry, IANA is requested to add the two new entries
 depicted below in in <a href="#iana-chunk-types" class="auto internal xref">Table 6</a> with a reference to this
 document. The registry at time of writing was available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1<a href="#section-11.3-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-types-registered"></span><div id="iana-chunk-types">
 <table class="center" id="table-6">
           <caption>
@@ -3552,16 +3661,16 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-chunk-parameter-types">
-<section id="section-10.4">
+<section id="section-11.4">
         <h3 id="name-sctp-chunk-parameter-types">
-<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-sctp-chunk-parameter-types" class="section-name selfRef">SCTP Chunk Parameter Types</a>
+<a href="#section-11.4" class="section-number selfRef">11.4. </a><a href="#name-sctp-chunk-parameter-types" class="section-name selfRef">SCTP Chunk Parameter Types</a>
         </h3>
-<p id="section-10.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-11.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Parameter Types" registry, IANA is requested to add the new
 entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 7</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-11.4-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-type-parameters-r"></span><div id="iana-chunk-parameter-types">
 <table class="center" id="table-7">
           <caption>
@@ -3587,16 +3696,16 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-error-cause-codes">
-<section id="section-10.5">
+<section id="section-11.5">
         <h3 id="name-sctp-error-cause-codes">
-<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-sctp-error-cause-codes" class="section-name selfRef">SCTP Error Cause Codes</a>
+<a href="#section-11.5" class="section-number selfRef">11.5. </a><a href="#name-sctp-error-cause-codes" class="section-name selfRef">SCTP Error Cause Codes</a>
         </h3>
-<p id="section-10.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-11.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
 entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 8</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-10.5-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-11.5-1" class="pilcrow">¶</a></p>
 <span id="name-error-cause-codes-parameter"></span><div id="iana-error-cause-codes">
 <table class="center" id="table-8">
           <caption>
@@ -3622,16 +3731,16 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="sctp-payload-protocol-identifier">
-<section id="section-10.6">
+<section id="section-11.6">
         <h3 id="name-sctp-payload-protocol-ident">
-<a href="#section-10.6" class="section-number selfRef">10.6. </a><a href="#name-sctp-payload-protocol-ident" class="section-name selfRef">SCTP Payload Protocol Identifier</a>
+<a href="#section-11.6" class="section-number selfRef">11.6. </a><a href="#name-sctp-payload-protocol-ident" class="section-name selfRef">SCTP Payload Protocol Identifier</a>
         </h3>
-<p id="section-10.6-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
+<p id="section-11.6-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
 entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a> with a
 reference to this document. The registry at time of writing was
 available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-10.6-1" class="pilcrow">¶</a></p>
+https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-11.6-1" class="pilcrow">¶</a></p>
 <span id="name-protection-operator-protoco"></span><div id="iana-payload-protection-id">
 <table class="center" id="table-9">
           <caption>
@@ -3659,53 +3768,53 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </section>
 </div>
 <div id="Security-Considerations">
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-security-considerations">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-11-1">All the security and privacy considerations of the security protocol
-used as the Protection Operator applies.<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">DTLS replay protection MUST NOT be turned off.<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-12-1">All the security and privacy considerations of the security protocol
+used as the Protection Operator applies.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">DTLS replay protection MUST NOT be turned off.<a href="#section-12-2" class="pilcrow">¶</a></p>
 <div id="privacy-considerations">
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-privacy-considerations">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
         </h3>
-<p id="section-11.1-1">Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
+<p id="section-12.1-1">Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
 port are fixed for each direction. Advanced privacy features such
 as changing Connection ID and sequence number encryption might
-therefore have limited effect.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+therefore have limited effect.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="aead-limit-considerations">
-<section id="section-11.2">
+<section id="section-12.2">
         <h3 id="name-aead-limit-considerations">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-aead-limit-considerations" class="section-name selfRef">AEAD Limit Considerations</a>
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-aead-limit-considerations" class="section-name selfRef">AEAD Limit Considerations</a>
         </h3>
-<p id="section-11.2-1">Section 4.5.3 of <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> defines limits on the number of records
+<p id="section-12.2-1">Section 4.5.3 of <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> defines limits on the number of records
 q that can be protected using the same key as well as limits on the
 number of received packets v that fail authentication with each key.
 To adhere to these limits the key management function can
 periodically poll the DTLS protection operation function to see
 when a limit have been reached or is closed to being reached.
-Instead of periodic polling, a callback can be used.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+Instead of periodic polling, a callback can be used.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="Downgrade-Attacks">
-<section id="section-11.3">
+<section id="section-12.3">
         <h3 id="name-downgrade-attacks">
-<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-downgrade-attacks" class="section-name selfRef">Downgrade Attacks</a>
+<a href="#section-12.3" class="section-number selfRef">12.3. </a><a href="#name-downgrade-attacks" class="section-name selfRef">Downgrade Attacks</a>
         </h3>
-<p id="section-11.3-1">The pvalid chunk provides a mechanism for preventing downgrade attacks
+<p id="section-12.3-1">The pvalid chunk provides a mechanism for preventing downgrade attacks
 that detects downgrading attempts between protection solutions and
 terminates the association. The chosen protection solution is the same
-as if the peers had been communicating in the absence of an attacker.<a href="#section-11.3-1" class="pilcrow">¶</a></p>
-<p id="section-11.3-2">The initial handshake is verified before the
+as if the peers had been communicating in the absence of an attacker.<a href="#section-12.3-1" class="pilcrow">¶</a></p>
+<p id="section-12.3-2">The initial handshake is verified before the
 DTLS Chunk is considered protected, thus no user data are sent before
-validation.<a href="#section-11.3-2" class="pilcrow">¶</a></p>
-<p id="section-11.3-3">The downgrade protection is only as strong as the weakest of the
+validation.<a href="#section-12.3-2" class="pilcrow">¶</a></p>
+<p id="section-12.3-3">The downgrade protection is only as strong as the weakest of the
 supported protection solutions as an active attacker can trick the
 endpoints to negotiate the weakest protection solution and then
 modify the weakly protected pvalid chunks to deceive the endpoints
@@ -3714,30 +3823,30 @@ is similar to the downgrade protection in TLS 1.3 specified in
 Section 4.1.3. of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> where downgrade protection is not
 provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
 to only support a limited set of strongly profiled protection
-solutions.<a href="#section-11.3-3" class="pilcrow">¶</a></p>
+solutions.<a href="#section-12.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-12">
+<section id="section-13">
       <h2 id="name-acknowledgments">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-12-1">The authors thank Michael Tüxen for his invaluable comments
+<p id="section-13-1">The authors thank Michael Tüxen for his invaluable comments
    helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Operator architecture.<a href="#section-12-1" class="pilcrow">¶</a></p>
+   restructuring the Protection Operator architecture.<a href="#section-13-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-13">
+<section id="section-14">
       <h2 id="name-references">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-13.1">
+<section id="section-14.1">
         <h3 id="name-normative-references">
-<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC4895">[RFC4895]</dt>
@@ -3780,9 +3889,9 @@ solutions.<a href="#section-11.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-13.2">
+<section id="section-14.2">
         <h3 id="name-informative-references">
-<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC8446">[RFC8446]</dt>
