@@ -3383,7 +3383,7 @@ synchronize the DTLS record protection operations usage of nonce
 values to avoid reuse and replay protection. With this realization the
 nonce state is kept by the DTLS chunk function. When the handshake
 function needs to send a DTLS message, e.g. key_update, which uses
-epoch 2 or higher, it uses the DTLS chunk protection operation. The
+DTLS epoch=3 or higher, it uses the DTLS chunk protection operation. The
 protected DTLS record is returned to the DTLS handshake
 implementation, which then sends it as SCTP user data.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
 <p id="section-9.10-2">Request : Protect Handshake message<a href="#section-9.10-2" class="pilcrow">¶</a></p>
@@ -3417,7 +3417,7 @@ implementation, which then sends it as SCTP user data.<a href="#section-9.10-1" 
 synchronize the DTLS record protection operations usage of nonce
 values to avoid reuse and ensure replay protection. This funciton
 takes a protected DTLS record that the handshake has been received as
-SCTP user data using an Epoch of 2 or higher for this DTLS connection.
+SCTP user data using an DTLS epoch= 3 or higher for this DTLS connection.
 The function attempts to decrypt, verify integrity and check replay
 protection and if successful return the plain text payload,
 alternatively indicate the invalidity of the payload.<a href="#section-9.11-1" class="pilcrow">¶</a></p>
@@ -3449,7 +3449,7 @@ alternatively indicate the invalidity of the payload.<a href="#section-9.11-1" c
       </h2>
 <p id="section-10-1">For each DTLS connection, there are certain crypto state infomration
 that needs to be handled thread safe to avoid nonce re-use and correct
-replay protection. This arises as the key materials for epoch 2 and higher
+replay protection. This arises as the key materials for DTLS epoch=3 and higher
 are shared between the DTLS chunk and the DTLS handshake parts.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">This issue is primarily for implementations of SCTP implementation
 and thus the DTLS chunk implementation resides in kernel space, and the
