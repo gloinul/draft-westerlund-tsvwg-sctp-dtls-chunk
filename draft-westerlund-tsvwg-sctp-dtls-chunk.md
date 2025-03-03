@@ -561,7 +561,7 @@ Chunk Length: 16 bits (unsigned integer)
   field in bytes plus 4.
 
 Protection Solutions Indicator: array of 32 bits (unsigned integer)
-: The array has at least one element.
+: The array has at least one element and a maximum of 32.
   The value is set by default to zero. It uses the different
   bit-values to indicate that the INIT contained an offer of the
   indiacted protection solutions. Value 0x1 is used to indicate that
@@ -1349,6 +1349,7 @@ bit position prior to having assigned all previous values.
 | Bit Position | Solution Name | Reference | Contact |
 | 0 | DTLS 1.3 Chunk | RFC-TBD | Draft Authors |
 | 1 | SCTP-AUTH | draft-ietf-tsvwg-rfc4895-bis-02 | Draft Authors |
+| 2-1023 | Available for Assignmnet | | |
 {: #iana-pvalid-psi title="PVALID Protection Solution Indicators" cols="r l l l"}
 
 New entries are registered following the Specification Required policy
