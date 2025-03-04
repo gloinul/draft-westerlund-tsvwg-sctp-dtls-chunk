@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-02T01:03:55.388298+00:00",
+  "timestamp": "2025-03-04T01:01:22.635710+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -797,6 +797,90 @@
           "body": "",
           "createdAt": "2024-10-21T12:20:48Z",
           "updatedAt": "2024-10-21T12:20:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOKszxDc6NIXq7",
+      "title": "Added a limit to PVALID of no more than 32 four\u2026",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/20",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "\u2026-byte words, i.e. a maximum of 1024 possible solutions can be indicated. This addresses issue #19 ",
+      "createdAt": "2025-03-03T10:37:33Z",
+      "updatedAt": "2025-03-03T16:35:27Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "911576c0af0920a516e9cf8bbf6cf628431bb621",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "gloinul-issue-19",
+      "headRefOid": "2eed1415393773413aa9a1046fb0d17064ce8d78",
+      "closedAt": "2025-03-03T16:35:27Z",
+      "mergedAt": "2025-03-03T16:35:26Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "4ec80f96b00b8c7e43e1bcac049dce09ba0af5c2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6eLbpe",
+          "commit": {
+            "abbreviatedOid": "2eed141"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T11:03:20Z",
+          "updatedAt": "2025-03-03T11:03:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOKszxDc6NJzAV",
+      "title": "Describing implementation challenges with key related state between chunk and handshake protection operations. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/21",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-03T13:28:41Z",
+      "updatedAt": "2025-03-03T16:35:12Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "911576c0af0920a516e9cf8bbf6cf628431bb621",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "mw-edits-122",
+      "headRefOid": "a7811649e8ee08e0152d7992558a42143eb6c408",
+      "closedAt": "2025-03-03T16:35:12Z",
+      "mergedAt": "2025-03-03T16:35:12Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "f12cf2ccbe2bec2bce6c4685e2c48edf5ac7085b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6eM8nB",
+          "commit": {
+            "abbreviatedOid": "cf41308"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "There are a few typos:\r\nLine 1350 : primiarily --> primarily \r\n1351 : reside --> resides\r\n1356 : include --> includes\r\n1364 : are very few --> is very limited\r\n1365 : \"the when\" --> when\r\n ",
+          "createdAt": "2025-03-03T13:54:34Z",
+          "updatedAt": "2025-03-03T13:54:34Z",
           "comments": []
         }
       ]
