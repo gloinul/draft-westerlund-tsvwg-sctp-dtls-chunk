@@ -347,10 +347,10 @@ that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
 
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS connections, those connection will be
-identified in the DTLS chunk with DCIs with the R (restart) bit set
+and maintain dedicated DTLS Keys, those connection will be
+identified in the DTLS chunk with the R (restart) bit set
 (see {{DTLS-chunk}}).  Both SCTP Endpoints shall ensure that
-Restart DTLS connections and related keys are preserved for supporting
+Restart DTLS keys are preserved for supporting
 the SCTP Restart use case.
 
 In order to be available for SCTP Restart purposes, the Restart DTLS
@@ -367,13 +367,11 @@ Restart procedure to be used, for instance a crash of the SCTP stack.
 The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
 whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
 using the keying material for the restart DTLS connection, that is the
-DTLS Restart Connection and its DCI.
+DTLS Restart Connection.
 
-A Restart DCI is identified by having the Restart Indicator bit set in
+A Restart is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
-There's exactly one active Restart DCI at a time, the newest. Whereas
-a number of Restart DTLS connection MAY exist at the same time with
-the purpose of replace the aging active Restart DTLS connection.
+There's exactly one active Restart Key at a time, the newest.
 
 
 ~~~~~~~~~~~ aasvg
@@ -399,12 +397,11 @@ the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
 and COOCKIE-ACK by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.
 
-A restarted SCTP Association SHALL use the Restart DCI, thus the
-Restart DTLS connection, for User Traffic until a new traffic DTLS
-connection will be available.  The implementors SHOULD initiate two
-new DTLS connection as soon as possible, one as replacement restart
-DCI, the other as a new traffic DCI, so that the time when no Restart
-DCI are available is kept to a minimum.
+A restarted SCTP Association SHALL use the Restart Key, for User Traffic
+until a new traffic DTLS Key will be available.
+The implementors SHOULD initiate a new DTLS connection as soon as possible,
+and derive the traffic and restart keys so that the time when no Restart
+Key is available is kept to a minimum.
 
 # New Parameter Type {#new-parameter-type}
 
@@ -476,7 +473,7 @@ payload of a plain SCTP packet.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Type = 0x4x   |reserved |R|DCI|         Chunk Length          |
+| Type = 0x4x   | reserved    |R|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -487,7 +484,7 @@ payload of a plain SCTP packet.
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure"}
 
-reserved: 5 bits
+reserved: 7 bits
 
 : Reserved bits for future use. Sender MUST set these bits to 0 and
   MUST be ignored on reception.
@@ -495,19 +492,7 @@ reserved: 5 bits
 R: 1 bit (boolean)
 
 : Restart indicator. If this bit is set this DTLS chunk is protected
-  with by an restart DTLS Connection with the index indicated by the
-  DCI. If not set, then a traffic DCI is indicated.
-
-DCI: 2 bits (unsigned integer)
-
-: DTLS Connection Index is the lower two bits of an DTLS Connection
-   Index counter for the traffic or restart DTLS connection index.
-   This is a counter implemented in DTLS in
-   SCTP that is used to identify which DTLS connection instance that
-   is capable of processing any received packet or DTLS message over
-   an user message. This counter is recommended to be the lower part
-   of a larger variable.
-   DCI is unrelated to the DTLS Connection ID (CID) {{RFC9147}}.
+  with by an restart DTLS Key.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
@@ -746,9 +731,8 @@ continues until it has reached the ESTABLISHED state. However, before
 the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
 states needs to be passed. First DTLS Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
-procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, or
-through other methods that results in at least one DCI has
-initialized state. When that has been accomplished one
+procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+When that has been accomplished one
 enters the VALIDATION state where one validates the exchange of the
 DTLS 1.3 Chunk Protected Association Parameter and any alternative
 protection solutions. If that is successful one enters the PROTECTED
@@ -963,11 +947,12 @@ chunks and DTLS chunks follows the rules defined below:
   accepted and handled according to section 4 of {{RFC9260}}.
 
 - If an SCTP restart is occurring there are exception rules to the
-  above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
-  DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
+  above. The INIT, INIT-ACK, COOKIE-ECHO and COOKIE-ACK SHALL be
+  sent protected by DTLS chunk using a restart Key.
+  The DTLS chunk with restart Key is
   continuning to protect any SCTP chunks sent while being in SCTP
   state ESTABLISHED, VALIDATION and PROTECTED, until a newely
-  established traffic DCI are ready to be used instead to protect
+  established traffic Key is ready to be used instead to protect
   future SCTP chunks.
 
 ~~~~~~~~~~~ aasvg
@@ -1075,8 +1060,7 @@ Parameters : list of cipher suits
 ## Establish Client Write Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
-corresponding key materials. Which has been used are explicitly
-indicated in the DCI field.
+corresponding key materials.
 
 The following information needs to be provided when setting Client Write (transmit) Keying material:
 
@@ -1087,11 +1071,8 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-* DCI:
-: The DTLS connection index value to establish (or overwrite)
-
 * Restart indication:
-: A bit indicating wheter the DCI is for restart purposes
+: A bit indicating wheter the Key is for restart purposes
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
@@ -1100,7 +1081,7 @@ Paramters :
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
+  The cipher suite is fixed for a (SCTP Assocation, Key) pair.
 
 * Write Key and IV:
 
@@ -1116,8 +1097,7 @@ Reply : Established or Failed
 ## Establish Server Write Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
-corresponding key materials. Which has been used are explicitly
-indicated in the DCI field.
+corresponding key materials.
 
 The following information needs to be provided when setting Server Write (transmit) Keying material:
 
@@ -1128,11 +1108,8 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-* DCI:
-: The DTLS connection index value to establish (or overwrite)
-
 * Restart indication:
-: A bit indicating wheter the DCI is for restart purposes
+: A bit indicating wheter the Key is for restart purposes
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
@@ -1141,7 +1118,7 @@ Paramters :
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
+  The cipher suite is fixed for a (SCTP Assocation, Key) pair.
 
 * Write Key and IV:
 
@@ -1157,15 +1134,13 @@ Reply : Established or Failed
 ## Destroy Client Write Keying Material
 
 A function to destroy the Client Write (transmit) keying material for a given epoch for a given
-DCI for a given SCTP Association.
+Key for a given SCTP Association.
 
 Request : Destroy client write key and IV
 
 Paramters :
 
 * SCTP Association
-
-* DCI
 
 * Restart indication
 
@@ -1178,15 +1153,13 @@ Parameters : true or false
 ## Destroy Server Write Keying Material
 
 A function to destroy the Server Write (transmit) keying material for a given epoch for a given
-DCI for a given SCTP Association.
+Key for a given SCTP Association.
 
 Request : Destroy server write key and IV
 
 Paramters :
 
 * SCTP Association
-
-* DCI
 
 * Restart indication
 
@@ -1196,22 +1169,20 @@ Reply: Destroyed
 
 Parameters : true or false
 
-## Set DCI to Use
+## Set Key to Use
 
-Set which key context (DCI) to use to protect the future SCTP packets sent by the
+Set which key to use to protect the future SCTP packets sent by the
 SCTP Association.
 
-Request : Set DCI used
+Request : Set Key used
 
 Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
 
-Reply: DCI set
+Reply: Key set
 
 Parameters : true or false
 
@@ -1225,8 +1196,6 @@ Request : Get q
 Paramters :
 
 * SCTP Association
-
-* DCI
 
 * Restart indication
 
@@ -1246,8 +1215,6 @@ Request : Get v
 Paramters :
 
 * SCTP Association
-
-* DCI
 
 * Restart indication
 
@@ -1272,8 +1239,6 @@ more suitable value depending on the use case should be considered.
 Request : Configure Replay Protection
 
 Paramters :
-
-* DCI
 
 * Restart indication
 
@@ -1303,8 +1268,6 @@ Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
 
 * Epoch
@@ -1331,8 +1294,6 @@ Request : Deprotect Handshake message
 Paramters :
 
 * SCTP Association
-
-* DCI
 
 * Restart indication
 
