@@ -124,7 +124,6 @@ features provided by SCTP and its extensions but with some limitations.
 # Overview
 
 ## Protocol Overview {#protocol-overview}
-
 The DTLS chunk is defined as a method for secure and confidential
 transfer for SCTP packets.  This is implemented inside the SCTP
 protocol, in a sublayer between the SCTP common header handling and
@@ -174,8 +173,7 @@ whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
 initial SCTP handshake, DTLS handshake, the SCTP common
-header, the SCTP DTLS chunk header, the INIT and INIT-ACK of an SCTP
-association restart, and the SHUTDOWN-COMPLETE chunk.
+header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
@@ -342,7 +340,7 @@ during an Association lifetime as described in {{RFC9260}} section 5.2
 with the purpose of achieving a Restart of the current Association.
 
 The SCTP Restart procedure is defined to maintain the security
-characteristics of a SCTP Association using DTLS Chunk, this requires
+characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
 
@@ -353,21 +351,21 @@ identified in the DTLS chunk with the R (restart) bit set
 Restart DTLS keys are preserved for supporting
 the SCTP Restart use case.
 
-In order to be available for SCTP Restart purposes, the Restart DTLS
-connection must be kept in a well-known state so that both SCTP
+In order to be available for SCTP Restart purposes, DTLS Chunk uses
+a dedicated Key that must be kept in a well-known state so that both SCTP
 Endpoints are aware of the DTLS sequence numbers and replay window. An
-SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS connection for any
+SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS Key for any
 other use case than SCTP Restart.
 
-The DTLS Restart Connections, the related key materials, the
+The DTLS Restart Key, the related epoch materials, the
 information related to the sequence numbers and replay window SHALL be
 stored in a safe way that survives the events that are causing SCTP
 Restart procedure to be used, for instance a crash of the SCTP stack.
 
-The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection, that is the
-DTLS Restart Connection.
+The SCTP Restart handshakes INIT/INIT-ACK, COOCKIE-ECHO/COOKIE-ACK
+exactly as in legacy SCTP Restart case even though those Chunks SHALL be
+sent as DTLS chunk protected using the keying material for the SCTP
+Restart case.
 
 A Restart is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
@@ -378,12 +376,12 @@ There's exactly one active Restart Key at a time, the newest.
 
 Initiator                                     Responder
     |                                             | -.
-    +--------------------[INIT]------------------>|   | Plain SCTP
-    |<-----------------[INIT-ACK]-----------------+   +-----------
-    |                                             | -'
-    |                                             | -.
-    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Encrypted
-    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +----------
+    +--------------------[INIT]------------------>|   |
+    |<-----------------[INIT-ACK]-----------------+   +-------
+    |                                             |   | Using
+    |                                             |   | SCTP
+    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Chunks
+    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +-------
     |                                             | -'
 
 ~~~~~~~~~~~
@@ -392,14 +390,13 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.
 
-Sending INIT and INIT-ACK plain text guarantees the compliance with
-the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
-and COOCKIE-ACK by means of DTLS chunk ensures that the
+The transport of INIT/INIT-ACK COOCKIE-ECHO/COOCKIE-ACK
+by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.
 
 A restarted SCTP Association SHALL use the Restart Key, for User Traffic
 until a new traffic DTLS Key will be available.
-The implementors SHOULD initiate a new DTLS connection as soon as possible,
+The implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no Restart
 Key is available is kept to a minimum.
 
@@ -473,7 +470,7 @@ payload of a plain SCTP packet.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Type = 0x4x   | reserved    |R|         Chunk Length          |
+| Type = 0x4x   | reserved    |R|           Reserved            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -494,8 +491,9 @@ R: 1 bit (boolean)
 : Restart indicator. If this bit is set this DTLS chunk is protected
   with by an restart DTLS Key.
 
-Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Payload in bytes plus 4.
+Reserved: 16 bits (unsigned integer)
+: Reserved bits for future use. Sender MUST set these bits to 0 and
+  MUST be ignored on reception.
 
 Payload: variable length
 : This holds the encrypted data as one DTLS 1.3 Record {{RFC9147}}.
@@ -810,8 +808,8 @@ what specified in {{etmout}}.
 In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.
 
-When entering the PROTECTED state, a Restart DTLS connection
-SHOULD be created.
+When entering the PROTECTED state, a Restart DTLS Key
+SHOULD be derived.
 
 ### Offering Multiple Security Solutions
 
@@ -824,7 +822,7 @@ The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
 includes {{RFC6083}} or more likely its replacement. This will result
 in that a number of different SCTP parameters may be included that are
-not possible to use simultanous. Instead the responder needs to parse
+not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most approriate. For example an offer of DTLS
@@ -833,7 +831,7 @@ solutions with different properties, namely DTLS 1.3 Chunks,
 DTLS/SCTP, and SCTP-AUTH only.
 
 The responder selects one or possibly more of compatible security
-solutions that can be used simultanously and include them in the
+solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
 will later send the PVALID chunk indicating all the offered
 solutions. This to prevent downgrade attacks where sent solution have
@@ -901,11 +899,11 @@ When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
 use SCTP Data chunk with dedicated PPID value = 4242, those chunks SHALL be
-sent and received using DTLS Chunks with the current CID.
+sent and received using DTLS Chunks with the current Key.
 
 The use of plain DATA chunk with PPID value = 4242 before the
 association reaches the PROTECTED state cannot be avoided as
-no valid DTLS CID exist until that state.
+no valid DTLS Keys exist until that state.
 Further in-band key management SHALL NOT use plain DATA chunks
 as this would allow attackers to inject overlapping DATA chunks
 with protected and impact the content of the SACK block.
@@ -987,7 +985,7 @@ when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of an protected SCTP packet being sent after the DTLS
+the structure of a protected SCTP packet being sent after the DTLS
 Chunk VALIDATION or PROTECTED state has been reached. Such packets are
 built with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.
@@ -1005,9 +1003,8 @@ that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP chunk bundling {{RFC9260}} SHALL NOT be
-performed. If a SCTP packet with chunk bundling is received the
-receiver SHALL ignore any subsequent chunk.
+without delay, and SCTP chunk bundling {{RFC9260}} SHALL NOT be
+performed. 
 
 ## Protected Data Chunk Reception {#data-receiving}
 
@@ -1019,7 +1016,11 @@ SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
 Handler that will split it in separated chunks and will handle them
 according to {{RFC9260}}.
 
-Meta data, such as ECN, source and destination address or path ID,
+If a SCTP packet with more than one DTLS chunk is received,
+thus bundling multiple chunks, the receiver SHALL handle the
+first DTLS chunk and ignore any subsequent chunk.
+
+Metadata, such as ECN, source and destination address or path ID,
 belonging to the received SCTP packet SHALL be tied to the relevant
 set of chunks and forwarded transparently to the SCTP endpoint.
 
