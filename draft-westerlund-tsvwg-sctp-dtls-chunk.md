@@ -1004,7 +1004,7 @@ encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
 without delay, and SCTP chunk bundling {{RFC9260}} SHALL NOT be
-performed. 
+performed.
 
 ## Protected Data Chunk Reception {#data-receiving}
 
