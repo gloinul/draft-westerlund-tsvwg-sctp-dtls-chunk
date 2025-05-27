@@ -1730,10 +1730,10 @@ characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
 <p id="section-3.9-3">In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS Keys, those Keys will be
+and maintain dedicated DTLS Key context, those Keys will be
 identified in the DTLS chunk with the R (restart) bit set
 (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints shall ensure that
-Restart DTLS keys are preserved for supporting
+Restart DTLS key context is preserved for supporting
 the SCTP Restart use case.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
 <p id="section-3.9-4">In order to be available for SCTP Restart purposes, DTLS Chunk uses
 a dedicated Key that must be kept in a well-known state so that both SCTP
@@ -2054,7 +2054,7 @@ MUST be ignored on reception.<a href="#section-5.1-7.2.1" class="pilcrow">¶</a>
 <dt id="section-5.1-7.3">R: 1 bit (boolean)</dt>
           <dd style="margin-left: 1.5em" id="section-5.1-7.4">
             <p id="section-5.1-7.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
-with by an restart DTLS Key.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
+with by an restart DTLS Key context.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.1-7.5">Reserved: 16 bits (unsigned integer)</dt>
