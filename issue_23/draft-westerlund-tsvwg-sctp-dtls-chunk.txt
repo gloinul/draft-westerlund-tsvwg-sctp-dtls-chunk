@@ -527,7 +527,7 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | Type = 0x4x   | reserved    |R|           Reserved            |
+   | Type = 0x4x   | reserved    |R|         Chunk Length          |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                                                               |
    |                            Payload                            |
@@ -544,8 +544,8 @@ Table of Contents
    R: 1 bit (boolean)  Restart indicator.  If this bit is set this DTLS
       chunk is protected with by an restart DTLS Key context.
 
-   Reserved: 16 bits (unsigned integer)  Reserved bits for future use.
-      Sender MUST set these bits to 0 and MUST be ignored on reception.
+   Chunk Length: 16 bits (unsigned integer)  This value holds the length
+      of the Payload in bytes plus 4.
 
    Payload: variable length  This holds the encrypted data as one DTLS
       1.3 Record [RFC9147].
