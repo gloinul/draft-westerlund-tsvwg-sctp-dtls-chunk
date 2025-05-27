@@ -403,10 +403,10 @@ Table of Contents
    is described in [RFC9260].
 
    In order to support SCTP Restart, the SCTP Endpoints shall allocate
-   and maintain dedicated DTLS Keys, those connection will be identified
-   in the DTLS chunk with the R (restart) bit set (see Section 5.1).
-   Both SCTP Endpoints shall ensure that Restart DTLS keys are preserved
-   for supporting the SCTP Restart use case.
+   and maintain dedicated DTLS Keys, those Keys will be identified in
+   the DTLS chunk with the R (restart) bit set (see Section 5.1).  Both
+   SCTP Endpoints shall ensure that Restart DTLS keys are preserved for
+   supporting the SCTP Restart use case.
 
    In order to be available for SCTP Restart purposes, DTLS Chunk uses a
    dedicated Key that must be kept in a well-known state so that both
@@ -419,19 +419,20 @@ Table of Contents
    a safe way that survives the events that are causing SCTP Restart
    procedure to be used, for instance a crash of the SCTP stack.
 
-   The SCTP Restart handshakes INIT/INIT-ACK, COOCKIE-ECHO/COOKIE-ACK
+   The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case even though those Chunks SHALL
    be sent as DTLS chunk protected using the keying material for the
    SCTP Restart case.
 
-   A Restart is identified by having the Restart Indicator bit set in
-   the DTLS Chunk (see Figure 4).  There's exactly one active Restart
-   Key at a time, the newest.
+   A DTLS Chunk using the restart DTLS key context is identified by
+   having the Restart Indicator bit set in the DTLS Chunk (see
+   Figure 4).  There's exactly one active Restart Key at a time, the
+   newest.
 
       Initiator                                     Responder
           |                                             | -.
-          +--------------------[INIT]------------------>|   |
-          |<-----------------[INIT-ACK]-----------------+   +-------
+          +------------[DTLS CHUNK(INIT)]-------------->|   |
+          |<---------[DTLS CHUNK(INIT-ACK)]-------------+   +-------
           |                                             |   | Using
           |                                             |   | SCTP
           +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Chunks
@@ -443,7 +444,7 @@ Table of Contents
    The Figure 2 shows how the control chunks being used for SCTP
    Association Restart are transported within DTLS in SCTP.
 
-   The transport of INIT/INIT-ACK COOCKIE-ECHO/COOCKIE-ACK by means of
+   The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK by means of
    DTLS chunk ensures that the peer requesting the restart has been
    previously validated.
 

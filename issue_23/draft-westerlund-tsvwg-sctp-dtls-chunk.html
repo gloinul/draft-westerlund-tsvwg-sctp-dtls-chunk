@@ -1730,7 +1730,7 @@ characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
 <p id="section-3.9-3">In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS Keys, those connection will be
+and maintain dedicated DTLS Keys, those Keys will be
 identified in the DTLS chunk with the R (restart) bit set
 (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints shall ensure that
 Restart DTLS keys are preserved for supporting
@@ -1744,11 +1744,12 @@ other use case than SCTP Restart.<a href="#section-3.9-4" class="pilcrow">¶</a>
 information related to the sequence numbers and replay window SHALL be
 stored in a safe way that survives the events that are causing SCTP
 Restart procedure to be used, for instance a crash of the SCTP stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
-<p id="section-3.9-6">The SCTP Restart handshakes INIT/INIT-ACK, COOCKIE-ECHO/COOKIE-ACK
+<p id="section-3.9-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
 exactly as in legacy SCTP Restart case even though those Chunks SHALL be
 sent as DTLS chunk protected using the keying material for the SCTP
 Restart case.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
-<p id="section-3.9-7">A Restart is identified by having the Restart Indicator bit set in
+<p id="section-3.9-7">A DTLS Chunk using the restart DTLS key context
+is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).
 There's exactly one active Restart Key at a time, the newest.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
@@ -1759,10 +1760,10 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
                 <path d="M 40,48 L 40,160" fill="none" stroke="black"></path>
                 <path d="M 408,48 L 408,160" fill="none" stroke="black"></path>
                 <path d="M 440,64 L 440,144" fill="none" stroke="black"></path>
-                <path d="M 40,64 L 200,64" fill="none" stroke="black"></path>
-                <path d="M 256,64 L 400,64" fill="none" stroke="black"></path>
-                <path d="M 48,80 L 184,80" fill="none" stroke="black"></path>
-                <path d="M 272,80 L 408,80" fill="none" stroke="black"></path>
+                <path d="M 40,64 L 136,64" fill="none" stroke="black"></path>
+                <path d="M 288,64 L 400,64" fill="none" stroke="black"></path>
+                <path d="M 48,80 L 120,80" fill="none" stroke="black"></path>
+                <path d="M 304,80 L 408,80" fill="none" stroke="black"></path>
                 <path d="M 440,80 L 496,80" fill="none" stroke="black"></path>
                 <path d="M 40,128 L 112,128" fill="none" stroke="black"></path>
                 <path d="M 320,128 L 400,128" fill="none" stroke="black"></path>
@@ -1778,8 +1779,10 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
                 <g class="text">
                   <text x="40" y="36">Initiator</text>
                   <text x="408" y="36">Responder</text>
-                  <text x="228" y="68">[INIT]</text>
-                  <text x="228" y="84">[INIT-ACK]</text>
+                  <text x="160" y="68">[DTLS</text>
+                  <text x="236" y="68">CHUNK(INIT)]</text>
+                  <text x="144" y="84">[DTLS</text>
+                  <text x="236" y="84">CHUNK(INIT-ACK)]</text>
                   <text x="472" y="100">Using</text>
                   <text x="468" y="116">SCTP</text>
                   <text x="136" y="132">[DTLS</text>
@@ -1799,7 +1802,7 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
 </div>
 <p id="section-3.9-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-9" class="pilcrow">¶</a></p>
-<p id="section-3.9-10">The transport of INIT/INIT-ACK COOCKIE-ECHO/COOCKIE-ACK
+<p id="section-3.9-10">The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK
 by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
 <p id="section-3.9-11">A restarted SCTP Association SHALL use the Restart Key, for User Traffic
