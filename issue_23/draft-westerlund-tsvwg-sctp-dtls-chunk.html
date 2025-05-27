@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 27 November 2025</td>
+<td class="center">Expires 28 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-26" class="published">26 May 2025</time>
+<time datetime="2025-05-27" class="published">27 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-27">27 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-28">28 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 28 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1544,8 +1544,7 @@ whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
 initial SCTP handshake, DTLS handshake, the SCTP common
-header, the SCTP DTLS chunk header, the INIT and INIT-ACK of an SCTP
-association restart, and the SHUTDOWN-COMPLETE chunk.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE chunk.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
 been keyed only plain text key-management traffic using a dedicated
@@ -1727,7 +1726,7 @@ Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.8-2" cl
 during an Association lifetime as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> section 5.2
 with the purpose of achieving a Restart of the current Association.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
 <p id="section-3.9-2">The SCTP Restart procedure is defined to maintain the security
-characteristics of a SCTP Association using DTLS Chunk, this requires
+characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
 <p id="section-3.9-3">In order to support SCTP Restart, the SCTP Endpoints shall allocate
@@ -1736,19 +1735,19 @@ identified in the DTLS chunk with the R (restart) bit set
 (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints shall ensure that
 Restart DTLS keys are preserved for supporting
 the SCTP Restart use case.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
-<p id="section-3.9-4">In order to be available for SCTP Restart purposes, the Restart DTLS
-connection must be kept in a well-known state so that both SCTP
+<p id="section-3.9-4">In order to be available for SCTP Restart purposes, DTLS Chunk uses
+a dedicated Key that must be kept in a well-known state so that both SCTP
 Endpoints are aware of the DTLS sequence numbers and replay window. An
-SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS connection for any
+SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS Key for any
 other use case than SCTP Restart.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
-<p id="section-3.9-5">The DTLS Restart Connections, the related key materials, the
+<p id="section-3.9-5">The DTLS Restart Key, the related epoch materials, the
 information related to the sequence numbers and replay window SHALL be
 stored in a safe way that survives the events that are causing SCTP
 Restart procedure to be used, for instance a crash of the SCTP stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
-<p id="section-3.9-6">The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection, that is the
-DTLS Restart Connection.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
+<p id="section-3.9-6">The SCTP Restart handshakes INIT/INIT-ACK, COOCKIE-ECHO/COOKIE-ACK
+exactly as in legacy SCTP Restart case even though those Chunks SHALL be
+sent as DTLS chunk protected using the keying material for the SCTP
+Restart case.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
 <p id="section-3.9-7">A Restart is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).
 There's exactly one active Restart Key at a time, the newest.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
@@ -1756,24 +1755,21 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
 <figure id="figure-2">
           <div id="section-3.9-8.1">
             <div class="alignCenter art-svg artwork" id="section-3.9-8.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="536" viewBox="0 0 536 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="504" viewBox="0 0 504 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 40,48 L 40,160" fill="none" stroke="black"></path>
                 <path d="M 408,48 L 408,160" fill="none" stroke="black"></path>
-                <path d="M 440,64 L 440,80" fill="none" stroke="black"></path>
-                <path d="M 440,128 L 440,144" fill="none" stroke="black"></path>
+                <path d="M 440,64 L 440,144" fill="none" stroke="black"></path>
                 <path d="M 40,64 L 200,64" fill="none" stroke="black"></path>
                 <path d="M 256,64 L 400,64" fill="none" stroke="black"></path>
                 <path d="M 48,80 L 184,80" fill="none" stroke="black"></path>
                 <path d="M 272,80 L 408,80" fill="none" stroke="black"></path>
-                <path d="M 440,80 L 528,80" fill="none" stroke="black"></path>
+                <path d="M 440,80 L 496,80" fill="none" stroke="black"></path>
                 <path d="M 40,128 L 112,128" fill="none" stroke="black"></path>
                 <path d="M 320,128 L 400,128" fill="none" stroke="black"></path>
                 <path d="M 48,144 L 112,144" fill="none" stroke="black"></path>
                 <path d="M 312,144 L 408,144" fill="none" stroke="black"></path>
-                <path d="M 440,144 L 520,144" fill="none" stroke="black"></path>
+                <path d="M 440,144 L 496,144" fill="none" stroke="black"></path>
                 <path d="M 424,48 C 432.83064,48 440,55.16936 440,64" fill="none" stroke="black"></path>
-                <path d="M 424,96 C 432.83064,96 440,88.83064 440,80" fill="none" stroke="black"></path>
-                <path d="M 424,112 C 432.83064,112 440,119.16936 440,128" fill="none" stroke="black"></path>
                 <path d="M 424,160 C 432.83064,160 440,152.83064 440,144" fill="none" stroke="black"></path>
                 <polygon class="arrowhead" points="408,128 396,122.4 396,133.6" fill="black" transform="rotate(0,400,128)"></polygon>
                 <polygon class="arrowhead" points="408,64 396,58.4 396,69.6" fill="black" transform="rotate(0,400,64)"></polygon>
@@ -1783,13 +1779,13 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
                   <text x="40" y="36">Initiator</text>
                   <text x="408" y="36">Responder</text>
                   <text x="228" y="68">[INIT]</text>
-                  <text x="472" y="68">Plain</text>
-                  <text x="516" y="68">SCTP</text>
                   <text x="228" y="84">[INIT-ACK]</text>
+                  <text x="472" y="100">Using</text>
+                  <text x="468" y="116">SCTP</text>
                   <text x="136" y="132">[DTLS</text>
                   <text x="212" y="132">CHUNK(COOKIE</text>
                   <text x="292" y="132">ECHO)]</text>
-                  <text x="488" y="132">Encrypted</text>
+                  <text x="476" y="132">Chunks</text>
                   <text x="136" y="148">[DTLS</text>
                   <text x="212" y="148">CHUNK(COOKIE</text>
                   <text x="288" y="148">ACK)]</text>
@@ -1803,13 +1799,12 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
 </div>
 <p id="section-3.9-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-9" class="pilcrow">¶</a></p>
-<p id="section-3.9-10">Sending INIT and INIT-ACK plain text guarantees the compliance with
-the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
-and COOCKIE-ACK by means of DTLS chunk ensures that the
+<p id="section-3.9-10">The transport of INIT/INIT-ACK COOCKIE-ECHO/COOCKIE-ACK
+by means of DTLS chunk ensures that the
 peer requesting the restart has been previously validated.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
 <p id="section-3.9-11">A restarted SCTP Association SHALL use the Restart Key, for User Traffic
 until a new traffic DTLS Key will be available.
-The implementors SHOULD initiate a new DTLS connection as soon as possible,
+The implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no Restart
 Key is available is kept to a minimum.<a href="#section-3.9-11" class="pilcrow">¶</a></p>
 </section>
@@ -2035,8 +2030,7 @@ payload of a plain SCTP packet.<a href="#section-5.1-5" class="pilcrow">¶</a></
                   <text x="92" y="84">0x4x</text>
                   <text x="180" y="84">reserved</text>
                   <text x="256" y="84">R</text>
-                  <text x="360" y="84">Chunk</text>
-                  <text x="412" y="84">Length</text>
+                  <text x="388" y="84">Reserved</text>
                   <text x="264" y="132">Payload</text>
                   <text x="384" y="180">Padding</text>
                 </g>
@@ -2060,9 +2054,10 @@ MUST be ignored on reception.<a href="#section-5.1-7.2.1" class="pilcrow">¶</a>
 with by an restart DTLS Key.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-7.5">Chunk Length: 16 bits (unsigned integer)</dt>
+<dt id="section-5.1-7.5">Reserved: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-5.1-7.6">
-            <p id="section-5.1-7.6.1">This value holds the length of the Payload in bytes plus 4.<a href="#section-5.1-7.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-7.6.1">Reserved bits for future use. Sender MUST set these bits to 0 and
+MUST be ignored on reception.<a href="#section-5.1-7.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.1-7.7">Payload: variable length</dt>
@@ -2630,8 +2625,8 @@ endpoint will generate an ABORT chunk.  The ERROR handling follows
 what specified in <a href="#etmout" class="auto internal xref">Section 6.2.3</a>.<a href="#section-7.1-12" class="pilcrow">¶</a></p>
 <p id="section-7.1-13">In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.<a href="#section-7.1-13" class="pilcrow">¶</a></p>
-<p id="section-7.1-14">When entering the PROTECTED state, a Restart DTLS connection
-SHOULD be created.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+<p id="section-7.1-14">When entering the PROTECTED state, a Restart DTLS Key
+SHOULD be derived.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
 <div id="offering-multiple-security-solutions">
 <section id="section-7.1.1">
           <h4 id="name-offering-multiple-security-">
@@ -2645,7 +2640,7 @@ attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Sectio
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
 includes <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> or more likely its replacement. This will result
 in that a number of different SCTP parameters may be included that are
-not possible to use simultanous. Instead the responder needs to parse
+not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most approriate. For example an offer of DTLS
@@ -2653,7 +2648,7 @@ policies to select the most approriate. For example an offer of DTLS
 solutions with different properties, namely DTLS 1.3 Chunks,
 DTLS/SCTP, and SCTP-AUTH only.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1.1-3">The responder selects one or possibly more of compatible security
-solutions that can be used simultanously and include them in the
+solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
 will later send the PVALID chunk indicating all the offered
 solutions. This to prevent downgrade attacks where sent solution have
@@ -2771,10 +2766,10 @@ and received unencrypted.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
 use SCTP Data chunk with dedicated PPID value = 4242, those chunks SHALL be
-sent and received using DTLS Chunks with the current CID.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+sent and received using DTLS Chunks with the current Key.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <p id="section-7.4-3">The use of plain DATA chunk with PPID value = 4242 before the
 association reaches the PROTECTED state cannot be avoided as
-no valid DTLS CID exist until that state.
+no valid DTLS Keys exist until that state.
 Further in-band key management SHALL NOT use plain DATA chunks
 as this would allow attackers to inject overlapping DATA chunks
 with protected and impact the content of the SACK block.
@@ -2967,7 +2962,7 @@ when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
         </figcaption></figure>
 </div>
 <p id="section-8-6">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 10</a> describes
-the structure of an protected SCTP packet being sent after the DTLS
+the structure of a protected SCTP packet being sent after the DTLS
 Chunk VALIDATION or PROTECTED state has been reached. Such packets are
 built with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.<a href="#section-8-6" class="pilcrow">¶</a></p>
@@ -2985,9 +2980,8 @@ the DTLS chunk overhead.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP chunk bundling <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> SHALL NOT be
-performed. If a SCTP packet with chunk bundling is received the
-receiver SHALL ignore any subsequent chunk.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+without delay, and SCTP chunk bundling <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> SHALL NOT be
+performed.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="data-receiving">
@@ -3002,9 +2996,12 @@ forwarded to the Protection Operator which will return a plain
 SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
 Handler that will split it in separated chunks and will handle them
 according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">Meta data, such as ECN, source and destination address or path ID,
+<p id="section-8.2-2">If a SCTP packet with more than one DTLS chunk is received,
+thus bundling multiple chunks, the receiver SHALL handle the
+first DTLS chunk and ignore any subsequent chunk.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-3">Metadata, such as ECN, source and destination address or path ID,
 belonging to the received SCTP packet SHALL be tied to the relevant
-set of chunks and forwarded transparently to the SCTP endpoint.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+set of chunks and forwarded transparently to the SCTP endpoint.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 <div id="sctp-header-handler">
 <section id="section-8.2.1">
           <h4 id="name-sctp-header-handler">
