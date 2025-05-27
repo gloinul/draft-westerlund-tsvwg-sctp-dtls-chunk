@@ -345,10 +345,10 @@ that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
 
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS Keys, those Keys will be
+and maintain dedicated DTLS Key context, those Keys will be
 identified in the DTLS chunk with the R (restart) bit set
 (see {{DTLS-chunk}}).  Both SCTP Endpoints shall ensure that
-Restart DTLS keys are preserved for supporting
+Restart DTLS key context is preserved for supporting
 the SCTP Restart use case.
 
 In order to be available for SCTP Restart purposes, DTLS Chunk uses
@@ -490,7 +490,7 @@ reserved: 7 bits
 R: 1 bit (boolean)
 
 : Restart indicator. If this bit is set this DTLS chunk is protected
-  with by an restart DTLS Key.
+  with by an restart DTLS Key context.
 
 Reserved: 16 bits (unsigned integer)
 : Reserved bits for future use. Sender MUST set these bits to 0 and
