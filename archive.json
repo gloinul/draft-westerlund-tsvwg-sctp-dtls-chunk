@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-27T01:07:32.454370+00:00",
+  "timestamp": "2025-05-29T01:08:54.568348+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -946,6 +946,307 @@
           "createdAt": "2025-03-03T13:54:34Z",
           "updatedAt": "2025-03-03T13:54:34Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOKszxDc6Xt1Ez",
+      "title": "Removal of DCI and updated related restart identification ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/26",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Removed DCI and fixed the relevant side effects.",
+      "createdAt": "2025-05-27T05:58:12Z",
+      "updatedAt": "2025-05-28T11:07:35Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "cd4c99c0484ec898361bf880b430165a2516633e",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue_23",
+      "headRefOid": "151b6ebaa1b7dd4387fe09e80e3e5e56cb57c101",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6rGx8w",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-05-27T11:24:13Z",
+          "updatedAt": "2025-05-27T11:54:18Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "I think this should be done, but is related to association restart. ",
+              "createdAt": "2025-05-27T11:24:13Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "Potential grammatical issue \"those connection\". However, I think we need to agree on a term for what a key + plus rest of context should be called. It is not a full DTLS connection. DTLS key context? A DTLS Key Context is the state related to a specific set of keys, the replay window, next DTLS sequence number, and its identifying values: Restart bit, DTLS connection ID (If used), and epoch. ",
+              "createdAt": "2025-05-27T11:28:33Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "Note, I think the definition I write above should be added elsewhere and used here instead of connection. ",
+              "createdAt": "2025-05-27T11:29:04Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "I think instead of using /, list all chunk types in a comma separated list. Also rewrite using \"restart DTLS key context\". ",
+              "createdAt": "2025-05-27T11:34:17Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "I think you need to expand this to say: A DTLS Chunk using the restart DTLS key context is identified ... then remove the tail end \"in the DTLS chunk\"",
+              "createdAt": "2025-05-27T11:36:51Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 80,
+              "body": "I think this should use [DTLS CHUNK(INIT)] and [DTLS CHUNK(INIT-ACK)]",
+              "createdAt": "2025-05-27T11:38:21Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 153,
+              "body": "I don't think we should redefine the Chunk Length, even if it is the only Chunk we should ever see on this level. The sum of the chunk length fields are the valid SCTP packet length. Although one might derive this length from the IP header I wonder if it is smart to redefine the field. ",
+              "createdAt": "2025-05-27T11:45:25Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 177,
+              "body": "With the new derivation based solution, I think we expect the restart keys to be configured as soon as the main keys have been installed for each direction. ",
+              "createdAt": "2025-05-27T11:47:09Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 177,
+              "body": "So I think this happens earlier than PROTECTED state. We might need to rework the state machine transitions slightly. ",
+              "createdAt": "2025-05-27T11:47:49Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            },
+            {
+              "originalPosition": 292,
+              "body": "The API may need to be clarified that a given key are valid for the combination of (SCTP association, DTLS Connection ID (if used), epoch and restart bit). ",
+              "createdAt": "2025-05-27T11:51:35Z",
+              "updatedAt": "2025-05-27T11:54:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHIrt",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T11:56:53Z",
+          "updatedAt": "2025-05-27T11:56:53Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "You are right, there are no connections, those are Keys",
+              "createdAt": "2025-05-27T11:56:53Z",
+              "updatedAt": "2025-05-27T11:56:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHLAT",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:00:17Z",
+          "updatedAt": "2025-05-27T12:00:17Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "I think we should use the word context, as it is not only keys, there are the replay window, latest used sequence number as well as the context identifiers. ",
+              "createdAt": "2025-05-27T12:00:17Z",
+              "updatedAt": "2025-05-27T12:00:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHMTF",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:02:15Z",
+          "updatedAt": "2025-05-27T12:02:15Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "MT was quite peculiar on removing this. We can talk about",
+              "createdAt": "2025-05-27T12:02:15Z",
+              "updatedAt": "2025-05-27T12:02:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHM7B",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:03:13Z",
+          "updatedAt": "2025-05-27T12:03:14Z",
+          "comments": [
+            {
+              "originalPosition": 177,
+              "body": "We have some work to do here, agree. I am not changing this for now but we know that Keys are derived at once and the state machine requires fine tuning",
+              "createdAt": "2025-05-27T12:03:13Z",
+              "updatedAt": "2025-05-27T12:03:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHO4E",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:06:01Z",
+          "updatedAt": "2025-05-27T12:06:01Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "But isn't it context a word with a precise semantic in DTLS? I have nothing against context, as long as it makes easier reading",
+              "createdAt": "2025-05-27T12:06:01Z",
+              "updatedAt": "2025-05-27T12:06:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHblz",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:23:09Z",
+          "updatedAt": "2025-05-27T12:23:10Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "I think we have to ask him, I don't remember him talking about redefining the chunk length field. He tried to optimize things. The length field in the DTLS record is optional, and should never be needed when using DTLS chunk as the DTLS chunk length field exists. There is a clear downside I think to make the DTLS chunk field not match the standard definition. Any firewall that sees a length field that is zero while the actual length is non-zero will react to the packet being errnous and might discard it. ",
+              "createdAt": "2025-05-27T12:23:09Z",
+              "updatedAt": "2025-05-27T12:23:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHlLI",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:35:07Z",
+          "updatedAt": "2025-05-27T12:35:08Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Regarding the DTLS 1.3 specification. The word context is used only three times, where one is part of a reference. So I think it is fine to define \"DTLS Key Context\" having the meaning we want it to have here to use the DTLS record like in a DTLS connection.\r\n",
+              "createdAt": "2025-05-27T12:35:07Z",
+              "updatedAt": "2025-05-27T12:35:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHoIk",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:37:21Z",
+          "updatedAt": "2025-05-27T12:37:21Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "This is a good point.",
+              "createdAt": "2025-05-27T12:37:21Z",
+              "updatedAt": "2025-05-27T12:37:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHoo-",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:37:37Z",
+          "updatedAt": "2025-05-27T12:37:38Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "I am restoring the length",
+              "createdAt": "2025-05-27T12:37:37Z",
+              "updatedAt": "2025-05-27T12:37:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc6rHqTn",
+          "commit": {
+            "abbreviatedOid": "f44393b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-27T12:39:10Z",
+          "updatedAt": "2025-05-27T12:39:10Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Then let's have it added in the definition.\r\nDTLS Key Context is the set of data defining a Key and it's applicability, such as epoch, sequence number etc.",
+              "createdAt": "2025-05-27T12:39:10Z",
+              "updatedAt": "2025-05-27T12:39:10Z"
+            }
+          ]
         }
       ]
     }
