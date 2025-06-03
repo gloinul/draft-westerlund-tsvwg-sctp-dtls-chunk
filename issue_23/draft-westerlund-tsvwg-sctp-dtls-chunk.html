@@ -27,12 +27,12 @@ features provided by SCTP and its extensions but with some limitations.
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
+    lxml 5.3.1
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
-    setuptools 70.3.0
+    setuptools 80.9.0
     wcwidth 0.2.13
 -->
 <link href="draft-westerlund-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
@@ -1052,11 +1052,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCTP DTLS Chunk</td>
-<td class="right">May 2025</td>
+<td class="right">June 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 29 November 2025</td>
+<td class="center">Expires 5 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-28" class="published">28 May 2025</time>
+<time datetime="2025-06-03" class="published">3 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-29">29 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-05">5 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1740,24 +1740,28 @@ characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
 <p id="section-3.9-3">In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS Key context, those Keys will be
-identified in the DTLS chunk with the R (restart) bit set
-(see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints shall ensure that
-Restart DTLS key context is preserved for supporting
-the SCTP Restart use case.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
-<p id="section-3.9-4">In order to be available for SCTP Restart purposes, DTLS Chunk uses
-a dedicated Key that must be kept in a well-known state so that both SCTP
-Endpoints are aware of the DTLS sequence numbers and replay window. An
-SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS Key for any
-other use case than SCTP Restart.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
-<p id="section-3.9-5">The DTLS Restart Key, the related epoch materials, the
-information related to the sequence numbers and replay window SHALL be
-stored in a safe way that survives the events that are causing SCTP
+and maintain dedicated DTLS Key contexts, SCTP packets protected by
+these contexts will be identified in the DTLS chunk with the R
+(restart) bit set (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints shall
+ensure that Restart DTLS key contexts is preserved for supporting the
+SCTP Restart use case.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+<p id="section-3.9-4">In order for the protected SCTP endpoint to be available for SCTP
+Restart purposes, the DTLS chunk needs acess to a DTLS Key context for
+this SCTP association that needs to be kept in a well-known state so
+that both SCTP Endpoints are aware of the DTLS sequence numbers and
+replay window, i.e. initialized but never used. An SCTP Endpoint SHALL
+NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
+association restart.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
+<p id="section-3.9-5">An SCTP endpoint that want to enable itself initiating a SCTP restart
+needs to store the Key and related DTLS epoch, indexed so that when
+performing a restart with the peer node it had an protected SCTP
+association with can identify the right restart Key and DTLS epoch and
+initialize the restart DTLS Key Context. The key and epoch needs to be
+stores safely so that they survive the events that are causing SCTP
 Restart procedure to be used, for instance a crash of the SCTP stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
 <p id="section-3.9-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
 exactly as in legacy SCTP Restart case even though those Chunks SHALL be
-sent as DTLS chunk protected using the keying material for the SCTP
-Restart case.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
+sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
 <p id="section-3.9-7">A DTLS Chunk using the restart DTLS key context
 is identified by having the Restart Indicator bit set in
 the DTLS Chunk (see <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).
@@ -1812,9 +1816,10 @@ There's exactly one active Restart Key at a time, the newest.<a href="#section-3
 </div>
 <p id="section-3.9-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9-9" class="pilcrow">¶</a></p>
-<p id="section-3.9-10">The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK
-by means of DTLS chunk ensures that the
-peer requesting the restart has been previously validated.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
+<p id="section-3.9-10">The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK by means of
+DTLS chunk ensures that the peer requesting the restart has been
+previously validated and the SCTP statemachine after having reached
+ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
 <p id="section-3.9-11">A restarted SCTP Association SHALL use the Restart Key, for User Traffic
 until a new traffic DTLS Key will be available.
 The implementors SHOULD initiate a new DTLS keying as soon as possible,

@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 29 November 2025                                       Ericsson
-                                                             28 May 2025
+Expires: 5 December 2025                                        Ericsson
+                                                             3 June 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2025.
+   This Internet-Draft will expire on 5 December 2025.
 
 Copyright Notice
 
@@ -413,26 +413,32 @@ Table of Contents
    is described in [RFC9260].
 
    In order to support SCTP Restart, the SCTP Endpoints shall allocate
-   and maintain dedicated DTLS Key context, those Keys will be
-   identified in the DTLS chunk with the R (restart) bit set (see
-   Section 5.1).  Both SCTP Endpoints shall ensure that Restart DTLS key
-   context is preserved for supporting the SCTP Restart use case.
+   and maintain dedicated DTLS Key contexts, SCTP packets protected by
+   these contexts will be identified in the DTLS chunk with the R
+   (restart) bit set (see Section 5.1).  Both SCTP Endpoints shall
+   ensure that Restart DTLS key contexts is preserved for supporting the
+   SCTP Restart use case.
 
-   In order to be available for SCTP Restart purposes, DTLS Chunk uses a
-   dedicated Key that must be kept in a well-known state so that both
-   SCTP Endpoints are aware of the DTLS sequence numbers and replay
-   window.  An SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS Key
-   for any other use case than SCTP Restart.
+   In order for the protected SCTP endpoint to be available for SCTP
+   Restart purposes, the DTLS chunk needs acess to a DTLS Key context
+   for this SCTP association that needs to be kept in a well-known state
+   so that both SCTP Endpoints are aware of the DTLS sequence numbers
+   and replay window, i.e. initialized but never used.  An SCTP Endpoint
+   SHALL NEVER use the SCTP Restart DTLS Key for any other use case than
+   SCTP association restart.
 
-   The DTLS Restart Key, the related epoch materials, the information
-   related to the sequence numbers and replay window SHALL be stored in
-   a safe way that survives the events that are causing SCTP Restart
-   procedure to be used, for instance a crash of the SCTP stack.
+   An SCTP endpoint that want to enable itself initiating a SCTP restart
+   needs to store the Key and related DTLS epoch, indexed so that when
+   performing a restart with the peer node it had an protected SCTP
+   association with can identify the right restart Key and DTLS epoch
+   and initialize the restart DTLS Key Context.  The key and epoch needs
+   to be stores safely so that they survive the events that are causing
+   SCTP Restart procedure to be used, for instance a crash of the SCTP
+   stack.
 
    The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case even though those Chunks SHALL
-   be sent as DTLS chunk protected using the keying material for the
-   SCTP Restart case.
+   be sent as DTLS chunk protected using the restart DTLS key context.
 
    A DTLS Chunk using the restart DTLS key context is identified by
    having the Restart Indicator bit set in the DTLS Chunk (see
@@ -456,7 +462,8 @@ Table of Contents
 
    The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK by means of
    DTLS chunk ensures that the peer requesting the restart has been
-   previously validated.
+   previously validated and the SCTP statemachine after having reached
+   ESTABLISHED state moves automatically to PROTECTED state.
 
    A restarted SCTP Association SHALL use the Restart Key, for User
    Traffic until a new traffic DTLS Key will be available.  The
