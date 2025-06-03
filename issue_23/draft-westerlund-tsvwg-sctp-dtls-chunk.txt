@@ -878,8 +878,9 @@ Table of Contents
    In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
    exchanged in the protected SCTP association.
 
-   When entering the PROTECTED state, a Restart DTLS Key SHOULD be
-   derived.
+   When entering the PROTECTED state, a Restart DTLS Key for the current
+   epoch SHOULD be provided into the DTLS key context store for the SCTP
+   association.
 
 7.1.1.  Offering Multiple Security Solutions
 
@@ -965,17 +966,18 @@ Table of Contents
    assocation is in ESTABLISHED or any of the states that can be reached
    after ESTABLISHED state, in-band key management are RECOMMENDED to
    use SCTP Data chunk with dedicated PPID value = 4242, those chunks
-   SHALL be sent and received using DTLS Chunks with the current Key.
+   SHALL be sent and received using DTLS Chunks with the current DTLS
+   Key context.
 
    The use of plain DATA chunk with PPID value = 4242 before the
    association reaches the PROTECTED state cannot be avoided as no valid
-   DTLS Keys exist until that state.  Further in-band key management
-   SHALL NOT use plain DATA chunks as this would allow attackers to
-   inject overlapping DATA chunks with protected and impact the content
-   of the SACK block.  Based on that, as soon as the initiator or
-   responder independently enter PROTECTED state, they will silently
-   discard any plain chunks.  Plain chunks that were sent but not
-   received yet will also be discarded as the SCTP protocol does
+   DTLS key context exist until that state.  Further in-band key
+   management SHALL NOT use plain DATA chunks as this would allow
+   attackers to inject overlapping DATA chunks with protected and impact
+   the content of the SACK block.  Based on that, as soon as the
+   initiator or responder independently enter PROTECTED state, they will
+   silently discard any plain chunks.  Plain chunks that were sent but
+   not received yet will also be discarded as the SCTP protocol does
    guarantee the needed retransmissions.
 
 7.5.  Consideration on T-valid
@@ -1011,11 +1013,11 @@ Table of Contents
 
    *  If an SCTP restart is occurring there are exception rules to the
       above.  The INIT, INIT-ACK, COOKIE-ECHO and COOKIE-ACK SHALL be
-      sent protected by DTLS chunk using a restart Key. The DTLS chunk
-      with restart Key is continuning to protect any SCTP chunks sent
-      while being in SCTP state ESTABLISHED, VALIDATION and PROTECTED,
-      until a newely established traffic Key is ready to be used instead
-      to protect future SCTP chunks.
+      sent protected by DTLS chunk using a restart DTLS key context.
+      The DTLS chunk with restart Key is continuning to protect any SCTP
+      chunks sent while being in SCTP state ESTABLISHED, VALIDATION and
+      PROTECTED, until a newely established traffic Key is ready to be
+      used instead to protect future SCTP chunks.
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
