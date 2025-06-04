@@ -549,7 +549,7 @@ Table of Contents
    the upper bits of the chunk type.
 
    The DTLS chunk is used to hold the DTLS 1.3 record with the protected
-   payload of a plain SCTP packet.
+   payload of a plain text SCTP packet without the SCTP common header.
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -569,7 +569,7 @@ Table of Contents
       these bits to 0 and MUST be ignored on reception.
 
    R: 1 bit (boolean)  Restart indicator.  If this bit is set this DTLS
-      chunk is protected with by an restart DTLS Key context.
+      chunk is protected with by an Restart DTLS Key context.
 
    Chunk Length: 16 bits (unsigned integer)  This value holds the length
       of the Payload in bytes plus 4.
@@ -673,10 +673,10 @@ Table of Contents
 
           Figure 6: ERROR Missing Protected Association Paramater
 
-   Note: Cause Length is equal to the number of missing parameters 8 + N
-   * 2 according to [RFC9260], section 3.3.10.2.  Also the Protection
-   Association ID may be present in any of the N missing params, no
-   order implied by the example in Figure 6.
+   Note: Cause Length in bytes is equal to following with the number of
+   missing parameters as N: 8 + N * 2 according to [RFC9260], section
+   3.3.10.2.  Also the Protection Association ID may be present in any
+   of the N missing params, no order implied by the example in Figure 6.
 
 6.2.  Error in DTLS Chunk
 
@@ -757,20 +757,20 @@ Table of Contents
 
 6.3.  Critical Error from DTLS
 
-   DTLS 1.3 MAY inform local SCTP endpoint about errors.  When an Error
-   in the DTLS 1.3 compromises the protection mechanism, the protection
-   operator may stop processing data altogether, thus the local SCTP
-   endpoint will not be able to send or receive any chunk for the
-   specified Association.  This will cause the Association to be closed
-   by legacy timer-based mechanism.  Since the Association protection is
-   compromised no further data will be sent and the remote peer will
-   also experience timeout on the Association.
+   DTLS Protection Operator MAY inform local SCTP endpoint about errors.
+   When an Error in the DTLS 1.3 compromises the protection mechanism,
+   the protection operator may stop processing data altogether, thus the
+   local SCTP endpoint will not be able to send or receive any chunk for
+   the specified Association.  This will cause the SCTP Association to
+   be closed by legacy timer-based mechanism.  Since the Association
+   protection is compromised no further data will be sent and the remote
+   peer will also experience timeout on the Association.
 
 6.4.  Non-critical Error in the Protection
 
-   A non-critical error in DTLS 1.3 means that the Protection Operator
-   is capable of recovering without the need of the whole Association to
-   be restarted.
+   A non-critical error in DTLS Protection Operator means that the
+   Protection Operator is capable of recovering without the need of the
+   whole SCTP Association to be restarted.
 
    From SCTP perspective, a non-critical error will be perceived as a
    temporary problem in the transport and will be handled with
