@@ -162,7 +162,7 @@ in Regard to SCTP and ULP" artwork-align="center"}
 
 Use of the DTLS chunk is defined per SCTP association.
 
-On the outgoing direction, once the SCTP stack has created the
+In the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
 that payload will be sent to the DTLS Protection Operator to be
 protected. The format of the protected payload is a DTLS 1.3 record
@@ -172,8 +172,9 @@ The SCTP Protection Operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
-initial SCTP handshake, DTLS handshake, the SCTP common
-header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE chunk.
+initial SCTP handshake, any initial key-management traffic, the SCTP
+common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
+chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
@@ -216,27 +217,25 @@ decryption into User Data.
 DTLS 1.3 operations requires to directly handshake messages with the
 remote peer for connection setup and other features, this kind of
 handshake is part of the Key Management functionality.  Key Management
-function achieves these features behaving as a SCTP User.  Key
-Management sends and receives its own data via the SCTP User Level
-interface.  Key Management's own data are distinguished from any other
-data by means of a dedicated PPID using the value 4242 (see
-{{iana-payload-protection-id}}).
+function achieves these features behaving as a user of the SCTP
+association.  Key Management sends and receives its own data via the
+SCTP User Level interface.  Key Management's own data are
+distinguished from any other data by means of a dedicated PPID using
+the value 4242 (see {{iana-payload-protection-id}}).
 
-Once the Key Management has established the DTLS 1.3 connection, it
-can set the Protection Operator for User Data encryption/decription
-via the API shown in {{sctp-DTLS-chunk-layering}}. At this stage the
-Key Management functions usage of protection operation on it's DTLS
-plain text messages needs to be synchronized with the DTLS chunk's
-protection operations to avoid nonce re-usage and replay
-protection. Alternatively the key management can use the DTLS chunk's
-session instance to protect it's messages.
+A Key Management using DTLS when it has established a DTLS 1.3
+connection, it can derive traffic and restart keys and set the
+Protection Operator for User Data encryption/decription via the API
+shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
+contexts. Both a DTLS Key context for traffic and a DTLS Key contect
+for restart should be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
 chunks until the Association has reached the PROTECTED state
 ({{init-state-machine}}).  From that time on, DTLS 1.3 handshake
 messages SHALL be transported as SCTP User Data with dedicated PPID =
-4242 within DTLS chunks, same as ULP data traffic.
+4242 within DTLS chunks, same as any ULP data traffic.
 
 In this document we use the terms DTLS Key context for indicating
 a Key, derived from a DTLS connection, and all relevant data that
@@ -244,8 +243,7 @@ needs to be provided to the Protection Operator for DTLS encryption
 and decryption.
 DTLS Key context includes Keys for sending and receiving, replay
 window, last sequence number.
-After successfull DTLS handshake, a DTLS Key context for traffic
-and a DTLS Key contect for restart are created.
+After successfull DTLS handshake,
 A DTLS Key context is tied to an SCTP Association, an epoch,
 the restart indicator and, when used, to a DTLS Connection Id.
 
