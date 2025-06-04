@@ -237,15 +237,14 @@ chunks until the Association has reached the PROTECTED state
 messages SHALL be transported as SCTP User Data with dedicated PPID =
 4242 within DTLS chunks, same as any ULP data traffic.
 
-In this document we use the terms DTLS Key context for indicating
-a Key, derived from a DTLS connection, and all relevant data that
-needs to be provided to the Protection Operator for DTLS encryption
-and decryption.
-DTLS Key context includes Keys for sending and receiving, replay
-window, last sequence number.
-After successfull DTLS handshake,
-A DTLS Key context is tied to an SCTP Association, an epoch,
-the restart indicator and, when used, to a DTLS Connection Id.
+In this document we use the terms DTLS Key context for indicating a
+Key, derived from a DTLS connection, and all relevant data that needs
+to be provided to the Protection Operator for DTLS encryption and
+decryption.  DTLS Key context includes Keys for sending and receiving,
+replay window, last used sequence number. Each DTLS key context are
+associated with a four value tuple identifying the context, consisting
+of SCTP Association, the restart indicator, the DTLS Connection ID (if
+used), an the DTLS epoch.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
