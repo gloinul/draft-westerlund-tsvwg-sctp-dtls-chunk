@@ -265,10 +265,10 @@ trigger retransmissions.
 ## PMTU Considerations {#pmtu}
 
 The addition of the DTLS chunk to SCTP reduces the room for payload,
-due to the size of the DTLS chunk header, padding, and authentication
-tag.  Thus, the SCTP layer creating the plain text payload needs to
-know about the overhead to adjust its target payload size
-appropriately.
+due to the size of the DTLS chunk header, padding, and the AEAD
+authentication tag.  Thus, the SCTP layer creating the plain text
+payload needs to know about the overhead to adjust its target payload
+size appropriately.
 
 A path MTU discovery function in SCTP will need to know the actual
 sent and received size of packets for the SCTP packets. This to
@@ -286,12 +286,13 @@ The SCTP mechanism for handling congestion control does depend on
 successful data transfer for enlarging or reducing the congestion
 window CWND (see {{RFC9260}} Section 7.2).
 
-It may happen that Protection Operator discards packets due to internal
-checks or because it has detected a malicious attempt. As those
-packets do not represent what the peer sent, it is acceptable to
-ignore them, although in-situ modification on the path of a packet
-resulting in discarding due to integrity failure will leave a gap, but
-has to be accepted as part of the path behavior.
+It may happen that Protection Operator discards packets due to replay
+protection, or integrity errors depending on network induced bit
+errors or malicous modifications. As those packets do not represent
+what the peer sent, it is acceptable to ignore them, although in-situ
+modification on the path of a packet resulting in discarding due to
+integrity failure will leave a gap, but has to be accepted as part of
+the path behavior.
 
 The Protection Operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
@@ -315,9 +316,9 @@ time belongs to SCTP protocol that will decide according to
 selection algorithm, actually the Protection Operator will not even
 know what path is being used.
 
-Replay window for DTLS Sequence Number will need to take into account
-that heartbeat (HB) chunks are sent concurrently over all paths in
-multihomed Associations, thus it needs to be large enough to
+The Replay window for the DTLS Sequence Number will need to take into
+account that heartbeat (HB) chunks are sent concurrently over all
+paths in multihomed Associations, thus it needs to be large enough to
 accomodate latency differencies.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
@@ -327,12 +328,14 @@ association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
 relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag shall be used. If the
-combination of those parameters is not unique the implementor MAY
-choose to send the DTLS Chunk to all Associations that fit with the
-parameters in order to find the right one. The association will
-attempt de-protection operations on the DTLS chunk, and if that is
-successful the ASCONF chunk can be processed.
+Source, Destination ports and VTag shall be used. If the combination
+of those parameters is not unique the implementor MAY choose to send
+the DTLS Chunk to all Associations that fit with the parameters in
+order to find the right one. The association will attempt
+de-protection operations on the DTLS chunk, and if that is successful
+the ASCONF chunk can be processed. Note that trial decoding should
+have an limit in number of tried contexts to prevent denial of service
+attacks on the endpoint.
 
 The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
@@ -344,7 +347,7 @@ Chunks as Authentication mechanism for ASCONF chunks.
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk
-during an Association lifetime as described in {{RFC9260}} section 5.2
+during an Association lifetime as described in Section 5.2 of {{RFC9260}}
 with the purpose of achieving a Restart of the current Association.
 
 The SCTP Restart procedure is defined to maintain the security
@@ -353,11 +356,11 @@ that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
 
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS Key contexts, SCTP packets protected by
-these contexts will be identified in the DTLS chunk with the R
-(restart) bit set (see {{DTLS-chunk}}).  Both SCTP Endpoints shall
-ensure that Restart DTLS key contexts is preserved for supporting the
-SCTP Restart use case.
+and maintain dedicated Restart DTLS Key contexts, SCTP packets
+protected by these contexts will be identified in the DTLS chunk with
+the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP Endpoints
+shall ensure that Restart DTLS key contexts is preserved for
+supporting the SCTP Restart use case.
 
 In order for the protected SCTP endpoint to be available for SCTP
 Restart purposes, the DTLS chunk needs acess to a DTLS Key context for
@@ -368,21 +371,29 @@ NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
 An SCTP endpoint that want to enable itself initiating a SCTP restart
-needs to store the Key and related DTLS epoch, indexed so that when
-performing a restart with the peer node it had an protected SCTP
-association with can identify the right restart Key and DTLS epoch and
-initialize the restart DTLS Key Context. The key and epoch needs to be
-stores safely so that they survive the events that are causing SCTP
-Restart procedure to be used, for instance a crash of the SCTP stack.
+needs to store the restart Keys, DTLS conenction ID (if used) and
+related DTLS epoch, indexed so that when performing a restart with the
+peer node it had an protected SCTP association with can identify the
+right restart Key and DTLS epoch and initialize the restart DTLS Key
+Context for when restarting the SCTP assocation. The keys, DTLS
+connection ID, and epoch needs to be stored safely so that they
+survive the events that are causing SCTP Restart procedure to be used,
+for instance a crash of the SCTP stack.
 
 The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
 exactly as in legacy SCTP Restart case even though those Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.
 
-A DTLS Chunk using the restart DTLS key context
-is identified by having the Restart Indicator bit set in
-the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
-There's exactly one active Restart Key at a time, the newest.
+A DTLS Chunk using the restart DTLS key context is identified by
+having the R bit (Restart Indicator) set in the DTLS Chunk (see
+{{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one
+active Restart Key at a time, the newest. However, a crash at the
+point having completed the key-management exchange but failing to
+commit the key material to secure storage could result in lost
+of the latest key. Therefore, the endpoints should retain the
+old restart DTLS key context for at least 30 seconds after having
+the next installed. However, the old restart DTLS Key Context should
+not be maintained for more than 5 minutes.
 
 
 ~~~~~~~~~~~ aasvg
@@ -408,11 +419,14 @@ DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP statemachine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
 
-A restarted SCTP Association SHALL use the Restart Key, for User Traffic
-until a new traffic DTLS Key will be available.
-The implementors SHOULD initiate a new DTLS keying as soon as possible,
-and derive the traffic and restart keys so that the time when no Restart
-Key is available is kept to a minimum.
+A restarted SCTP Association SHALL use the Restart Key, for User
+Traffic until a new traffic DTLS Key will be available.  The
+implementors SHOULD initiate a new DTLS keying as soon as possible,
+and derive the traffic and restart keys so that the time when no
+Restart Key is available is kept to a minimum. Note that another
+restart attempt prior to having created new restart DTLS Key context
+for the new SCTP association will result in the endpoints being unable
+to restart the SCTP assocation.
 
 # New Parameter Type {#new-parameter-type}
 
