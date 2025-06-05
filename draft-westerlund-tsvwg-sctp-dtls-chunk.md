@@ -124,7 +124,6 @@ features provided by SCTP and its extensions but with some limitations.
 # Overview
 
 ## Protocol Overview {#protocol-overview}
-
 The DTLS chunk is defined as a method for secure and confidential
 transfer for SCTP packets.  This is implemented inside the SCTP
 protocol, in a sublayer between the SCTP common header handling and
@@ -163,7 +162,7 @@ in Regard to SCTP and ULP" artwork-align="center"}
 
 Use of the DTLS chunk is defined per SCTP association.
 
-On the outgoing direction, once the SCTP stack has created the
+In the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet payload containing control and/or DATA chunks,
 that payload will be sent to the DTLS Protection Operator to be
 protected. The format of the protected payload is a DTLS 1.3 record
@@ -173,9 +172,9 @@ The SCTP Protection Operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except than the
-initial SCTP handshake, DTLS handshake, the SCTP common
-header, the SCTP DTLS chunk header, the INIT and INIT-ACK of an SCTP
-association restart, and the SHUTDOWN-COMPLETE chunk.
+initial SCTP handshake, any initial key-management traffic, the SCTP
+common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
+chunk.
 
 SCTP DTLS chunk capability is agreed by the peers at the
 initialization of the SCTP association. Until the DTLS protection has
@@ -218,27 +217,34 @@ decryption into User Data.
 DTLS 1.3 operations requires to directly handshake messages with the
 remote peer for connection setup and other features, this kind of
 handshake is part of the Key Management functionality.  Key Management
-function achieves these features behaving as a SCTP User.  Key
-Management sends and receives its own data via the SCTP User Level
-interface.  Key Management's own data are distinguished from any other
-data by means of a dedicated PPID using the value 4242 (see
-{{iana-payload-protection-id}}).
+function achieves these features behaving as a user of the SCTP
+association.  Key Management sends and receives its own data via the
+SCTP User Level interface.  Key Management's own data are
+distinguished from any other data by means of a dedicated PPID using
+the value 4242 (see {{iana-payload-protection-id}}).
 
-Once the Key Management has established the DTLS 1.3 connection, it
-can set the Protection Operator for User Data encryption/decription
-via the API shown in {{sctp-DTLS-chunk-layering}}. At this stage the
-Key Management functions usage of protection operation on it's DTLS
-plain text messages needs to be synchronized with the DTLS chunk's
-protection operations to avoid nonce re-usage and replay
-protection. Alternatively the key management can use the DTLS chunk's
-session instance to protect it's messages.
+A Key Management using DTLS when it has established a DTLS 1.3
+connection, it can derive traffic and restart keys and set the
+Protection Operator for User Data encryption/decription via the API
+shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
+contexts. Both a DTLS Key context for traffic and a DTLS Key contect
+for restart should be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
 chunks until the Association has reached the PROTECTED state
 ({{init-state-machine}}).  From that time on, DTLS 1.3 handshake
 messages SHALL be transported as SCTP User Data with dedicated PPID =
-4242 within DTLS chunks, same as ULP data traffic.
+4242 within DTLS chunks, same as any ULP data traffic.
+
+In this document we use the terms DTLS Key context for indicating a
+Key, derived from a DTLS connection, and all relevant data that needs
+to be provided to the Protection Operator for DTLS encryption and
+decryption.  DTLS Key context includes Keys for sending and receiving,
+replay window, last used sequence number. Each DTLS key context are
+associated with a four value tuple identifying the context, consisting
+of SCTP Association, the restart indicator, the DTLS Connection ID (if
+used), an the DTLS epoch.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -259,10 +265,10 @@ trigger retransmissions.
 ## PMTU Considerations {#pmtu}
 
 The addition of the DTLS chunk to SCTP reduces the room for payload,
-due to the size of the DTLS chunk header, padding, and authentication
-tag.  Thus, the SCTP layer creating the plain text payload needs to
-know about the overhead to adjust its target payload size
-appropriately.
+due to the size of the DTLS chunk header, padding, and the AEAD
+authentication tag.  Thus, the SCTP layer creating the plain text
+payload needs to know about the overhead to adjust its target payload
+size appropriately.
 
 A path MTU discovery function in SCTP will need to know the actual
 sent and received size of packets for the SCTP packets. This to
@@ -280,12 +286,13 @@ The SCTP mechanism for handling congestion control does depend on
 successful data transfer for enlarging or reducing the congestion
 window CWND (see {{RFC9260}} Section 7.2).
 
-It may happen that Protection Operator discards packets due to internal
-checks or because it has detected a malicious attempt. As those
-packets do not represent what the peer sent, it is acceptable to
-ignore them, although in-situ modification on the path of a packet
-resulting in discarding due to integrity failure will leave a gap, but
-has to be accepted as part of the path behavior.
+It may happen that Protection Operator discards packets due to replay
+protection, or integrity errors depending on network induced bit
+errors or malicous modifications. As those packets do not represent
+what the peer sent, it is acceptable to ignore them, although in-situ
+modification on the path of a packet resulting in discarding due to
+integrity failure will leave a gap, but has to be accepted as part of
+the path behavior.
 
 The Protection Operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
@@ -309,9 +316,9 @@ time belongs to SCTP protocol that will decide according to
 selection algorithm, actually the Protection Operator will not even
 know what path is being used.
 
-Replay window for DTLS Sequence Number will need to take into account
-that heartbeat (HB) chunks are sent concurrently over all paths in
-multihomed Associations, thus it needs to be large enough to
+The Replay window for the DTLS Sequence Number will need to take into
+account that heartbeat (HB) chunks are sent concurrently over all
+paths in multihomed Associations, thus it needs to be large enough to
 accomodate latency differencies.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
@@ -321,12 +328,14 @@ association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
 relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag shall be used. If the
-combination of those parameters is not unique the implementor MAY
-choose to send the DTLS Chunk to all Associations that fit with the
-parameters in order to find the right one. The association will
-attempt de-protection operations on the DTLS chunk, and if that is
-successful the ASCONF chunk can be processed.
+Source, Destination ports and VTag shall be used. If the combination
+of those parameters is not unique the implementor MAY choose to send
+the DTLS Chunk to all Associations that fit with the parameters in
+order to find the right one. The association will attempt
+de-protection operations on the DTLS chunk, and if that is successful
+the ASCONF chunk can be processed. Note that trial decoding should
+have an limit in number of tried contexts to prevent denial of service
+attacks on the endpoint.
 
 The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
@@ -338,54 +347,65 @@ Chunks as Authentication mechanism for ASCONF chunks.
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk
-during an Association lifetime as described in {{RFC9260}} section 5.2
+during an Association lifetime as described in Section 5.2 of {{RFC9260}}
 with the purpose of achieving a Restart of the current Association.
 
 The SCTP Restart procedure is defined to maintain the security
-characteristics of a SCTP Association using DTLS Chunk, this requires
+characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
 
 In order to support SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated DTLS connections, those connection will be
-identified in the DTLS chunk with DCIs with the R (restart) bit set
-(see {{DTLS-chunk}}).  Both SCTP Endpoints shall ensure that
-Restart DTLS connections and related keys are preserved for supporting
-the SCTP Restart use case.
+and maintain dedicated Restart DTLS Key contexts, SCTP packets
+protected by these contexts will be identified in the DTLS chunk with
+the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP Endpoints
+shall ensure that Restart DTLS key contexts is preserved for
+supporting the SCTP Restart use case.
 
-In order to be available for SCTP Restart purposes, the Restart DTLS
-connection must be kept in a well-known state so that both SCTP
-Endpoints are aware of the DTLS sequence numbers and replay window. An
-SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS connection for any
-other use case than SCTP Restart.
+In order for the protected SCTP endpoint to be available for SCTP
+Restart purposes, the DTLS chunk needs acess to a DTLS Key context for
+this SCTP association that needs to be kept in a well-known state so
+that both SCTP Endpoints are aware of the DTLS sequence numbers and
+replay window, i.e. initialized but never used. An SCTP Endpoint SHALL
+NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
+association restart.
 
-The DTLS Restart Connections, the related key materials, the
-information related to the sequence numbers and replay window SHALL be
-stored in a safe way that survives the events that are causing SCTP
-Restart procedure to be used, for instance a crash of the SCTP stack.
+An SCTP endpoint that want to enable itself initiating a SCTP restart
+needs to store the restart Keys, DTLS conenction ID (if used) and
+related DTLS epoch, indexed so that when performing a restart with the
+peer node it had an protected SCTP association with can identify the
+right restart Key and DTLS epoch and initialize the restart DTLS Key
+Context for when restarting the SCTP assocation. The keys, DTLS
+connection ID, and epoch needs to be stored safely so that they
+survive the events that are causing SCTP Restart procedure to be used,
+for instance a crash of the SCTP stack.
 
-The SCTP Restart handshakes INIT/INIT-ACK exactly as in legacy SCTP
-whilst COOCKIE-ECHO/COOKIE-ACK SHALL be sent as DTLS chunk protected
-using the keying material for the restart DTLS connection, that is the
-DTLS Restart Connection and its DCI.
+The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
+exactly as in legacy SCTP Restart case even though those Chunks SHALL be
+sent as DTLS chunk protected using the restart DTLS key context.
 
-A Restart DCI is identified by having the Restart Indicator bit set in
-the DTLS Chunk (see {{sctp-DTLS-chunk-newchunk-crypt-struct}}).
-There's exactly one active Restart DCI at a time, the newest. Whereas
-a number of Restart DTLS connection MAY exist at the same time with
-the purpose of replace the aging active Restart DTLS connection.
+A DTLS Chunk using the restart DTLS key context is identified by
+having the R bit (Restart Indicator) set in the DTLS Chunk (see
+{{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one
+active Restart Key at a time, the newest. However, a crash at the
+point having completed the key-management exchange but failing to
+commit the key material to secure storage could result in lost
+of the latest key. Therefore, the endpoints should retain the
+old restart DTLS key context for at least 30 seconds after having
+the next installed. However, the old restart DTLS Key Context should
+not be maintained for more than 5 minutes.
 
 
 ~~~~~~~~~~~ aasvg
 
 Initiator                                     Responder
     |                                             | -.
-    +--------------------[INIT]------------------>|   | Plain SCTP
-    |<-----------------[INIT-ACK]-----------------+   +-----------
-    |                                             | -'
-    |                                             | -.
-    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Encrypted
-    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +----------
+    +------------[DTLS CHUNK(INIT)]-------------->|   |
+    |<---------[DTLS CHUNK(INIT-ACK)]-------------+   +-------
+    |                                             |   | Using
+    |                                             |   | SCTP
+    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Chunks
+    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +-------
     |                                             | -'
 
 ~~~~~~~~~~~
@@ -394,17 +414,19 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.
 
-Sending INIT and INIT-ACK plain text guarantees the compliance with
-the legacy SCTP Restart, whilst the transport of the COOCKIE-ECHO
-and COOCKIE-ACK by means of DTLS chunk ensures that the
-peer requesting the restart has been previously validated.
+The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK by means of
+DTLS chunk ensures that the peer requesting the restart has been
+previously validated and the SCTP statemachine after having reached
+ESTABLISHED state moves automatically to PROTECTED state.
 
-A restarted SCTP Association SHALL use the Restart DCI, thus the
-Restart DTLS connection, for User Traffic until a new traffic DTLS
-connection will be available.  The implementors SHOULD initiate two
-new DTLS connection as soon as possible, one as replacement restart
-DCI, the other as a new traffic DCI, so that the time when no Restart
-DCI are available is kept to a minimum.
+A restarted SCTP Association SHALL use the Restart Key, for User
+Traffic until a new traffic DTLS Key will be available.  The
+implementors SHOULD initiate a new DTLS keying as soon as possible,
+and derive the traffic and restart keys so that the time when no
+Restart Key is available is kept to a minimum. Note that another
+restart attempt prior to having created new restart DTLS Key context
+for the new SCTP association will result in the endpoints being unable
+to restart the SCTP assocation.
 
 # New Parameter Type {#new-parameter-type}
 
@@ -470,13 +492,13 @@ accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
 the upper bits of the chunk type.
 
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
-payload of a plain SCTP packet.
+payload of a plain text SCTP packet without the SCTP common header.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Type = 0x4x   |reserved |R|DCI|         Chunk Length          |
+| Type = 0x4x   | reserved    |R|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                            Payload                            |
@@ -487,7 +509,7 @@ payload of a plain SCTP packet.
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure"}
 
-reserved: 5 bits
+reserved: 7 bits
 
 : Reserved bits for future use. Sender MUST set these bits to 0 and
   MUST be ignored on reception.
@@ -495,19 +517,7 @@ reserved: 5 bits
 R: 1 bit (boolean)
 
 : Restart indicator. If this bit is set this DTLS chunk is protected
-  with by an restart DTLS Connection with the index indicated by the
-  DCI. If not set, then a traffic DCI is indicated.
-
-DCI: 2 bits (unsigned integer)
-
-: DTLS Connection Index is the lower two bits of an DTLS Connection
-   Index counter for the traffic or restart DTLS connection index.
-   This is a counter implemented in DTLS in
-   SCTP that is used to identify which DTLS connection instance that
-   is capable of processing any received packet or DTLS message over
-   an user message. This counter is recommended to be the lower part
-   of a larger variable.
-   DCI is unrelated to the DTLS Connection ID (CID) {{RFC9147}}.
+  with by an Restart DTLS Key context.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
@@ -611,10 +621,11 @@ security policy.
 ~~~~~~~~~~~
 {: #sctp-DTLS-init-chunk-missing-protected title="ERROR Missing Protected Association Paramater" artwork-align="center"}
 
-Note: Cause Length is equal to the number of missing parameters 8 + N
-* 2 according to {{RFC9260}}, section 3.3.10.2. Also the Protection
-Association ID may be present in any of the N missing params, no order
-implied by the example in {{sctp-DTLS-init-chunk-missing-protected}}.
+Note: Cause Length in bytes is equal to following with the number of
+missing parameters as N: 8 + N * 2 according to {{RFC9260}}, section
+3.3.10.2. Also the Protection Association ID may be present in any of
+the N missing params, no order implied by the example in
+{{sctp-DTLS-init-chunk-missing-protected}}.
 
 ## Error in DTLS Chunk  {#eprotect}
 
@@ -695,20 +706,20 @@ use is "Failure in Validation" identifier 0x02.
 
 ## Critical Error from DTLS {#eengine}
 
-DTLS 1.3 MAY inform local SCTP endpoint about errors.  When an Error
-in the DTLS 1.3 compromises the protection mechanism, the protection
-operator may stop processing data altogether, thus the local SCTP
-endpoint will not be able to send or receive any chunk for the
-specified Association.  This will cause the Association to
-be closed by legacy timer-based mechanism. Since the Association
+DTLS Protection Operator MAY inform local SCTP endpoint about errors.
+When an Error in the DTLS 1.3 compromises the protection mechanism,
+the protection operator may stop processing data altogether, thus the
+local SCTP endpoint will not be able to send or receive any chunk for
+the specified Association.  This will cause the SCTP Association to be
+closed by legacy timer-based mechanism. Since the Association
 protection is compromised no further data will be sent and the remote
 peer will also experience timeout on the Association.
 
 ## Non-critical Error in the Protection {#non-critical-errors}
 
-A non-critical error in DTLS 1.3 means that the
+A non-critical error in DTLS Protection Operator means that the
 Protection Operator is capable of recovering without the need
-of the whole Association to be restarted.
+of the whole SCTP Association to be restarted.
 
 From SCTP perspective, a non-critical error will be perceived
 as a temporary problem in the transport and will be handled
@@ -733,7 +744,7 @@ INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
 and any optional information.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
-only protected associations shall consider INIT chunk not containing
+only protected associations shall consider an INIT chunk not containing
 the DTLS 1.3 Chunk Protected Association parameter or another by
 security policy accepted security solution as an error, thus it will
 reply with an ABORT chunk according to what specified in
@@ -744,11 +755,10 @@ When initiator and responder have agreed on a protected association by
 means of handshaking INIT/INIT-ACK the SCTP association establishment
 continues until it has reached the ESTABLISHED state. However, before
 the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
-states needs to be passed. First DTLS Chunk needs be initializied
+states needs to be passed. First the DTLS Chunk needs be initializied
 in the PROTECTION INTILIZATION state. This MAY be accomplished by the
-procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, or
-through other methods that results in at least one DCI has
-initialized state. When that has been accomplished one
+procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+When that has been accomplished one
 enters the VALIDATION state where one validates the exchange of the
 DTLS 1.3 Chunk Protected Association Parameter and any alternative
 protection solutions. If that is successful one enters the PROTECTED
@@ -756,9 +766,9 @@ state. This state sequence is depicted in {{init-state-machine}}.
 
 Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
-value 4242 used to exchange in-band key establishment messages for
-DTLS. Any other DATA chunk being received in a Protected association
-SHALL be silently discarded.
+value 4242 used to exchange in-band key establishment messages. Any
+other DATA chunk being received in a Protected association SHALL be
+silently discarded.
 
 If in-band DTLS handshake {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}
 is used to establish the security parameters for the DTLS Chunks, DTLS
@@ -826,8 +836,9 @@ what specified in {{etmout}}.
 In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
 exchanged in the protected SCTP association.
 
-When entering the PROTECTED state, a Restart DTLS connection
-SHOULD be created.
+When entering the PROTECTED state, a Restart DTLS Key for the current
+epoch SHOULD be provided into the DTLS key context store for the SCTP
+association.
 
 ### Offering Multiple Security Solutions
 
@@ -840,7 +851,7 @@ The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
 includes {{RFC6083}} or more likely its replacement. This will result
 in that a number of different SCTP parameters may be included that are
-not possible to use simultanous. Instead the responder needs to parse
+not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most approriate. For example an offer of DTLS
@@ -849,7 +860,7 @@ solutions with different properties, namely DTLS 1.3 Chunks,
 DTLS/SCTP, and SCTP-AUTH only.
 
 The responder selects one or possibly more of compatible security
-solutions that can be used simultanously and include them in the
+solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
 will later send the PVALID chunk indicating all the offered
 solutions. This to prevent downgrade attacks where sent solution have
@@ -917,11 +928,11 @@ When the Association is in DTLS chunk PROTECTED state and the SCTP
 assocation is in ESTABLISHED or any of the states that can be reached
 after ESTABLISHED state, in-band key management are RECOMMENDED to
 use SCTP Data chunk with dedicated PPID value = 4242, those chunks SHALL be
-sent and received using DTLS Chunks with the current CID.
+sent and received using DTLS Chunks with the current DTLS Key context.
 
 The use of plain DATA chunk with PPID value = 4242 before the
 association reaches the PROTECTED state cannot be avoided as
-no valid DTLS CID exist until that state.
+no valid DTLS key context exist until that state.
 Further in-band key management SHALL NOT use plain DATA chunks
 as this would allow attackers to inject overlapping DATA chunks
 with protected and impact the content of the SACK block.
@@ -963,11 +974,12 @@ chunks and DTLS chunks follows the rules defined below:
   accepted and handled according to section 4 of {{RFC9260}}.
 
 - If an SCTP restart is occurring there are exception rules to the
-  above. The COOKIE-ECHO and COOKIE-ACK SHALL be sent protected by
-  DTLS chunk using a restart DCI. The DTLS chunk with restart DCI is
+  above. The INIT, INIT-ACK, COOKIE-ECHO and COOKIE-ACK SHALL be
+  sent protected by DTLS chunk using a Restart DTLS key context.
+  The DTLS chunk with restart Key is
   continuning to protect any SCTP chunks sent while being in SCTP
   state ESTABLISHED, VALIDATION and PROTECTED, until a newely
-  established traffic DCI are ready to be used instead to protect
+  established traffic Key is ready to be used instead to protect
   future SCTP chunks.
 
 ~~~~~~~~~~~ aasvg
@@ -1002,7 +1014,7 @@ when the DTLS Chunk is in PROTECTION INITIALIZATION, and VALIDATION
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of an protected SCTP packet being sent after the DTLS
+the structure of a protected SCTP packet being sent after the DTLS
 Chunk VALIDATION or PROTECTED state has been reached. Such packets are
 built with the SCTP common header. Only one DTLS chunk can be sent in
 a SCTP packet.
@@ -1020,23 +1032,27 @@ that specific association, the Protection Operator will return an
 encrypted DTLS 1.3 record.
 
 An SCTP packet containing an SCTP DTLS chunk SHALL be delivered
-without delay and SCTP chunk bundling {{RFC9260}} SHALL NOT be
-performed. If a SCTP packet with chunk bundling is received the
-receiver SHALL ignore any subsequent chunk.
+without delay, and SCTP chunk bundling {{RFC9260}} SHALL NOT be
+performed.
 
 ## Protected Data Chunk Reception {#data-receiving}
 
 When the DTLS Chunk state machine has reached the VALIDATION or
-PROTECTED state, the DTLS chunk handler will receive DTLS chunks
-from the SCTP Header Handler.  Payload from DTLS chunks will be
-forwarded to the Protection Operator which will return a plain
-SCTP Payload.  The plain SCTP payload will be forwarded to SCTP Chunk
-Handler that will split it in separated chunks and will handle them
-according to {{RFC9260}}.
+PROTECTED state, the DTLS chunk handler will receive DTLS chunks from
+the SCTP Header Handler.  Payload from DTLS chunks will be forwarded
+to the Protection Operator which will return a plain SCTP Payload,
+assuming verified authenticty and no replay.  The plain SCTP payload
+will be forwarded to SCTP Chunk Handler that will split it in
+separated chunks and will handle them according to {{RFC9260}}.
 
-Meta data, such as ECN, source and destination address or path ID,
-belonging to the received SCTP packet SHALL be tied to the relevant
-set of chunks and forwarded transparently to the SCTP endpoint.
+If a SCTP packet with more than one DTLS chunk is received,
+thus bundling multiple chunks, the receiver SHALL handle the
+first DTLS chunk and ignore any subsequent chunk.
+
+Metadata, such as ECN, reception time, IP packet size, source and
+destination address or path ID, belonging to the received SCTP packet
+SHALL be tied to the relevant set of chunks and forwarded
+transparently to the SCTP endpoint.
 
 ### SCTP Header Handler
 
@@ -1051,7 +1067,7 @@ delivers it towards the lower transport layer.
 
 # Abstract API  {#abstract-api}
 
-This section describes and abstract API that is needed between a key
+This section describes an abstract API that is needed between a key
 establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.
 
@@ -1075,8 +1091,7 @@ Parameters : list of cipher suits
 ## Establish Client Write Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
-corresponding key materials. Which has been used are explicitly
-indicated in the DCI field.
+corresponding key materials.
 
 The following information needs to be provided when setting Client Write (transmit) Keying material:
 
@@ -1087,11 +1102,12 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-* DCI:
-: The DTLS connection index value to establish (or overwrite)
-
 * Restart indication:
-: A bit indicating wheter the DCI is for restart purposes
+: A bit indicating wheter the Key is for restart purposes
+
+* DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
+  the key-management its field length and value are include. The field length
+  can be set to zero (0) to indicate that CID is not used.
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
@@ -1100,10 +1116,9 @@ Paramters :
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
+  The cipher suite is fixed for a (SCTP Assocation, Key) pair.
 
 * Write Key and IV:
-
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
@@ -1116,8 +1131,7 @@ Reply : Established or Failed
 ## Establish Server Write Keying Material
 
 The DTLS Chunk can use one of out of multiple sets of cipher suit and
-corresponding key materials. Which has been used are explicitly
-indicated in the DCI field.
+corresponding key materials.
 
 The following information needs to be provided when setting Server Write (transmit) Keying material:
 
@@ -1128,11 +1142,12 @@ Paramters :
 * SCTP Assocation:
 : Reference to the relevant SCTP assocation to set the keying material for.
 
-* DCI:
-: The DTLS connection index value to establish (or overwrite)
-
 * Restart indication:
-: A bit indicating wheter the DCI is for restart purposes
+: A bit indicating wheter the Key is for restart purposes
+
+* DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
+  the key-management its field length and value are include. The field length
+  can be set to zero (0) to indicate that CID is not used.
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
@@ -1141,15 +1156,13 @@ Paramters :
 * Cipher Suit:
 : 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-  The cipher suite is fixed for a (SCTP Assocation, DCI) pair.
+  The cipher suite is fixed for a (SCTP Assocation, Key) pair.
 
 * Write Key and IV:
-
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
 cipher suit used.
-
 
 Reply : Established or Failed
 
@@ -1157,7 +1170,7 @@ Reply : Established or Failed
 ## Destroy Client Write Keying Material
 
 A function to destroy the Client Write (transmit) keying material for a given epoch for a given
-DCI for a given SCTP Association.
+Key for a given SCTP Association.
 
 Request : Destroy client write key and IV
 
@@ -1165,9 +1178,9 @@ Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
+
+* DTLS CID
 
 * DTLS Epoch
 
@@ -1178,7 +1191,7 @@ Parameters : true or false
 ## Destroy Server Write Keying Material
 
 A function to destroy the Server Write (transmit) keying material for a given epoch for a given
-DCI for a given SCTP Association.
+Key for a given SCTP Association.
 
 Request : Destroy server write key and IV
 
@@ -1186,9 +1199,9 @@ Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
+
+* DTLS CID
 
 * DTLS Epoch
 
@@ -1196,22 +1209,24 @@ Reply: Destroyed
 
 Parameters : true or false
 
-## Set DCI to Use
+## Set Key to Use
 
-Set which key context (DCI) to use to protect the future SCTP packets sent by the
+Set which key to use to protect the future SCTP packets sent by the
 SCTP Association.
 
-Request : Set DCI used
+Request : Set Key used
 
 Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
 
-Reply: DCI set
+* DTLS CID
+
+* DTLS Epoch
+
+Reply: Key set
 
 Parameters : true or false
 
@@ -1226,9 +1241,9 @@ Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
+
+* DTLS CID
 
 * DTLS Epoch
 
@@ -1247,9 +1262,9 @@ Paramters :
 
 * SCTP Association
 
-* DCI
-
 * Restart indication
+
+* DTLS CID
 
 * DTLS Epoch
 
@@ -1269,15 +1284,17 @@ times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
 
+Note this sets this configuration to be used across any DTLS key
+context for a given SCTP Association and traffic/restart usages.
+
 Request : Configure Replay Protection
 
 Paramters :
 
-* DCI
+* SCTP Association
 
 * Restart indication
 
-* SCTP Association
 
 * Configuration parameters
 
@@ -1286,86 +1303,11 @@ Reply: Replay Protection Configured
 Parameters : true or false
 
 
-## Protect Handshake Message
-
-Optional API function that can be one way to handle the need to
-synchronize the DTLS record protection operations usage of nonce
-values to avoid reuse and replay protection. With this realization the
-nonce state is kept by the DTLS chunk function. When the handshake
-function needs to send a DTLS message, e.g. key_update, which uses
-DTLS epoch=3 or higher, it uses the DTLS chunk protection operation. The
-protected DTLS record is returned to the DTLS handshake
-implementation, which then sends it as SCTP user data.
-
-Request : Protect Handshake message
-
-Paramters :
-
-* SCTP Association
-
-* DCI
-
-* Restart indication
-
-* Epoch
-
-* Plain Text Message
-
-Reply: Protected DTLS record.
-
-
-## Deprotect Handshake Message
-
-Optional API function that can be one way to handle the need to
-synchronize the DTLS record protection operations usage of nonce
-values to avoid reuse and ensure replay protection. This funciton
-takes a protected DTLS record that the handshake has been received as
-SCTP user data using an DTLS epoch= 3 or higher for this DTLS connection.
-The function attempts to decrypt, verify integrity and check replay
-protection and if successful return the plain text payload,
-alternatively indicate the invalidity of the payload.
-
-
-Request : Deprotect Handshake message
-
-Paramters :
-
-* SCTP Association
-
-* DCI
-
-* Restart indication
-
-* DTLS record
-
-Reply: Plain Text DTLS message or failure indicator
-
 # Implementation Considerations
 
-For each DTLS connection, there are certain crypto state infomration
+For each DTLS Key Contexts, there are certain crypto state infomration
 that needs to be handled thread safe to avoid nonce re-use and correct
-replay protection. This arises as the key materials for DTLS epoch=3 and higher
-are shared between the DTLS chunk and the DTLS handshake parts.
-
-This issue is primarily for implementations of SCTP implementation
-and thus the DTLS chunk implementation resides in kernel space, and the
-DTLS handshake resides in user space. For user space implementations
-where both DTLS handshake messages and SCTP message protection can directly
-call the same DTLS implementation instance the issue is avoided.
-
-The abstract API {{abstract-api}} includes a proposal for how to handle
-this challenge by using an API function call to protect the plain text
-message, and another for decrypting and verifying the integrity.
-
-It needs to be noted that DTLS handshake messages sent after DTLS
-connection establishment will be protected twice. First before being
-sent as SCTP user data, and then a second time as part of DATA Chunks
-in SCTP packets. The extra overhead is minimal as the number of these
-messages are very limited. However, care needs to be take with the replay
-protection, as when deprotecting the DTLS message that DTLS record
-sequence number will be lower than the latest received for an SCTP
-message.
-
+replay protection.
 
 
 # IANA Considerations {#IANA-Consideration}
@@ -1511,7 +1453,7 @@ Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
 port are fixed for each direction. Advanced privacy features such
-as changing Connection ID and sequence number encryption might
+as changing DTLS Connection ID and sequence number encryption might
 therefore have limited effect.
 
 ## AEAD Limit Considerations
