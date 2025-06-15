@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T01:15:39.554968+00:00",
+  "timestamp": "2025-06-15T01:17:22.284205+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -333,16 +333,24 @@
       "id": "I_kwDOKszxDc6cvCDK",
       "title": "IANA early review noted that there are no upper limit in regestry definition",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/19",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "IANA did an early review and commented:\r\n\r\nIn Section 10.2, what\u2019s the upper numeric boundary (e.g., 31) for the \u201cbit position\u201d field?\r\n\r\nThis should be clarified as we allow for multiple 32-bit words. So the limit are likely the maximum of words in a parameter. ",
       "createdAt": "2024-11-01T17:53:54Z",
-      "updatedAt": "2024-11-01T17:53:54Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-06-12T13:38:47Z",
+      "closedAt": "2025-06-12T13:38:47Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "A limit has been implemented. ",
+          "createdAt": "2025-06-12T13:38:47Z",
+          "updatedAt": "2025-06-12T13:38:47Z"
+        }
+      ]
     },
     {
       "number": 22,
@@ -352,13 +360,38 @@
       "state": "OPEN",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "tuexen",
+        "gloinul"
+      ],
       "labels": [],
       "body": "From the Design Team : the PVALID chunk is not a preferred solution, it shall be replaced by using a legacy DATA Chunk having a new PPID.",
       "createdAt": "2025-05-26T06:58:06Z",
-      "updatedAt": "2025-05-26T06:58:06Z",
+      "updatedAt": "2025-06-13T08:59:10Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@teiclap and I tried to implement the design team direction of attempting to move the downgrade attack prevention that PVALID Chunk was supporting to the security function running in user space above an SCTP stack. We have run into issues which we think are the result of not fully thinking through this direction and would like to discuss it further.\n \nThe main goal of the PVALID mechanism is ensure that all that was negotiated in clear text was all that the sender of the respective side actually offered so no downgrades occurred at this step INIT/INIT-ACK. To be able to do that both sides needs to accurately represent all that was offered when it comes to security parameters and compare that to all that was received on the peer side. The PVALID mechanism need to carry the relevant information of both what was offered and what was received. I think it is here that we didn\u2019t think this through properly what the implications of this is when trying to do this from the user land level. \n \nThe user land process initiating an SCTP association needs to configure the SCTP stack with which security related options it wants to offer. This will result in one or more security related parameter will be included. So here I would note that we existing parameters are DTLS Chunk (with key-management indicators) and possibly also SCTP-AUTH with the chunks/all chunks, random, HMAC Algo. These offered parameters needs to be either parameterized and included in the cookie, or simply the whole set of relevant parameters included in cookie and then encrypted. \n \nThe responder sends back the INIT-ACK with parameter response for what it accepts to use and relevant parameter values. The Init-ACK also contains the state cookie containing the offered info as well as it\u2019s own response of information. As the responder want to remain stateless for this first Init/Init-ACK procedure nothing is stored locally or given to the upper layer. \n \nThe Initiator receives the INIT-ACK and verifies that the SCTP Association and configured security parameters is viable and stores either the parameters or a representation of what it received. Then it sends the Cookie ECHO back to the responder side. Here the information from the  INIT/INIT-ACK could be provided to key-management but it likely makes sense to wait until 5 when the SCTP association enters established.\n \nThe responder side receives the Cookie-ECHO and unpacks the cookie and creates the SCTP Association state and stores the security parameters. On the responder side the SCTP association is now in established state. However, the key-management step is so far not initiated by the responder but by the initiator. The responder sends the Cookie-ACK. Here is the earlies the responder side could provide the relevant information from the INIT and INIT-ACK to the key management.\n \nThe initiator is receiving the Cookie-ACK and goes into established state. As the SCTP Association establishment succeeded the key-management mechanism can be triggered. It will send its DTLS Client Hello. \n \nThe responder receives the DTLS client hell and gives it to the key-management function. Generates the DTLS Server hello and sends that back. At this point it can install DTLS Chunk receive keys, and send keys, but can\u2019t activate them until it has confirmed that the Server Hello has reached the DTLS Client. So technically this could be based on SCTP SACKs, but I think that is complex when it comes to the API function. Thus, one could initiate PVALID here and send an encrypted DTLS Chunk with a PVALID message, thus potentially mixing encrypted and unencrypted SCTP packets, however any retransmission of the Server Hello must be sent unencrypted.\n \nThe initiator receives the Server Hello and can now install both receiver keys and send keys. It now sends the DTLS Client ACK to conclude the DTLS handshake. This can be sent encrypted to my understanding. The initiator side can after having sent this initiate PVALID mechanism. \n \nThe responder receives the DTLS Client ACK (encrypted) and can also verify conclusion of DTLS handshake and also move to send only encrypted at this point. At this stage it can definitely run PVALID process. \n \nLets, now look at what information is needed to perform the PVALID mechanism. For the initiator to generate a PVALID message it needs to have the actual parameter set or a representation of that stored in the key-management user land protocol. Which means that it either can determine what would be sent based on the configuration, or need have an API function to query the SCTP stack to get what was included in the INIT. Then it could send its PVALID message with this information to the responder.\n \nThe responder when receiving the PVALID message needs to compare the included information with was actually received in the INIT message. However, due to the statelessness, it will get this from the Cookie-Echo (4) and thus needs an API function here to extract this information. I will also note that we need to handle the situation that the responder might not know all the parameters that was offered. Thus, it lacks implementation to know what some of these parameters are. Claudio and I concluded that this comparison can be done in two ways. The PVALID Chunk requires the SCTP stack to determine all options it received in the INIT based on its implementation capabilities and mark those down. Then when it receives the PVALID chunk it compared all it could understand, with all that is offered. If anything was offered that the responder implements but didn\u2019t mark as parsed from the INIT we have a potential modification and should abort. Doing this from the user land level generates certain API requirements. It basically means that in a step after (4) the responder key-management side should read up the SCTP stacks interpretation of what was offered in the INIT. It also needs and API function that gives the corresponding list of all that is implemented in this stack. We see moving this information across the SCTP stack boundary up to the key-management as non-trivial and requires generating an information structure that represents all relevant security parameter combinations. \n\nClaudio have an alternative idea that appears to both of us to result in simpler implementation assuming that PVALID remains a chunk. The core of this idea is to have the implementations perform only a byte comparison between what it received in the INIT/INIT-ACK and what is contained in the PVALID Chunk. We think only the Parameters needs to be compared. So the PVALID chunk will contain a full binary representation of the INIT or INIT-ACK parameters depending on direction. That way both sides simply save what it sent, and later sends it in the PVALID Chunk. As this binary byte object is not interpreted, only stored as part of the SCTP association state doing the validation within the SCTP level is simple and straight forward and avoids the need for additional API calls. \n \nThe only potential downside with this is that this will grow the handshake messages, especially the INIT-ACK as that message needs to contain both the parameter response in clear text, as well as both the received parameters from the INIT as well as its response but protected inside the encrypted Cookie. Thus, the INIT-ACK will contain three sets of parameters.\n \nThe design team will discuss this further.",
+          "createdAt": "2025-06-12T13:37:17Z",
+          "updatedAt": "2025-06-12T13:37:17Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Design team discussed this. We will encoded all security option in the DTLS Chunk Parameter. Each option is given a value and listed in a priority list. @gloinul will write parameter and IANA table. @tuexen to specify API for it.\n\nWe plan to send the PVALID messages over seperate PPID. ",
+          "createdAt": "2025-06-13T08:37:51Z",
+          "updatedAt": "2025-06-13T08:37:51Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen to write api and interaction with statemachine to go from SCTP ESTABLISHED to PROTECTED including PVALID message exchange. ",
+          "createdAt": "2025-06-13T08:44:10Z",
+          "updatedAt": "2025-06-13T08:44:10Z"
+        }
+      ]
     },
     {
       "number": 23,
@@ -400,11 +433,13 @@
       "state": "OPEN",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "gloinul"
+      ],
       "labels": [],
       "body": "From the Design Team : DTLS1.3 Parameter in INIT/INIT-ACK Chunk requires supporting options, such as the key management, for instance.",
       "createdAt": "2025-05-26T12:42:13Z",
-      "updatedAt": "2025-05-26T12:42:13Z",
+      "updatedAt": "2025-06-13T08:59:03Z",
       "closedAt": null,
       "comments": []
     },
@@ -416,11 +451,13 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "Do one reset the DTLS epoch values after an SCTP assocation restart protected by the DTLS chunk?\n\nAs the DTLS 1.3 epoch counter is 64-bit I don't think there are a real issue of running out of space and do not need to be reset for that reason. If one reset the counter, the node not restarting could potentially be forced to overwrite the current epoch. However, the SCTP association restart basically result in a new DTLS key context store, which will initially only contain the restart DTLS context ID. There should be no traffic DTLS key context, these should only be generated after a new DTLS key management invocation. \n\nIf one do not reset the counter then there will be a need to for the key-management on the restarting side to understand that the next epoch value to use is the one used by the restart +1.\n\nDo anyone see issues with reseting epoch on restart?",
       "createdAt": "2025-06-03T13:16:56Z",
-      "updatedAt": "2025-06-05T13:09:33Z",
+      "updatedAt": "2025-06-13T08:58:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -429,6 +466,20 @@
           "body": "As both side knows the restart key used for the restart using restart +1 is actually fine, and might have less overlap issues compared to being on the first epoch and resetting it back and then having to overwrite the restart key used, after having installed the traffic key. In some particular situation we might end up overwriting an existing key in cases if the restart happens in the exact moment the negotiation when the non restarting have managed to install the next key, but not the crashing side. ",
           "createdAt": "2025-06-05T13:09:32Z",
           "updatedAt": "2025-06-05T13:09:32Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Design Team discussion: Assumption will reset it to value=3 after restart. The API needs to take into account that full epoch resets from higher value to a lower. ",
+          "createdAt": "2025-06-13T08:57:39Z",
+          "updatedAt": "2025-06-13T08:57:39Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Write down API consideration of this. ",
+          "createdAt": "2025-06-13T08:58:21Z",
+          "updatedAt": "2025-06-13T08:58:21Z"
         }
       ]
     },
@@ -440,11 +491,13 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "gloinul"
+      ],
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-06-04T12:30:54Z",
+      "updatedAt": "2025-06-13T09:34:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -453,6 +506,13 @@
           "body": "Current comment on this is in https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-westerlund-tsvwg-sctp-dtls-chunk.html#name-dynamic-address-reconfigura",
           "createdAt": "2025-06-04T12:30:53Z",
           "updatedAt": "2025-06-04T12:30:53Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Discussion: ACONF from new address when encapsulated will not work. Using it encapsulated when just signalling a new address over an existing one will work. Explain this limitation. ",
+          "createdAt": "2025-06-13T09:34:07Z",
+          "updatedAt": "2025-06-13T09:34:07Z"
         }
       ]
     },
@@ -464,11 +524,13 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "The description of how the DTLS chunk initilization was agreed to be generalized and thus the interaction with the API functions needs to be updated.\n\nReception Key set: Can receive DTLS chunk from peer will also accept unprotected. \nSend Key set: Will send SCTP packets protected, but still accepts unprotected.\nProtection Established: Protection sending and reception verified, only protected packets established. \n\nThis will interact with the exchange of user level validation data that can only be sent after Send Key Set. Likely this will need to be addressed in combination with #22 update. ",
       "createdAt": "2025-06-04T13:17:24Z",
-      "updatedAt": "2025-06-04T13:17:24Z",
+      "updatedAt": "2025-06-13T08:58:48Z",
       "closedAt": null,
       "comments": []
     }
