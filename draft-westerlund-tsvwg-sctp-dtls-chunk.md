@@ -431,9 +431,10 @@ to restart the SCTP assocation.
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
-negotiate the use of the DTLS 1.3 chunk during
-association setup. {{sctp-DTLS-chunk-init-parameter}} illustrates
-the new parameter type.
+negotiate the use of the DTLS 1.3 chunk during association setup, its
+keying method and indicate preference in relation to different keying
+and other security solutions. {{sctp-DTLS-chunk-init-parameter}}
+illustrates the new parameter type.
 
 | Parameter Type | Parameter Name |
 | 0x80xx | DTLS 1.3 Chunk Protected Association |
@@ -446,8 +447,10 @@ the use of the upper bits of the parameter type.
 
 ## DTLS 1.3 Chunk Protected Association {#protectedassoc-parameter}
 
-This parameter is only used to indicate the request and acknowledge of
-support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
+This parameter is used to the request and acknowledge of support of
+DTLS 1.3 Chunk during INIT/INIT-ACK handshake and indicate preference
+for keying and the preference order between multiple security
+solutions (if supported).
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -455,7 +458,12 @@ support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x80XX    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
+|  Protection Solution #1       |  Protection Solution #2       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+: Protection Solutions                                          :
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Protection Solution #N        | Padding                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
 
@@ -464,7 +472,21 @@ Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x80XX.
 
 Parameter Length: 16 bits (unsigned integer)
-: This field has value equal to 4.
+: This value holds the length of the parameter, which will be the number of Protection Solution fields (N) times two
+  plus 4 and if N is odd plus 2 bytes of padding.
+
+Protection Solution fields: zero or more 16-bit unsigned integer fields:
+: Each Protection Solution field is a 16-bit unsigned integer
+indicting a Protection Solution. Protection solutions include both DTLS
+Chunk based, where a solution combines the DTLS chunk with a
+key-management solution, or non DTLS Chunk based ones. The Protection
+Solutions are listed in descending order of preference, i.e. the first
+listed in the parameter is the most preferred and the last the least
+preferred.
+
+Padding: If the number of included Protection solutions are odd the
+parameter MUST be padded with two zero (0) bytes of padding to make
+the parameter 32-bit aligned.
 
 RFC-Editor Note: Please replace 0x08XX with the actual parameter type
 value assigned by IANA and then remove this note.
@@ -531,59 +553,56 @@ Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
-##  Protection Solution Validation Chunk (PVALID) {#pvalid-chunk}
+#  Downgrade Protection Validation Message {#pvalid}
 
-This section defines the new chunk types that will be used to validate
-the Init/Init-ACK negotiation that selected the DTLS 1.3 chunk.  This
-to prevent down grade attacks on the negotiation if other protection
-solutions where offered. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}}
-illustrates the new chunk type.
+This section defines a standardized message that will be exchanged
+between the endpoints to validate the Init/Init-ACK negotiation that
+selected the DTLS 1.3 chunk.  This to prevent down grade attacks on
+the negotiation if other protection solutions where
+offered. {{sctp-DTLS-PVALID-message}} illustrates the
+message structure. This message is exchanged as reliably DATA message
+using a dedicated PPID to enable the key-exchange mechanism to be the
+receiver of the message and thus validate the the negotiation.
 
-| Chunk Type | Chunk Name |
-| 0x4X | Protection Solution Validation (PVALID) |
-{: #sctp-DTLS-chunk-newchunk-pvalid-chunk title="PVALID Chunk Type" cols="r l"}
 
-It should be noted that the PVALID chunk format requires the receiver
-stop processing this SCTP packet, discard the unrecognized chunk and
-all further chunks, and report the unrecognized chunk in an ERROR
-chunk using the 'Unrecognized Chunk Type' error cause.  This is
-accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
-the upper bits of the chunk type.
-
-The PVALID chunk is used to hold a 32-bit vector of offered protection
+The PVALID message is used to hold a 32-bit vector of offered protection
 solutions in the INIT.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Type = 0x4X  |   Flags = 0   |         Chunk Length          |
+|  Type = 0x01  |   Flags = 0   |         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Protection Solutions Indicator                               |
+|  Protection Solution #1       |  Protection Solution #2       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+: Protection Solutions                                          :
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Protection Solution #N        | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-PVALID -struct title="PVALID Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-PVALID-message -struct title="PVALID Message Structure" artwork-align="center"}
 
 {: vspace="0"}
-Chunk Type: 8 bits (unsigned integer)
-: This value MUST be set to 0x4X.
+Type: 8 bits (unsigned integer)
+: This value MUST be set to 0x01 to indicate Message
 
-Chunk Flags: 8 bits
+Flags: 8 bits
 : MUST be set to zero on transmit and MUST be ignored on receipt.
 
-Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Protection Solutions Indicator
-  field in bytes plus 4.
+Protection Solution fields: zero or more 16-bit unsigned integer fields:
+: Each Protection Solution field is a 16-bit unsigned integer
+indicting a Protection Solution. Protection solutions include both DTLS
+Chunk based, where a solution combines the DTLS chunk with a
+key-management solution, or non DTLS Chunk based ones. The Protection
+Solutions are listed in descending order of preference, i.e. the first
+listed in the parameter is the most preferred and the last the least
+preferred.
 
-Protection Solutions Indicator: array of 32 bits (unsigned integer)
-: The array has at least one element and a maximum of 32.
-  The value is set by default to zero. It uses the different
-  bit-values to indicate that the INIT contained an offer of the
-  indiacted protection solutions. Value 0x1 is used to indicate that
-  one offered DTLS 1.3 Chunk.
+Padding: If the number of included Protection solutions are odd the
+parameter MUST be padded with two zero (0) bytes of padding to make
+the parameter 32-bit aligned.
 
-RFC-Editor Note: Please replace 0x4X with the actual chunk type value
-assigned by IANA and then remove this note.
 
 # Error Handling {#error_handling}
 
@@ -685,7 +704,7 @@ can be added to the Error List.
 ### Failure in Protection Solution Validation {#evalidate}
 
 A Failure may occur during protection solution validation, i.e. when
-the PVALID chunks {{pvalid-chunk}} are exchanged to validate the
+the PVALID messages {{sctp-DTLS-PVALID-message}} are exchanged to validate the
 initialization.  In such case an ABORT chunk will be sent with error
 in protection cause code (specified in {{eprotect}}) and extra cause
 "Failure in Validation" identifier 0x02 to indicate this failure.
@@ -787,7 +806,7 @@ In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
 When keys are installed, the initiator MUST send to the responder a
-PVALID chunk (see {{sctp-DTLS-chunk-newchunk-pvalid-chunk}})
+PVALID message (see {{sctp-DTLS-PVALID-message}})
 containing indication of all offered protection solutions previously
 sent in the INIT chunk, including the 0x1 value indicating that DTLS
 1.3 Chunk Protected Association parameter was included. The
