@@ -1335,7 +1335,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-protection-error-cause-code" class="internal xref">Protection Error Cause Codes Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-pvalid-protection-solution-" class="internal xref">PVALID Protection Solution Indicators</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-sctp-protection-solution-id" class="internal xref">SCTP Protection Solution Identifiers</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
                 <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-sctp-chunk-types" class="internal xref">SCTP Chunk Types</a></p>
@@ -1448,8 +1448,10 @@ protocol, in a sublayer between the SCTP common header handling and
 the SCTP chunk handling.  Once an SCTP packet has been received and
 the SCTP common header has been used to identify the SCTP association,
 the DTLS chunk is sent to the DTLS Protection Operator that will
-return the SCTP payload containing the unprotected SCTP chunks, those
-chunks will then be handled according to their SCTP protocol
+perform replay protection, decrypt, verify authenticity, and if the
+DTLS chunk is successfully processed return the plain text SCTP
+payload containing the SCTP chunks, those chunks will then be handled
+according to their SCTP protocol
 specifications. <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> illustrates the DTLS
 chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-layering-in-rega"></span><div id="sctp-DTLS-chunk-layering">
@@ -1536,7 +1538,7 @@ encapsulated in a SCTP chunk which is named the DTLS chunk.<a href="#section-3.1
 <p id="section-3.1-5">The SCTP Protection Operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
-the association and no information is sent unprotected except than the
+the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
 chunk.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
@@ -1552,7 +1554,7 @@ document <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite 
 <p id="section-3.1-7">When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
-exchange data securely.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+exchange data securely with its peer.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
 <p id="section-3.1-8">A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as specified in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>. DTLS replay
 protection will be used to supress duplicated DTLS chunks, however a
@@ -1592,7 +1594,7 @@ contexts. Both a DTLS Key context for traffic and a DTLS Key contect
 for restart should be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
-chunks until the Association has reached the PROTECTED state
+chunks until the Association has reached the VALIDATION state
 (<a href="#init-state-machine" class="auto internal xref">Section 8.3</a>).  From that time on, DTLS 1.3 handshake
 messages SHALL be transported as SCTP User Data with dedicated PPID =
 4242 within DTLS chunks, same as any ULP data traffic.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
@@ -1604,6 +1606,13 @@ replay window, last used sequence number. Each DTLS key context are
 associated with a four value tuple identifying the context, consisting
 of SCTP Association, the restart indicator, the DTLS Connection ID (if
 used), an the DTLS epoch.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">Support of DTLS Connection ID in the DTLS Record layer used in the
+DTLS Chunk is OPTIONAL, and negotiated using the key-management
+function.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<p id="section-3.2-9">The first established key context for any SCTP association and DTLS
+connection ID (if used) SHALL use epoch=3. This ensures that the
+epoch of the key context will normally match the epoch of the
+DTLS key-management connection.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="buffering">
@@ -1756,18 +1765,18 @@ connection ID, and epoch needs to be stored safely so that they
 survive the events that are causing SCTP Restart procedure to be used,
 for instance a crash of the SCTP stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
 <p id="section-3.9-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case even though those Chunks SHALL be
+exactly as in legacy SCTP Restart case though these Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
 <p id="section-3.9-7">A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).  There's exactly one
 active Restart Key at a time, the newest. However, a crash at the
 point having completed the key-management exchange but failing to
-commit the key material to secure storage could result in lost
-of the latest key. Therefore, the endpoints should retain the
-old restart DTLS key context for at least 30 seconds after having
-the next installed. However, the old restart DTLS Key Context should
-not be maintained for more than 5 minutes.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
+commit the key material to secure storage could result in lost of the
+latest key. Therefore, the endpoints SHOULD retain the old restart
+DTLS key context for at least 30 seconds after having the next
+installed. However, the old restart DTLS Key Context SHOULD NOT be
+maintained for more than 5 minutes.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-2">
           <div id="section-3.9-8.1">
@@ -1822,14 +1831,22 @@ used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#
 DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP statemachine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
-<p id="section-3.9-11">A restarted SCTP Association SHALL use the Restart Key, for User
-Traffic until a new traffic DTLS Key will be available.  The
+<p id="section-3.9-11">A restarted SCTP Association SHALL continue to use the Restart Key,
+for User Traffic until a new traffic DTLS Key will be available.  The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no
 Restart Key is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.<a href="#section-3.9-11" class="pilcrow">¶</a></p>
+<p id="section-3.9-12">After restart the next traffic key SHALL use epoch=3, i.e. the epoch
+value is reseted. Note that if the restart epoch used also was 3 when
+not using any DTLS connection ID, then the installation of the new
+restart key context needs to be done with some care to avoid dropping
+valid packets. After having derived new traffic keys the endpoint
+installs the traffic key first, and start using it.  The new restart
+key is only installed after any old in-flight restart packets have had
+a chance to be received.<a href="#section-3.9-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1966,18 +1983,20 @@ solutions (if supported).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-4.1-3.3">Parameter Length: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.4">
-            <p id="section-4.1-3.4.1">This value holds the length of the parameter, which will be the number of Protection Solution fields (N) times two
-plus 4 and if N is odd plus 2 bytes of padding.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-3.4.1">This value holds the length of the parameter, which will be the
+number of Protection Solution fields (N) times two plus 4 and if N
+is odd plus 2 bytes of padding.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.1-3.5">Protection Solution fields: zero or more 16-bit unsigned integer fields:</dt>
+<dt id="section-4.1-3.5">Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifers:</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.6">
-            <p id="section-4.1-3.6.1">Each Protection Solution field is a 16-bit unsigned integer
-indicting a Protection Solution. Protection solutions include both DTLS
-Chunk based, where a solution combines the DTLS chunk with a
-key-management solution, or non DTLS Chunk based ones. The Protection
-Solutions are listed in descending order of preference, i.e. the first
-listed in the parameter is the most preferred and the last the least
+            <p id="section-4.1-3.6.1">Each Protection Solution Identifer (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.2</a>)
+is a 16-bit unsigned integer value indicting a Protection
+Solution. Protection solutions include both DTLS Chunk based, where
+a solution combines the DTLS chunk with a key-management solution,
+or non DTLS Chunk based security solution. The Protection Solutions
+are listed in descending order of preference, i.e. the first listed
+in the parameter is the most preferred and the last the least
 preferred.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
@@ -2146,18 +2165,17 @@ be ignored by the receiver.<a href="#section-5.1-7.10.1" class="pilcrow">¶</a><
       </h2>
 <p id="section-6-1">This section defines a standardized message that will be exchanged
 between the endpoints to validate the Init/Init-ACK negotiation that
-selected the DTLS 1.3 chunk.  This to prevent down grade attacks on
-the negotiation if other protection solutions where
-offered. <a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a> illustrates the
-message structure. This message is exchanged as reliably DATA message
-using a dedicated PPID to enable the key-exchange mechanism to be the
-receiver of the message and thus validate the the negotiation.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The PVALID message is used to hold a 32-bit vector of offered protection
-solutions in the INIT.<a href="#section-6-2" class="pilcrow">¶</a></p>
+selected the DTLS 1.3 chunk and the select key-management solution.
+This to prevent down grade attacks on the negotiation if other
+protection solutions where offered. <a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a>
+illustrates the message structure. This message is exchanged after the
+SCTP assocation reached VALIDATION state on stream 0 as reliably DATA
+message using a dedicated PPID to enable the key-exchange mechanism to
+be the receiver of the message and thus validate the the negotiation.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <span id="name-pvalid-message-structure"></span><div id="sctp-DTLS-PVALID-message">
 <figure id="figure-5">
-        <div id="section-6-3.1">
-          <div class="alignCenter art-svg artwork" id="section-6-3.1.1">
+        <div id="section-6-2.1">
+          <div class="alignCenter art-svg artwork" id="section-6-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
               <path d="M 8,64 L 8,128" fill="none" stroke="black"></path>
               <path d="M 8,160 L 8,192" fill="none" stroke="black"></path>
@@ -2231,39 +2249,43 @@ solutions in the INIT.<a href="#section-6-2" class="pilcrow">¶</a></p>
                 <text x="188" y="180">#N</text>
                 <text x="304" y="180">Padding</text>
               </g>
-            </svg><a href="#section-6-3.1.1" class="pilcrow">¶</a>
+            </svg><a href="#section-6-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-pvalid-message-structure" class="selfRef">PVALID Message Structure</a>
         </figcaption></figure>
 </div>
-<span class="break"></span><dl class="dlNewline" id="section-6-4">
-        <dt id="section-6-4.1">Type: 8 bits (unsigned integer)</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.2">
-          <p id="section-6-4.2.1">This value MUST be set to 0x01 to indicate Message<a href="#section-6-4.2.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-6-3">
+        <dt id="section-6-3.1">Type: 8 bits (unsigned integer)</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.2">
+          <p id="section-6-3.2.1">This value MUST be set to 0x01 to indicate Message<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-6-4.3">Flags: 8 bits</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.4">
-          <p id="section-6-4.4.1">MUST be set to zero on transmit and MUST be ignored on receipt.<a href="#section-6-4.4.1" class="pilcrow">¶</a></p>
+<dt id="section-6-3.3">Flags: 8 bits</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.4">
+          <p id="section-6-3.4.1">MUST be set to zero on transmit and MUST be ignored on receipt.<a href="#section-6-3.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-6-4.5">Protection Solution fields: zero or more 16-bit unsigned integer fields:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.6">
-          <p id="section-6-4.6.1">Each Protection Solution field is a 16-bit unsigned integer
-indicting a Protection Solution. Protection solutions include both DTLS
-Chunk based, where a solution combines the DTLS chunk with a
-key-management solution, or non DTLS Chunk based ones. The Protection
-Solutions are listed in descending order of preference, i.e. the first
-listed in the parameter is the most preferred and the last the least
-preferred.<a href="#section-6-4.6.1" class="pilcrow">¶</a></p>
+<dt id="section-6-3.5">Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.6">
+          <p id="section-6-3.6.1">Each Protection Solution Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.2</a>)
+is a 16-bit unsigned integer indicting a Protection
+Solution. Protection solutions include both DTLS Chunk based, where
+a solution combines the DTLS chunk with a key-management solution,
+or non DTLS Chunk based ones. The Protection Solutions are listed in
+descending order of preference, i.e. the first listed in the
+parameter is the most preferred and the last the least preferred.<a href="#section-6-3.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-6-5">Padding: If the number of included Protection solutions are odd the
+<p id="section-6-4">Padding: If the number of included Protection solutions are odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
-the parameter 32-bit aligned.<a href="#section-6-5" class="pilcrow">¶</a></p>
+the parameter 32-bit aligned.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">The PVALID message MUST include exactly the same set and in the same
+order of SCTP Protection Solution Identifiers that was sent by this
+endpoint in the DTLS 1.3 Chunk Protected parameter included in the
+INIT or INIT-ACK CHUNK.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="error_handling">
@@ -2391,10 +2413,10 @@ the N missing params, no order implied by the example in
         <h3 id="name-error-in-dtls-chunk">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-error-in-dtls-chunk" class="section-name selfRef">Error in DTLS Chunk</a>
         </h3>
-<p id="section-7.2-1">A new Error Type is defined for DTLS Chunk, it's used for any error
-related to the DTLS chunk's protection mechanism described in this
-document and has a structure that allows detailed information to be
-added as extra causes.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">A new Error Type is defined for the DTLS Chunk, it's used for any
+error related to the DTLS chunk's protection mechanism described in
+this document and has a structure that allows detailed information to
+be added as extra causes.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">This specification describes some of the causes whilst the key
 establishment specification MAY add further causes.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.2-3">When detecting an error, SCTP will send an ABORT chunk containing
@@ -2589,12 +2611,14 @@ an ABORT chunk SHALL NOT be sent.<a href="#section-7.4-3" class="pilcrow">¶</a>
 <p id="section-8.1-1">An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
 chunk protected association shall send to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
-(see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>) whith the optional information, if
-any (see <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a>).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+(see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>) indicating supported and preferred
+key-management solutions (see
+<a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a>).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with DTLS 1.3 Chunk Protected Association parameter, will reply with
 INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-and any optional information.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+and any its set of supported key-management solutions, and the selected
+to be used among the common set listed first.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
 the DTLS 1.3 Chunk Protected Association parameter or another by
@@ -2602,18 +2626,19 @@ security policy accepted security solution as an error, thus it will
 reply with an ABORT chunk according to what specified in
 <a href="#enoprotected" class="auto internal xref">Section 7.1</a> indicating that for this endpoint mandatory DTLS 1.3
 Chunk Protected Association parameter is missing.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">When initiator and responder have agreed on a protected association by
-means of handshaking INIT/INIT-ACK the SCTP association establishment
-continues until it has reached the ESTABLISHED state. However, before
-the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
-states needs to be passed. First the DTLS Chunk needs be initializied
-in the PROTECTION INTILIZATION state. This MAY be accomplished by the
-procedure defined in <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.
-When that has been accomplished one
-enters the VALIDATION state where one validates the exchange of the
-DTLS 1.3 Chunk Protected Association Parameter and any alternative
-protection solutions. If that is successful one enters the PROTECTED
-state. This state sequence is depicted in <a href="#init-state-machine" class="auto internal xref">Section 8.3</a>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">When initiator and responder have agreed on a DTLS Chunk protected
+association by means of handshaking INIT/INIT-ACK the SCTP association
+establishment continues until it has reached the ESTABLISHED
+state. However, before the SCTP assocation is protected by the DTLS
+1.3 Chunk some additional states needs to be passed. First the DTLS
+Chunk needs be initializied in the PROTECTION INTILIZATION state. This
+MAY be accomplished by the procedure defined in
+<span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.  When that has been
+accomplished one enters the VALIDATION state where one validates the
+exchange of the DTLS 1.3 Chunk Protected Association Parameter and any
+alternative protection solutions. If that is successful one enters the
+PROTECTED state. This state sequence is depicted in
+<a href="#init-state-machine" class="auto internal xref">Section 8.3</a>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 <p id="section-8.1-5">Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
 value 4242 used to exchange in-band key establishment messages. Any
@@ -2633,77 +2658,65 @@ both initiator and responder SHALL handle plain text chunks as well as
 DTLS chunks.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
 <p id="section-8.1-7">In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in <a href="#ekeyhandshake" class="auto internal xref">Section 7.2.1</a>.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
-<p id="section-8.1-8">When keys are installed, the initiator MUST send to the responder a
-PVALID message (see <a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a>)
-containing indication of all offered protection solutions previously
-sent in the INIT chunk, including the 0x1 value indicating that DTLS
-1.3 Chunk Protected Association parameter was included. The
-transmission of the PVALID chunk will be done reliably using an RTO
-timeout based mechanism, see below. The responder receiving the PVALID
-chunk will compare the indicated solutions with the ones previously
-received as parameters in the INIT chunk. The responder will ignore
-unknown parameters and security solutions. For the supported solutions
-if the parameters in the INIT matches what is listed in the PVALID and
-there are no additional by the endpoint supported solution in the
-PVALID, it will reply to the initiator with a PVALID chunk containing
-the chosen proteciton solution, otherwise it will reply with an ABORT
-chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
-association will be terminated. If the association was not aborted the
-protected association is considered successfully established and the
-PROTECTED state is entered.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
-<p id="section-8.1-9">When entering PROTECTED state, the initiator and the responder
-independently SHALL stop handling plain text chunks, i.e. those
-chunks will be silently discarded. PVALID chunks received in
-PROTECTED state will be threated as retransmission, thus the
-initiator receiving a PVALID in PROTECTED state SHALL ignore it,
-whereas the responder receiving a PVALID state in PROTECTED
-state SHALL properly reply with PVALID chunk as described
-above.<a href="#section-8.1-9" class="pilcrow">¶</a></p>
-<p id="section-8.1-10">When the initiator receives the PVALID chunk, it will compare with the
+<p id="section-8.1-8">When write keys have been installed, the initiator key-management
+function MUST send to the responder a PVALID message (see
+<a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a>) containing indication of all offered
+protection solutions previously sent in the INIT chunk in the DTLS 1.3
+Chunk Protected Association parameter. The transmission of the PVALID
+message is done using PPID=XX on stream=0 using a reliable SCTP user
+message.  The responder receiving the PVALID message will compare the
+indicated solutions with the ones previously received in the parameter
+in the INIT chunk. The responder will ignore unknown parameters and
+security solutions. For the supported solutions if the parameters in
+the INIT matches what is listed in the PVALID and there are no
+additional by the endpoint supported solution in the PVALID, it will
+reply to the initiator with a PVALID message containing the content of
+parameter is sent in the INIT-ACK, otherwise it will reply with an
+ABORT chunk. ERROR CAUSE will indicate "Failure in Validation" and the
+SCTP association will be terminated. If the association was not
+aborted the protected association is considered successfully
+established and the PROTECTED state is entered.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
+<p id="section-8.1-9">When the initiator receives the PVALID message, it will compare with the
 previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
-established and the initiator enters the PROTECTED state.<a href="#section-8.1-10" class="pilcrow">¶</a></p>
-<p id="section-8.1-11">PVALID chunk will be sent by the initiator every RTO time (see section
-6.3.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>) until a PVALID or an ABORT chunk is received
-from the responder or T-valid timer expires. To optimize the completion
-of the validation in case the PVALID from the responder is lost, if
-the initiator receives other chunks protected the DTLS chunk
-it MAY immediately, or with a small delay to ensure that no-reorder
-has occurred, restransmit its PVALID chunk.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
-<p id="section-8.1-12">If T-valid timer expires either at initiator or responder, the
+established and the initiator enters the PROTECTED state.<a href="#section-8.1-9" class="pilcrow">¶</a></p>
+<p id="section-8.1-10">If T-valid timer expires either at initiator or responder, the
 endpoint will generate an ABORT chunk.  The ERROR handling follows
-what specified in <a href="#etmout" class="auto internal xref">Section 7.2.3</a>.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
-<p id="section-8.1-13">In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
-exchanged in the protected SCTP association.<a href="#section-8.1-13" class="pilcrow">¶</a></p>
-<p id="section-8.1-14">When entering the PROTECTED state, a Restart DTLS Key for the current
+what specified in <a href="#etmout" class="auto internal xref">Section 7.2.3</a>.<a href="#section-8.1-10" class="pilcrow">¶</a></p>
+<p id="section-8.1-11">In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
+exchanged in the protected SCTP association.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
+<p id="section-8.1-12">When entering the PROTECTED state, a Restart DTLS Key for the current
 epoch SHOULD be provided into the DTLS key context store for the SCTP
-association.<a href="#section-8.1-14" class="pilcrow">¶</a></p>
+association.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
 <div id="offering-multiple-security-solutions">
 <section id="section-8.1.1">
           <h4 id="name-offering-multiple-security-">
 <a href="#section-8.1.1" class="section-number selfRef">8.1.1. </a><a href="#name-offering-multiple-security-" class="section-name selfRef">Offering Multiple Security Solutions</a>
           </h4>
 <p id="section-8.1.1-1">An initiator of an SCTP association may want to offer multiple
-different security solutions in addition to DTLS 1.3 chunks for the
+different key-management solutions for DTLS Chunk or in combination
+with other security solutions in addition to DTLS 1.3 chunks for the
 SCTP association. This can be done but need to consider the downgrade
 attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Section 13.3</a>).<a href="#section-8.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1.1-2">The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
-includes <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> or more likely its replacement. This will result
+may include SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span>. This will result
 in that a number of different SCTP parameters may be included that are
 not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most approriate. For example an offer of DTLS
-1.3 Chunks and RFC 6083, can be interpreted as three different
+1.3 Chunks and SCTP-AUTH, could be interpreted as three different
 solutions with different properties, namely DTLS 1.3 Chunks,
-DTLS/SCTP, and SCTP-AUTH only.<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
+DTLS/SCTP <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span>, and SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span> only.
+However, here the DTLS 1.3 Chunk Protected Assocation Parameter can
+indicate both preference and which of the solutions that are desired.<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1.1-3">The responder selects one or possibly more of compatible security
 solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
-will later send the PVALID chunk indicating all the offered
+will later send the PVALID message indicating all the offered
 solutions. This to prevent downgrade attacks where sent solution have
 been removed on-path.<a href="#section-8.1.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -2716,13 +2729,12 @@ been removed on-path.<a href="#section-8.1.1-3" class="pilcrow">¶</a></p>
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-termination-of-a-protected-" class="section-name selfRef">Termination of a Protected Association</a>
         </h3>
 <p id="section-8.2-1">Besides the procedures for terminating an association explained in
-<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, DTLS 1.3 SHALL ask SCTP endpoint for
-terminating an association when having an internal error or by
-detecting a security violation.
-During the termination procedure all Control Chunks SHALL be protected
-except SHUTDOWN-COMPLETE. The internal design of Protection
-Engines and their capability is out of the scope of the current
-document.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, DTLS 1.3 SHALL ask SCTP endpoint for terminating an
+association when having an internal error or by detecting a security
+violation.  During the termination procedure all Control Chunks SHALL
+be protected except SHUTDOWN-COMPLETE. The internal design of
+Protection Engines and their capability is out of the scope of the
+current document.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="init-state-machine">
@@ -2811,7 +2823,7 @@ document.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-considerations-on-key-manag" class="section-name selfRef">Considerations on Key Management</a>
         </h3>
 <p id="section-8.4-1">When the Association is in PROTECTION INITIALIZATION state, in-band
-DTLS key management <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span> SHALL
+DTLS key management, e.g. <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>, SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>) for message transfer that will be sent
 and received unencrypted.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
@@ -3519,30 +3531,27 @@ registry is depicted below in <a href="#iana-protection-error-cause" class="auto
 as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-12.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="pvalid-protection-solution-indicators">
+<div id="IANA-Protection-Solution-ID">
 <section id="section-12.2">
-        <h3 id="name-pvalid-protection-solution-">
-<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-pvalid-protection-solution-" class="section-name selfRef">PVALID Protection Solution Indicators</a>
+        <h3 id="name-sctp-protection-solution-id">
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-sctp-protection-solution-id" class="section-name selfRef">SCTP Protection Solution Identifiers</a>
         </h3>
-<p id="section-12.2-1">IANA is requested to create a new registry called "PVALID Protection
-Solution Indicators". This regsitry is part of the of the Stream
+<p id="section-12.2-1">IANA is requested to create a new registry called "SCTP Protection
+Solutions". This regsitry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
-<p id="section-12.2-2">The purpose of this registry is to assign indicator bits for any
-security solution that could be offered as an alternative to DTLS
-chunk or themselves want to use the PVALID chunk mechanism to detect
-downgrade attacks. Any security solution that is offered through a
-parameter exchange during the SCTP handshake are potential to be
-included here.<a href="#section-12.2-2" class="pilcrow">¶</a></p>
-<p id="section-12.2-3">Each entry will be assigned a bit-postion starting from the most
-significant first bit (bit 0) in the PVALID Protection Solutions
-Indicator field. Each application should be assigned the next
-available bit postion, especially avoiding to assign in the next 32
-bit position prior to having assigned all previous values.<a href="#section-12.2-3" class="pilcrow">¶</a></p>
-<span id="name-pvalid-protection-solution-i"></span><div id="iana-pvalid-psi">
+<p id="section-12.2-2">The purpose of this registry is to assign Protection Solution
+Identifier for any security solution that is either using the DTLS
+Chunk combined with a key-management method, offered as an alternative
+to DTLS chunk, or themselves want to use the PVALID message mechanism
+to detect downgrade attacks. Any security solution that is offered
+through a parameter exchange during the SCTP handshake are potential
+to be included here.<a href="#section-12.2-2" class="pilcrow">¶</a></p>
+<p id="section-12.2-3">Each entry will be assigned a 16-bit unsigned integer value from the suitable range.<a href="#section-12.2-3" class="pilcrow">¶</a></p>
+<span id="name-pvalid-protection-solution-"></span><div id="iana-psi">
 <table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-pvalid-protection-solution-i" class="selfRef">PVALID Protection Solution Indicators</a>
+<a href="#name-pvalid-protection-solution-" class="selfRef">PVALID Protection Solution Indicators</a>
           </caption>
 <thead>
             <tr>
@@ -3555,27 +3564,27 @@ bit position prior to having assigned all previous values.<a href="#section-12.2
           <tbody>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk with Pre-</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-TBD</td>
               <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">SCTP-AUTH</td>
-              <td class="text-left" rowspan="1" colspan="1">draft-ietf-tsvwg-rfc4895-bis-02</td>
-              <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
+              <td class="text-right" rowspan="1" colspan="1">1-4095</td>
+              <td class="text-left" rowspan="1" colspan="1">Available for Assignmnet using Specification Required policy</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">2-1023</td>
-              <td class="text-left" rowspan="1" colspan="1">Available for Assignmnet</td>
+              <td class="text-right" rowspan="1" colspan="1">4096-65535</td>
+              <td class="text-left" rowspan="1" colspan="1">Available for Assignmnet using First Come, First Served policy</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="section-12.2-5">New entries are registered following the Specification Required policy
-as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
+<p id="section-12.2-5">New entries in the range 0-4095 are registered following the Specification Required policy
+as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  New entries in the range 4096-65535 are first come, first served.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-chunk-types">
@@ -3855,6 +3864,10 @@ solutions.<a href="#section-13.3-3" class="pilcrow">¶</a></p>
 <dt id="RFC8446">[RFC8446]</dt>
         <dd>
 <span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-tsvwg-rfc4895-bis">[I-D.ietf-tsvwg-rfc4895-bis]</dt>
+        <dd>
+<span class="refAuthor">Tüxen, M.</span>, <span class="refAuthor">Stewart, R. R.</span>, <span class="refAuthor">Lei, P.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authenticated Chunks for the Stream Control Transmission Protocol (SCTP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tsvwg-rfc4895-bis-05</span>, <time datetime="2025-04-21" class="refDate">21 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-rfc4895-bis-05">https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-rfc4895-bis-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.westerlund-tsvwg-sctp-DTLS-handshake">[I-D.westerlund-tsvwg-sctp-DTLS-handshake]</dt>
       <dd>
