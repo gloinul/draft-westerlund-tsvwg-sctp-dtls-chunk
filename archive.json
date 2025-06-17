@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-15T01:17:22.284205+00:00",
+  "timestamp": "2025-06-17T01:10:07.439776+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -531,6 +531,24 @@
       "body": "The description of how the DTLS chunk initilization was agreed to be generalized and thus the interaction with the API functions needs to be updated.\n\nReception Key set: Can receive DTLS chunk from peer will also accept unprotected. \nSend Key set: Will send SCTP packets protected, but still accepts unprotected.\nProtection Established: Protection sending and reception verified, only protected packets established. \n\nThis will interact with the exchange of user level validation data that can only be sent after Send Key Set. Likely this will need to be addressed in combination with #22 update. ",
       "createdAt": "2025-06-04T13:17:24Z",
       "updatedAt": "2025-06-13T08:58:48Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOKszxDc67yEGw",
+      "title": "Define a new PPID used for PVALID message",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/30",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "gloinul"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-16T15:40:34Z",
+      "updatedAt": "2025-06-16T15:40:34Z",
       "closedAt": null,
       "comments": []
     }
@@ -1390,6 +1408,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 31,
+      "id": "PR_kwDOKszxDc6aviLn",
+      "title": "Change PVALID to message update parameter to use Protection Solution Identifiers.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/31",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves issue #22\r\nResolves issue #25 \r\nPartially implemented #27 ",
+      "createdAt": "2025-06-16T15:43:58Z",
+      "updatedAt": "2025-06-16T15:46:59Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "49a4260bbffd15bb85b7f59e739aed830c183181",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue22",
+      "headRefOid": "09c7bc8153dcfb968123ab24b2907d081b04d169",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
