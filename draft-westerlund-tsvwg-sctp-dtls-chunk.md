@@ -394,16 +394,16 @@ survive the events that are causing SCTP Restart procedure to be used,
 for instance a crash of the SCTP stack.
 
 The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case though these Chunks SHALL be
+exactly as in legacy SCTP Restart case; these Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 {{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one
-active Restart Key at a time, the newest. However, a crash at the
+active Restart DTLS Context at a time, the newest. However, a crash at the
 point having completed the key-management exchange but failing to
-commit the key material to secure storage could result in lost of the
-latest key. Therefore, the endpoints SHOULD retain the old restart
+commit the DTLS Key Context to secure storage could result in lost of the
+latest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart
 DTLS key context for at least 30 seconds after having the next
 installed. However, the old restart DTLS Key Context SHOULD NOT be
 maintained for more than 5 minutes.
@@ -432,11 +432,11 @@ DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP statemachine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
 
-A restarted SCTP Association SHALL continue to use the Restart Key,
-for User Traffic until a new traffic DTLS Key will be available.  The
+A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
+for User Traffic until a new traffic DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no
-Restart Key is available is kept to a minimum. Note that another
+Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.
@@ -446,8 +446,8 @@ value is reseted. Note that if the restart epoch used also was 3 when
 not using any DTLS connection ID, then the installation of the new
 restart key context needs to be done with some care to avoid dropping
 valid packets. After having derived new traffic keys the endpoint
-installs the traffic key first, and start using it.  The new restart
-key is only installed after any old in-flight restart packets have had
+installs the Traffic DTLS Key Context first, and start using it. The new restart
+DTLS Key Context is only installed after any old in-flight restart packets have had
 a chance to be received.
 
 # New Parameter Type {#new-parameter-type}
@@ -495,8 +495,8 @@ Parameter Type: 16 bits (unsigned integer)
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be the
-  number of Protection Solution fields (N) times two plus 4 and if N
-  is odd plus 2 bytes of padding.
+  number of Protection Solution fields (N) times two plus 4 and, if N
+  is odd, plus 2 bytes of padding.
 
 Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifers:
 : Each Protection Solution Identifer ({{IANA-Protection-Solution-ID}})
@@ -508,7 +508,7 @@ Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identif
   in the parameter is the most preferred and the last the least
   preferred.
 
-Padding: If the number of included Protection solutions are odd the
+Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.
 
@@ -622,12 +622,12 @@ Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identif
   descending order of preference, i.e. the first listed in the
   parameter is the most preferred and the last the least preferred.
 
-Padding: If the number of included Protection solutions are odd the
+Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.
 
-The PVALID message MUST include exactly the same set and in the same
-order of SCTP Protection Solution Identifiers that was sent by this
+The PVALID message MUST include exactly the same sequence of SCTP
+Protection Solution Identifiers that was sent by this
 endpoint in the DTLS 1.3 Chunk Protected parameter included in the
 INIT or INIT-ACK CHUNK.
 
@@ -836,7 +836,7 @@ DTLS chunks.
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
-When write keys have been installed, the initiator key-management
+When DTLS Key Context have been installed, the initiator key-management
 function MUST send to the responder a PVALID message (see
 {{sctp-DTLS-PVALID-message}}) containing indication of all offered
 protection solutions previously sent in the INIT chunk in the DTLS 1.3
@@ -849,7 +849,7 @@ security solutions. For the supported solutions if the parameters in
 the INIT matches what is listed in the PVALID and there are no
 additional by the endpoint supported solution in the PVALID, it will
 reply to the initiator with a PVALID message containing the content of
-parameter is sent in the INIT-ACK, otherwise it will reply with an
+parameter sent in the INIT-ACK, otherwise it will reply with an
 ABORT chunk. ERROR CAUSE will indicate "Failure in Validation" and the
 SCTP association will be terminated. If the association was not
 aborted the protected association is considered successfully
@@ -1394,7 +1394,7 @@ as defined by {{RFC8126}}.
 ## SCTP Protection Solution Identifiers {#IANA-Protection-Solution-ID}
 
 IANA is requested to create a new registry called "SCTP Protection
-Solutions". This regsitry is part of the of the Stream
+Solutions". This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
 The purpose of this registry is to assign Protection Solution
