@@ -33,6 +33,7 @@ author:
 
 informative:
   RFC8446:
+  I-D.ietf-tsvwg-rfc4895-bis:
 
   I-D.westerlund-tsvwg-sctp-DTLS-handshake:
     target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
@@ -124,14 +125,17 @@ features provided by SCTP and its extensions but with some limitations.
 # Overview
 
 ## Protocol Overview {#protocol-overview}
+
 The DTLS chunk is defined as a method for secure and confidential
 transfer for SCTP packets.  This is implemented inside the SCTP
 protocol, in a sublayer between the SCTP common header handling and
 the SCTP chunk handling.  Once an SCTP packet has been received and
 the SCTP common header has been used to identify the SCTP association,
 the DTLS chunk is sent to the DTLS Protection Operator that will
-return the SCTP payload containing the unprotected SCTP chunks, those
-chunks will then be handled according to their SCTP protocol
+perform replay protection, decrypt, verify authenticity, and if the
+DTLS chunk is successfully processed return the plain text SCTP
+payload containing the SCTP chunks, those chunks will then be handled
+according to their SCTP protocol
 specifications. {{sctp-DTLS-chunk-layering}} illustrates the DTLS
 chunk layering in regard to SCTP and the Upper Layer Protocol (ULP).
 
@@ -171,7 +175,7 @@ encapsulated in a SCTP chunk which is named the DTLS chunk.
 The SCTP Protection Operator performs protection operations on the
 whole unprotected SCTP packet payload, i.e., all chunks after the SCTP
 common header. Information protection is kept during the lifetime of
-the association and no information is sent unprotected except than the
+the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
 chunk.
@@ -189,7 +193,7 @@ document {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
-exchange data securely.
+exchange data securely with its peer.
 
 A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
@@ -232,7 +236,7 @@ for restart should be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
-chunks until the Association has reached the PROTECTED state
+chunks until the Association has reached the VALIDATION state
 ({{init-state-machine}}).  From that time on, DTLS 1.3 handshake
 messages SHALL be transported as SCTP User Data with dedicated PPID =
 4242 within DTLS chunks, same as any ULP data traffic.
@@ -245,6 +249,15 @@ replay window, last used sequence number. Each DTLS key context are
 associated with a four value tuple identifying the context, consisting
 of SCTP Association, the restart indicator, the DTLS Connection ID (if
 used), an the DTLS epoch.
+
+Support of DTLS Connection ID in the DTLS Record layer used in the
+DTLS Chunk is OPTIONAL, and negotiated using the key-management
+function.
+
+The first established key context for any SCTP association and DTLS
+connection ID (if used) SHALL use epoch=3. This ensures that the
+epoch of the key context will normally match the epoch of the
+DTLS key-management connection.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -381,19 +394,19 @@ survive the events that are causing SCTP Restart procedure to be used,
 for instance a crash of the SCTP stack.
 
 The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case even though those Chunks SHALL be
+exactly as in legacy SCTP Restart case; these Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 {{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one
-active Restart Key at a time, the newest. However, a crash at the
+active Restart DTLS Context at a time, the newest. However, a crash at the
 point having completed the key-management exchange but failing to
-commit the key material to secure storage could result in lost
-of the latest key. Therefore, the endpoints should retain the
-old restart DTLS key context for at least 30 seconds after having
-the next installed. However, the old restart DTLS Key Context should
-not be maintained for more than 5 minutes.
+commit the DTLS Key Context to secure storage could result in lost of the
+latest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart
+DTLS key context for at least 30 seconds after having the next
+installed. However, the old restart DTLS Key Context SHOULD NOT be
+maintained for more than 5 minutes.
 
 
 ~~~~~~~~~~~ aasvg
@@ -419,21 +432,31 @@ DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP statemachine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
 
-A restarted SCTP Association SHALL use the Restart Key, for User
-Traffic until a new traffic DTLS Key will be available.  The
+A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
+for User Traffic until a new traffic DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no
-Restart Key is available is kept to a minimum. Note that another
+Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.
 
+After restart the next traffic key SHALL use epoch=3, i.e. the epoch
+value is reseted. Note that if the restart epoch used also was 3 when
+not using any DTLS connection ID, then the installation of the new
+restart key context needs to be done with some care to avoid dropping
+valid packets. After having derived new traffic keys the endpoint
+installs the Traffic DTLS Key Context first, and start using it. The new restart
+DTLS Key Context is only installed after any old in-flight restart packets have had
+a chance to be received.
+
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
-negotiate the use of the DTLS 1.3 chunk during
-association setup. {{sctp-DTLS-chunk-init-parameter}} illustrates
-the new parameter type.
+negotiate the use of the DTLS 1.3 chunk during association setup, its
+keying method and indicate preference in relation to different keying
+and other security solutions. {{sctp-DTLS-chunk-init-parameter}}
+illustrates the new parameter type.
 
 | Parameter Type | Parameter Name |
 | 0x80xx | DTLS 1.3 Chunk Protected Association |
@@ -446,8 +469,10 @@ the use of the upper bits of the parameter type.
 
 ## DTLS 1.3 Chunk Protected Association {#protectedassoc-parameter}
 
-This parameter is only used to indicate the request and acknowledge of
-support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
+This parameter is used to the request and acknowledge of support of
+DTLS 1.3 Chunk during INIT/INIT-ACK handshake and indicate preference
+for keying and the preference order between multiple security
+solutions (if supported).
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -455,7 +480,12 @@ support of DTLS 1.3 Chunk during INIT/INIT-ACK handshake.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x80XX    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
+|  Protection Solution #1       |  Protection Solution #2       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+: Protection Solutions                                          :
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Protection Solution #N        | Padding                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
 
@@ -464,7 +494,23 @@ Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x80XX.
 
 Parameter Length: 16 bits (unsigned integer)
-: This field has value equal to 4.
+: This value holds the length of the parameter, which will be the
+  number of Protection Solution fields (N) times two plus 4 and, if N
+  is odd, plus 2 bytes of padding.
+
+Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifers:
+: Each Protection Solution Identifer ({{IANA-Protection-Solution-ID}})
+  is a 16-bit unsigned integer value indicting a Protection
+  Solution. Protection solutions include both DTLS Chunk based, where
+  a solution combines the DTLS chunk with a key-management solution,
+  or non DTLS Chunk based security solution. The Protection Solutions
+  are listed in descending order of preference, i.e. the first listed
+  in the parameter is the most preferred and the last the least
+  preferred.
+
+Padding: If the number of included Protection solutions is odd the
+parameter MUST be padded with two zero (0) bytes of padding to make
+the parameter 32-bit aligned.
 
 RFC-Editor Note: Please replace 0x08XX with the actual parameter type
 value assigned by IANA and then remove this note.
@@ -531,59 +577,60 @@ Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
-##  Protection Solution Validation Chunk (PVALID) {#pvalid-chunk}
+#  Downgrade Protection Validation Message {#pvalid}
 
-This section defines the new chunk types that will be used to validate
-the Init/Init-ACK negotiation that selected the DTLS 1.3 chunk.  This
-to prevent down grade attacks on the negotiation if other protection
-solutions where offered. {{sctp-DTLS-chunk-newchunk-pvalid-chunk}}
-illustrates the new chunk type.
+This section defines a standardized message that will be exchanged
+between the endpoints to validate the Init/Init-ACK negotiation that
+selected the DTLS 1.3 chunk and the select key-management solution.
+This to prevent down grade attacks on the negotiation if other
+protection solutions where offered. {{sctp-DTLS-PVALID-message}}
+illustrates the message structure. This message is exchanged after the
+SCTP assocation reached VALIDATION state on stream 0 as reliably DATA
+message using a dedicated PPID to enable the key-exchange mechanism to
+be the receiver of the message and thus validate the the negotiation.
 
-| Chunk Type | Chunk Name |
-| 0x4X | Protection Solution Validation (PVALID) |
-{: #sctp-DTLS-chunk-newchunk-pvalid-chunk title="PVALID Chunk Type" cols="r l"}
-
-It should be noted that the PVALID chunk format requires the receiver
-stop processing this SCTP packet, discard the unrecognized chunk and
-all further chunks, and report the unrecognized chunk in an ERROR
-chunk using the 'Unrecognized Chunk Type' error cause.  This is
-accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
-the upper bits of the chunk type.
-
-The PVALID chunk is used to hold a 32-bit vector of offered protection
-solutions in the INIT.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Type = 0x4X  |   Flags = 0   |         Chunk Length          |
+|  Type = 0x01  |   Flags = 0   |         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Protection Solutions Indicator                               |
+|  Protection Solution #1       |  Protection Solution #2       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+: Protection Solutions                                          :
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Protection Solution #N        | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-PVALID -struct title="PVALID Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-PVALID-message -struct title="PVALID Message Structure" artwork-align="center"}
 
 {: vspace="0"}
-Chunk Type: 8 bits (unsigned integer)
-: This value MUST be set to 0x4X.
+Type: 8 bits (unsigned integer)
+: This value MUST be set to 0x01 to indicate Message
 
-Chunk Flags: 8 bits
+Flags: 8 bits
 : MUST be set to zero on transmit and MUST be ignored on receipt.
 
-Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Protection Solutions Indicator
-  field in bytes plus 4.
+Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:
 
-Protection Solutions Indicator: array of 32 bits (unsigned integer)
-: The array has at least one element and a maximum of 32.
-  The value is set by default to zero. It uses the different
-  bit-values to indicate that the INIT contained an offer of the
-  indiacted protection solutions. Value 0x1 is used to indicate that
-  one offered DTLS 1.3 Chunk.
+: Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
+  is a 16-bit unsigned integer indicting a Protection
+  Solution. Protection solutions include both DTLS Chunk based, where
+  a solution combines the DTLS chunk with a key-management solution,
+  or non DTLS Chunk based ones. The Protection Solutions are listed in
+  descending order of preference, i.e. the first listed in the
+  parameter is the most preferred and the last the least preferred.
 
-RFC-Editor Note: Please replace 0x4X with the actual chunk type value
-assigned by IANA and then remove this note.
+Padding: If the number of included Protection solutions is odd the
+parameter MUST be padded with two zero (0) bytes of padding to make
+the parameter 32-bit aligned.
+
+The PVALID message MUST include exactly the same sequence of SCTP
+Protection Solution Identifiers that was sent by this
+endpoint in the DTLS 1.3 Chunk Protected parameter included in the
+INIT or INIT-ACK CHUNK.
+
 
 # Error Handling {#error_handling}
 
@@ -629,10 +676,10 @@ the N missing params, no order implied by the example in
 
 ## Error in DTLS Chunk  {#eprotect}
 
-A new Error Type is defined for DTLS Chunk, it's used for any error
-related to the DTLS chunk's protection mechanism described in this
-document and has a structure that allows detailed information to be
-added as extra causes.
+A new Error Type is defined for the DTLS Chunk, it's used for any
+error related to the DTLS chunk's protection mechanism described in
+this document and has a structure that allows detailed information to
+be added as extra causes.
 
 This specification describes some of the causes whilst the key
 establishment specification MAY add further causes.
@@ -685,7 +732,7 @@ can be added to the Error List.
 ### Failure in Protection Solution Validation {#evalidate}
 
 A Failure may occur during protection solution validation, i.e. when
-the PVALID chunks {{pvalid-chunk}} are exchanged to validate the
+the PVALID messages {{sctp-DTLS-PVALID-message}} are exchanged to validate the
 initialization.  In such case an ABORT chunk will be sent with error
 in protection cause code (specified in {{eprotect}}) and extra cause
 "Failure in Validation" identifier 0x02 to indicate this failure.
@@ -735,13 +782,15 @@ an ABORT chunk SHALL NOT be sent.
 An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
 chunk protected association shall send to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
-(see {{protectedassoc-parameter}}) whith the optional information, if
-any (see {{sctp-DTLS-chunk-init-options}}).
+(see {{protectedassoc-parameter}}) indicating supported and preferred
+key-management solutions (see
+{{sctp-DTLS-chunk-init-options}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with DTLS 1.3 Chunk Protected Association parameter, will reply with
 INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-and any optional information.
+and any its set of supported key-management solutions, and the selected
+to be used among the common set listed first.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
@@ -751,18 +800,19 @@ reply with an ABORT chunk according to what specified in
 {{enoprotected}} indicating that for this endpoint mandatory DTLS 1.3
 Chunk Protected Association parameter is missing.
 
-When initiator and responder have agreed on a protected association by
-means of handshaking INIT/INIT-ACK the SCTP association establishment
-continues until it has reached the ESTABLISHED state. However, before
-the SCTP assocation is protected by the DTLS 1.3 Chunk some additional
-states needs to be passed. First the DTLS Chunk needs be initializied
-in the PROTECTION INTILIZATION state. This MAY be accomplished by the
-procedure defined in {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
-When that has been accomplished one
-enters the VALIDATION state where one validates the exchange of the
-DTLS 1.3 Chunk Protected Association Parameter and any alternative
-protection solutions. If that is successful one enters the PROTECTED
-state. This state sequence is depicted in {{init-state-machine}}.
+When initiator and responder have agreed on a DTLS Chunk protected
+association by means of handshaking INIT/INIT-ACK the SCTP association
+establishment continues until it has reached the ESTABLISHED
+state. However, before the SCTP assocation is protected by the DTLS
+1.3 Chunk some additional states needs to be passed. First the DTLS
+Chunk needs be initializied in the PROTECTION INTILIZATION state. This
+MAY be accomplished by the procedure defined in
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.  When that has been
+accomplished one enters the VALIDATION state where one validates the
+exchange of the DTLS 1.3 Chunk Protected Association Parameter and any
+alternative protection solutions. If that is successful one enters the
+PROTECTED state. This state sequence is depicted in
+{{init-state-machine}}.
 
 Until the procedure has reached the PROTECTED state the only usage of
 DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
@@ -786,48 +836,31 @@ DTLS chunks.
 In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in {{ekeyhandshake}}.
 
-When keys are installed, the initiator MUST send to the responder a
-PVALID chunk (see {{sctp-DTLS-chunk-newchunk-pvalid-chunk}})
-containing indication of all offered protection solutions previously
-sent in the INIT chunk, including the 0x1 value indicating that DTLS
-1.3 Chunk Protected Association parameter was included. The
-transmission of the PVALID chunk will be done reliably using an RTO
-timeout based mechanism, see below. The responder receiving the PVALID
-chunk will compare the indicated solutions with the ones previously
-received as parameters in the INIT chunk. The responder will ignore
-unknown parameters and security solutions. For the supported solutions
-if the parameters in the INIT matches what is listed in the PVALID and
-there are no additional by the endpoint supported solution in the
-PVALID, it will reply to the initiator with a PVALID chunk containing
-the chosen proteciton solution, otherwise it will reply with an ABORT
-chunk. ERROR CAUSE will indicate "Failure in Validation" and the SCTP
-association will be terminated. If the association was not aborted the
-protected association is considered successfully established and the
-PROTECTED state is entered.
+When DTLS Key Context have been installed, the initiator key-management
+function MUST send to the responder a PVALID message (see
+{{sctp-DTLS-PVALID-message}}) containing indication of all offered
+protection solutions previously sent in the INIT chunk in the DTLS 1.3
+Chunk Protected Association parameter. The transmission of the PVALID
+message is done using PPID=XX on stream=0 using a reliable SCTP user
+message.  The responder receiving the PVALID message will compare the
+indicated solutions with the ones previously received in the parameter
+in the INIT chunk. The responder will ignore unknown parameters and
+security solutions. For the supported solutions if the parameters in
+the INIT matches what is listed in the PVALID and there are no
+additional by the endpoint supported solution in the PVALID, it will
+reply to the initiator with a PVALID message containing the content of
+parameter sent in the INIT-ACK, otherwise it will reply with an
+ABORT chunk. ERROR CAUSE will indicate "Failure in Validation" and the
+SCTP association will be terminated. If the association was not
+aborted the protected association is considered successfully
+established and the PROTECTED state is entered.
 
-When entering PROTECTED state, the initiator and the responder
-independently SHALL stop handling plain text chunks, i.e. those
-chunks will be silently discarded. PVALID chunks received in
-PROTECTED state will be threated as retransmission, thus the
-initiator receiving a PVALID in PROTECTED state SHALL ignore it,
-whereas the responder receiving a PVALID state in PROTECTED
-state SHALL properly reply with PVALID chunk as described
-above.
-
-When the initiator receives the PVALID chunk, it will compare with the
+When the initiator receives the PVALID message, it will compare with the
 previous chosen option and in case of mismatch with the one received
 previously in the protected association parameter in the INIT-ACK
 chunk, it will reply with ABORT with the ERROR CAUSE "Failure in
 Validation", otherwise the protected association is successfully
 established and the initiator enters the PROTECTED state.
-
-PVALID chunk will be sent by the initiator every RTO time (see section
-6.3.1 of {{RFC9260}}) until a PVALID or an ABORT chunk is received
-from the responder or T-valid timer expires. To optimize the completion
-of the validation in case the PVALID from the responder is lost, if
-the initiator receives other chunks protected the DTLS chunk
-it MAY immediately, or with a small delay to ensure that no-reorder
-has occurred, restransmit its PVALID chunk.
 
 If T-valid timer expires either at initiator or responder, the
 endpoint will generate an ABORT chunk.  The ERROR handling follows
@@ -843,26 +876,29 @@ association.
 ### Offering Multiple Security Solutions
 
 An initiator of an SCTP association may want to offer multiple
-different security solutions in addition to DTLS 1.3 chunks for the
+different key-management solutions for DTLS Chunk or in combination
+with other security solutions in addition to DTLS 1.3 chunks for the
 SCTP association. This can be done but need to consider the downgrade
 attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
-includes {{RFC6083}} or more likely its replacement. This will result
+may include SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}}. This will result
 in that a number of different SCTP parameters may be included that are
 not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most approriate. For example an offer of DTLS
-1.3 Chunks and RFC 6083, can be interpreted as three different
+1.3 Chunks and SCTP-AUTH, could be interpreted as three different
 solutions with different properties, namely DTLS 1.3 Chunks,
-DTLS/SCTP, and SCTP-AUTH only.
+DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
+However, here the DTLS 1.3 Chunk Protected Assocation Parameter can
+indicate both preference and which of the solutions that are desired.
 
 The responder selects one or possibly more of compatible security
 solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
-will later send the PVALID chunk indicating all the offered
+will later send the PVALID message indicating all the offered
 solutions. This to prevent downgrade attacks where sent solution have
 been removed on-path.
 
@@ -870,13 +906,12 @@ been removed on-path.
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
-{{RFC9260}}, DTLS 1.3 SHALL ask SCTP endpoint for
-terminating an association when having an internal error or by
-detecting a security violation.
-During the termination procedure all Control Chunks SHALL be protected
-except SHUTDOWN-COMPLETE. The internal design of Protection
-Engines and their capability is out of the scope of the current
-document.
+{{RFC9260}}, DTLS 1.3 SHALL ask SCTP endpoint for terminating an
+association when having an internal error or by detecting a security
+violation.  During the termination procedure all Control Chunks SHALL
+be protected except SHUTDOWN-COMPLETE. The internal design of
+Protection Engines and their capability is out of the scope of the
+current document.
 
 ## Protection Initialization State Machine {#init-state-machine}
 
@@ -919,7 +954,7 @@ document.
 ## Considerations on Key Management {#key-management-considerations}
 
 When the Association is in PROTECTION INITIALIZATION state, in-band
-DTLS key management {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}} SHALL
+DTLS key management, e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}, SHALL
 use SCTP user messages with the SCTP-DTLS PPID value = 4242 (see
 {{iana-payload-protection-id}}) for message transfer that will be sent
 and received unencrypted.
@@ -1356,33 +1391,30 @@ registry is depicted below in {{iana-protection-error-cause}}.
 New entries are registered following the Specification Required policy
 as defined by {{RFC8126}}.
 
-## PVALID Protection Solution Indicators ##
+## SCTP Protection Solution Identifiers {#IANA-Protection-Solution-ID}
 
-IANA is requested to create a new registry called "PVALID Protection
-Solution Indicators". This regsitry is part of the of the Stream
+IANA is requested to create a new registry called "SCTP Protection
+Solutions". This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
-The purpose of this registry is to assign indicator bits for any
-security solution that could be offered as an alternative to DTLS
-chunk or themselves want to use the PVALID chunk mechanism to detect
-downgrade attacks. Any security solution that is offered through a
-parameter exchange during the SCTP handshake are potential to be
-included here.
+The purpose of this registry is to assign Protection Solution
+Identifier for any security solution that is either using the DTLS
+Chunk combined with a key-management method, offered as an alternative
+to DTLS chunk, or themselves want to use the PVALID message mechanism
+to detect downgrade attacks. Any security solution that is offered
+through a parameter exchange during the SCTP handshake are potential
+to be included here.
 
-Each entry will be assigned a bit-postion starting from the most
-significant first bit (bit 0) in the PVALID Protection Solutions
-Indicator field. Each application should be assigned the next
-available bit postion, especially avoiding to assign in the next 32
-bit position prior to having assigned all previous values.
+Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
 | Bit Position | Solution Name | Reference | Contact |
-| 0 | DTLS 1.3 Chunk | RFC-TBD | Draft Authors |
-| 1 | SCTP-AUTH | draft-ietf-tsvwg-rfc4895-bis-02 | Draft Authors |
-| 2-1023 | Available for Assignmnet | | |
-{: #iana-pvalid-psi title="PVALID Protection Solution Indicators" cols="r l l l"}
+| 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
+| 1-4095 | Available for Assignmnet using Specification Required policy | | |
+| 4096-65535 | Available for Assignmnet using First Come, First Served policy | | |
+{: #iana-psi title="PVALID Protection Solution Indicators" cols="r l l l"}
 
-New entries are registered following the Specification Required policy
-as defined by {{RFC8126}}.
+New entries in the range 0-4095 are registered following the Specification Required policy
+as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
 
 ## SCTP Chunk Types
 
