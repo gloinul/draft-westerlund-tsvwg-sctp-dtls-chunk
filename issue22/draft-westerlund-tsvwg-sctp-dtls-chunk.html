@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 18 December 2025</td>
+<td class="center">Expires 19 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-16" class="published">16 June 2025</time>
+<time datetime="2025-06-17" class="published">17 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-18">18 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-19">19 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1765,15 +1765,15 @@ connection ID, and epoch needs to be stored safely so that they
 survive the events that are causing SCTP Restart procedure to be used,
 for instance a crash of the SCTP stack.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
 <p id="section-3.9-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case though these Chunks SHALL be
+exactly as in legacy SCTP Restart case; these Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.9-6" class="pilcrow">¶</a></p>
 <p id="section-3.9-7">A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).  There's exactly one
-active Restart Key at a time, the newest. However, a crash at the
+active Restart DTLS Context at a time, the newest. However, a crash at the
 point having completed the key-management exchange but failing to
-commit the key material to secure storage could result in lost of the
-latest key. Therefore, the endpoints SHOULD retain the old restart
+commit the DTLS Key Context to secure storage could result in lost of the
+latest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart
 DTLS key context for at least 30 seconds after having the next
 installed. However, the old restart DTLS Key Context SHOULD NOT be
 maintained for more than 5 minutes.<a href="#section-3.9-7" class="pilcrow">¶</a></p>
@@ -1831,11 +1831,11 @@ used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#
 DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP statemachine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9-10" class="pilcrow">¶</a></p>
-<p id="section-3.9-11">A restarted SCTP Association SHALL continue to use the Restart Key,
-for User Traffic until a new traffic DTLS Key will be available.  The
+<p id="section-3.9-11">A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
+for User Traffic until a new traffic DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the traffic and restart keys so that the time when no
-Restart Key is available is kept to a minimum. Note that another
+Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.<a href="#section-3.9-11" class="pilcrow">¶</a></p>
@@ -1844,8 +1844,8 @@ value is reseted. Note that if the restart epoch used also was 3 when
 not using any DTLS connection ID, then the installation of the new
 restart key context needs to be done with some care to avoid dropping
 valid packets. After having derived new traffic keys the endpoint
-installs the traffic key first, and start using it.  The new restart
-key is only installed after any old in-flight restart packets have had
+installs the Traffic DTLS Key Context first, and start using it. The new restart
+DTLS Key Context is only installed after any old in-flight restart packets have had
 a chance to be received.<a href="#section-3.9-12" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1984,8 +1984,8 @@ solutions (if supported).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <dt id="section-4.1-3.3">Parameter Length: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.4">
             <p id="section-4.1-3.4.1">This value holds the length of the parameter, which will be the
-number of Protection Solution fields (N) times two plus 4 and if N
-is odd plus 2 bytes of padding.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
+number of Protection Solution fields (N) times two plus 4 and, if N
+is odd, plus 2 bytes of padding.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-4.1-3.5">Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifers:</dt>
@@ -2001,7 +2001,7 @@ preferred.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-4.1-4">Padding: If the number of included Protection solutions are odd the
+<p id="section-4.1-4">Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1-5">RFC-Editor Note: Please replace 0x08XX with the actual parameter type
@@ -2279,11 +2279,11 @@ parameter is the most preferred and the last the least preferred.<a href="#secti
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-6-4">Padding: If the number of included Protection solutions are odd the
+<p id="section-6-4">Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">The PVALID message MUST include exactly the same set and in the same
-order of SCTP Protection Solution Identifiers that was sent by this
+<p id="section-6-5">The PVALID message MUST include exactly the same sequence of SCTP
+Protection Solution Identifiers that was sent by this
 endpoint in the DTLS 1.3 Chunk Protected parameter included in the
 INIT or INIT-ACK CHUNK.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
@@ -2658,7 +2658,7 @@ both initiator and responder SHALL handle plain text chunks as well as
 DTLS chunks.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
 <p id="section-8.1-7">In case of T-valid timeout, the endpoint will generate an ABORT chunk.
 The ERROR handling follows what specified in <a href="#ekeyhandshake" class="auto internal xref">Section 7.2.1</a>.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
-<p id="section-8.1-8">When write keys have been installed, the initiator key-management
+<p id="section-8.1-8">When DTLS Key Context have been installed, the initiator key-management
 function MUST send to the responder a PVALID message (see
 <a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a>) containing indication of all offered
 protection solutions previously sent in the INIT chunk in the DTLS 1.3
@@ -2671,7 +2671,7 @@ security solutions. For the supported solutions if the parameters in
 the INIT matches what is listed in the PVALID and there are no
 additional by the endpoint supported solution in the PVALID, it will
 reply to the initiator with a PVALID message containing the content of
-parameter is sent in the INIT-ACK, otherwise it will reply with an
+parameter sent in the INIT-ACK, otherwise it will reply with an
 ABORT chunk. ERROR CAUSE will indicate "Failure in Validation" and the
 SCTP association will be terminated. If the association was not
 aborted the protected association is considered successfully
@@ -3537,7 +3537,7 @@ as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a
 <a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-sctp-protection-solution-id" class="section-name selfRef">SCTP Protection Solution Identifiers</a>
         </h3>
 <p id="section-12.2-1">IANA is requested to create a new registry called "SCTP Protection
-Solutions". This regsitry is part of the of the Stream
+Solutions". This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
 <p id="section-12.2-2">The purpose of this registry is to assign Protection Solution
 Identifier for any security solution that is either using the DTLS
