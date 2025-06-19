@@ -506,7 +506,10 @@ Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identif
   or non DTLS Chunk based security solution. The Protection Solutions
   are listed in descending order of preference, i.e. the first listed
   in the parameter is the most preferred and the last the least
-  preferred.
+  preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
+  endpoint include all of the offered solutions which it supports and
+  list the selected one first. Including its decreasing preference on
+  the additional Protection Solutions.
 
 Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
@@ -585,9 +588,10 @@ selected the DTLS 1.3 chunk and the select key-management solution.
 This to prevent down grade attacks on the negotiation if other
 protection solutions where offered. {{sctp-DTLS-PVALID-message}}
 illustrates the message structure. This message is exchanged after the
-SCTP assocation reached VALIDATION state on stream 0 as reliably DATA
-message using a dedicated PPID to enable the key-exchange mechanism to
-be the receiver of the message and thus validate the the negotiation.
+SCTP assocation reached VALIDATION state on stream 0 as reliable sent
+DATA message identified using the dedicated PVALID PPID=4243
+({{sec-iana-ppid}}) to enable the key-exchange mechanism to be the
+receiver of the message and thus validate the the negotiation.
 
 
 ~~~~~~~~~~~ aasvg
@@ -598,7 +602,8 @@ be the receiver of the message and thus validate the the negotiation.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |  Protection Solution #1       |  Protection Solution #2       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-: Protection Solutions                                          :
+| Protection Solutions ...                                      |
+|                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Protection Solution #N        | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -607,29 +612,25 @@ be the receiver of the message and thus validate the the negotiation.
 
 {: vspace="0"}
 Type: 8 bits (unsigned integer)
-: This value MUST be set to 0x01 to indicate Message
+: This value MUST be set to 0x01 to indicate that it is a PVALID Message
 
 Flags: 8 bits
 : MUST be set to zero on transmit and MUST be ignored on receipt.
 
 Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:
 
-: Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
-  is a 16-bit unsigned integer indicting a Protection
-  Solution. Protection solutions include both DTLS Chunk based, where
-  a solution combines the DTLS chunk with a key-management solution,
-  or non DTLS Chunk based ones. The Protection Solutions are listed in
-  descending order of preference, i.e. the first listed in the
-  parameter is the most preferred and the last the least preferred.
+: Each Protection Solution Identifier
+  ({{IANA-Protection-Solution-ID}}) is a 16-bit unsigned integer
+  indicting a Protection Solution. Protection solutions include both
+  DTLS Chunk based, where a solution combines the DTLS chunk with a
+  key-management solution, or non DTLS Chunk based ones. The include
+  Protection solutions and their order MUST match what was sent in the
+  DTLS 1.3 Chunk Protected Association parameter
+  {{protectedassoc-parameter}} sent by the sending endpoint.
 
 Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.
-
-The PVALID message MUST include exactly the same sequence of SCTP
-Protection Solution Identifiers that was sent by this
-endpoint in the DTLS 1.3 Chunk Protected parameter included in the
-INIT or INIT-ACK CHUNK.
 
 
 # Error Handling {#error_handling}
@@ -1458,7 +1459,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
-## SCTP Payload Protocol Identifier
+## SCTP Payload Protocol Identifier {#sec-iana-ppid}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
@@ -1470,6 +1471,13 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 | ID Value | SCTP Payload Protocol Identifier | Reference |
 | 4242 | DTLS Chunk Key-Management Messages | RFC-To-Be |
 {: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
+
+Secondly it is requested that a new Payload Protocol Identifier is
+assigned to be used to identify the PVALID message {{pvalid}}.
+
+| ID Value | SCTP Payload Protocol Identifier | Reference |
+| 4243 | DTLS Chunk PVALID Messages | RFC-To-Be |
+{: #iana-payload-protection-id-pvalid title="PVALID Protocol Identifier Registered" cols="r l l"}
 
 
 # Security Considerations {#Security-Considerations}
