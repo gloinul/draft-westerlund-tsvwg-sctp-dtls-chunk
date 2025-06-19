@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T01:10:07.439776+00:00",
+  "timestamp": "2025-06-19T01:10:16.112292+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -430,7 +430,7 @@
       "id": "I_kwDOKszxDc64Pj8z",
       "title": "DT : Options in DTLS1.3 Parameter",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/25",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -439,16 +439,24 @@
       "labels": [],
       "body": "From the Design Team : DTLS1.3 Parameter in INIT/INIT-ACK Chunk requires supporting options, such as the key management, for instance.",
       "createdAt": "2025-05-26T12:42:13Z",
-      "updatedAt": "2025-06-13T08:59:03Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-06-17T11:58:43Z",
+      "closedAt": "2025-06-17T11:58:43Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "New parameter values have been implemented in PR #31. ",
+          "createdAt": "2025-06-17T11:58:43Z",
+          "updatedAt": "2025-06-17T11:58:43Z"
+        }
+      ]
     },
     {
       "number": 27,
       "id": "I_kwDOKszxDc65mtnA",
       "title": "When performing SCTP Association restart do one reset epoch?",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/27",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -457,8 +465,8 @@
       "labels": [],
       "body": "Do one reset the DTLS epoch values after an SCTP assocation restart protected by the DTLS chunk?\n\nAs the DTLS 1.3 epoch counter is 64-bit I don't think there are a real issue of running out of space and do not need to be reset for that reason. If one reset the counter, the node not restarting could potentially be forced to overwrite the current epoch. However, the SCTP association restart basically result in a new DTLS key context store, which will initially only contain the restart DTLS context ID. There should be no traffic DTLS key context, these should only be generated after a new DTLS key management invocation. \n\nIf one do not reset the counter then there will be a need to for the key-management on the restarting side to understand that the next epoch value to use is the one used by the restart +1.\n\nDo anyone see issues with reseting epoch on restart?",
       "createdAt": "2025-06-03T13:16:56Z",
-      "updatedAt": "2025-06-13T08:58:21Z",
-      "closedAt": null,
+      "updatedAt": "2025-06-17T11:59:53Z",
+      "closedAt": "2025-06-17T11:59:53Z",
       "comments": [
         {
           "author": "gloinul",
@@ -480,6 +488,13 @@
           "body": "Write down API consideration of this. ",
           "createdAt": "2025-06-13T08:58:21Z",
           "updatedAt": "2025-06-13T08:58:21Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Reseting the Epoch has now been implemented by #31 ",
+          "createdAt": "2025-06-17T11:59:53Z",
+          "updatedAt": "2025-06-17T11:59:53Z"
         }
       ]
     },
@@ -1414,26 +1429,55 @@
       "id": "PR_kwDOKszxDc6aviLn",
       "title": "Change PVALID to message update parameter to use Protection Solution Identifiers.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/31",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Resolves issue #22\r\nResolves issue #25 \r\nPartially implemented #27 ",
       "createdAt": "2025-06-16T15:43:58Z",
-      "updatedAt": "2025-06-16T15:46:59Z",
+      "updatedAt": "2025-06-17T11:57:55Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "49a4260bbffd15bb85b7f59e739aed830c183181",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue22",
-      "headRefOid": "09c7bc8153dcfb968123ab24b2907d081b04d169",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "adbadb4768b93ed176cf7a7095f871342f9d3d3e",
+      "closedAt": "2025-06-17T11:57:54Z",
+      "mergedAt": "2025-06-17T11:57:54Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "10527cd9e37fad30fce9b6e07764a24ecd8519f1"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6u5dhh",
+          "commit": {
+            "abbreviatedOid": "09c7bc8"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Line 396 to 398 :The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK\r\nexactly as in legacy SCTP Restart case; these Chunks SHALL be\r\nsent as DTLS chunk protected using the restart DTLS key context.\r\n\r\nLine 402\r\n{{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one\r\nactive Restart Key at a time, the newest. However, a crash at the\r\npoint having completed the key-management exchange but failing to\r\nshould be:\r\n{{sctp-DTLS-chunk-newchunk-crypt-struct}}).  There's exactly one\r\nactive Restart DTLS Context at a time, the newest. However, a crash at the\r\npoint having completed the key-management exchange but failing to\r\n\r\nLine 405 \r\ncommit the key material to secure storage could result in lost of the\r\nlatest key. Therefore, the endpoints SHOULD retain the old restart\r\nshould be\r\ncommit the DTLS Key Context to secure storage could result in lost of the\r\nlatest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart\r\n\r\nLine 423 \r\nA restarted SCTP Association SHALL continue to use the Restart Key,\r\nfor User Traffic until a new traffic DTLS Key will be available.  The\r\nshould be\r\nA restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,\r\nfor User Traffic until a new traffic DTLS Key Context will be available.  The\r\n\r\nLine 493\r\nRestart Key is available is kept to a minimum. Note that another\r\nshould be\r\nRestart DTLS Key Context is available is kept to a minimum. Note that another\r\n\r\nLine 448\r\nvalid packets. After having derived new traffic keys the endpoint\r\ninstalls the traffic key first, and start using it.  The new restart\r\nkey is only installed after any old in-flight restart packets have had\r\na chance to be received.\r\nshould be\r\nvalid packets. After having derived new traffic keys the endpoint\r\ninstalls the Traffic DTLS Key Context first, and start using it.  The new restart\r\nDTLS Key Context is only installed after any old in-flight restart packets have had\r\na chance to be received.\r\n\r\nLine 501 : shouldn't at least one Protection Solution exist?\r\n\r\nLine 629 : rather than set, I think we should use \"sequence\"\r\n\r\nLine 839 : aren't we setting a DTLS Key Context rather than individual keys? \r\n\r\nLine 852: \r\nparameter is sent in the INIT-ACK, otherwise it will reply with an\r\nshould be\r\nparameter sent in the INIT-ACK, otherwise it will reply with an\r\n\r\nLine 1397\r\nSolutions\". This regsitry is part of the of the Stream\r\nshould be\r\nSolutions\". This registry is part of the of the Stream\r\n\r\n\r\n\r\n\r\n",
+          "createdAt": "2025-06-17T06:31:18Z",
+          "updatedAt": "2025-06-17T06:31:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6u5pHH",
+          "commit": {
+            "abbreviatedOid": "09c7bc8"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Line 476:\r\n  plus 4 and if N is odd plus 2 bytes of padding.\r\nshould be\r\n  plus 4 and, if N is odd, plus 2 bytes of padding.\r\n\r\nLine 487 and 682\r\nPadding: If the number of included Protection solutions are odd the\r\nshould be\r\nPadding: If the number of included Protection solutions is odd the\r\n\r\n",
+          "createdAt": "2025-06-17T06:47:58Z",
+          "updatedAt": "2025-06-17T06:47:58Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
