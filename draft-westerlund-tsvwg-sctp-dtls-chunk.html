@@ -18,10 +18,10 @@ prevent eavesdropping and detect tampering or message forgery.
        Applications using SCTP DTLS chunk can use all transport
 features provided by SCTP and its extensions but with some limitations. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.29.0" name="generator">
 <meta content="draft-westerlund-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
+  xml2rfc 3.29.0
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 19 December 2025</td>
+<td class="center">Expires 21 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-westerlund-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-17" class="published">17 June 2025</time>
+<time datetime="2025-06-19" class="published">19 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-19">19 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-21">21 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1997,7 +1997,10 @@ a solution combines the DTLS chunk with a key-management solution,
 or non DTLS Chunk based security solution. The Protection Solutions
 are listed in descending order of preference, i.e. the first listed
 in the parameter is the most preferred and the last the least
-preferred.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
+preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
+endpoint include all of the offered solutions which it supports and
+list the selected one first. Including its decreasing preference on
+the additional Protection Solutions.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -2169,26 +2172,25 @@ selected the DTLS 1.3 chunk and the select key-management solution.
 This to prevent down grade attacks on the negotiation if other
 protection solutions where offered. <a href="#sctp-DTLS-PVALID-message" class="auto internal xref">Figure 5</a>
 illustrates the message structure. This message is exchanged after the
-SCTP assocation reached VALIDATION state on stream 0 as reliably DATA
-message using a dedicated PPID to enable the key-exchange mechanism to
-be the receiver of the message and thus validate the the negotiation.<a href="#section-6-1" class="pilcrow">¶</a></p>
+SCTP assocation reached VALIDATION state on stream 0 as reliable sent
+DATA message identified using the dedicated PVALID PPID=4243
+(<a href="#sec-iana-ppid" class="auto internal xref">Section 12.6</a>) to enable the key-exchange mechanism to be the
+receiver of the message and thus validate the the negotiation.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <span id="name-pvalid-message-structure"></span><div id="sctp-DTLS-PVALID-message">
 <figure id="figure-5">
         <div id="section-6-2.1">
           <div class="alignCenter art-svg artwork" id="section-6-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 8,64 L 8,128" fill="none" stroke="black"></path>
-              <path d="M 8,160 L 8,192" fill="none" stroke="black"></path>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="528" viewBox="0 0 528 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,64 L 8,208" fill="none" stroke="black"></path>
               <path d="M 136,64 L 136,96" fill="none" stroke="black"></path>
               <path d="M 264,64 L 264,128" fill="none" stroke="black"></path>
-              <path d="M 264,160 L 264,192" fill="none" stroke="black"></path>
-              <path d="M 520,64 L 520,128" fill="none" stroke="black"></path>
-              <path d="M 520,160 L 520,192" fill="none" stroke="black"></path>
+              <path d="M 264,176 L 264,208" fill="none" stroke="black"></path>
+              <path d="M 520,64 L 520,208" fill="none" stroke="black"></path>
               <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
               <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
               <path d="M 8,128 L 520,128" fill="none" stroke="black"></path>
-              <path d="M 8,160 L 520,160" fill="none" stroke="black"></path>
-              <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
+              <path d="M 8,176 L 520,176" fill="none" stroke="black"></path>
+              <path d="M 8,208 L 520,208" fill="none" stroke="black"></path>
               <g class="text">
                 <text x="16" y="36">0</text>
                 <text x="176" y="36">1</text>
@@ -2240,14 +2242,13 @@ be the receiver of the message and thus validate the the negotiation.<a href="#s
                 <text x="324" y="116">Protection</text>
                 <text x="404" y="116">Solution</text>
                 <text x="452" y="116">#2</text>
-                <text x="8" y="148">:</text>
                 <text x="60" y="148">Protection</text>
                 <text x="144" y="148">Solutions</text>
-                <text x="520" y="148">:</text>
-                <text x="60" y="180">Protection</text>
-                <text x="140" y="180">Solution</text>
-                <text x="188" y="180">#N</text>
-                <text x="304" y="180">Padding</text>
+                <text x="200" y="148">...</text>
+                <text x="60" y="196">Protection</text>
+                <text x="140" y="196">Solution</text>
+                <text x="188" y="196">#N</text>
+                <text x="304" y="196">Padding</text>
               </g>
             </svg><a href="#section-6-2.1.1" class="pilcrow">¶</a>
 </div>
@@ -2259,7 +2260,7 @@ be the receiver of the message and thus validate the the negotiation.<a href="#s
 <span class="break"></span><dl class="dlNewline" id="section-6-3">
         <dt id="section-6-3.1">Type: 8 bits (unsigned integer)</dt>
         <dd style="margin-left: 1.5em" id="section-6-3.2">
-          <p id="section-6-3.2.1">This value MUST be set to 0x01 to indicate Message<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-3.2.1">This value MUST be set to 0x01 to indicate that it is a PVALID Message<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-6-3.3">Flags: 8 bits</dt>
@@ -2269,23 +2270,20 @@ be the receiver of the message and thus validate the the negotiation.<a href="#s
         <dd class="break"></dd>
 <dt id="section-6-3.5">Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:</dt>
         <dd style="margin-left: 1.5em" id="section-6-3.6">
-          <p id="section-6-3.6.1">Each Protection Solution Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.2</a>)
-is a 16-bit unsigned integer indicting a Protection
-Solution. Protection solutions include both DTLS Chunk based, where
-a solution combines the DTLS chunk with a key-management solution,
-or non DTLS Chunk based ones. The Protection Solutions are listed in
-descending order of preference, i.e. the first listed in the
-parameter is the most preferred and the last the least preferred.<a href="#section-6-3.6.1" class="pilcrow">¶</a></p>
+          <p id="section-6-3.6.1">Each Protection Solution Identifier
+(<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.2</a>) is a 16-bit unsigned integer
+indicting a Protection Solution. Protection solutions include both
+DTLS Chunk based, where a solution combines the DTLS chunk with a
+key-management solution, or non DTLS Chunk based ones. The include
+Protection solutions and their order MUST match what was sent in the
+DTLS 1.3 Chunk Protected Association parameter
+<a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> sent by the sending endpoint.<a href="#section-6-3.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
 <p id="section-6-4">Padding: If the number of included Protection solutions is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">The PVALID message MUST include exactly the same sequence of SCTP
-Protection Solution Identifiers that was sent by this
-endpoint in the DTLS 1.3 Chunk Protected parameter included in the
-INIT or INIT-ACK CHUNK.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="error_handling">
@@ -3696,7 +3694,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 </div>
 </section>
 </div>
-<div id="sctp-payload-protocol-identifier">
+<div id="sec-iana-ppid">
 <section id="section-12.6">
         <h3 id="name-sctp-payload-protocol-ident">
 <a href="#section-12.6" class="section-number selfRef">12.6. </a><a href="#name-sctp-payload-protocol-ident" class="section-name selfRef">SCTP Payload Protocol Identifier</a>
@@ -3724,6 +3722,30 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
             <tr>
               <td class="text-right" rowspan="1" colspan="1">4242</td>
               <td class="text-left" rowspan="1" colspan="1">DTLS Chunk Key-Management Messages</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-12.6-3">Secondly it is requested that a new Payload Protocol Identifier is
+assigned to be used to identify the PVALID message <a href="#pvalid" class="auto internal xref">Section 6</a>.<a href="#section-12.6-3" class="pilcrow">¶</a></p>
+<span id="name-pvalid-protocol-identifier-"></span><div id="iana-payload-protection-id-pvalid">
+<table class="center" id="table-9">
+          <caption>
+<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#name-pvalid-protocol-identifier-" class="selfRef">PVALID Protocol Identifier Registered</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">ID Value</th>
+              <th class="text-left" rowspan="1" colspan="1">SCTP Payload Protocol Identifier</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">4243</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS Chunk PVALID Messages</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
