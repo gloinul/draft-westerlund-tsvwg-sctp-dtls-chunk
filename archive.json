@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-19T01:10:16.112292+00:00",
+  "timestamp": "2025-06-22T01:16:44.231434+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -554,7 +554,7 @@
       "id": "I_kwDOKszxDc67yEGw",
       "title": "Define a new PPID used for PVALID message",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/30",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -563,7 +563,39 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-16T15:40:34Z",
-      "updatedAt": "2025-06-16T15:40:34Z",
+      "updatedAt": "2025-06-19T13:05:36Z",
+      "closedAt": "2025-06-19T13:05:36Z",
+      "comments": []
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOKszxDc68U8VW",
+      "title": "DTLS 1.3 Chunk Protected Association responder including all its supported or just the common subset?",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/32",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "So the initiator of an SCTP Association will inlclude all its Protection Solutions in preference order in its DTLS 1.3 Chunk Protected Association parameter. However, when the responder sends the INIT-ACK and include the parameter should the parameter include:\n\na) All Protection solutions it supports, and have the initiator pick the most preferred in this answer that it supports. Thus enabling the initiator to learn the full capability of the peer. Thus it potentially two disjunct sets could be exchanged.\nb) Only the subset of Protection solutions the responding node support, whit the first being the selected solution.\n\n",
+      "createdAt": "2025-06-19T09:20:52Z",
+      "updatedAt": "2025-06-19T09:20:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 34,
+      "id": "I_kwDOKszxDc68gGNY",
+      "title": "Motivation of SCTP restart",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/34",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Motivation unclear\n- How can the restart key be stored in a secure way\n- Mandatory to implement\n- What happens if not implemented\n\nThis is to be discussed at the next VC.",
+      "createdAt": "2025-06-20T09:22:01Z",
+      "updatedAt": "2025-06-20T09:22:01Z",
       "closedAt": null,
       "comments": []
     }
@@ -1475,6 +1507,48 @@
           "body": "Line 476:\r\n  plus 4 and if N is odd plus 2 bytes of padding.\r\nshould be\r\n  plus 4 and, if N is odd, plus 2 bytes of padding.\r\n\r\nLine 487 and 682\r\nPadding: If the number of included Protection solutions are odd the\r\nshould be\r\nPadding: If the number of included Protection solutions is odd the\r\n\r\n",
           "createdAt": "2025-06-17T06:47:58Z",
           "updatedAt": "2025-06-17T06:47:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOKszxDc6bQbG7",
+      "title": "Adding PPID for PVALID, some other fixes related to PVALID.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/33",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "resolves #30. ",
+      "createdAt": "2025-06-19T13:03:31Z",
+      "updatedAt": "2025-06-19T13:14:40Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "10527cd9e37fad30fce9b6e07764a24ecd8519f1",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "pvalid-pip",
+      "headRefOid": "ae0b5b719e2c7a8c3731c320e5205883f1628761",
+      "closedAt": "2025-06-19T13:05:35Z",
+      "mergedAt": "2025-06-19T13:05:35Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "3873b4ed51d70c3737f23212c6a5c373dcc30541"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6vamAb",
+          "commit": {
+            "abbreviatedOid": "ae0b5b7"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Made some spelling changes",
+          "createdAt": "2025-06-19T13:14:40Z",
+          "updatedAt": "2025-06-19T13:14:40Z",
           "comments": []
         }
       ]
