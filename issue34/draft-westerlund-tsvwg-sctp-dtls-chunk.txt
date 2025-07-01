@@ -86,6 +86,7 @@ Table of Contents
      3.8.  Dynamic Address Reconfiguration Considerations
      3.9.  SCTP Restart Considerations
        3.9.1.  Protected SCTP Restart
+       3.9.2.  Compatibility with legacy SCTP Restart
    4.  New Parameter Type
      4.1.  DTLS 1.3 Chunk Protected Association
    5.  New Chunk Types
@@ -418,46 +419,42 @@ Table of Contents
    [RFC9260] with the purpose of achieving a Restart of the current
    Association, thus implementing SCTP Restart.
 
-   The current specification doesn't support SCTP Restart as described
-   in [RFC9260], but it introduces a protected SCTP Restart procedure
-   Section 3.9.1 that SHOULD be implemented when there are valid use
-   cases from upper layer protocols that rely on it, as for instance
-   3GPP NG-C protocol [ETSI-TS-38.413].
-
-   As the legacy SCTP Restart is not supported, when unexpected INIT
-   chunk is received unprotected, it SHALL be silently discarded.
-
 3.9.1.  Protected SCTP Restart
 
-   The protected SCTP Restart procedure is defined to maintain the
-   security characteristics of an SCTP Association using DTLS Chunk,
-   this requires that SCTP Restart procedure is modified in regards to
-   how it is described in [RFC9260].
+   When the upper layer protocols require support of SCTP Restart, as in
+   case of 3GPP NG-C protocol [ETSI-TS-38.413], the protected SCTP
+   Restart procedure SHOULD be implemented.
 
-   In order to support SCTP Restart, the SCTP Endpoints shall allocate
-   and maintain dedicated Restart DTLS Key contexts, SCTP packets
-   protected by these contexts will be identified in the DTLS chunk with
-   the R (Restart) bit set (see Section 5.1).  Both SCTP Endpoints shall
-   ensure that Restart DTLS key contexts is preserved for supporting the
-   SCTP Restart use case.
+   The protected SCTP Restart procedure keeps the security
+   characteristics of an SCTP Association using DTLS Chunk.
 
-   In order for the protected SCTP endpoint to be available for SCTP
-   Restart purposes, the DTLS chunk needs acess to a DTLS Key context
-   for this SCTP association that needs to be kept in a well-known state
-   so that both SCTP Endpoints are aware of the DTLS sequence numbers
-   and replay window, i.e. initialized but never used.  An SCTP Endpoint
-   SHALL NEVER use the SCTP Restart DTLS Key for any other use case than
-   SCTP association restart.
+   In protected SCTP Restart, INIT chunks are sent encrypted using DTLS
+   Chunks.
 
-   An SCTP endpoint that want to enable itself initiating a SCTP restart
-   needs to store the restart Keys, DTLS conenction ID (if used) and
-   related DTLS epoch, indexed so that when performing a restart with
-   the peer node it had an protected SCTP association with can identify
-   the right restart Key and DTLS epoch and initialize the restart DTLS
-   Key Context for when restarting the SCTP assocation.  The keys, DTLS
+   In order to support protected SCTP Restart, the SCTP Endpoints shall
+   allocate and maintain dedicated Restart DTLS Key contexts, SCTP
+   packets protected by these contexts will be identified in the DTLS
+   chunk with the R (Restart) bit set (see Section 5.1).  Both SCTP
+   Endpoints shall ensure that Restart DTLS key contexts is preserved
+   for supporting the protected SCTP Restart use case.
+
+   In order for the protected SCTP endpoint to be available for
+   protected SCTP Restart purposes, the DTLS chunk needs acess to a DTLS
+   Key context for this SCTP association that needs to be kept in a
+   well-known state so that both SCTP Endpoints are aware of the DTLS
+   sequence numbers and replay window, i.e. initialized but never used.
+   An SCTP Endpoint SHALL NEVER use the SCTP Restart DTLS Key for any
+   other use case than SCTP association restart.
+
+   An SCTP endpoint willing to initiate a protected SCTP restart needs
+   to store the restart Keys, DTLS conenction ID (if used) and related
+   DTLS epoch, indexed so that when performing a restart with the peer
+   node it had an protected SCTP association with can identify the right
+   restart Key and DTLS epoch and initialize the restart DTLS Key
+   Context for when restarting the SCTP assocation.  The keys, DTLS
    connection ID, and epoch needs to be stored safely so that they
-   survive the events that are causing SCTP Restart procedure to be
-   used, for instance a crash of the SCTP stack.
+   survive the events that are causing protected SCTP Restart procedure
+   to be used, for instance a crash of the SCTP stack.
 
    The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case; these Chunks SHALL be sent as
@@ -512,6 +509,22 @@ Table of Contents
    endpoint installs the Traffic DTLS Key Context first, and start using
    it.  The new restart DTLS Key Context is only installed after any old
    in-flight restart packets have had a chance to be received.
+
+3.9.2.  Compatibility with legacy SCTP Restart
+
+   The current specification doesn't support SCTP Restart as described
+   in [RFC9260]; when unexpected INIT chunk is received unprotected, it
+   SHALL be silently discarded.
+
+   An SCTP Endpoint supporting only legacy SCTP Restart and involved in
+   an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
+   the Association using unprotected INIT chunk.
+
+   An SCTP Endpoint supporting only legacy SCTP Restart and involved in
+   an SCTP Association using DTLS Chunks, when receiving an INIT chunk
+   protected by DTLS chunk as described in Section 3.9.1, thus having
+   the R bit (Restart Indicator) set in the DTLS Chunk (see Figure 4),
+   will silently discard it.
 
 4.  New Parameter Type
 
