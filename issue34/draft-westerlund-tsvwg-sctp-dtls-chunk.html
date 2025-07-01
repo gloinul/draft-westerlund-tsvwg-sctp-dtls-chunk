@@ -1788,7 +1788,7 @@ sent as DTLS chunk protected using the restart DTLS key context.<a href="#sectio
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).  There's exactly one
 active Restart DTLS Context at a time, the newest. However, a crash at the
-point having completed the key-management exchange but failing to
+time having completed the key-management exchange but failing to
 commit the DTLS Key Context to secure storage could result in lost of the
 latest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart
 DTLS key context for at least 30 seconds after having the next
@@ -1857,13 +1857,13 @@ restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-13">After restart the next traffic key SHALL use epoch=3, i.e. the epoch
-value is reseted. Note that if the restart epoch used also was 3 when
+value is reset. Note that if the restart epoch used also was 3 when
 not using any DTLS connection ID, then the installation of the new
 restart key context needs to be done with some care to avoid dropping
 valid packets. After having derived new traffic keys the endpoint
 installs the Traffic DTLS Key Context first, and start using it. The new restart
-DTLS Key Context is only installed after any old in-flight restart packets have had
-a chance to be received.<a href="#section-3.9.1-13" class="pilcrow">¶</a></p>
+DTLS Key Context is only installed after any old in-flight restart packets
+will have been received.<a href="#section-3.9.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-rest-comp">
