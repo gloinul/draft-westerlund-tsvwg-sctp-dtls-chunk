@@ -56,6 +56,10 @@ informative:
        email: claudio.porfiri@ericsson.com
     date: March 2025
 
+  ETSI-TS-38.413:
+    target: "https://www.etsi.org/deliver/etsi_ts/138400_138499/138413/18.05.00_60/ts_138413v180500p.pdf"
+    title: "NG Application Protocol (NGAP) version 18.5.0 Release 18"
+  date: March 2025
 
 normative:
   RFC4895:
@@ -232,7 +236,7 @@ connection, it can derive traffic and restart keys and set the
 Protection Operator for User Data encryption/decription via the API
 shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
 contexts. Both a DTLS Key context for traffic and a DTLS Key contect
-for restart should be created.
+for restart SHOULD be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
@@ -361,9 +365,21 @@ Chunks as Authentication mechanism for ASCONF chunks.
 
 This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in Section 5.2 of {{RFC9260}}
-with the purpose of achieving a Restart of the current Association.
+with the purpose of achieving a Restart of the current Association,
+thus implementing SCTP Restart.
 
-The SCTP Restart procedure is defined to maintain the security
+The current specification doesn't support SCTP Restart as described
+in {{RFC9260}}, but it introduces a protected SCTP Restart procedure
+{{protected-restart}} that SHOULD be implemented when there are valid use cases
+from upper layer protocols that rely on it, as for instance
+3GPP NG-C protocol {{ETSI-TS-38.413}}.
+
+As the legacy SCTP Restart is not supported, when unexpected INIT
+chunk is received unprotected, it SHALL be silently discarded.
+
+### Protected SCTP Restart {#protected-restart}
+
+The protected SCTP Restart procedure is defined to maintain the security
 characteristics of an SCTP Association using DTLS Chunk, this requires
 that SCTP Restart procedure is modified in regards to how it is
 described in {{RFC9260}}.
