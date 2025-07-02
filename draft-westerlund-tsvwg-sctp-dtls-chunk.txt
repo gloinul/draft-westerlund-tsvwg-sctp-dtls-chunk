@@ -1458,8 +1458,7 @@ Table of Contents
    suitable range.
 
    +============+================================+===========+=========+
-   |        Bit | Solution Name                  | Reference | Contact |
-   |   Position |                                |           |         |
+   | Identifier | Solution Name                  | Reference | Contact |
    +============+================================+===========+=========+
    |          0 | DTLS 1.3 Chunk with Pre-       | RFC-TBD   | Draft   |
    |            |                                |           | Authors |
