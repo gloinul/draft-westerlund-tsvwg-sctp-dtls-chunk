@@ -1407,7 +1407,7 @@ to be included here.
 
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
-| Bit Position | Solution Name | Reference | Contact |
+| Identifier | Solution Name | Reference | Contact |
 | 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignmnet using Specification Required policy | | |
 | 4096-65535 | Available for Assignmnet using First Come, First Served policy | | |
