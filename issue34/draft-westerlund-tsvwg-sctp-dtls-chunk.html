@@ -1371,6 +1371,9 @@ features provided by SCTP and its extensions but with some limitations.<a href="
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
                 <p id="section-toc.1-1.13.2.3.1"><a href="#section-13.3" class="auto internal xref">13.3</a>.  <a href="#name-downgrade-attacks" class="internal xref">Downgrade Attacks</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.4">
+                <p id="section-toc.1-1.13.2.4.1"><a href="#section-13.4" class="auto internal xref">13.4</a>.  <a href="#name-persitent-secure-stoage-of-" class="internal xref">Persitent Secure Stoage of Restart Key Context</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
@@ -1599,7 +1602,7 @@ connection, it can derive traffic and restart keys and set the
 Protection Operator for User Data encryption/decription via the API
 shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> to create the necessary DTLS key
 contexts. Both a DTLS Key context for traffic and a DTLS Key contect
-for restart SHOULD be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+for restart needs to be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
 chunks until the Association has reached the VALIDATION state
@@ -1747,15 +1750,23 @@ Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.8-2" cl
 during an Association lifetime as described in Section 5.2 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>
 with the purpose of achieving a Restart of the current Association,
 thus implementing SCTP Restart.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
-<p id="section-3.9-2">This specification doesn't support SCTP Restart as described
-in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>; when unexpected INIT
-chunk is received unprotected, it SHALL be silently discarded.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
-<p id="section-3.9-3">When the upper layer protocols require support of SCTP Restart,
-as in case of 3GPP NG-C protocol <span>[<a href="#ETSI-TS-38.413" class="cite xref">ETSI-TS-38.413</a>]</span>, the
-protected SCTP Restart procedure described in <a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>
-SHOULD be implemented.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
-<p id="section-3.9-4">The cases where one of the SCTP Endpoint only implements
-legacy SCTP Restart are described in <a href="#sctp-rest-comp" class="auto internal xref">Section 3.9.2</a>.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
+<p id="section-3.9-2">This specification doesn't support SCTP Restart as described in
+<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>; when unexpected INIT chunk is received unprotected, it
+SHALL be silently discarded to prevent denial of service attacks on
+the ongoing assocciation.<a href="#section-3.9-2" class="pilcrow">¶</a></p>
+<p id="section-3.9-3">All implementations SHALL support receiving and processing unexpected
+INIT chunks protected by DTLS Chunk as described in
+<a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>. This as has minimal implementation burden
+as it only requires handling the restart DTLS Key Context and detect
+DTLS Chunks indicating the restart.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+<p id="section-3.9-4">When the upper layer protocols require support of SCTP Restart, as in
+case of 3GPP NG-C protocol <span>[<a href="#ETSI-TS-38.413" class="cite xref">ETSI-TS-38.413</a>]</span>, the endpoint needs to
+support also initiating protected SCTP Restart procedure described in
+<a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>. Implementing initiating protected restart
+procedure is RECOMMENDED, however not required as persistent secure
+storage of the restart DTLS Key Context is needed.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
+<p id="section-3.9-5">The cases where one of the SCTP Endpoints only implements initiating
+legacy SCTP Restart are described in <a href="#sctp-rest-comp" class="auto internal xref">Section 3.9.2</a>.<a href="#section-3.9-5" class="pilcrow">¶</a></p>
 <div id="protected-restart">
 <section id="section-3.9.1">
           <h4 id="name-protected-sctp-restart">
@@ -1769,7 +1780,7 @@ using DTLS Chunks.<a href="#section-3.9.1-2" class="pilcrow">¶</a></p>
 and maintain dedicated Restart DTLS Key contexts, SCTP packets
 protected by these contexts will be identified in the DTLS chunk with
 the R (Restart) bit set (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints
-shall ensure that Restart DTLS key contexts is preserved for
+needs to ensure that Restart DTLS key contexts is preserved for
 supporting the protected SCTP Restart use case.<a href="#section-3.9.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-4">In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs acess to a DTLS Key context for
@@ -1778,28 +1789,34 @@ that both SCTP Endpoints are aware of the DTLS sequence numbers and
 replay window, i.e. initialized but never used. An SCTP Endpoint SHALL
 NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.<a href="#section-3.9.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-5">An SCTP endpoint willing to initiate a protected SCTP restart
-needs to store the restart Keys, DTLS conenction ID (if used) and
-related DTLS epoch, indexed so that when performing a restart with the
-peer node it had an protected SCTP association with can identify the
-right restart Key and DTLS epoch and initialize the restart DTLS Key
-Context for when restarting the SCTP assocation. The keys, DTLS
-connection ID, and epoch needs to be stored safely so that they
-survive the events that are causing protected SCTP Restart
-procedure to be used, for instance a crash of the SCTP stack.<a href="#section-3.9.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.9.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
+restart needs to store securily and persistent the restart Keys, DTLS
+conenction ID (if used) and related DTLS epoch, indexed so that when
+performing a restart with the peer node it had an protected SCTP
+association with can identify the right restart Key and DTLS epoch and
+initialize the restart DTLS Key Context for when restarting the SCTP
+assocation. The keys, DTLS connection ID, and epoch needs to be stored
+secure and persistently so that they survive the events that are
+causing protected SCTP Restart procedure to be used, for instance a
+crash of the SCTP stack. The security considerations for persistent
+secure storage of keying materials is further discussed in
+<a href="#sec-considertation-storage" class="auto internal xref">Section 13.4</a>.<a href="#section-3.9.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
 exactly as in legacy SCTP Restart case; these Chunks SHALL be
 sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.9.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-7">A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).  There's exactly one
-active Restart DTLS Context at a time, the newest. However, a crash at the
-time having completed the key-management exchange but failing to
-commit the DTLS Key Context to secure storage could result in lost of the
-latest DTLS Key Context . Therefore, the endpoints SHOULD retain the old restart
-DTLS key context for at least 30 seconds after having the next
-installed. However, the old restart DTLS Key Context SHOULD NOT be
-maintained for more than 5 minutes.<a href="#section-3.9.1-7" class="pilcrow">¶</a></p>
+active Restart DTLS Context at a time, the newest. However, a crash at
+the time having completed the key-management exchange but failing to
+commit the DTLS Key Context to persistent secure storage could result
+in lost of the latest DTLS Key Context. Therefore, the endpoints
+SHOULD retain the old restart DTLS key context until it the
+key-management confirms the new ones are commited to secure storage.
+This can for example be ensure that at key-changes signals to
+terminate the old DTLS Key Contexts (including the restart) is never
+sent until the new restart DTLS Key Context has been committed to
+storage.<a href="#section-3.9.1-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-2">
             <div id="section-3.9.1-8.1">
@@ -1862,14 +1879,14 @@ Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP assocation.<a href="#section-3.9.1-11" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-12">After restart the next traffic key SHALL use epoch=3, i.e. the epoch
-value is reset. Note that if the restart epoch used also was 3 when
-not using any DTLS connection ID, then the installation of the new
-restart key context needs to be done with some care to avoid dropping
-valid packets. After having derived new traffic keys the endpoint
-installs the Traffic DTLS Key Context first, and start using it. The new restart
-DTLS Key Context is only installed after any old in-flight restart packets
-will have been received.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
+<p id="section-3.9.1-12">After restart the next traffic DTLS key context SHALL use epoch=3,
+i.e. the epoch value is reset. Note that if the restart epoch used
+also was 3 when not using any DTLS connection ID, then the
+installation of the new restart DTLS key context needs to be done with
+some care to avoid dropping valid packets. After having derived new
+traffic keys the endpoint installs the Traffic DTLS Key Context first,
+and start using it. The new restart DTLS Key Context is only installed
+after any old in-flight restart packets will have been received.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-rest-comp">
@@ -1879,7 +1896,10 @@ will have been received.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
           </h4>
 <p id="section-3.9.2-1">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
-restart the Association using unprotected INIT chunk.<a href="#section-3.9.2-1" class="pilcrow">¶</a></p>
+restart the Association using unprotected INIT chunk. The affect
+will be that the restart initiator will have its packet being dropped
+until the peer nodes times out the SCTP Association from lack
+of any response from the restarting node.<a href="#section-3.9.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.9.2-2">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks, when receiving an INIT
 chunk protected by DTLS chunk as described in <a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>,
@@ -3852,6 +3872,24 @@ Section 4.1.3. of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span
 provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
 to only support a limited set of strongly profiled protection
 solutions.<a href="#section-13.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-considertation-storage">
+<section id="section-13.4">
+        <h3 id="name-persitent-secure-stoage-of-">
+<a href="#section-13.4" class="section-number selfRef">13.4. </a><a href="#name-persitent-secure-stoage-of-" class="section-name selfRef">Persitent Secure Stoage of Restart Key Context</a>
+        </h3>
+<p id="section-13.4-1">The Restart DTLS Key Context needs to be stored securely and persistent. Securely
+as access to this security context may enable an attacker to perform an restart,
+resulting a denial of service on the existing SCTP Association. It can also
+give the attacker access to the ULP. Thus the storage needs to provide at least
+as strong resistant against exfiltration as the main DTLS Key Context store.<a href="#section-13.4-1" class="pilcrow">¶</a></p>
+<p id="section-13.4-2">When it comes to how to realize persistant storage that is highly
+dependent on the ULP and how it can utilize restarted SCTP
+Associations. One way can be to have an actual secure persistant storage
+solution accessible to the endpoint. In other use cases the persistance part
+might be accomplished be keeping the current restart DTLS Key Context with
+the ULP State if that is sufficiently secure.<a href="#section-13.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
