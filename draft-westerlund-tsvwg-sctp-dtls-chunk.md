@@ -501,6 +501,16 @@ chunk protected by DTLS chunk as described in {{protected-restart}},
 thus having the R bit (Restart Indicator) set in the DTLS Chunk (see
 {{sctp-DTLS-chunk-newchunk-crypt-struct}}), will silently discard it.
 
+Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
+in an SCTP Association using DTLS Chunks cannot use SCTP Restart
+legacy procedure, in case of need to restart the Association
+it SHOULD keep on retrying initiating a new Association
+until the remote SCTP Endpoint will close the existing Association
+(i.e. due to timeout) and will accept a new one.
+As alternative, depending on the Use Case and the Upper Layer protocol,
+it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
+will accept the initiation of the new Association while still supervising
+the old one.
 
 # New Parameter Type {#new-parameter-type}
 
