@@ -559,7 +559,6 @@ payload of a plain text SCTP packet without the SCTP common header.
 {: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure"}
 
 reserved: 7 bits
-
 : Reserved bits for future use. Sender MUST set these bits to 0 and
   MUST be ignored on reception.
 
