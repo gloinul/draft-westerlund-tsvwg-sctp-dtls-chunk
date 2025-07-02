@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 2 January 2026                                         Ericsson
-                                                             1 July 2025
+Expires: 3 January 2026                                         Ericsson
+                                                             2 July 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2026.
+   This Internet-Draft will expire on 3 January 2026.
 
 Copyright Notice
 
@@ -419,11 +419,18 @@ Table of Contents
    [RFC9260] with the purpose of achieving a Restart of the current
    Association, thus implementing SCTP Restart.
 
-3.9.1.  Protected SCTP Restart
+   This specification doesn't support SCTP Restart as described in
+   [RFC9260]; when unexpected INIT chunk is received unprotected, it
+   SHALL be silently discarded.
 
    When the upper layer protocols require support of SCTP Restart, as in
    case of 3GPP NG-C protocol [ETSI-TS-38.413], the protected SCTP
-   Restart procedure SHOULD be implemented.
+   Restart procedure described in Section 3.9.1 SHOULD be implemented.
+
+   The cases where one of the SCTP Endpoint only implements legacy SCTP
+   Restart are described in Section 3.9.2.
+
+3.9.1.  Protected SCTP Restart
 
    The protected SCTP Restart procedure keeps the security
    characteristics of an SCTP Association using DTLS Chunk.
@@ -511,10 +518,6 @@ Table of Contents
    flight restart packets will have been received.
 
 3.9.2.  Compatibility with legacy SCTP Restart
-
-   The current specification doesn't support SCTP Restart as described
-   in [RFC9260]; when unexpected INIT chunk is received unprotected, it
-   SHALL be silently discarded.
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
