@@ -368,11 +368,20 @@ during an Association lifetime as described in Section 5.2 of {{RFC9260}}
 with the purpose of achieving a Restart of the current Association,
 thus implementing SCTP Restart.
 
-### Protected SCTP Restart {#protected-restart}
+This specification doesn't support SCTP Restart as described
+in {{RFC9260}}; when unexpected INIT
+chunk is received unprotected, it SHALL be silently discarded.
 
 When the upper layer protocols require support of SCTP Restart,
 as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the
-protected SCTP Restart procedure SHOULD be implemented.
+protected SCTP Restart procedure described in {{protected-restart}}
+SHOULD be implemented.
+
+The cases where one of the SCTP Endpoint only implements
+legacy SCTP Restart are described in {{sctp-rest-comp}}.
+
+### Protected SCTP Restart {#protected-restart}
+
 
 The protected SCTP Restart procedure keeps the security
 characteristics of an SCTP Association using DTLS Chunk.
@@ -463,10 +472,6 @@ DTLS Key Context is only installed after any old in-flight restart packets
 will have been received.
 
 ### Compatibility with legacy SCTP Restart {#sctp-rest-comp}
-
-The current specification doesn't support SCTP Restart as described
-in {{RFC9260}}; when unexpected INIT
-chunk is received unprotected, it SHALL be silently discarded.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
