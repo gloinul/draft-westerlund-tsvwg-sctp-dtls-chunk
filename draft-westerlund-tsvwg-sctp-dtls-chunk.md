@@ -505,7 +505,7 @@ Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks cannot use SCTP Restart
 legacy procedure, in case of need to restart the Association
 it SHOULD keep on retrying initiating a new Association
-until the remote SCTP Endpoint will close the existing Association
+until the remote SCTP Endpoint have closed the existing Association
 (i.e. due to timeout) and will accept a new one.
 As alternative, depending on the Use Case and the Upper Layer protocol,
 it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
