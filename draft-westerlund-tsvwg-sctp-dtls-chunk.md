@@ -718,6 +718,12 @@ Below a number of defined Error Causes (Extra Cause above) are
 defined, additional causes can be registered with IANA following the
 rules in {{IANA-Extra-Cause}}.
 
+### No Common Protection Solution {#enocommonpsi}
+
+If the responder to do not support any of the protection solutions
+offered by the assocation intiator in the
+
+
 ### Error During Protection Handshake {#ekeyhandshake}
 
 The usage of the DTLS Chunk can specify a handshake, for example
@@ -789,8 +795,15 @@ key-management solutions (see
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with DTLS 1.3 Chunk Protected Association parameter, will reply with
 INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-and any its set of supported key-management solutions, and the selected
-to be used among the common set listed first.
+containg the selected protection solution out of the set of supported
+ones. In case there are no common set of supported solutions that are
+accepted by the responder, and the endpoints policy require secured
+association it SHALL reply with an ABORT chunk, include the error
+cause "Error in DTLS Chunk" {{eprotect}} and containing the Extra
+Cause "No Common Protection Solution" {{enocommonpsi}}. Otherwise, the
+responder MAY send an INIT-ACK without the DTLS 1.3 Chunk Protected
+Association parameter to indicate it is willing to create a session
+without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
@@ -1380,7 +1393,7 @@ is reserved for future extension. The proposed general form of the
 registry is depicted below in {{iana-protection-error-cause}}.
 
 | Cause Code | Meaning | Reference | Contact |
-| 0 | Error in the Protection Operator List | RFC-To-Be | Authors |
+| 0 | No Common Protection Solution | RFC-To-Be | Authors |
 | 1 | Error During Protection Handshake | RFC-To-Be | Authors|
 | 2 | Failure in Protection Operators Validation | RFC-To-Be | Authors |
 | 3 | Timeout During KEY Handshake or Validation | RFC-To-Be | Authors |
