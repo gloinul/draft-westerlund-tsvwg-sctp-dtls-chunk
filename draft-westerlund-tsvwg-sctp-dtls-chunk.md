@@ -1338,13 +1338,6 @@ Reply: Replay Protection Configured
 Parameters : true or false
 
 
-# Implementation Considerations
-
-For each DTLS Key Contexts, there are certain crypto state infomration
-that needs to be handled thread safe to avoid nonce re-use and correct
-replay protection.
-
-
 # IANA Considerations {#IANA-Consideration}
 
 This document defines two new registries in the Stream Control
