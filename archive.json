@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-01T01:18:21.138227+00:00",
+  "timestamp": "2025-07-03T01:10:45.354917+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -367,7 +367,7 @@
       "labels": [],
       "body": "From the Design Team : the PVALID chunk is not a preferred solution, it shall be replaced by using a legacy DATA Chunk having a new PPID.",
       "createdAt": "2025-05-26T06:58:06Z",
-      "updatedAt": "2025-06-13T08:59:10Z",
+      "updatedAt": "2025-07-02T23:52:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -390,6 +390,13 @@
           "body": "@tuexen to write api and interaction with statemachine to go from SCTP ESTABLISHED to PROTECTED including PVALID message exchange. ",
           "createdAt": "2025-06-13T08:44:10Z",
           "updatedAt": "2025-06-13T08:44:10Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think I have an idea how to simplify this:\n* The client sends one or more protection solution Ids in the protection solutions parameter.\n* The server sends exactly one  protection solution Id in the protection solutions parameter. This is one of the received ones.\n* Provide an API to let the application know which protection solutions parameter was sent and received.\n* After the association is established the communication is unprotected. This allows the DTLS handshake to happen.\n* When deriving the send/recv keys, make them include the protection solutions parameters during key derivation.\n* This way the protected packets are also protected against downgrade attacks and we don't need any additional message exchanges. \n* Once you provided a receive key, no unprotected packets will be processed anymore. \n* Or am I missing something, @gloinul @hannestschofenig ",
+          "createdAt": "2025-07-02T23:52:40Z",
+          "updatedAt": "2025-07-02T23:52:40Z"
         }
       ]
     },
@@ -630,6 +637,22 @@
           "updatedAt": "2025-06-30T09:34:09Z"
         }
       ]
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOKszxDc6-ROis",
+      "title": "Padding of SCTP Packets",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/35",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "As both SCTP and DTLS can add padding to achieve a certain packet size I think further text and clarification of this should be added. The following text was present in draft-westerlund-tsvwg-sctp-dtls-handshake but it makes more sense to add it to Chunks instead. Which leads to an additional question if there should be an API function to instruct the DTLS Chunk to always produce a multiple of the set size large DTLS Chunks. \n```\n\nBoth SCTP and DTLS contains mechanisms to padd SCTP payloads, and DTLS\nrecords respectively. If padding of SCTP packets are desired to hide\nactual message sizes it RECOMMEDED to use the SCTP Padding Chunck\n{{RFC4820}} to generate a consistent SCTP payload size. Support of\nthis chunk is only required on the sender side, any SCTP receiver will\nsafely ignore the PAD Chunk. However, if the PAD chunk is not\nsupported DTLS padding MAY be used.\n\nIt needs to be noted that independent if SCTP padding or DTLS padding\nis used the padding is not taken into account by the SCTP congestion\ncontrol. Extensive use of padding has potential for worsen congestion\nsituations as the SCTP association will consume more bandwidth than\nits derived share by the congestion control.\n\nThe use of SCTP PAD chunk is recommened as it at least can enable\nfuture extension or SCTP implementation that account also for the\npadding. Use of DTLS padding hides this packet expansion from SCTP.\n```",
+      "createdAt": "2025-07-01T11:59:41Z",
+      "updatedAt": "2025-07-01T12:00:49Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -1584,6 +1607,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOKszxDc6dCP1x",
+      "title": "Update of SCTP Restart to address Issue34",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/36",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Redesign of SCTP Restart",
+      "createdAt": "2025-07-02T07:51:25Z",
+      "updatedAt": "2025-07-02T13:47:30Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "910e92c112960e302c295b29491c30b36c35d1b5",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue34",
+      "headRefOid": "8e719c402a363a71f511efb01f33a43d64c546e4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
