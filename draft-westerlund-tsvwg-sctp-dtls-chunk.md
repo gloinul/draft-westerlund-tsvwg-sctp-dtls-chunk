@@ -1341,10 +1341,6 @@ Parameters : true or false
 
 # Implementation Considerations
 
-For each DTLS Key Contexts, there are certain crypto state information
-that needs to be handled thread safe to avoid nonce re-use and correct
-replay protection.
-
 ## Privacy Padding of SCTP Packets
 
 To reduce the potential information leakage from packet size
