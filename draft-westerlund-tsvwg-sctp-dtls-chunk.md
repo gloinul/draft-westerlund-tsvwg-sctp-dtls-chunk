@@ -54,10 +54,11 @@ informative:
        name: Claudio Porfiri
        org: Ericsson
        email: claudio.porfiri@ericsson.com
-    date: March 2025
+    date: Jul 2025
 
 
 normative:
+  RFC4820:
   RFC4895:
   RFC5061:
   RFC6083:
@@ -1349,6 +1350,35 @@ Paramters :
 Reply: Replay Protection Configured
 
 Parameters : true or false
+
+
+# Implementation Considerations
+
+## Privacy Padding of SCTP Packets
+
+To reduce the potential information leakage from packet size
+variations one may select to padd the SCTP Packets to uniform packet
+sizes. This size may be either the maximum used, or in block sized
+increments. However, the padding needs to be done inside of the
+encryption envelope.
+
+Both SCTP and DTLS contains mechanisms to padd SCTP payloads, and DTLS
+records respectively. If padding of SCTP packets are desired to hide
+actual message sizes it RECOMMEDED to use the SCTP Padding Chunck
+{{RFC4820}} to generate a consistent SCTP payload size. Support of
+this chunk is only required on the sender side, any SCTP receiver will
+safely ignore the PAD Chunk. However, if the PAD chunk is not
+supported DTLS padding MAY be used.
+
+It needs to be noted that independent if SCTP padding or DTLS padding
+is used the padding is not taken into account by the SCTP congestion
+control. Extensive use of padding has potential for worsen congestion
+situations as the SCTP association will consume more bandwidth than
+its derived share by the congestion control.
+
+The use of SCTP PAD chunk is recommened as it at least can enable
+future extension or SCTP implementation that account also for the
+padding. Use of DTLS padding hides this packet expansion from SCTP.
 
 
 # IANA Considerations {#IANA-Consideration}
