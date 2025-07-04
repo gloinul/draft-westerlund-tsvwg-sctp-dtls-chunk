@@ -5,8 +5,8 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 4 January 2026                                         Ericsson
-                                                             3 July 2025
+Expires: 5 January 2026                                         Ericsson
+                                                             4 July 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2026.
+   This Internet-Draft will expire on 5 January 2026.
 
 Copyright Notice
 
@@ -1377,10 +1377,6 @@ Table of Contents
    Parameters : true or false
 
 11.  Implementation Considerations
-
-   For each DTLS Key Contexts, there are certain crypto state
-   information that needs to be handled thread safe to avoid nonce re-
-   use and correct replay protection.
 
 11.1.  Privacy Padding of SCTP Packets
 
