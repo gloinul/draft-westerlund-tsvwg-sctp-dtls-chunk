@@ -93,9 +93,10 @@ Table of Contents
    7.  Error Handling
      7.1.  Mandatory Protected Association Parameter Missing
      7.2.  Error in DTLS Chunk
-       7.2.1.  Error During Protection Handshake
-       7.2.2.  Failure in Protection Solution Validation
-       7.2.3.  Timeout During Protection Handshake or Validation
+       7.2.1.  No Common Protection Solution
+       7.2.2.  Error During Protection Handshake
+       7.2.3.  Failure in Protection Solution Validation
+       7.2.4.  Timeout During Protection Handshake or Validation
      7.3.  Critical Error from DTLS
      7.4.  Non-critical Error in the Protection
    8.  Procedures
@@ -763,7 +764,12 @@ Table of Contents
    defined, additional causes can be registered with IANA following the
    rules in Section 11.1.
 
-7.2.1.  Error During Protection Handshake
+7.2.1.  No Common Protection Solution
+
+   If the responder to do not support any of the protection solutions
+   offered by the assocation intiator in the
+
+7.2.2.  Error During Protection Handshake
 
    The usage of the DTLS Chunk can specify a handshake, for example
    [I-D.westerlund-tsvwg-sctp-DTLS-handshake], in which case that
@@ -774,7 +780,7 @@ Table of Contents
    detailing the reason that drove the protection to fail.  Such
    granular information can be added to the Error List.
 
-7.2.2.  Failure in Protection Solution Validation
+7.2.3.  Failure in Protection Solution Validation
 
    A Failure may occur during protection solution validation, i.e. when
    the PVALID messages Figure 5 are exchanged to validate the
@@ -782,7 +788,7 @@ Table of Contents
    in protection cause code (specified in Section 7.2) and extra cause
    "Failure in Validation" identifier 0x02 to indicate this failure.
 
-7.2.3.  Timeout During Protection Handshake or Validation
+7.2.4.  Timeout During Protection Handshake or Validation
 
    Whenever a T-valid timeout occurs, the SCTP endpoint will send an
    ABORT chunk with "Error in Protection" cause (specified in
@@ -833,8 +839,15 @@ Table of Contents
    An SCTP Endpoint acting as responder, when receiving an INIT chunk
    with DTLS 1.3 Chunk Protected Association parameter, will reply with
    INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-   and any its set of supported key-management solutions, and the
-   selected to be used among the common set listed first.
+   containg the selected protection solution out of the set of supported
+   ones.  In case there are no common set of supported solutions that
+   are accepted by the responder, and the endpoints policy require
+   secured association it SHALL reply with an ABORT chunk, include the
+   error cause "Error in DTLS Chunk" Section 7.2 and containing the
+   Extra Cause "No Common Protection Solution" Section 7.2.1.
+   Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
+   Chunk Protected Association parameter to indicate it is willing to
+   create a session without security.
 
    Additionally, an SCTP Endpoint acting as responder willing to support
    only protected associations shall consider an INIT chunk not
@@ -878,7 +891,7 @@ Table of Contents
    chunks as well as DTLS chunks.
 
    In case of T-valid timeout, the endpoint will generate an ABORT
-   chunk.  The ERROR handling follows what specified in Section 7.2.1.
+   chunk.  The ERROR handling follows what specified in Section 7.2.2.
 
    When DTLS Key Context have been installed, the initiator key-
    management function MUST send to the responder a PVALID message (see
@@ -909,7 +922,7 @@ Table of Contents
 
    If T-valid timer expires either at initiator or responder, the
    endpoint will generate an ABORT chunk.  The ERROR handling follows
-   what specified in Section 7.2.3.
+   what specified in Section 7.2.4.
 
    In the PROTECTED state any ULP SCTP messages for any PPID SHALL be
    exchanged in the protected SCTP association.
@@ -1407,26 +1420,24 @@ Table of Contents
    for future extension.  The proposed general form of the registry is
    depicted below in Table 3.
 
-      +============+=========================+===========+=========+
-      | Cause Code | Meaning                 | Reference | Contact |
-      +============+=========================+===========+=========+
-      |          0 | Error in the Protection | RFC-To-Be | Authors |
-      |            | Operator List           |           |         |
-      +------------+-------------------------+-----------+---------+
-      |          1 | Error During Protection | RFC-To-Be | Authors |
-      |            | Handshake               |           |         |
-      +------------+-------------------------+-----------+---------+
-      |          2 | Failure in Protection   | RFC-To-Be | Authors |
-      |            | Operators Validation    |           |         |
-      +------------+-------------------------+-----------+---------+
-      |          3 | Timeout During KEY      | RFC-To-Be | Authors |
-      |            | Handshake or Validation |           |         |
-      +------------+-------------------------+-----------+---------+
-      |    4-65534 | Available for           | RFC-To-Be | Authors |
-      |            | Assignment              |           |         |
-      +------------+-------------------------+-----------+---------+
-      |      65535 | Reserved                | RFC-To-Be | Authors |
-      +------------+-------------------------+-----------+---------+
+   +============+===============================+===========+=========+
+   | Cause Code | Meaning                       | Reference | Contact |
+   +============+===============================+===========+=========+
+   |          0 | No Common Protection Solution | RFC-To-Be | Authors |
+   +------------+-------------------------------+-----------+---------+
+   |          1 | Error During Protection       | RFC-To-Be | Authors |
+   |            | Handshake                     |           |         |
+   +------------+-------------------------------+-----------+---------+
+   |          2 | Failure in Protection         | RFC-To-Be | Authors |
+   |            | Operators Validation          |           |         |
+   +------------+-------------------------------+-----------+---------+
+   |          3 | Timeout During KEY Handshake  | RFC-To-Be | Authors |
+   |            | or Validation                 |           |         |
+   +------------+-------------------------------+-----------+---------+
+   |    4-65534 | Available for Assignment      | RFC-To-Be | Authors |
+   +------------+-------------------------------+-----------+---------+
+   |      65535 | Reserved                      | RFC-To-Be | Authors |
+   +------------+-------------------------------+-----------+---------+
 
                    Table 3: Protection Error Cause Code
 
