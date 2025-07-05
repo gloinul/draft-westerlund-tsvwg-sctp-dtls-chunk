@@ -613,8 +613,8 @@ Table of Contents
       N is odd, plus 2 bytes of padding.
 
    Protection Solution fields: zero or more 16-bit SCTP Protection
-   Solution Identifers:
-      Each Protection Solution Identifer (Section 12.2) is a 16-bit
+   Solution Identifiers:
+      Each Protection Solution Identifier (Section 12.2) is a 16-bit
       unsigned integer value indicting a Protection Solution.
       Protection solutions include both DTLS Chunk based, where a
       solution combines the DTLS chunk with a key-management solution,
