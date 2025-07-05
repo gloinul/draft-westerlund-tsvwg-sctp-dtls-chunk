@@ -1413,7 +1413,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
 <p id="section-1-1">This document defines a DTLS chunk for the Stream Control
    Transmission Protocol (SCTP), as defined in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This specification defines the actual DTLS chunk, how to enable
-   it usage, how it interacts with the SCTP association establishment
+   its usage, how it interacts with the SCTP association establishment
    to enable endpoint authentication, key-establishment, and key
    updates.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">The DTLS chunk is designed to enable mutual
@@ -1622,9 +1622,9 @@ Key, derived from a DTLS connection, and all relevant data that needs
 to be provided to the Protection Operator for DTLS encryption and
 decryption.  DTLS Key context includes Keys for sending and receiving,
 replay window, last used sequence number. Each DTLS key context are
-associated with a four value tuple identifying the context, consisting
+associated with a four-value tuple identifying the context, consisting
 of SCTP Association, the restart indicator, the DTLS Connection ID (if
-used), an the DTLS epoch.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+used), and the DTLS epoch.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
 <p id="section-3.2-8">Support of DTLS Connection ID in the DTLS Record layer used in the
 DTLS Chunk is OPTIONAL, and negotiated using the key-management
 function.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
@@ -1739,7 +1739,7 @@ the DTLS Chunk to all Associations that fit with the parameters in
 order to find the right one. The association will attempt
 de-protection operations on the DTLS chunk, and if that is successful
 the ASCONF chunk can be processed. Note that trial decoding should
-have an limit in number of tried contexts to prevent denial of service
+have a limit in number of tried contexts to prevent denial of service
 attacks on the endpoint.<a href="#section-3.8-1" class="pilcrow">¶</a></p>
 <p id="section-3.8-2">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>.  For
@@ -1800,7 +1800,7 @@ association restart.<a href="#section-3.9.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
 restart needs to store securily and persistent the restart Keys, DTLS
 conenction ID (if used) and related DTLS epoch, indexed so that when
-performing a restart with the peer node it had an protected SCTP
+performing a restart with the peer node it had a protected SCTP
 association with can identify the right restart Key and DTLS epoch and
 initialize the restart DTLS Key Context for when restarting the SCTP
 assocation. The keys, DTLS connection ID, and epoch needs to be stored
@@ -1818,7 +1818,7 @@ having the R bit (Restart Indicator) set in the DTLS Chunk (see
 active Restart DTLS Context at a time, the newest. However, a crash at
 the time having completed the key-management exchange but failing to
 commit the DTLS Key Context to persistent secure storage could result
-in lost of the latest DTLS Key Context. Therefore, the endpoints
+in loss of the latest DTLS Key Context. Therefore, the endpoints
 SHOULD retain the old restart DTLS key context until it the
 key-management confirms the new ones are commited to secure storage.
 This can for example be ensure that at key-changes signals to
@@ -1904,7 +1904,7 @@ after any old in-flight restart packets will have been received.<a href="#sectio
           </h4>
 <p id="section-3.9.2-1">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
-restart the Association using unprotected INIT chunk. The affect
+restart the Association using unprotected INIT chunk. The effect
 will be that the restart initiator will have its packet being dropped
 until the peer nodes times out the SCTP Association from lack
 of any response from the restarting node.<a href="#section-3.9.2-1" class="pilcrow">¶</a></p>
@@ -2213,7 +2213,7 @@ MUST be ignored on reception.<a href="#section-5.1-7.2.1" class="pilcrow">¶</a>
 <dt id="section-5.1-7.3">R: 1 bit (boolean)</dt>
           <dd style="margin-left: 1.5em" id="section-5.1-7.4">
             <p id="section-5.1-7.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
-with by an Restart DTLS Key context.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
+with by a Restart DTLS Key context.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.1-7.5">Chunk Length: 16 bits (unsigned integer)</dt>
@@ -3938,7 +3938,7 @@ solutions.<a href="#section-13.3-3" class="pilcrow">¶</a></p>
 <a href="#section-13.4" class="section-number selfRef">13.4. </a><a href="#name-persitent-secure-stoage-of-" class="section-name selfRef">Persitent Secure Stoage of Restart Key Context</a>
         </h3>
 <p id="section-13.4-1">The Restart DTLS Key Context needs to be stored securely and persistent. Securely
-as access to this security context may enable an attacker to perform an restart,
+as access to this security context may enable an attacker to perform a restart,
 resulting a denial of service on the existing SCTP Association. It can also
 give the attacker access to the ULP. Thus the storage needs to provide at least
 as strong resistant against exfiltration as the main DTLS Key Context store.<a href="#section-13.4-1" class="pilcrow">¶</a></p>
