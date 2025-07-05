@@ -619,7 +619,7 @@ payload of a plain text SCTP packet without the SCTP common header.
 |                               |           Padding             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure"}
+{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
 
 reserved: 7 bits
 : Reserved bits for future use. Sender MUST set these bits to 0 and
