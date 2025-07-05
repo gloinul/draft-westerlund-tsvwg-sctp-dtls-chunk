@@ -487,7 +487,7 @@ traffic keys the endpoint installs the Traffic DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.
 
-### Compatibility with legacy SCTP Restart {#sctp-rest-comp}
+### Compatibility with Legacy SCTP Restart {#sctp-rest-comp}
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
