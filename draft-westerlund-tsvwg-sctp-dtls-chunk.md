@@ -104,7 +104,7 @@ features provided by SCTP and its extensions but with some limitations.
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
    established. It is dependent on a key management function that is
-   defined seperately to achieve all these capabilities. The
+   defined separately to achieve all these capabilities. The
    key management function uses an API to provision the SCTP
    association's DTLS chunk protection with key-material to enable and
    rekey the protection operations.
@@ -121,7 +121,7 @@ features provided by SCTP and its extensions but with some limitations.
    full security and SCTP association state.
 
    DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
-   other versions are explicitely not part of this document.
+   other versions are explicitly not part of this document.
 
 # Conventions
 
@@ -192,7 +192,7 @@ PPID (4242) may flow, no ULP traffic. The key management function uses
 an API to key the DTLS protection operation function. Usage of the
 DTLS 1.3 handshake for initial mutual authentication and key
 establishment as well as periodic re-authentication and rekeying with
-Diffe-Hellman of the DTLS chunk protection is defied in a seperate
+Diffe-Hellman of the DTLS chunk protection is defied in a separate
 document {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 When the endpoint authentication and key establishment has been
@@ -202,7 +202,7 @@ exchange data securely with its peer.
 
 A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
-protection will be used to supress duplicated DTLS chunks, however a
+protection will be used to suppress duplicated DTLS chunks, however a
 failure to prevent replay will only result in duplicated SCTP chunks and
 will be handled as duplicated chunks by SCTP endpoint in the same way
 a duplicated SCTP packet with those SCTP chunks would have been.
@@ -234,9 +234,9 @@ the value 4242 (see {{iana-payload-protection-id}}).
 
 A Key Management using DTLS when it has established a DTLS 1.3
 connection, it can derive traffic and restart keys and set the
-Protection Operator for User Data encryption/decription via the API
+Protection Operator for User Data encryption/decryption via the API
 shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
-contexts. Both a DTLS Key context for traffic and a DTLS Key contect
+contexts. Both a DTLS Key context for traffic and a DTLS Key context
 for restart needs to be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
@@ -1633,10 +1633,10 @@ resulting a denial of service on the existing SCTP Association. It can also
 give the attacker access to the ULP. Thus the storage needs to provide at least
 as strong resistant against exfiltration as the main DTLS Key Context store.
 
-When it comes to how to realize persistant storage that is highly
+When it comes to how to realize persistent storage that is highly
 dependent on the ULP and how it can utilize restarted SCTP
-Associations. One way can be to have an actual secure persistant storage
-solution accessible to the endpoint. In other use cases the persistance part
+Associations. One way can be to have an actual secure persistent storage
+solution accessible to the endpoint. In other use cases the persistence part
 might be accomplished be keeping the current restart DTLS Key Context with
 the ULP State if that is sufficiently secure.
 
