@@ -561,8 +561,8 @@ Parameter Length: 16 bits (unsigned integer)
   number of Protection Solution fields (N) times two plus 4 and, if N
   is odd, plus 2 bytes of padding.
 
-Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifers:
-: Each Protection Solution Identifer ({{IANA-Protection-Solution-ID}})
+Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:
+: Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
   is a 16-bit unsigned integer value indicting a Protection
   Solution. Protection solutions include both DTLS Chunk based, where
   a solution combines the DTLS chunk with a key-management solution,
