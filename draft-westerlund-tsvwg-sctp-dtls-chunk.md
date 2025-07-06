@@ -1509,7 +1509,7 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 | 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
-{: #iana-psi title="PVALID Protection Solution Indicators" cols="r l l l"}
+{: #iana-psi title="PVALID Protection Solution Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
 as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
