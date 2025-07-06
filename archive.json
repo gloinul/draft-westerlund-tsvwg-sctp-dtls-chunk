@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-03T01:10:45.354917+00:00",
+  "timestamp": "2025-07-06T01:17:07.234887+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -367,7 +367,7 @@
       "labels": [],
       "body": "From the Design Team : the PVALID chunk is not a preferred solution, it shall be replaced by using a legacy DATA Chunk having a new PPID.",
       "createdAt": "2025-05-26T06:58:06Z",
-      "updatedAt": "2025-07-02T23:52:40Z",
+      "updatedAt": "2025-07-03T11:00:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -397,6 +397,83 @@
           "body": "I think I have an idea how to simplify this:\n* The client sends one or more protection solution Ids in the protection solutions parameter.\n* The server sends exactly one  protection solution Id in the protection solutions parameter. This is one of the received ones.\n* Provide an API to let the application know which protection solutions parameter was sent and received.\n* After the association is established the communication is unprotected. This allows the DTLS handshake to happen.\n* When deriving the send/recv keys, make them include the protection solutions parameters during key derivation.\n* This way the protected packets are also protected against downgrade attacks and we don't need any additional message exchanges. \n* Once you provided a receive key, no unprotected packets will be processed anymore. \n* Or am I missing something, @gloinul @hannestschofenig ",
           "createdAt": "2025-07-02T23:52:40Z",
           "updatedAt": "2025-07-02T23:52:40Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I think including the protection solution as context value in the TLS key exporter is potentially a good idea if one was expecting to use the same labels for DTLS based key-exchanges. However, I think per key-managment solution unique labels would have the same properties. I think the important here is that two different key-managmenet specs (and thus indicated protection solutions) would not result in the same actual Traffic keys. \n\nSo, I am a bit hesitant against having no limitation on unprotected traffic prior to key-installment if I understand the implications of bullet four. So it would be volunteer to use PPID=4242 for this. Do you expect to integrate the key-management into ones ULP also with this proposal? \n\nAlso having worked on Ericsson's handshake draft I am more and more desiring to go back to the PVALID Chunk for validation. This as the timing of the exchange and how to handle that requires further interaction and puts the requirements on the key-management. I rather do it in on place, i.e. as part of chunk.",
+          "createdAt": "2025-07-03T07:15:26Z",
+          "updatedAt": "2025-07-03T07:15:26Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am considering the man-in-the-middle case where the downgrade happens by modification of INIT chunk so that the server will never be aware of the whole set of the protection solutions.\nThe client's API will never know why the server has chosen a certain solution unless a dedicated, protected handshake exists.\nI may have missed some parts of the reasoning, but I am still convinced that an handshake for validation is needed.",
+          "createdAt": "2025-07-03T07:39:44Z",
+          "updatedAt": "2025-07-03T07:39:44Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I am considering the man-in-the-middle case where the downgrade happens by modification of INIT chunk so that the server will never be aware of the whole set of the protection solutions. The client's API will never know why the server has chosen a certain solution unless a dedicated, protected handshake exists. I may have missed some parts of the reasoning, but I am still convinced that an handshake for validation is needed.\n\nAssume the client puts PSID1 and PSID2 in the protection solution parameter, the attacker remove PSID1 and therefore the server only sees PSID2. Then the server responds with PSID2.\nNow\n* the client would use PSID1 and PSID2 for the client information and PSID2 for the server one in the key derivation\n* the server would use PSID2 for the client information and PSID2 for the server on.\nTherefore the keys are different and no validated information would be transferred.",
+          "createdAt": "2025-07-03T08:00:24Z",
+          "updatedAt": "2025-07-03T08:00:24Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > I am considering the man-in-the-middle case where the downgrade happens by modification of INIT chunk so that the server will never be aware of the whole set of the protection solutions. The client's API will never know why the server has chosen a certain solution unless a dedicated, protected handshake exists. I may have missed some parts of the reasoning, but I am still convinced that an handshake for validation is needed.\n> \n> Assume the client puts PSID1 and PSID2 in the protection solution parameter, the attacker remove PSID1 and therefore the server only sees PSID2. Then the server responds with PSID2. Now\n> \n> * the client would use PSID1 and PSID2 for the client information and PSID2 for the server one in the key derivation\n> * the server would use PSID2 for the client information and PSID2 for the server on.\n>   Therefore the keys are different and no validated information would be transferred.\n\nI didn't get that, yes I think it's a good idea. We would need to standardize the protection's token though, and the key derivation mechanism should also be part of the chunk draft.",
+          "createdAt": "2025-07-03T08:05:00Z",
+          "updatedAt": "2025-07-03T08:08:47Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think including the protection solution as context value in the TLS key exporter is potentially a good idea if one was expecting to use the same labels for DTLS based key-exchanges. However, I think per key-managment solution unique labels would have the same properties. I think the important here is that two different key-managmenet specs (and thus indicated protection solutions) would not result in the same actual Traffic keys.\n\nI think we need to be more precise:\n* We should use key management specific labels. So the traffic keys are almost always different\n* We can not guarantee that the keys are always different. But you can't guarantee that in any way.\n> \n> So, I am a bit hesitant against having no limitation on unprotected traffic prior to key-installment if I understand the implications of bullet four. So it would be volunteer to use PPID=4242 for this. \n\nThe PPID should not be looked or modified by the SCTP stack. At least not in the base stack.\nSince we want to be generic on the key management, I thought the SCTP stack will provide the information with each user message if the user message was received in a protected way or not.\nThis way the upper layer can check that its constraints are fulfilled.\n\n> Do you expect to integrate the key-management into ones ULP also with this proposal?\n\nI am not sure what this sentence means.\nWe need to wait with the downgrade protection until we can communicate in a protected way. Then we could define a simple protocol to ensure there was no downgrade and ensure that we know this before processing protected user messages. But building this step in the key derivation, which we wanted to include in the key management document anyway, sees a very clear and simple solution.\n\nIt enforces that no protected user data is delivered in case of a downgrade attack.\n> \n> Also having worked on Ericsson's handshake draft I am more and more desiring to go back to the PVALID Chunk for validation. This as the timing of the exchange and how to handle that requires further interaction and puts the requirements on the key-management. I rather do it in on place, i.e. as part of chunk.\n\nI don't follow here. You need to derive the transmission keys for the DTLD chunk. Just incorporate the information from the SCTP handshake.\n\nHowever, this makes the implementation much more complex. You need another chunk with retransmission stuff, change the state engine, ...\n\nPutting this into the key derivation, we would need to implement\n* a socket option which enforces the drop of unprotected packets\n* the sending and receiving of the protection solution parameter\n* the corresponding socket option for handling them\n* the socket options to provide the traffic and restart keys\n* the sending and receiving of the DTLS chunk\n* the exposure of user messages have been received in a protected way or not\n\nAdd of these seems to be limited functional changes that can be reviewed and tested even with pre-shared keys.",
+          "createdAt": "2025-07-03T08:13:38Z",
+          "updatedAt": "2025-07-03T09:13:21Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Ok, your clarification around wanting to include the whole set of offered solutions into context of the key derivation makes a difference. It still results in the chunk putting recommendation to the key-management. \n\nI think what is needed in regards to these proposal is what impact it has to state machine and abstract API functions. @tuexen can you please put a bit more details into your proposal so that we really can see what it entails and what then ends up being expected to be done by the key-management. \n\nI think there is an issue with one line of your strawman:\n\n- Once you provided a receive key, no unprotected packets will be processed anymore.\n\nI think this can result in the deadlock situations unless there is a separate call for moving to require all traffic to be encrypted.\n\nThe failure case which I don't see working is this:\n1: A->Z: DTLS CH\n2: Z->A: DTLS SH\n3: Z: Can derive both keys, only sets READ as 2 needs to be delivered as plain text. If packet loss of part of (2), SACK will be sent as plain text A->Z. \n4: A: Derives Read and Write, sets both (\n5: A->Z: P(DTLS ACK)\n6: Z: Sets Write key and locks down receiving unencrypted.\n7: Z->A: Send P(PVALID message)\n8: A: Locks down to only receive protected.\n9: A->Z: Send P(PVALID message)\n\nThere are alternatives of this, but there appear to be cases where at least one side needs to be able to receive protected, but can't guarantee that all will be protected as there might be unprotected SACK chunks requesting restransmission. And until the next message has been received one can't commit to writing secure as it would cause deadlock. ",
+          "createdAt": "2025-07-03T08:41:28Z",
+          "updatedAt": "2025-07-03T08:41:28Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Ok, your clarification around wanting to include the whole set of offered solutions into context of the key derivation makes a difference. It still results in the chunk putting recommendation to the key-management.\n\nI don't understand the last sentence.\n\n> \n> I think what is needed in regards to these proposal is what impact it has to state machine and abstract API functions. [@tuexen](https://github.com/tuexen) can you please put a bit more details into your proposal so that we really can see what it entails and what then ends up being expected to be done by the key-management.\n> \n> I think there is an issue with one line of your strawman:\n> \n> * Once you provided a receive key, no unprotected packets will be processed anymore.\n\nYes, you are right. I need a primitive \"drop unprotected packets from now on\". Sorry for the\nconfusion on my side.\n\nHere is the figure I had in mind (incorrectly):\n```\nRecord 0\n ClientHello\n (epoch=0)\n                            -------->\n                                                     Record 0\n                            <--------       HelloRetryRequest\n                                                    (epoch=0)\n Record 1\n ClientHello                -------->\n (epoch=0)\n                                                     Record 1\n                            <--------             ServerHello\n                                                    (epoch=0)\n                                        {EncryptedExtensions}\n                                                    (epoch=2)\n                                                {Certificate}\n                                                    (epoch=2)\n                                          {CertificateVerify}\n                                                    (epoch=2)\n                                                   {Finished}\n                                                    (epoch=2)\n Record 2\n {Certificate}              -------->\n (epoch=2)\n {CertificateVerify}\n (epoch=2)\n {Finished}\n (epoch=2)\n set recv key\n                                                     Record 2\n                                                     set send/recv key\n                            <--------                   [ACK]\n                                                    (epoch=3)\n drop unprotected\n set send key\n                                                    on sender dry or protected packet\n                                                    drop unprotected\n\n Record 3\n          -------->\n (epoch=3)\n                                                     Record 3\n                            <--------      [Application Data]\n                                                    (epoch=3)\n\n                         Some time later ...\n                 (Post-Handshake Message Exchange)\n                                                     Record 4\n                            <--------      [NewSessionTicket]\n                                                    (epoch=3)\n Record 4\n [ACK]                      -------->\n (epoch=3)\n\n                         Some time later ...\n                           (Rekeying)\n                                                     Record 5\n                            <--------      [Application Data]\n                                                    (epoch=4)\n Record 5\n [Application Data]         -------->\n (epoch=4)\n\n\n```\nI consider the DTLS chunk be only driven by the setting of the send and receive keys and the drop unprotected primitive. This is done by the key management procedure and the key management procedure has to ensure that the receive key is not set before the peer has set the corresponding send key.\n\nFor the DTLS handshake, this means doing these operations during the handshake at specific points.\n\n\n> \n> I think this can result in the deadlock situations unless there is a separate call for moving to require all traffic to be encrypted.\n> \n> The failure case which I don't see working is this: 1: A->Z: DTLS CH 2: Z->A: DTLS SH 3: Z: Can derive both keys, only sets READ as 2 needs to be delivered as plain text. If packet loss of part of (2), SACK will be sent as plain text A->Z. 4: A: Derives Read and Write, sets both ( 5: A->Z: P(DTLS ACK) 6: Z: Sets Write key and locks down receiving unencrypted. 7: Z->A: Send P(PVALID message) 8: A: Locks down to only receive protected. 9: A->Z: Send P(PVALID message)\n> \n> There are alternatives of this, but there appear to be cases where at least one side needs to be able to receive protected, but can't guarantee that all will be protected as there might be unprotected SACK chunks requesting restransmission. And until the next message has been received one can't commit to writing secure as it would cause deadlock.\n\n",
+          "createdAt": "2025-07-03T09:11:29Z",
+          "updatedAt": "2025-07-03T09:11:29Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Ok, so this moves the handling of the conceptual steps of validation, and controlling the ULP etc to above the API. I will think about more about it. I will note I think this do requires a high level architectural aspect on the implementations in general, and what is expected common behavior between key-management solutions. Especially those that are related to down grade attack protection. \n\n ",
+          "createdAt": "2025-07-03T09:48:11Z",
+          "updatedAt": "2025-07-03T09:48:11Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Great. We can also discuss this tomorrow. I'll start writing the API stuff for this. We can always tweak it based on the outcome of the discussion.",
+          "createdAt": "2025-07-03T09:54:20Z",
+          "updatedAt": "2025-07-03T09:54:20Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We might want to describe any side conditions for using the API. This would give writers of key management solutions a guidance what to do.",
+          "createdAt": "2025-07-03T09:55:05Z",
+          "updatedAt": "2025-07-03T09:55:05Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In the API description we must state that downgrade protection relies on how DTLS Key context are derived, thus the key derivation mechanism needs to use the information about offered and chosen protections in a unique way. This is a requirement for the handshake draft in case someone in the future will write a new one. Proprietary extension may be prone to open a thread attack surface here.\nI think that we need to raise to the SCTP User the responsibility to define which protections are acceptable when creating the association.",
+          "createdAt": "2025-07-03T11:00:52Z",
+          "updatedAt": "2025-07-03T11:00:52Z"
         }
       ]
     },
@@ -579,15 +656,15 @@
       "id": "I_kwDOKszxDc68U8VW",
       "title": "DTLS 1.3 Chunk Protected Association responder including all its supported or just the common subset?",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/32",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "So the initiator of an SCTP Association will inlclude all its Protection Solutions in preference order in its DTLS 1.3 Chunk Protected Association parameter. However, when the responder sends the INIT-ACK and include the parameter should the parameter include:\n\na) All Protection solutions it supports, and have the initiator pick the most preferred in this answer that it supports. Thus enabling the initiator to learn the full capability of the peer. Thus it potentially two disjunct sets could be exchanged.\nb) Only the subset of Protection solutions the responding node support, whit the first being the selected solution.\n\n",
       "createdAt": "2025-06-19T09:20:52Z",
-      "updatedAt": "2025-06-30T09:50:37Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-04T09:11:12Z",
+      "closedAt": "2025-07-04T09:11:12Z",
       "comments": [
         {
           "author": "gloinul",
@@ -603,7 +680,7 @@
       "id": "I_kwDOKszxDc68gGNY",
       "title": "Motivation of SCTP restart",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/34",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -612,8 +689,8 @@
       "labels": [],
       "body": "- Motivation unclear\n- How can the restart key be stored in a secure way\n- Mandatory to implement\n- What happens if not implemented\n\nThis is to be discussed at the next VC.",
       "createdAt": "2025-06-20T09:22:01Z",
-      "updatedAt": "2025-06-30T09:34:09Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-04T09:13:17Z",
+      "closedAt": "2025-07-04T09:13:17Z",
       "comments": [
         {
           "author": "teiclap",
@@ -643,14 +720,30 @@
       "id": "I_kwDOKszxDc6-ROis",
       "title": "Padding of SCTP Packets",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "As both SCTP and DTLS can add padding to achieve a certain packet size I think further text and clarification of this should be added. The following text was present in draft-westerlund-tsvwg-sctp-dtls-handshake but it makes more sense to add it to Chunks instead. Which leads to an additional question if there should be an API function to instruct the DTLS Chunk to always produce a multiple of the set size large DTLS Chunks. \n```\n\nBoth SCTP and DTLS contains mechanisms to padd SCTP payloads, and DTLS\nrecords respectively. If padding of SCTP packets are desired to hide\nactual message sizes it RECOMMEDED to use the SCTP Padding Chunck\n{{RFC4820}} to generate a consistent SCTP payload size. Support of\nthis chunk is only required on the sender side, any SCTP receiver will\nsafely ignore the PAD Chunk. However, if the PAD chunk is not\nsupported DTLS padding MAY be used.\n\nIt needs to be noted that independent if SCTP padding or DTLS padding\nis used the padding is not taken into account by the SCTP congestion\ncontrol. Extensive use of padding has potential for worsen congestion\nsituations as the SCTP association will consume more bandwidth than\nits derived share by the congestion control.\n\nThe use of SCTP PAD chunk is recommened as it at least can enable\nfuture extension or SCTP implementation that account also for the\npadding. Use of DTLS padding hides this packet expansion from SCTP.\n```",
       "createdAt": "2025-07-01T11:59:41Z",
-      "updatedAt": "2025-07-01T12:00:49Z",
+      "updatedAt": "2025-07-04T09:12:38Z",
+      "closedAt": "2025-07-04T09:12:38Z",
+      "comments": []
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOKszxDc6_AjDq",
+      "title": "Don't use embedded error cause codes",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/40",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Right now, the protocol uses a single error cause code, which embeds more specific error causes. I think we should just use a couple or error causes without embedding them, because\n- there is no shortage of error causes\n- this improves consistency with other extensions\n- this fits better in the normal error handing, in particular with the existing API.\n\nAffected sections include section 7.2 and 12.1.\n\nIf we agree on this, I can make the corresponding changes.",
+      "createdAt": "2025-07-05T08:44:10Z",
+      "updatedAt": "2025-07-05T08:44:10Z",
       "closedAt": null,
       "comments": []
     }
@@ -1613,26 +1706,181 @@
       "id": "PR_kwDOKszxDc6dCP1x",
       "title": "Update of SCTP Restart to address Issue34",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/36",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Redesign of SCTP Restart",
       "createdAt": "2025-07-02T07:51:25Z",
-      "updatedAt": "2025-07-02T13:47:30Z",
+      "updatedAt": "2025-07-04T09:13:16Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "910e92c112960e302c295b29491c30b36c35d1b5",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue34",
-      "headRefOid": "8e719c402a363a71f511efb01f33a43d64c546e4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "e9bc207cc1f87c5294ba9114407fc1fbc97eaaee",
+      "closedAt": "2025-07-04T09:13:16Z",
+      "mergedAt": "2025-07-04T09:13:16Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "9a058512139fac9c748cb26649648002cd4bdf05"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6xwr3L",
+          "commit": {
+            "abbreviatedOid": "8e719c4"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-03T08:55:00Z",
+          "updatedAt": "2025-07-03T08:55:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOKszxDc6dOtEP",
+      "title": "Added text on privacy padding in the chunk.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/37",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #35 ",
+      "createdAt": "2025-07-03T09:07:21Z",
+      "updatedAt": "2025-07-04T09:12:33Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "d54202762f3aa95d09dc6d2c54ae29dfce0562f2",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "padding-issue35",
+      "headRefOid": "92c9a03b142b09b8c3ed810fb7060b62de837d97",
+      "closedAt": "2025-07-04T09:12:33Z",
+      "mergedAt": "2025-07-04T09:12:33Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "682444bd6fa4482f28f9be5bcdea3f1083c9f85e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6xw303",
+          "commit": {
+            "abbreviatedOid": "a17cd55"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-03T09:10:32Z",
+          "updatedAt": "2025-07-03T09:10:32Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOKszxDc6dO-B-",
+      "title": "Only include selected PSI in INIT-ACK and Fixed error handling for when no common PSI exist.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/38",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This both resolves the description to only include the selected one in the responders parameter. It also added error handling in case no common PSI exists. \r\n\r\nResolves #32 ",
+      "createdAt": "2025-07-03T09:32:11Z",
+      "updatedAt": "2025-07-04T09:11:11Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "247b28f30813cc78c51ddb114916a5087b43ad22",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue32",
+      "headRefOid": "0d9c23c20b52067c7492241d09fb37853528a3c6",
+      "closedAt": "2025-07-04T09:11:11Z",
+      "mergedAt": "2025-07-04T09:11:11Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "e6c713c23bc5f8ea10673cf18cb1c465eb58e894"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6xxzF9",
+          "commit": {
+            "abbreviatedOid": "0d9c23c"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-03T10:23:54Z",
+          "updatedAt": "2025-07-03T10:23:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOKszxDc6dVAoQ",
+      "title": "cleanup: remove non specific text",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/39",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think thread safety is not specific to this extension. It applies to an SCTP implementation in general and also seem implementation specific to me.",
+      "createdAt": "2025-07-03T20:02:37Z",
+      "updatedAt": "2025-07-04T06:52:22Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "247b28f30813cc78c51ddb114916a5087b43ad22",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup-1",
+      "headRefOid": "77d550f15b0cf8783b87fa7d1b0b5986da942384",
+      "closedAt": "2025-07-04T06:52:22Z",
+      "mergedAt": "2025-07-04T06:52:22Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "d54202762f3aa95d09dc6d2c54ae29dfce0562f2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc6x9Wwu",
+          "commit": {
+            "abbreviatedOid": "77d550f"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-04T05:34:00Z",
+          "updatedAt": "2025-07-04T05:34:00Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc6x99FB",
+          "commit": {
+            "abbreviatedOid": "77d550f"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-04T06:52:16Z",
+          "updatedAt": "2025-07-04T06:52:16Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
