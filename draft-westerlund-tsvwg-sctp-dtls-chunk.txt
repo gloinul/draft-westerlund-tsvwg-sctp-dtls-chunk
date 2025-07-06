@@ -1566,7 +1566,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-               Table 4: PVALID Protection Solution Indicators
+              Table 4: PVALID Protection Solution Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
