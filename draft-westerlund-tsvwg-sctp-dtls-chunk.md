@@ -32,6 +32,7 @@ author:
    email: claudio.porfiri@ericsson.com
 
 informative:
+  RFC6458:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
 
@@ -1412,6 +1413,45 @@ Parameters :
 Reply: Replay Protection Configured
 
 Parameters : true or false
+
+
+# Socket API Considerations {#socket-api}
+
+This section describes how the socket API defined in {{RFC6458}} needs to be
+extended to provide a way for the application to control the usage of the
+DTLS chunk.
+
+A 'Socket API Considerations' section is contained in all SCTP-related
+specifications published after {{RFC6458}} describing an extension for which
+implementations using the socket API as specified in {{RFC6458}} would require
+some extension of the socket API.
+Please note that this section is informational only.
+
+A socket API implementation based on {{RFC6458}} is extended by supporting
+several new IPPROTO_SCTP-level socket options and a new flag for recvmsg().
+
+## A New Flag for recvmsg() (MSG_PROTECTED)
+
+This flag is returned by recvmsg() in msg_flags for all user messages for
+which all DATA chunks where received in protected SCTP packets.
+This also means that if sctp_recvv() is used, MSG_PROTECTED is returned in
+the *flags argument.
+
+## Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
+
+## Get or Set the Local Protection Method Identifiers (SCTP_DTLS_LOCAL_PMIDS)
+
+## Get the Remote Protection Method Identifiers (SCTP_DTLS_REMOTE_PMIDS)
+
+## Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
+
+## Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+
+## Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+
+## Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
+
+## Get Statistic Counters (SCTP_DTLS_STATS)
 
 
 # Implementation Considerations
