@@ -237,7 +237,7 @@ connection, it can derive traffic and restart keys and set the
 Protection Operator for User Data encryption/decryption via the API
 shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
 contexts. Both a DTLS Key context for traffic and a DTLS Key context
-for restart needs to be created.
+for restart need to be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
@@ -250,7 +250,7 @@ In this document we use the terms DTLS Key context for indicating a
 Key, derived from a DTLS connection, and all relevant data that needs
 to be provided to the Protection Operator for DTLS encryption and
 decryption.  DTLS Key context includes Keys for sending and receiving,
-replay window, last used sequence number. Each DTLS key context are
+replay window, last used sequence number. Each DTLS key context is
 associated with a four-value tuple identifying the context, consisting
 of SCTP Association, the restart indicator, the DTLS Connection ID (if
 used), and the DTLS epoch.
