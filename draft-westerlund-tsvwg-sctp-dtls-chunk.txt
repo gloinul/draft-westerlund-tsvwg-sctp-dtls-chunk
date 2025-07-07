@@ -192,67 +192,80 @@ Table of Contents
 
 3.1.  Protocol Overview
 
-   The DTLS chunk is defined as a method for secure and confidential
-   transfer for SCTP packets.  This is implemented inside the SCTP
-   protocol, in a sublayer between the SCTP common header handling and
-   the SCTP chunk handling.  Once an SCTP packet has been received and
-   the SCTP common header has been used to identify the SCTP
-   association, the DTLS chunk is sent to the DTLS Protection Operator
-   that will perform replay protection, decrypt, verify authenticity,
-   and if the DTLS chunk is successfully processed return the plain text
-   SCTP payload containing the SCTP chunks, those chunks will then be
-   handled according to their SCTP protocol specifications.  Figure 1
-   illustrates the DTLS chunk layering in regard to SCTP and the Upper
-   Layer Protocol (ULP).
+   The DTLS chunk can be used for secure and confidential transfer of
+   SCTP packets.  This is implemented inside the SCTP protocol.  Once an
+   SCTP packet has been received and the SCTP common header has been
+   used to identify the SCTP association, the DTLS chunk is processed by
+   the DTLS Protection Operator that will perform replay protection,
+   decrypt, verify authenticity, and if the DTLS chunk is successfully
+   processed provides the protected SCTP chunks for further processing.
+   Figure 1 illustrates the DTLS chunk processing in regard to SCTP and
+   the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
 
-       +---------------+ +--------------------+
-       |               | |       DTLS 1.3     |  Keys
-       |      ULP      | |                    +<------------.
-       |               | |   Key Management   |              |
-       +---------------+-+---+----------------+            --+-- API
-       |                     |                 \    User     |
-       |                     |                  +-- Level    |
-       | SCTP Chunks Handler |                      Messages |
-       |                     |                               |
-       |                     | +-- SCTP Unprotected Payload  |
-       |                     |/                              |
-       +---------------------+    +---------------------+    |
-       |        DTLS         |    |       DTLS 1.3      |    |
-       |        Chunk        |<-->|                     |<--'
-       |       Handler       |    | Protection Operator |
-       +---------------------+    +---------------------+
-       |                     |\
-       | SCTP Header Handler | +-- SCTP Protected Payload
-       |                     |
-       +---------------------+
+          +---------------+ +-------------------------------+
+          |      ULP      | |            DTLS 1.3           |
+          |               | |    +---------------------+    |
+          |               | | +->+    Key Exporter     +--+ |
+          |               | | |  +---------------------+  | |
+          |               | | |                           | |
+          |               | | |  +---------------------+  | |
+          |               | | +--+    Key Management   +  | |
+          |               | | |  +---------------------+  | |
+          |               | | |     +---+ +---+           | |
+          |               | | |     | H | |   |           | |
+          |               | | |     | a | |   |           | |
+          |               | | | k   | n | | A |         k | |
+          |               | | | e   | d | | l |         e | |
+          |               | | | y   | s | | e |    ...  y | |
+          |               | | | s   | h | | r |         s | |
+          |               | | |     | a | | t |           | |
+          |               | | |     | k | |   |           | |
+          |               | | |     | e | |   |           | |
+          |               | | |     +-+-+ +-+-+           | |
+          |               | | |       |     |             | |
+          |               | | |       +-----+---...       | |
+          |               | | | ContentType |             | |
+          |               | | |  +----------+----------+  | |
+          |               | | +->|        Record       |  | |
+          |               | |    | Protection Operator |  | |
+          +               | |    +----------+----------+  | |
+          +-------+-------+ +-----------------------------+-+
+                  ^                          ^            |
+                  |                          |            |
+                  +--+-----------------------+            | keys
+                PPID |                                    |
+                     V                                    V
+          +-----------------------------------------------+-+
+          |                    +---------------------+    | |
+          |        SCTP        |         Chunk       |<---+ |
+          |                    | Protection Operator |      |
+          |                    +---------------------+      |
+          +-------------------------------------------------+
 
           Figure 1: DTLS Chunk Layering in Regard to SCTP and ULP
 
-   Use of the DTLS chunk is defined per SCTP association.
-
    In the outgoing direction, once the SCTP stack has created the
-   unprotected SCTP packet payload containing control and/or DATA
-   chunks, that payload will be sent to the DTLS Protection Operator to
-   be protected.  The format of the protected payload is a DTLS 1.3
-   record encapsulated in a SCTP chunk which is named the DTLS chunk.
+   unprotected SCTP packet containing control and/or DATA chunks, SCTP
+   chunks will be processed by the DTLS Protection Operator to be
+   protected.  The result of this computation is a DTLS 1.3 record
+   encapsulated in a SCTP chunk which is named the DTLS chunk.
 
-   The SCTP Protection Operator performs protection operations on the
-   whole unprotected SCTP packet payload, i.e., all chunks after the
-   SCTP common header.  Information protection is kept during the
+   The SCTP Protection Operator performs protection operations on all
+   chunks of an SCTP packet.  Information protection is kept during the
    lifetime of the association and no information is sent unprotected
    except the initial SCTP handshake, any initial key-management
    traffic, the SCTP common header, the SCTP DTLS chunk header, and the
    SHUTDOWN-COMPLETE chunk.
 
-   SCTP DTLS chunk capability is agreed by the peers at the
-   initialization of the SCTP association.  Until the DTLS protection
-   has been keyed only plain text key-management traffic using a
-   dedicated PPID (4242) may flow, no ULP traffic.  The key management
-   function uses an API to key the DTLS protection operation function.
-   Usage of the DTLS 1.3 handshake for initial mutual authentication and
-   key establishment as well as periodic re-authentication and rekeying
-   with Diffe-Hellman of the DTLS chunk protection is defied in a
-   separate document [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
+   The support of the DTLS chunk is negotiated by the peers at the setup
+   of the SCTP association.  Key management and application traffic is
+   multiplexed using the PPID.  The dedicated PPID 4242 is used for key
+   management.  The key management function uses an API to key the DTLS
+   protection operation function.  Usage of the DTLS 1.3 handshake for
+   initial mutual authentication and key establishment as well as
+   periodic re-authentication and rekeying with Diffe-Hellman of the
+   DTLS chunk protection is defined in a separate document
+   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
 
    When the endpoint authentication and key establishment has been
    completed, the association is considered to be secured and the ULP is
