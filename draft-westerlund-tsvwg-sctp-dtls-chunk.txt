@@ -114,9 +114,10 @@ Table of Contents
      9.4.  Destroy Client Write Keying Material
      9.5.  Destroy Server Write Keying Material
      9.6.  Set Key to Use
-     9.7.  Get q
-     9.8.  Get v
-     9.9.  Configure Replay Protection
+     9.7.  Require Protected SCTP Packets
+     9.8.  Get q
+     9.9.  Get v
+     9.10. Configure Replay Protection
    10. Socket API Considerations
      10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
      10.2.  Get the Supported Cipher Suits
@@ -307,10 +308,11 @@ Table of Contents
    the value 4242 (see Table 8).
 
    Once Key Management has established a DTLS 1.3 connection, it can
-   derive traffic and restart keys and set the Protection Operator for
+   derive primary and restart keys and set the Protection Operator for
    User Data encryption/decryption via the keys API shown in Figure 1 to
    create the necessary DTLS key contexts.  Both a DTLS Key context for
-   traffic and a DTLS Key context for restart need to be created.
+   normal use (primary) and a DTLS Key context for SCTP association
+   restart need to be created.
 
    DTLS 1.3 handshake messages, that are transported as SCTP User Data
    with dedicated PPID = 4242, SHALL be sent and received as plain DATA
@@ -537,24 +539,24 @@ Table of Contents
    ESTABLISHED state moves automatically to PROTECTED state.
 
    A restarted SCTP Association SHALL continue to use the Restart DTLS
-   Key Context, for User Traffic until a new traffic DTLS Key Context
+   Key Context, for User Traffic until a new primary DTLS Key Context
    will be available.  The implementors SHOULD initiate a new DTLS
-   keying as soon as possible, and derive the traffic and restart keys
+   keying as soon as possible, and derive the primary and restart keys
    so that the time when no Restart DTLS Key Context is available is
    kept to a minimum.  Note that another restart attempt prior to having
    created new restart DTLS Key context for the new SCTP association
    will result in the endpoints being unable to restart the SCTP
    association.
 
-   After restart the next traffic DTLS key context SHALL use epoch=3,
+   After restart the next primary DTLS key context SHALL use epoch=3,
    i.e. the epoch value is reset.  Note that if the restart epoch used
    also was 3 when not using any DTLS connection ID, then the
    installation of the new restart DTLS key context needs to be done
    with some care to avoid dropping valid packets.  After having derived
-   new traffic keys the endpoint installs the Traffic DTLS Key Context
-   first, and start using it.  The new restart DTLS Key Context is only
-   installed after any old in-flight restart packets will have been
-   received.
+   new primary DTLS Key Context the endpoint installs the primary DTLS
+   Key Context first, and start using it.  The new restart DTLS Key
+   Context is only installed after any old in-flight restart packets
+   will have been received.
 
 3.9.2.  Compatibility with Legacy SCTP Restart
 
@@ -1016,6 +1018,14 @@ Table of Contents
    establishment part and the DTLS 1.3 protection chunk.  This is an
    example API and there are alternative implementations.
 
+   This API enables the cryptographical protection operations by setting
+   client/server write key and IV for primary and restart DTLS key
+   context.  The key is the primary cryptograpical key used by the
+   cipher suit for DTLS record protection (Section 5.2 of [RFC8446].
+   The initilization vector (IV) is cryptographical random material used
+   to XOR with the sequence number to create the nonce per Section 5.3
+   of [RFC8446].
+
 9.1.  Cipher Suit Capabilities
 
    The key-management function needs to know which cipher suits defined
@@ -1176,7 +1186,18 @@ Table of Contents
 
    Parameters : true or false
 
-9.7.  Get q
+9.7.  Require Protected SCTP Packets
+
+   A function to configure an SCTP association to require that normal
+   SCTP packets must be protected in a DTLS Chunk going forward.
+
+   Parameters:
+
+   *  SCTP Association
+
+   Reply: Acknowledgement
+
+9.8.  Get q
 
    Get q, the number of protected messages (AEAD encryption invocations)
    for a given epoch.
@@ -1197,7 +1218,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.8.  Get v
+9.9.  Get v
 
    Get v, the number of attacker forgery attempts (failed AEAD
    decryption invocations) for a given epoch.
@@ -1218,7 +1239,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.9.  Configure Replay Protection
+9.10.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
@@ -1231,7 +1252,7 @@ Table of Contents
    should be considered.
 
    Note this sets this configuration to be used across any DTLS key
-   context for a given SCTP Association and traffic/restart usages.
+   context for a given SCTP Association and primary/restart usages.
 
    Request : Configure Replay Protection
 
