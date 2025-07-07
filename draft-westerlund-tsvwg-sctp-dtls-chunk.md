@@ -173,8 +173,8 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
 +-------+-------+ +-----------------------------+-+
         ^                          ^            |
         |                          |            |
-        +--+-----------------------+            | keys API
-      PPID |                                    | --------
+        +--+-----------------------+            | keys
+      PPID |                                    |
            V                                    V
 +-----------------------------------------------+-+
 |                    +---------------------+    | |
@@ -203,11 +203,11 @@ The support of the DTLS chunk is negotiated by the peers at the
 setup of the SCTP association. Key management and application traffic
 is multiplexed using the PPID. The dedicated PPID 4242 is used for
 key management. The key management function uses
-a keys API to key the Chunk protection operation function. Usage of the
+an API to key the Chunk protection operation function. Usage of the
 DTLS 1.3 handshake for initial mutual authentication and key
 establishment as well as periodic re-authentication and rekeying with
-Diffe-Hellman of the DTLS chunk protection is defined in a separate
-document {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+Diffe-Hellman of the DTLS chunk protection is defined in separate
+documents, e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
@@ -747,10 +747,9 @@ rules in {{IANA-Extra-Cause}}.
 If the responder to do not support any of the protection solutions
 offered by the association initiator in the Protection Soluiton
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
-chunk immediately after COOKIE-ECHO/COOKIE-ACK handshaking
-that will include the error
-cause "Error in DTLS Chunk" {{eprotect}} and containing the Extra
-Cause "No Common Protection Solution".
+chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
+including the error cause "Error in DTLS Chunk" {{eprotect}} and
+containing the Extra Cause "No Common Protection Solution".
 
 
 ## Critical Error from DTLS {#eengine}
