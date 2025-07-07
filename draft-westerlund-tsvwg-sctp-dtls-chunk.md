@@ -212,12 +212,12 @@ chunk.
 The support of the DTLS chunk and the key-management method to use is
 negotiated by the peers at the setup of the SCTP association using a
 new parameter. Key management and application traffic is multiplexed
-using the PPID. The dedicated PPID 4242 is defined for key
-management. The key management function uses an API to key the Chunk
-protection operation function. Usage of the DTLS 1.3 handshake for
-initial mutual authentication and key establishment as well as
-periodic re-authentication and rekeying with Diffe-Hellman of the DTLS
-chunk protection is defined in separate documents,
+using the PPID. The dedicated PPID 4242 is defined for use by key
+management for DTLS chunk. The key management function uses an API to
+key the Chunk protection operation function. Usage of the DTLS 1.3
+handshake for initial mutual authentication and key establishment as
+well as periodic re-authentication and rekeying with Diffe-Hellman of
+the DTLS chunk protection is defined in separate documents,
 e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. To prevent
 downgrade attacks of the key-management negotiation the key-management
 should implement specific procedures when deriving keys.
@@ -236,7 +236,7 @@ protection will be used to suppress duplicated DTLS chunks.
 
 The DTLS Chunk architecture splits DTLS 1.3 as shown in
 {{sctp-DTLS-chunk-layering}}, where the Key Management functionality
-is done at DTLS1.3 block, acting as a parallel User Level Protocol
+is done at DTLS 1.3 block level, acting as a parallel User Level Protocol
 and a Chunk Protection Operator functionality inside the SCTP
 Protocol Stack.
 
@@ -258,40 +258,34 @@ distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see {{iana-payload-protection-id}}).
 
 Once Key Management has established a DTLS 1.3 connection, it can
-derive primary and restart keys and set the Protection Operator for
-User Data encryption/decryption via the keys API shown in
-{{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
-contexts. Both a DTLS Key context for normal use (primary) and
-a DTLS Key context for SCTP association restart need to be created.
-
-DTLS 1.3 handshake messages, that are transported as SCTP User Data
-with dedicated PPID = 4242, SHALL be sent and received as plain DATA
-chunks until PROTECTED state is reached. From that time on, DTLS 1.3 handshake
-messages SHALL be transported as SCTP User Data with dedicated PPID =
-4242 within DTLS chunks, same as any ULP data traffic.
+derive primary and restart keys and set the Chunk Protection Operator
+for SCTP Packet Payload encryption/decryption via an API to create the
+necessary DTLS key contexts. Both a DTLS Key context for normal use
+(primary) and a DTLS Key context for SCTP association restart needs to
+be created.
 
 In this document we use the terms DTLS Key context for indicating a
-Key, derived from a DTLS connection, and all relevant data that needs
-to be provided to the Protection Operator for DTLS encryption and
-decryption.  DTLS Key context includes Keys for sending and receiving,
-replay window, last used sequence number. Each DTLS key context is
-associated with a four-value tuple identifying the context, consisting
-of SCTP Association, the restart indicator, the DTLS Connection ID (if
-used), and the DTLS epoch.
+Key and IV, produced by the key-management, and all relevant data that
+needs to be provided to the Chunk Protection Operator for DTLS encryption
+and decryption.  DTLS Key context includes Keys and IV for sending and
+receiving, replay window, last used sequence number. Each DTLS key
+context is associated with a four-value tuple identifying the context,
+consisting of SCTP Association, the restart indicator, the DTLS
+Connection ID (if used), and the DTLS epoch.
 
 Support of DTLS Connection ID in the DTLS Record layer used in the
 DTLS Chunk is OPTIONAL, and negotiated using the key-management
 function.
 
-The first established key context for any SCTP association and DTLS
+The first established DTLS key context for any SCTP association and DTLS
 connection ID (if used) SHALL use epoch=3. This ensures that the
-epoch of the key context will normally match the epoch of the
-DTLS key-management connection.
+epoch of the DTLS key context will normally match the epoch of
+an DTLS key-management connection.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
 DTLS 1.3 operations and SCTP are asynchronous, meaning that the
-Protection Operator may deliver the decrypted SCTP Payload to the SCTP
+Chunk Protection Operator may deliver the decrypted SCTP Payload to the SCTP
 endpoint without respecting the reception order.  It's up to SCTP
 endpoint to reorder the chunks in the reception buffer and to take
 care of the flow control according to what specified in
@@ -299,7 +293,7 @@ care of the flow control according to what specified in
 of the transport network.
 
 Even though the above allows the implementors to adopt a
-multithreading design of the Protection Operators, the actual
+multithreading design of the Chunk Protection Operators, the actual
 implementation should consider that out-of-order handling of SCTP
 chunks is not desired and may cause false congestion signals and
 trigger retransmissions.
@@ -317,7 +311,7 @@ sent and received size of packets for the SCTP packets. This to
 correctly handle PMTUD probe packets.
 
 From SCTP perspective, if there is a maximum size of plain text data
-that can be protected by the Protection Operator that must be
+that can be protected by the Chunk Protection Operator that must be
 communicated to SCTP. As such a limit will limit the PMTU for SCTP to
 the maximum plain text plus DTLS chunk and algorithm overhead plus
 the SCTP common header.
@@ -328,7 +322,7 @@ The SCTP mechanism for handling congestion control does depend on
 successful data transfer for enlarging or reducing the congestion
 window CWND (see {{RFC9260}} Section 7.2).
 
-It may happen that Protection Operator discards packets due to replay
+It may happen that Chunk Protection Operator discards packets due to replay
 protection, or integrity errors depending on network induced bit
 errors or malicious modifications. As those packets do not represent
 what the peer sent, it is acceptable to ignore them, although in-situ
@@ -336,7 +330,7 @@ modification on the path of a packet resulting in discarding due to
 integrity failure will leave a gap, but has to be accepted as part of
 the path behavior.
 
-The Protection Operator will not interfere with the SCTP congestion
+The Chunk Protection Operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
@@ -354,8 +348,8 @@ payload.
 When an Association is multihomed there are multiple paths between
 Endpoints.  The selection of the specific path to be used at a certain
 time belongs to SCTP protocol that will decide according to
-{{RFC9260}}.  The Protection Operator shall not influence the path
-selection algorithm, actually the Protection Operator will not even
+{{RFC9260}}.  The Chunk Protection Operator shall not influence the path
+selection algorithm, actually the Chunk Protection Operator will not even
 know what path is being used.
 
 The Replay window for the DTLS Sequence Number will need to take into
@@ -764,9 +758,9 @@ containing the Extra Cause "No Common Protection Solution".
 
 ## Critical Error from DTLS {#eengine}
 
-DTLS Protection Operator MAY inform local SCTP endpoint about errors.
+The Chunk Protection Operator MAY inform local SCTP endpoint about errors.
 When an Error in the DTLS 1.3 compromises the protection mechanism,
-the protection operator may stop processing data altogether, thus the
+the Chunk Protection Operator may stop processing data altogether, thus the
 local SCTP endpoint will not be able to send or receive any chunk for
 the specified Association.  This will cause the SCTP Association to be
 closed by legacy timer-based mechanism. Since the Association
@@ -775,15 +769,15 @@ peer will also experience timeout on the Association.
 
 ## Non-critical Error in the Protection {#non-critical-errors}
 
-A non-critical error in DTLS Protection Operator means that the
-Protection Operator is capable of recovering without the need
+A non-critical error in Chunk Protection Operator means that the
+Chunk Protection Operator is capable of recovering without the need
 of the whole SCTP Association to be re-established.
 
 From SCTP perspective, a non-critical error will be perceived
 as a temporary problem in the transport and will be handled
 with retransmissions and SACKS according to {{RFC9260}}.
 
-When the Protection Operator will experience a non-critical error,
+When the Chunk Protection Operator will experience a non-critical error,
 an ABORT chunk SHALL NOT be sent.
 
 # Procedures {#procedures}
@@ -822,16 +816,9 @@ When initiator and responder have agreed on a DTLS Chunk protected
 association by means of handshaking INIT/INIT-ACK the SCTP association
 establishment continues until it has reached the ESTABLISHED state.
 
-Until the procedure has reached the PROTECTED state the only usage of
-DATA Chunks that is accepted is DATA Chunks with the SCTP-DTLS PPID
-value 4242 used to exchange in-band key establishment messages. Any
-other DATA chunk being received in a Protected association SHALL be
-silently discarded.
-
-If in-band DTLS handshake {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}
-is used to establish the security parameters for the DTLS Chunks, DTLS
-1.3 initializes itself by transferring its own handshake messages as
-payload of the DATA chunk.
+When the SCTP session has been established follow the process defined
+by the selected key-management solution for establishing DTLS Key Contexts
+and installing them.
 
 ### Offering Multiple Security Solutions
 
@@ -857,10 +844,9 @@ indicate both preference and which of the solutions that are desired.
 
 The responder selects one or possibly more of compatible security
 solutions that can be used simultaneously and include them in the
-response (INIT-ACK). If DTLS 1.3 chunks was selected the initiator
-will later send the PVALID message indicating all the offered
-solutions. This to prevent downgrade attacks where sent solution have
-been removed on-path.
+response (INIT-ACK). If DTLS 1.3 chunks was selected and the
+Key-Management method follows the recommendation for down-grade
+prevention the endpoints can know that down-grade did not happen.
 
 
 ## Termination of a Protected Association {#termination-procedure}
@@ -878,7 +864,7 @@ current document.
 It is up to the upper layer to manage the keys for the DTLS chunk.
 One example of such a in-band DTLS key management is
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
-They key management SHOULD use a dedicated PPID to ensure that the
+The key management SHOULD use a dedicated PPID to ensure that the
 user messages are handled by the appropriate layer.
 
 When performing key management, the keys for receiving SHOULD be installed
@@ -1424,7 +1410,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 # Security Considerations {#Security-Considerations}
 
 All the security and privacy considerations of the security protocol
-used as the Protection Operator applies.
+used as the Chunk Protection Operator applies.
 
 DTLS replay protection MUST NOT be turned off.
 
@@ -1449,20 +1435,15 @@ Instead of periodic polling, a callback can be used.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-The initial handshake is verified before the
-DTLS Chunk is considered protected, thus no user data are sent before
-validation.
+As long as the Key-management include the ordered list of protection
+solutions indicators present in the parameter part of the INIT chunk
+for the SCTP Association in its key-derivation the association will be
+protected from down-grade.
 
-The downgrade protection is only as strong as the weakest of the
-supported protection solutions as an active attacker can trick the
-endpoints to negotiate the weakest protection solution and then
-modify the weakly protected pvalid chunks to deceive the endpoints
-that the negotiation of the Protection Operators is validated. This
-is similar to the downgrade protection in TLS 1.3 specified in
-Section 4.1.3. of {{RFC8446}} where downgrade protection is not
-provided when TLS 1.2 with static RSA is used. It is RECOMMENDED
-to only support a limited set of strongly profiled protection
-solutions.
+In case any key-management do not include the parameter content in
+its key-derivation down-grade might be possible if that key-management
+method is selected. It is up to endpoint policies to determine
+which protection it deems necessary against down-grade attacks.
 
 ## Persistent Secure Storage of Restart Key Context {#sec-considertation-storage}
 
