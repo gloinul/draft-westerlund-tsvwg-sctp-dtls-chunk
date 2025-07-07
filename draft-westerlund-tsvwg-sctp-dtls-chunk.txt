@@ -329,7 +329,7 @@ Table of Contents
 
    The first established DTLS key context for any SCTP association and
    DTLS connection ID (if used) SHALL use epoch=3.  This ensures that
-   the epoch of the DTLS key context will normally match the epoch of an
+   the epoch of the DTLS key context will normally match the epoch of a
    DTLS key-management connection.
 
 3.3.  SCTP DTLS Chunk Buffering and Flow Control
