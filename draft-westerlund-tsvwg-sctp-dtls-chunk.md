@@ -280,7 +280,7 @@ function.
 The first established DTLS key context for any SCTP association and DTLS
 connection ID (if used) SHALL use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
-an DTLS key-management connection.
+a DTLS key-management connection.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
