@@ -920,29 +920,19 @@ Table of Contents
 
 7.3.  Considerations on Key Management
 
-   When the Association is in PROTECTION INITIALIZATION state, in-band
-   DTLS key management, e.g. [I-D.westerlund-tsvwg-sctp-DTLS-handshake],
-   SHALL use SCTP user messages with the SCTP-DTLS PPID value = 4242
-   (see Table 8) for message transfer that will be sent and received
-   unencrypted.
+   It is up to the upper layer to manage the keys for the DTLS chunk.
+   One example of such a in-band DTLS key management is
+   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].  They key management
+   SHOULD use a dedicated PPID to ensure that the user messages are
+   handled by the appropriate layer.
 
-   When the Association is in DTLS chunk PROTECTED state and the SCTP
-   association is in ESTABLISHED or any of the states that can be
-   reached after ESTABLISHED state, in-band key management are
-   RECOMMENDED to use SCTP Data chunk with dedicated PPID value = 4242,
-   those chunks SHALL be sent and received using DTLS Chunks with the
-   current DTLS Key context.
+   When performing key management, the keys for receiving SHOULD be
+   installed before the corresponding send keys at the peer.  For
+   mitigating downgrade attacks the key derivation MUST include the
+   protection solution Identifiers that were sent and received.
 
-   The use of plain DATA chunk with PPID value = 4242 before the
-   association reaches the PROTECTED state cannot be avoided as no valid
-   DTLS key context exist until that state.  Further in-band key
-   management SHALL NOT use plain DATA chunks as this would allow
-   attackers to inject overlapping DATA chunks with protected and impact
-   the content of the SACK block.  Based on that, as soon as the
-   initiator or responder independently enter PROTECTED state, they will
-   silently discard any plain chunks.  Plain chunks that were sent but
-   not received yet will also be discarded as the SCTP protocol does
-   guarantee the needed retransmissions.
+   The communication is only protected after both sides have configured
+   the keys for sending and both sides have enforced the protection.
 
 8.  DTLS Chunk Handling
 
