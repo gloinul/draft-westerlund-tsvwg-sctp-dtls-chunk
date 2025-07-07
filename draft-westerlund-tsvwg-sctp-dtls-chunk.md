@@ -192,7 +192,7 @@ protected. The result of this computation is a DTLS 1.3 record
 encapsulated in a SCTP chunk which is named the DTLS chunk.
 
 The SCTP Protection Operator performs protection operations on all
-chunks os an SCTP packet. Information protection is kept during the lifetime of
+chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
