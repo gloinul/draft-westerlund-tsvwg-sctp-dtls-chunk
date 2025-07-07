@@ -115,24 +115,37 @@ Table of Contents
      9.7.  Get q
      9.8.  Get v
      9.9.  Configure Replay Protection
-   10. Implementation Considerations
-     10.1.  Privacy Padding of SCTP Packets
-   11. IANA Considerations
-     11.1.  Protection Error Cause Codes Registry
-     11.2.  SCTP Protection Solution Identifiers
-     11.3.  SCTP Chunk Type
-     11.4.  SCTP Chunk Parameter Types
-     11.5.  SCTP Error Cause Codes
-     11.6.  SCTP Payload Protocol Identifier
-   12. Security Considerations
-     12.1.  Privacy Considerations
-     12.2.  AEAD Limit Considerations
-     12.3.  Downgrade Attacks
-     12.4.  Persistent Secure Storage of Restart Key Context
-   13. Acknowledgments
-   14. References
-     14.1.  Normative References
-     14.2.  Informative References
+   10. Socket API Considerations
+     10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
+     10.2.  Get the Supported Cipher Suits
+            (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
+     10.3.  Get or Set the Local Protection Method Identifiers
+            (SCTP_DTLS_LOCAL_PMIDS)
+     10.4.  Get the Remote Protection Method Identifiers
+            (SCTP_DTLS_REMOTE_PMIDS)
+     10.5.  Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
+     10.6.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+     10.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+     10.8.  Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
+     10.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+   11. Implementation Considerations
+     11.1.  Privacy Padding of SCTP Packets
+   12. IANA Considerations
+     12.1.  Protection Error Cause Codes Registry
+     12.2.  SCTP Protection Solution Identifiers
+     12.3.  SCTP Chunk Type
+     12.4.  SCTP Chunk Parameter Types
+     12.5.  SCTP Error Cause Codes
+     12.6.  SCTP Payload Protocol Identifier
+   13. Security Considerations
+     13.1.  Privacy Considerations
+     13.2.  AEAD Limit Considerations
+     13.3.  Downgrade Attacks
+     13.4.  Persistent Secure Storage of Restart Key Context
+   14. Acknowledgments
+   15. References
+     15.1.  Normative References
+     15.2.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -469,7 +482,7 @@ Table of Contents
    that are causing protected SCTP Restart procedure to be used, for
    instance a crash of the SCTP stack.  The security considerations for
    persistent secure storage of keying materials is further discussed in
-   Section 12.4.
+   Section 13.4.
 
    The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case; these Chunks SHALL be sent as
@@ -606,7 +619,7 @@ Table of Contents
 
    Protection Solution fields: zero or more 16-bit SCTP Protection
    Solution Identifiers:
-      Each Protection Solution Identifier (Section 11.2) is a 16-bit
+      Each Protection Solution Identifier (Section 12.2) is a 16-bit
       unsigned integer value indicting a Protection Solution.
       Protection solutions include both DTLS Chunk based, where a
       solution combines the DTLS chunk with a key-management solution,
@@ -766,7 +779,7 @@ Table of Contents
 
    Below a number of defined Error Causes (Extra Cause above) are
    defined, additional causes can be registered with IANA following the
-   rules in Section 11.1.
+   rules in Section 12.1.
 
 6.2.1.  No Common Protection Solution
 
@@ -850,7 +863,7 @@ Table of Contents
    different key-management solutions for DTLS Chunk or in combination
    with other security solutions in addition to DTLS 1.3 chunks for the
    SCTP association.  This can be done but need to consider the
-   downgrade attack risks (see Section 12.3).
+   downgrade attack risks (see Section 13.3).
 
    The initiator MAY include in its INIT additional security solutions
    that are compatible to offer in parallel with DTLS 1.3 Chunks.  This
@@ -1215,9 +1228,50 @@ Table of Contents
 
    Parameters : true or false
 
-10.  Implementation Considerations
+10.  Socket API Considerations
 
-10.1.  Privacy Padding of SCTP Packets
+   This section describes how the socket API defined in [RFC6458] needs
+   to be extended to provide a way for the application to control the
+   usage of the DTLS chunk.
+
+   A 'Socket API Considerations' section is contained in all SCTP-
+   related specifications published after [RFC6458] describing an
+   extension for which implementations using the socket API as specified
+   in [RFC6458] would require some extension of the socket API.  Please
+   note that this section is informational only.
+
+   A socket API implementation based on [RFC6458] is extended by
+   supporting several new IPPROTO_SCTP-level socket options and a new
+   flag for recvmsg().
+
+10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
+
+   This flag is returned by recvmsg() in msg_flags for all user messages
+   for which all DATA chunks where received in protected SCTP packets.
+   This also means that if sctp_recvv() is used, MSG_PROTECTED is
+   returned in the *flags argument.
+
+10.2.  Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
+
+10.3.  Get or Set the Local Protection Method Identifiers
+       (SCTP_DTLS_LOCAL_PMIDS)
+
+10.4.  Get the Remote Protection Method Identifiers
+       (SCTP_DTLS_REMOTE_PMIDS)
+
+10.5.  Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
+
+10.6.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+
+10.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+
+10.8.  Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
+
+10.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+
+11.  Implementation Considerations
+
+11.1.  Privacy Padding of SCTP Packets
 
    To reduce the potential information leakage from packet size
    variations one may select to pad the SCTP Packets to uniform packet
@@ -1243,7 +1297,7 @@ Table of Contents
    future extension or SCTP implementation that account also for the
    padding.  Use of DTLS padding hides this packet expansion from SCTP.
 
-11.  IANA Considerations
+12.  IANA Considerations
 
    This document defines two new registries in the Stream Control
    Transmission Protocol (SCTP) Parameters group that IANA maintains.
@@ -1261,7 +1315,7 @@ Table of Contents
    And finally the update of one registered SCTP Payload Protocol
    Identifier.
 
-11.1.  Protection Error Cause Codes Registry
+12.1.  Protection Error Cause Codes Registry
 
    IANA is requested to create a new registry called "Protection Error
    Cause Codes".  This registry is part of the Stream Control
@@ -1291,7 +1345,7 @@ Table of Contents
    New entries are registered following the Specification Required
    policy as defined by [RFC8126].
 
-11.2.  SCTP Protection Solution Identifiers
+12.2.  SCTP Protection Solution Identifiers
 
    IANA is requested to create a new registry called "SCTP Protection
    Solutions".  This registry is part of the of the Stream Control
@@ -1329,7 +1383,7 @@ Table of Contents
    Specification Required policy as defined by [RFC8126].  New entries
    in the range 4096-65535 are first come, first served.
 
-11.3.  SCTP Chunk Type
+12.3.  SCTP Chunk Type
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Types" registry, IANA is requested to add the one new entry
@@ -1346,7 +1400,7 @@ Table of Contents
 
                     Table 5: New Chunk Type Registered
 
-11.4.  SCTP Chunk Parameter Types
+12.4.  SCTP Chunk Parameter Types
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Parameter Types" registry, IANA is requested to add the new
@@ -1363,7 +1417,7 @@ Table of Contents
 
                Table 6: New Chunk Type Parameters Registered
 
-11.5.  SCTP Error Cause Codes
+12.5.  SCTP Error Cause Codes
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Error Cause Codes" registry, IANA is requested to add the new entry
@@ -1381,7 +1435,7 @@ Table of Contents
                   Table 7: Error Cause Codes Parameters
                                 Registered
 
-11.6.  SCTP Payload Protocol Identifier
+12.6.  SCTP Payload Protocol Identifier
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Payload Protocol Identifiers" registry, IANA is requested to update
@@ -1398,14 +1452,14 @@ Table of Contents
 
         Table 8: Protection Operator Protocol Identifier Registered
 
-12.  Security Considerations
+13.  Security Considerations
 
    All the security and privacy considerations of the security protocol
    used as the Protection Operator applies.
 
    DTLS replay protection MUST NOT be turned off.
 
-12.1.  Privacy Considerations
+13.1.  Privacy Considerations
 
    Use of the SCTP DTLS chunk provides privacy to SCTP by protecting
    user data and much of the SCTP control signaling.  The SCTP
@@ -1414,7 +1468,7 @@ Table of Contents
    privacy features such as changing DTLS Connection ID and sequence
    number encryption might therefore have limited effect.
 
-12.2.  AEAD Limit Considerations
+13.2.  AEAD Limit Considerations
 
    Section 4.5.3 of [RFC9147] defines limits on the number of records q
    that can be protected using the same key as well as limits on the
@@ -1424,7 +1478,7 @@ Table of Contents
    a limit have been reached or is closed to being reached.  Instead of
    periodic polling, a callback can be used.
 
-12.3.  Downgrade Attacks
+13.3.  Downgrade Attacks
 
    The initial handshake is verified before the DTLS Chunk is considered
    protected, thus no user data are sent before validation.
@@ -1439,7 +1493,7 @@ Table of Contents
    provided when TLS 1.2 with static RSA is used.  It is RECOMMENDED to
    only support a limited set of strongly profiled protection solutions.
 
-12.4.  Persistent Secure Storage of Restart Key Context
+13.4.  Persistent Secure Storage of Restart Key Context
 
    The Restart DTLS Key Context needs to be stored securely and
    persistent.  Securely as access to this security context may enable
@@ -1455,16 +1509,16 @@ Table of Contents
    persistence part might be accomplished be keeping the current restart
    DTLS Key Context with the ULP State if that is sufficiently secure.
 
-13.  Acknowledgments
+14.  Acknowledgments
 
    The authors thank Michael Tüxen for his invaluable comments helping
    to cope with Association Restart, ASCONF handling and restructuring
    the Protection Operator architecture.  We also like to thank Amanda
    Baber with IANA for feedback on our IANA registry.
 
-14.  References
+15.  References
 
-14.1.  Normative References
+15.1.  Normative References
 
    [RFC4820]  Tuexen, M., Stewart, R., and P. Lei, "Padding Chunk and
               Parameter for the Stream Control Transmission Protocol
@@ -1516,7 +1570,13 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-14.2.  Informative References
+15.2.  Informative References
+
+   [RFC6458]  Stewart, R., Tuexen, M., Poon, K., Lei, P., and V.
+              Yasevich, "Sockets API Extensions for the Stream Control
+              Transmission Protocol (SCTP)", RFC 6458,
+              DOI 10.17487/RFC6458, December 2011,
+              <https://www.rfc-editor.org/info/rfc6458>.
 
    [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
               Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
