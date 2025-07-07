@@ -30,6 +30,16 @@ author:
    name: Claudio Porfiri
    org: Ericsson
    email: claudio.porfiri@ericsson.com
+-
+   ins: M. Tüxen
+   name: Michael Tüxen
+   org: Münster University of Applied Sciences
+   abbrev: Münster Univ. of Appl. Sciences
+   street: Stegerwaldstrasse 39
+   code: 48565
+   city: Steinfurt
+   country: Germany
+   email: tuexen@fh-muenster.de
 
 informative:
   RFC6458:
@@ -1449,7 +1459,6 @@ the ULP State if that is sufficiently secure.
 
 # Acknowledgments
 
-   The authors thank Michael Tüxen for his invaluable comments
-   helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Operator architecture. We also like
-   to thank Amanda Baber with IANA for feedback on our IANA registry.
+The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
+participation in the design team and their contributions to this document.
+We also like to thank Amanda Baber with IANA for feedback on our IANA registry.
