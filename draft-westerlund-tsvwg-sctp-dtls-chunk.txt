@@ -6,6 +6,8 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
 Expires: 8 January 2026                                         Ericsson
+                                                                M. Tüxen
+                                         Münster Univ. of Appl. Sciences
                                                              7 July 2025
 
 
@@ -1528,10 +1530,10 @@ Table of Contents
 
 14.  Acknowledgments
 
-   The authors thank Michael Tüxen for his invaluable comments helping
-   to cope with Association Restart, ASCONF handling and restructuring
-   the Protection Operator architecture.  We also like to thank Amanda
-   Baber with IANA for feedback on our IANA registry.
+   The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
+   participation in the design team and their contributions to this
+   document.  We also like to thank Amanda Baber with IANA for feedback
+   on our IANA registry.
 
 15.  References
 
@@ -1635,3 +1637,11 @@ Authors' Addresses
    Claudio Porfiri
    Ericsson
    Email: claudio.porfiri@ericsson.com
+
+
+   Michael Tüxen
+   Münster University of Applied Sciences
+   Stegerwaldstrasse 39
+   48565 Steinfurt
+   Germany
+   Email: tuexen@fh-muenster.de
