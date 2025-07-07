@@ -8,6 +8,7 @@
 <meta content="Magnus Westerlund" name="author">
 <meta content="John Preuß Mattsson" name="author">
 <meta content="Claudio Porfiri" name="author">
+<meta content="Michael Tüxen" name="author">
 <meta content="
        This document describes a method for adding Cryptographic protection
 to the Stream Control Transmission Protocol (SCTP). The SCTP DTLS
@@ -1089,6 +1090,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <div class="author-name">C. Porfiri</div>
 <div class="org">Ericsson</div>
 </div>
+<div class="author">
+      <div class="author-name">M. Tüxen</div>
+<div class="org">Münster Univ. of Appl. Sciences</div>
+</div>
 </dd>
 </dl>
 </div>
@@ -1303,13 +1308,16 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-set-key-to-use" class="internal xref">Set Key to Use</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.7">
-                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-get-q" class="internal xref">Get q</a></p>
+                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-require-protected-sctp-pack" class="internal xref">Require Protected SCTP Packets</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.8">
-                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-get-v" class="internal xref">Get v</a></p>
+                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-get-q" class="internal xref">Get q</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.9">
-                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
+                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-get-v" class="internal xref">Get v</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.10">
+                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
 </li>
             </ul>
 </li>
@@ -1647,12 +1655,12 @@ association.  Key Management sends and receives its own data via the
 SCTP User Level interface.  Key Management's own data are
 distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">Once Key Management has established a DTLS 1.3
-connection, it can derive traffic and restart keys and set the
-Protection Operator for User Data encryption/decryption via the keys API
-shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> to create the necessary DTLS key
-contexts. Both a DTLS Key context for traffic and a DTLS Key context
-for restart need to be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Once Key Management has established a DTLS 1.3 connection, it can
+derive primary and restart keys and set the Protection Operator for
+User Data encryption/decryption via the keys API shown in
+<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> to create the necessary DTLS key
+contexts. Both a DTLS Key context for normal use (primary) and
+a DTLS Key context for SCTP association restart need to be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
 chunks until PROTECTED state is reached. From that time on, DTLS 1.3 handshake
@@ -1921,19 +1929,19 @@ DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP state machine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9.1-10" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-11">A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
-for User Traffic until a new traffic DTLS Key Context will be available. The
+for User Traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
-and derive the traffic and restart keys so that the time when no
+and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.<a href="#section-3.9.1-11" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-12">After restart the next traffic DTLS key context SHALL use epoch=3,
+<p id="section-3.9.1-12">After restart the next primary DTLS key context SHALL use epoch=3,
 i.e. the epoch value is reset. Note that if the restart epoch used
 also was 3 when not using any DTLS connection ID, then the
 installation of the new restart DTLS key context needs to be done with
 some care to avoid dropping valid packets. After having derived new
-traffic keys the endpoint installs the Traffic DTLS Key Context first,
+primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
 </section>
@@ -2864,6 +2872,13 @@ defined in the corresponding specifications.<a href="#section-8.2-4" class="pilc
 <p id="section-9-1">This section describes an abstract API that is needed between a key
 establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">This API enables the cryptographical protection operations by setting
+client/server write key and IV for primary and restart DTLS key
+context. The key is the primary cryptograpical key used by the cipher
+suit for DTLS record protection (Section 5.2 of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>. The
+initilization vector (IV) is cryptographical random material used to
+XOR with the sequence number to create the nonce per Section 5.3 of
+<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <div id="cipher-suit-capabilities">
 <section id="section-9.1">
         <h3 id="name-cipher-suit-capabilities">
@@ -3104,41 +3119,30 @@ SCTP Association.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
 <p id="section-9.6-6">Parameters : true or false<a href="#section-9.6-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-q">
+<div id="require-protected-sctp-packets">
 <section id="section-9.7">
-        <h3 id="name-get-q">
-<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
+        <h3 id="name-require-protected-sctp-pack">
+<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-require-protected-sctp-pack" class="section-name selfRef">Require Protected SCTP Packets</a>
         </h3>
-<p id="section-9.7-1">Get q, the number of protected messages (AEAD encryption invocations) for
-a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
-<p id="section-9.7-2">Request : Get q<a href="#section-9.7-2" class="pilcrow">¶</a></p>
-<p id="section-9.7-3">Parameters :<a href="#section-9.7-3" class="pilcrow">¶</a></p>
+<p id="section-9.7-1">A function to configure an SCTP association to require that normal
+SCTP packets must be protected in a DTLS Chunk going forward.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
+<p id="section-9.7-2">Parameters:<a href="#section-9.7-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.7-4.1">
-            <p id="section-9.7-4.1.1">SCTP Association<a href="#section-9.7-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.7-4.2">
-            <p id="section-9.7-4.2.1">Restart indication<a href="#section-9.7-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.7-4.3">
-            <p id="section-9.7-4.3.1">DTLS CID<a href="#section-9.7-4.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.7-4.4">
-            <p id="section-9.7-4.4.1">DTLS Epoch<a href="#section-9.7-4.4.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.7-3.1">
+            <p id="section-9.7-3.1.1">SCTP Association<a href="#section-9.7-3.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.7-5">Reply: q<a href="#section-9.7-5" class="pilcrow">¶</a></p>
-<p id="section-9.7-6">Parameters : non-negative integer<a href="#section-9.7-6" class="pilcrow">¶</a></p>
+<p id="section-9.7-4">Reply: Acknowledgement<a href="#section-9.7-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-v">
+<div id="get-q">
 <section id="section-9.8">
-        <h3 id="name-get-v">
-<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
+        <h3 id="name-get-q">
+<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
         </h3>
-<p id="section-9.8-1">Get v, the number of attacker forgery attempts
-(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
-<p id="section-9.8-2">Request : Get v<a href="#section-9.8-2" class="pilcrow">¶</a></p>
+<p id="section-9.8-1">Get q, the number of protected messages (AEAD encryption invocations) for
+a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
+<p id="section-9.8-2">Request : Get q<a href="#section-9.8-2" class="pilcrow">¶</a></p>
 <p id="section-9.8-3">Parameters :<a href="#section-9.8-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.8-4.1">
@@ -3154,40 +3158,67 @@ a given epoch.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
             <p id="section-9.8-4.4.1">DTLS Epoch<a href="#section-9.8-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.8-5">Reply: v<a href="#section-9.8-5" class="pilcrow">¶</a></p>
+<p id="section-9.8-5">Reply: q<a href="#section-9.8-5" class="pilcrow">¶</a></p>
 <p id="section-9.8-6">Parameters : non-negative integer<a href="#section-9.8-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="configure-replay-protection">
+<div id="get-v">
 <section id="section-9.9">
-        <h3 id="name-configure-replay-protection">
-<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        <h3 id="name-get-v">
+<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
         </h3>
-<p id="section-9.9-1">The DTLS replay protection in this usage is expected to be fairly
+<p id="section-9.9-1">Get v, the number of attacker forgery attempts
+(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
+<p id="section-9.9-2">Request : Get v<a href="#section-9.9-2" class="pilcrow">¶</a></p>
+<p id="section-9.9-3">Parameters :<a href="#section-9.9-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.9-4.1">
+            <p id="section-9.9-4.1.1">SCTP Association<a href="#section-9.9-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.9-4.2">
+            <p id="section-9.9-4.2.1">Restart indication<a href="#section-9.9-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.9-4.3">
+            <p id="section-9.9-4.3.1">DTLS CID<a href="#section-9.9-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.9-4.4">
+            <p id="section-9.9-4.4.1">DTLS Epoch<a href="#section-9.9-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.9-5">Reply: v<a href="#section-9.9-5" class="pilcrow">¶</a></p>
+<p id="section-9.9-6">Parameters : non-negative integer<a href="#section-9.9-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configure-replay-protection">
+<section id="section-9.10">
+        <h3 id="name-configure-replay-protection">
+<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        </h3>
+<p id="section-9.10-1">The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets are
 a combination of how delayed one packet may be compared to another
 times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
-more suitable value depending on the use case should be considered.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
-<p id="section-9.9-2">Note this sets this configuration to be used across any DTLS key
-context for a given SCTP Association and traffic/restart usages.<a href="#section-9.9-2" class="pilcrow">¶</a></p>
-<p id="section-9.9-3">Request : Configure Replay Protection<a href="#section-9.9-3" class="pilcrow">¶</a></p>
-<p id="section-9.9-4">Parameters :<a href="#section-9.9-4" class="pilcrow">¶</a></p>
+more suitable value depending on the use case should be considered.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
+<p id="section-9.10-2">Note this sets this configuration to be used across any DTLS key
+context for a given SCTP Association and primary/restart usages.<a href="#section-9.10-2" class="pilcrow">¶</a></p>
+<p id="section-9.10-3">Request : Configure Replay Protection<a href="#section-9.10-3" class="pilcrow">¶</a></p>
+<p id="section-9.10-4">Parameters :<a href="#section-9.10-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.9-5.1">
-            <p id="section-9.9-5.1.1">SCTP Association<a href="#section-9.9-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.10-5.1">
+            <p id="section-9.10-5.1.1">SCTP Association<a href="#section-9.10-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.9-5.2">
-            <p id="section-9.9-5.2.1">Restart indication<a href="#section-9.9-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.10-5.2">
+            <p id="section-9.10-5.2.1">Restart indication<a href="#section-9.10-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.9-5.3">
-            <p id="section-9.9-5.3.1">Configuration parameters<a href="#section-9.9-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.10-5.3">
+            <p id="section-9.10-5.3.1">Configuration parameters<a href="#section-9.10-5.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.9-6">Reply: Replay Protection Configured<a href="#section-9.9-6" class="pilcrow">¶</a></p>
-<p id="section-9.9-7">Parameters : true or false<a href="#section-9.9-7" class="pilcrow">¶</a></p>
+<p id="section-9.10-6">Reply: Replay Protection Configured<a href="#section-9.10-6" class="pilcrow">¶</a></p>
+<p id="section-9.10-7">Parameters : true or false<a href="#section-9.10-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3668,10 +3699,9 @@ the ULP State if that is sufficiently secure.<a href="#section-13.4-2" class="pi
       <h2 id="name-acknowledgments">
 <a href="#section-14" class="section-number selfRef">14. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-14-1">The authors thank Michael Tüxen for his invaluable comments
-   helping to cope with Association Restart, ASCONF handling and
-   restructuring the Protection Operator architecture. We also like
-   to thank Amanda Baber with IANA for feedback on our IANA registry.<a href="#section-14-1" class="pilcrow">¶</a></p>
+<p id="section-14-1">The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
+participation in the design team and their contributions to this document.
+We also like to thank Amanda Baber with IANA for feedback on our IANA registry.<a href="#section-14-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -3786,6 +3816,19 @@ the ULP State if that is sufficiently secure.<a href="#section-13.4-2" class="pi
 <div class="email">
 <span>Email:</span>
 <a href="mailto:claudio.porfiri@ericsson.com" class="email">claudio.porfiri@ericsson.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Michael Tüxen</span></div>
+<div dir="auto" class="left"><span class="org">Münster University of Applied Sciences</span></div>
+<div dir="auto" class="left"><span class="street-address">Stegerwaldstrasse 39</span></div>
+<div dir="auto" class="left">
+<span class="postal-code">48565</span> <span class="locality">Steinfurt</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Germany</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:tuexen@fh-muenster.de" class="email">tuexen@fh-muenster.de</a>
 </div>
 </address>
 </section>
