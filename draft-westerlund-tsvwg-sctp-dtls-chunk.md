@@ -209,15 +209,18 @@ initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
 chunk.
 
-The support of the DTLS chunk is negotiated by the peers at the
-setup of the SCTP association. Key management and application traffic
-is multiplexed using the PPID. The dedicated PPID 4242 is used for
-key management. The key management function uses
-an API to key the Chunk protection operation function. Usage of the
-DTLS 1.3 handshake for initial mutual authentication and key
-establishment as well as periodic re-authentication and rekeying with
-Diffe-Hellman of the DTLS chunk protection is defined in separate
-documents, e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+The support of the DTLS chunk and the key-management method to use is
+negotiated by the peers at the setup of the SCTP association using a
+new parameter. Key management and application traffic is multiplexed
+using the PPID. The dedicated PPID 4242 is defined for key
+management. The key management function uses an API to key the Chunk
+protection operation function. Usage of the DTLS 1.3 handshake for
+initial mutual authentication and key establishment as well as
+periodic re-authentication and rekeying with Diffe-Hellman of the DTLS
+chunk protection is defined in separate documents,
+e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. To prevent
+downgrade attacks of the key-management negotiation the key-management
+should implement specific procedures when deriving keys.
 
 When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
@@ -226,10 +229,7 @@ exchange data securely with its peer.
 
 A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
-protection will be used to suppress duplicated DTLS chunks, however a
-failure to prevent replay will only result in duplicated SCTP chunks and
-will be handled as duplicated chunks by SCTP endpoint in the same way
-a duplicated SCTP packet with those SCTP chunks would have been.
+protection will be used to suppress duplicated DTLS chunks.
 
 
 ## DTLS Considerations {#DTLS-engines}
@@ -888,6 +888,19 @@ that were sent and received.
 
 The communication is only protected after both sides have configured the keys
 for sending and both sides have enforced the protection.
+
+To prevent downgrade attacks the key-management methods SHOULD include
+in its input to key derivation the offered list in priority order of
+protections solutions from the SCTP associations INIT chunk's DTLS 1.3
+Chunk Protected Association parameter. By both peers including the
+sent and received list, respectively, in the key derivation any
+downgrade will result in a key-missmatch between the SCTP assocation
+initiator and responder, resulting in the SCTP assocation failing
+after having installed key contexts, thus preventing any down-grade
+attempt to weaking the security. Methods not including the list of
+offered protection solutions will enable a downgrade to such a
+key-management method.
+
 
 # DTLS Chunk Handling {#dtls-chunk-handling}
 
