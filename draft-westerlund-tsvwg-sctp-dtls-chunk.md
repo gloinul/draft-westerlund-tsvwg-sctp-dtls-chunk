@@ -257,12 +257,12 @@ SCTP User Level interface.  Key Management's own data are
 distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see {{iana-payload-protection-id}}).
 
-Once Key Management has established a DTLS 1.3
-connection, it can derive traffic and restart keys and set the
-Protection Operator for User Data encryption/decryption via the keys API
-shown in {{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
-contexts. Both a DTLS Key context for traffic and a DTLS Key context
-for restart need to be created.
+Once Key Management has established a DTLS 1.3 connection, it can
+derive primary and restart keys and set the Protection Operator for
+User Data encryption/decryption via the keys API shown in
+{{sctp-DTLS-chunk-layering}} to create the necessary DTLS key
+contexts. Both a DTLS Key context for normal use (primary) and
+a DTLS Key context for SCTP association restart need to be created.
 
 DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
@@ -494,20 +494,20 @@ previously validated and the SCTP state machine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
 
 A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
-for User Traffic until a new traffic DTLS Key Context will be available. The
+for User Traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
-and derive the traffic and restart keys so that the time when no
+and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.
 
-After restart the next traffic DTLS key context SHALL use epoch=3,
+After restart the next primary DTLS key context SHALL use epoch=3,
 i.e. the epoch value is reset. Note that if the restart epoch used
 also was 3 when not using any DTLS connection ID, then the
 installation of the new restart DTLS key context needs to be done with
 some care to avoid dropping valid packets. After having derived new
-traffic keys the endpoint installs the Traffic DTLS Key Context first,
+primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.
 
@@ -975,6 +975,14 @@ This section describes an abstract API that is needed between a key
 establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.
 
+This API enables the cryptographical protection operations by setting
+client/server write key and IV for primary and restart DTLS key
+context. The key is the primary cryptograpical key used by the cipher
+suit for DTLS record protection (Section 5.2 of {{RFC8446}}. The
+initilization vector (IV) is cryptographical random material used to
+XOR with the sequence number to create the nonce per Section 5.3 of
+{{RFC8446}}.
+
 ## Cipher Suit Capabilities
 
 The key-management function needs to know which cipher suits defined
@@ -1134,6 +1142,18 @@ Reply: Key set
 
 Parameters : true or false
 
+## Require Protected SCTP Packets
+
+A function to configure an SCTP association to require that normal
+SCTP packets must be protected in a DTLS Chunk going forward.
+
+Parameters:
+
+* SCTP Association
+
+Reply: Acknowledgement
+
+
 ## Get q
 
 Get q, the number of protected messages (AEAD encryption invocations) for
@@ -1189,7 +1209,7 @@ may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
 
 Note this sets this configuration to be used across any DTLS key
-context for a given SCTP Association and traffic/restart usages.
+context for a given SCTP Association and primary/restart usages.
 
 Request : Configure Replay Protection
 
