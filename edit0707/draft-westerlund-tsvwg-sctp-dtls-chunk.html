@@ -1483,7 +1483,7 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.<a 
 <figure id="figure-1">
           <div id="section-3.1-2.1">
             <div class="alignCenter art-svg artwork" id="section-3.1-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="656" width="472" viewBox="0 0 472 656" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="656" width="440" viewBox="0 0 440 656" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,32 L 8,464" fill="none" stroke="black"></path>
                 <path d="M 8,560 L 8,640" fill="none" stroke="black"></path>
                 <path d="M 72,472 L 72,512" fill="none" stroke="black"></path>
@@ -1529,7 +1529,6 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.<a 
                 <path d="M 8,464 L 136,464" fill="none" stroke="black"></path>
                 <path d="M 152,464 L 408,464" fill="none" stroke="black"></path>
                 <path d="M 72,512 L 288,512" fill="none" stroke="black"></path>
-                <path d="M 408,528 L 464,528" fill="none" stroke="black"></path>
                 <path d="M 8,560 L 408,560" fill="none" stroke="black"></path>
                 <path d="M 176,576 L 352,576" fill="none" stroke="black"></path>
                 <path d="M 360,592 L 392,592" fill="none" stroke="black"></path>
@@ -1579,7 +1578,6 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.<a 
                   <text x="244" y="436">Protection</text>
                   <text x="324" y="436">Operator</text>
                   <text x="420" y="516">keys</text>
-                  <text x="456" y="516">API</text>
                   <text x="68" y="532">PPID</text>
                   <text x="92" y="596">SCTP</text>
                   <text x="272" y="596">Chunk</text>
@@ -1608,11 +1606,11 @@ chunk.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 setup of the SCTP association. Key management and application traffic
 is multiplexed using the PPID. The dedicated PPID 4242 is used for
 key management. The key management function uses
-a keys API to key the Chunk protection operation function. Usage of the
+an API to key the Chunk protection operation function. Usage of the
 DTLS 1.3 handshake for initial mutual authentication and key
 establishment as well as periodic re-authentication and rekeying with
-Diffe-Hellman of the DTLS chunk protection is defined in a separate
-document <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+Diffe-Hellman of the DTLS chunk protection is defined in separate
+documents, e.g. <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
@@ -2521,10 +2519,9 @@ rules in <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.1</a>
 <p id="section-6.2.1-1">If the responder to do not support any of the protection solutions
 offered by the association initiator in the Protection Soluiton
 Parameters <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a> SCTP will send an ABORT
-chunk immediately after COOKIE-ECHO/COOKIE-ACK handshaking
-that will include the error
-cause "Error in DTLS Chunk" <a href="#eprotect" class="auto internal xref">Section 6.2</a> and containing the Extra
-Cause "No Common Protection Solution".<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>,
+including the error cause "Error in DTLS Chunk" <a href="#eprotect" class="auto internal xref">Section 6.2</a> and
+containing the Extra Cause "No Common Protection Solution".<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
