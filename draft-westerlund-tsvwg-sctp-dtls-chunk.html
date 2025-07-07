@@ -1474,7 +1474,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 SCTP packets. This is implemented inside the SCTP protocol.
 Once an SCTP packet has been received and the SCTP common header has
 been used to identify the SCTP association, the DTLS chunk is processed by
-the DTLS Protection Operator that will perform replay protection, decrypt,
+the Chunk Protection Operator that will perform replay protection, decrypt,
 verify authenticity, and if the DTLS chunk is successfully processed provides
 the protected SCTP chunks for further processing.
 <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> illustrates the DTLS chunk processing in regard
@@ -1593,10 +1593,10 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.<a 
 </div>
 <p id="section-3.1-3">In the outgoing direction, once the SCTP stack has created the
 unprotected SCTP packet containing control and/or DATA chunks,
-SCTP chunks will be processed by the DTLS Protection Operator to be
+SCTP chunks will be processed by the Chunk Protection Operator to be
 protected. The result of this computation is a DTLS 1.3 record
 encapsulated in a SCTP chunk which is named the DTLS chunk.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">The SCTP Protection Operator performs protection operations on all
+<p id="section-3.1-4">The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
@@ -1606,11 +1606,11 @@ chunk.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 setup of the SCTP association. Key management and application traffic
 is multiplexed using the PPID. The dedicated PPID 4242 is used for
 key management. The key management function uses
-an API to key the DTLS protection operation function. Usage of the
+an API to key the Chunk protection operation function. Usage of the
 DTLS 1.3 handshake for initial mutual authentication and key
 establishment as well as periodic re-authentication and rekeying with
-Diffe-Hellman of the DTLS chunk protection is defined in a separate
-document <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+Diffe-Hellman of the DTLS chunk protection is defined in separate
+documents, e.g. <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
 informed about that. From this time on it's possible for the ULPs to
@@ -1629,13 +1629,14 @@ a duplicated SCTP packet with those SCTP chunks would have been.<a href="#sectio
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-dtls-considerations" class="section-name selfRef">DTLS Considerations</a>
         </h3>
 <p id="section-3.2-1">The DTLS Chunk architecture splits DTLS 1.3 as shown in
-<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where there's a Key Management functionality
-on top of SCTP Chunks Handler and a Protection Operator functionality
-interfacing DTLS Chunk Handler.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where the Key Management functionality
+is done at DTLS1.3 block, acting as a parallel User Level Protocol
+and a Chunk Protection Operator functionality inside the SCTP
+Protocol Stack.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">Key Management is the set of data and procedures that take care of key
 distribution, verification, and update, DTLS connection setup, update and
 maintenance.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">Protection Operator functionality is the set of data and procedures
+<p id="section-3.2-3">Chunk Protection Operator functionality is the set of data and procedures
 taking care of User Data encryption into DTLS Record and DTLS record
 decryption into User Data.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">DTLS 1.3 operations requires to directly handshake messages with the
@@ -1646,15 +1647,15 @@ association.  Key Management sends and receives its own data via the
 SCTP User Level interface.  Key Management's own data are
 distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">A Key Management using DTLS when it has established a DTLS 1.3
+<p id="section-3.2-5">Once Key Management has established a DTLS 1.3
 connection, it can derive traffic and restart keys and set the
-Protection Operator for User Data encryption/decryption via the API
+Protection Operator for User Data encryption/decryption via the keys API
 shown in <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> to create the necessary DTLS key
 contexts. Both a DTLS Key context for traffic and a DTLS Key context
 for restart need to be created.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">DTLS 1.3 handshake messages, that are transported as SCTP User Data
 with dedicated PPID = 4242, SHALL be sent and received as plain DATA
-chunks. From that time on, DTLS 1.3 handshake
+chunks until PROTECTED state is reached. From that time on, DTLS 1.3 handshake
 messages SHALL be transported as SCTP User Data with dedicated PPID =
 4242 within DTLS chunks, same as any ULP data traffic.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 <p id="section-3.2-7">In this document we use the terms DTLS Key context for indicating a
@@ -1841,7 +1842,7 @@ association restart.<a href="#section-3.9.1-4" class="pilcrow">¶</a></p>
 restart needs to store securely and persistent the restart Keys, DTLS
 connection ID (if used) and related DTLS epoch, indexed so that when
 performing a restart with the peer node it had a protected SCTP
-association with can identify the right restart Key and DTLS epoch and
+association which can identify the right restart Key and DTLS epoch and
 initialize the restart DTLS Key Context for when restarting the SCTP
 association. The keys, DTLS connection ID, and epoch needs to be stored
 secure and persistently so that they survive the events that are
@@ -2106,7 +2107,7 @@ number of Protection Solution fields (N) times two plus 4 and, if N
 is odd, plus 2 bytes of padding.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.1-3.5">Protection Solution fields: zero or more 16-bit SCTP Protection Solution Identifiers:</dt>
+<dt id="section-4.1-3.5">Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.6">
             <p id="section-4.1-3.6.1">Each Protection Solution Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.2</a>)
 is a 16-bit unsigned integer value indicting a Protection
@@ -2516,7 +2517,11 @@ rules in <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.1</a>
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-no-common-protection-soluti" class="section-name selfRef">No Common Protection Solution</a>
           </h4>
 <p id="section-6.2.1-1">If the responder to do not support any of the protection solutions
-offered by the association initiator in the<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+offered by the association initiator in the Protection Soluiton
+Parameters <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a> SCTP will send an ABORT
+chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>,
+including the error cause "Error in DTLS Chunk" <a href="#eprotect" class="auto internal xref">Section 6.2</a> and
+containing the Extra Cause "No Common Protection Solution".<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2543,7 +2548,7 @@ peer will also experience timeout on the Association.<a href="#section-6.3-1" cl
         </h3>
 <p id="section-6.4-1">A non-critical error in DTLS Protection Operator means that the
 Protection Operator is capable of recovering without the need
-of the whole SCTP Association to be restarted.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+of the whole SCTP Association to be re-established.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">From SCTP perspective, a non-critical error will be perceived
 as a temporary problem in the transport and will be handled
 with retransmissions and SACKS according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
@@ -2583,9 +2588,9 @@ Association parameter to indicate it is willing to create a session
 without security.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
-the DTLS 1.3 Chunk Protected Association parameter or another by
-security policy accepted security solution as an error, thus it will
-reply with an ABORT chunk according to what specified in
+the DTLS 1.3 Chunk Protected Association parameter or another
+Protection Solution accepted by own security policy solution as an error,
+thus it will reply with an ABORT chunk according to what specified in
 <a href="#enoprotected" class="auto internal xref">Section 6.1</a> indicating that for this endpoint mandatory DTLS 1.3
 Chunk Protected Association parameter is missing.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">When initiator and responder have agreed on a DTLS Chunk protected
