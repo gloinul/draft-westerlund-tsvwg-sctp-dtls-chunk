@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T01:11:12.823277+00:00",
+  "timestamp": "2025-07-20T01:21:12.209114+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -936,9 +936,17 @@
       "labels": [],
       "body": "DTLS can negotiate less than full size DTLS records. Is that needed? And if needed we need API surface for it. \n\nTo be discussed not needed to handled for IETF 123 submission. ",
       "createdAt": "2025-07-07T08:53:27Z",
-      "updatedAt": "2025-07-07T08:53:27Z",
+      "updatedAt": "2025-07-19T14:31:57Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So the DTLS negotiation is defined in https://datatracker.ietf.org/doc/html/rfc8449. There is a current Socket API for SCTP that sets MTU for chunks: https://datatracker.ietf.org/doc/html/rfc6458 \n\nSo the SocketAPI may need some clarification to enable restricting the size generate towards the peer to honor RecordSizeLimit. In addtion there is a question if there would be limits on DTLS chunk level that needs to be exposed to the Key-management to correct configure the input to RecordSizeLimit exchange in handshake.",
+          "createdAt": "2025-07-19T14:31:57Z",
+          "updatedAt": "2025-07-19T14:31:57Z"
+        }
+      ]
     },
     {
       "number": 51,
