@@ -206,7 +206,8 @@ The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
-common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
+common header, the SCTP DTLS chunk header, the INIT and INIT-ACK
+chunks during an SCTP Restart procedure and the SHUTDOWN-COMPLETE
 chunk.
 
 The support of the DTLS chunk and the key-management method to use is
@@ -507,7 +508,7 @@ after any old in-flight restart packets will have been received.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
-restart the Association using unprotected INIT chunk. The effect
+restart the Association. The effect
 will be that the restart initiator will receive INIT-ACK back
 but then COOCKE-ECHO will be dropped until the peer nodes times
 out the SCTP Association from lack of any response from the
