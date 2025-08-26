@@ -853,10 +853,13 @@ prevention the endpoints can know that down-grade did not happen.
 Besides the procedures for terminating an association explained in
 {{RFC9260}}, DTLS 1.3 SHALL ask SCTP endpoint for terminating an
 association when having an internal error or by detecting a security
-violation.  During the termination procedure all Control Chunks SHALL
-be protected except SHUTDOWN-COMPLETE. The internal design of
-Protection Engines and their capability is out of the scope of the
-current document.
+violation. Note that the closure of the DTLS1.3 connection doesn't
+compromise the capability of sending and receiving protected
+SHUTDOWN-COMPLETE chunks as that capability only relies on the
+Key Context and not on the DTLS1.3 connection from where it has
+been derived.
+The internal design of Protection Engines and their
+capability is out of the scope of the current document.
 
 ## Considerations on Key Management {#key-management-considerations}
 
