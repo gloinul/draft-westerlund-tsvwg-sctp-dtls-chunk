@@ -507,7 +507,7 @@ after any old in-flight restart packets will have been received.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
-restart the Association using unprotected INIT chunk. The effect
+restart the Association. The effect
 will be that the restart initiator will receive INIT-ACK back
 but then COOCKE-ECHO will be dropped until the peer nodes times
 out the SCTP Association from lack of any response from the
