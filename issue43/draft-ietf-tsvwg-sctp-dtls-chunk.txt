@@ -5,14 +5,14 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 27 February 2026                                       Ericsson
+Expires: 28 February 2026                                       Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                          26 August 2025
+                                                          27 August 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
-             draft-westerlund-tsvwg-sctp-dtls-chunk-latest
+                draft-ietf-tsvwg-sctp-dtls-chunk-latest
 
 Abstract
 
@@ -31,8 +31,7 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-
-   chunk/.
+   https://datatracker.ietf.org/doc/draft-ietf-tsvwg-sctp-dtls-chunk/.
 
    Discussion of this document takes place on the Transport Area Working
    Group (tsvwg) Working Group mailing list (mailto:tsvwg@ietf.org),
@@ -57,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 February 2026.
+   This Internet-Draft will expire on 28 February 2026.
 
 Copyright Notice
 
