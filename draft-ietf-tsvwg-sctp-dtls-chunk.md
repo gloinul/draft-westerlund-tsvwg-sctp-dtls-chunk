@@ -206,7 +206,12 @@ The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
+<<<<<<< HEAD
+common header, the SCTP DTLS chunk header, and the INIT and INIT-ACK
+chunks during an SCTP Restart procedure.
+=======
 common header, and the the SCTP DTLS chunk header.
+>>>>>>> main
 
 The support of the DTLS chunk and the key-management method to use is
 negotiated by the peers at the setup of the SCTP association using a
@@ -387,15 +392,8 @@ with the purpose of achieving a Restart of the current Association,
 thus implementing SCTP Restart.
 
 This specification doesn't support SCTP Restart as described in
-{{RFC9260}}; when unexpected INIT chunk is received unprotected, it
-SHALL be silently discarded to prevent denial of service attacks on
-the ongoing association.
-
-All implementations SHALL support receiving and processing unexpected
-INIT chunks protected by DTLS Chunk as described in
-{{protected-restart}}. This as has minimal implementation burden
-as it only requires handling the restart DTLS Key Context and detect
-DTLS Chunks indicating the restart.
+{{RFC9260}} because the COOCKIE-ECHO and COOKIE-ACK chunks
+are sent encrypted (see {{protected-restart}});
 
 When the upper layer protocols require support of SCTP Restart, as in
 case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the endpoint needs to
@@ -413,8 +411,9 @@ legacy SCTP Restart are described in {{sctp-rest-comp}}.
 The protected SCTP Restart procedure keeps the security
 characteristics of an SCTP Association using DTLS Chunk.
 
-In protected SCTP Restart, INIT chunks are sent encrypted
-using DTLS Chunks.
+In protected SCTP Restart, INIT and INIT-ACK chunks are sent
+strictly according to  {{RFC9260}}, but COOCKIE-ECHO and COOKIE-ACK chunks
+are encrypted using DTLS Chunks and Restart DTLS Key contexts.
 
 In order to support protected SCTP Restart, the SCTP Endpoints shall allocate
 and maintain dedicated Restart DTLS Key contexts, SCTP packets
@@ -432,7 +431,7 @@ NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
 An SCTP endpoint wanting to be able to initiate a protected SCTP
-restart needs to store securely and persistent the restart Keys, DTLS
+restart needs to store securely and persistently the restart Keys, DTLS
 connection ID (if used) and related DTLS epoch, indexed so that when
 performing a restart with the peer node it had a protected SCTP
 association which can identify the right restart Key and DTLS epoch and
@@ -445,8 +444,9 @@ secure storage of keying materials is further discussed in
 {{sec-considertation-storage}}.
 
 The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case; these Chunks SHALL be
-sent as DTLS chunk protected using the restart DTLS key context.
+exactly as in legacy SCTP Restart case; INIT, INIT-ACK SHALL be
+sent plain as in the legacy, whereas COOCKIE-ECHO, COOKIE-ACK
+Chunks SHALL be sent as DTLS chunk protected using the restart DTLS key context.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
@@ -467,12 +467,15 @@ storage.
 
 Initiator                                     Responder
     |                                             | -.
-    +------------[DTLS CHUNK(INIT)]-------------->|   |
-    |<---------[DTLS CHUNK(INIT-ACK)]-------------+   +-------
-    |                                             |   | Using
-    |                                             |   | SCTP
-    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Chunks
-    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   +-------
+    |                                             |   +-------
+    +--------------------(INIT)------------------>|   | Plain
+    |<-----------------(INIT-ACK)-----------------+   +-------
+    |                                             | -'
+    |                                             | -.
+    |                                             |   +-------
+    +---------[DTLS CHUNK(COOKIE ECHO)]---------->|   | Using SCTP
+    |<--------[DTLS CHUNK(COOKIE ACK)]------------+   | Chunks
+    |                                             |   +-------
     |                                             | -'
 
 ~~~~~~~~~~~
@@ -481,7 +484,7 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.
 
-The transport of INIT, INIT-ACK COOCKIE-ECHO, COOCKIE-ACK by means of
+The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP state machine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
@@ -508,13 +511,14 @@ after any old in-flight restart packets will have been received.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
-restart the Association using unprotected INIT chunk. The effect
-will be that the restart initiator will have its packet being dropped
-until the peer nodes times out the SCTP Association from lack
-of any response from the restarting node.
+restart the Association. The effect
+will be that the restart initiator will receive INIT-ACK back
+but then COOCKE-ECHO will be dropped until the peer nodes times
+out the SCTP Association from lack of any response from the
+restarting node.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
-in an SCTP Association using DTLS Chunks, when receiving an INIT
+in an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
 chunk protected by DTLS chunk as described in {{protected-restart}},
 thus having the R bit (Restart Indicator) set in the DTLS Chunk (see
 {{sctp-DTLS-chunk-newchunk-crypt-struct}}), will silently discard it.
