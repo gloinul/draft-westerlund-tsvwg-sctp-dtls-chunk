@@ -206,9 +206,8 @@ The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
-common header, the SCTP DTLS chunk header, the INIT and INIT-ACK
-chunks during an SCTP Restart procedure and the SHUTDOWN-COMPLETE
-chunk.
+common header, the SCTP DTLS chunk header, and the INIT and INIT-ACK
+chunks during an SCTP Restart procedure.
 
 The support of the DTLS chunk and the key-management method to use is
 negotiated by the peers at the setup of the SCTP association using a
