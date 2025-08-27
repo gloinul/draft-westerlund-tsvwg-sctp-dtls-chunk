@@ -659,6 +659,7 @@ Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
+
 # Error Handling {#error_handling}
 
 This specification introduces a new set of error causes that are to be
