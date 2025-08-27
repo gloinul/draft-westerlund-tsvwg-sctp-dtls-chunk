@@ -1,5 +1,5 @@
 ---
-docname: draft-westerlund-tsvwg-sctp-dtls-chunk-latest
+docname: draft-ietf-tsvwg-sctp-dtls-chunk-latest
 title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
 abbrev: SCTP DTLS Chunk
 obsoletes:
