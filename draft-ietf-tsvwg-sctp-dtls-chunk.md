@@ -206,8 +206,7 @@ The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
-common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
-chunk.
+common header, and the the SCTP DTLS chunk header.
 
 The support of the DTLS chunk and the key-management method to use is
 negotiated by the peers at the setup of the SCTP association using a
@@ -660,6 +659,7 @@ Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
+
 # Error Handling {#error_handling}
 
 This specification introduces a new set of error causes that are to be
@@ -854,10 +854,13 @@ prevention the endpoints can know that down-grade did not happen.
 Besides the procedures for terminating an association explained in
 {{RFC9260}}, DTLS 1.3 SHALL ask SCTP endpoint for terminating an
 association when having an internal error or by detecting a security
-violation.  During the termination procedure all Control Chunks SHALL
-be protected except SHUTDOWN-COMPLETE. The internal design of
-Protection Engines and their capability is out of the scope of the
-current document.
+violation. Note that the closure of the DTLS1.3 connection doesn't
+compromise the capability of sending and receiving protected
+SHUTDOWN-COMPLETE chunks as that capability only relies on the
+Key Context and not on the DTLS1.3 connection from where it has
+been derived.
+The internal design of Protection Engines and their
+capability is out of the scope of the current document.
 
 ## Considerations on Key Management {#key-management-considerations}
 
