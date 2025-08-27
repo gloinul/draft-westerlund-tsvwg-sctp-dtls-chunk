@@ -1608,8 +1608,7 @@ encapsulated in a SCTP chunk which is named the DTLS chunk.<a href="#section-3.1
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
-common header, the SCTP DTLS chunk header, and the SHUTDOWN-COMPLETE
-chunk.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+common header, and the the SCTP DTLS chunk header.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.1-5">The support of the DTLS chunk and the key-management method to use is
 negotiated by the peers at the setup of the SCTP association using a
 new parameter. Key management and application traffic is multiplexed
@@ -2642,10 +2641,13 @@ prevention the endpoints can know that down-grade did not happen.<a href="#secti
 <p id="section-7.2-1">Besides the procedures for terminating an association explained in
 <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, DTLS 1.3 SHALL ask SCTP endpoint for terminating an
 association when having an internal error or by detecting a security
-violation.  During the termination procedure all Control Chunks SHALL
-be protected except SHUTDOWN-COMPLETE. The internal design of
-Protection Engines and their capability is out of the scope of the
-current document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+violation. Note that the closure of the DTLS1.3 connection doesn't
+compromise the capability of sending and receiving protected
+SHUTDOWN-COMPLETE chunks as that capability only relies on the
+Key Context and not on the DTLS1.3 connection from where it has
+been derived.
+The internal design of Protection Engines and their
+capability is out of the scope of the current document.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-management-considerations">
