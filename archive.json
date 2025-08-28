@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-20T01:21:12.209114+00:00",
+  "timestamp": "2025-08-28T01:03:58.150011+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -903,17 +903,18 @@
       "id": "I_kwDOKszxDc6_Kaf7",
       "title": "Why is the SHUTDOWN COMPLETE chunk sent unprotected",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/48",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "tuexen"
+        "tuexen",
+        "teiclap"
       ],
       "labels": [],
       "body": "",
       "createdAt": "2025-07-07T00:03:04Z",
-      "updatedAt": "2025-07-07T12:19:26Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-27T08:13:42Z",
+      "closedAt": "2025-08-27T08:13:42Z",
       "comments": [
         {
           "author": "gloinul",
@@ -921,6 +922,13 @@
           "body": "Without diving deeply into RFC 9260. I think my motivation for not protecting this is that there are some cases where you have dropped all main state for an association, and only have a minimal state kept. Thus, I wanted to ensure that in this minimal state case that one can process the packet without having to hand on to the key contexts.\n\nLets looks more closely on this after draft dead line. ",
           "createdAt": "2025-07-07T12:19:26Z",
           "updatedAt": "2025-07-07T12:19:26Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "As the key context exists even after the DTLS connection has been dropped, the SCTP Association has enough information to handle it encrypted. I am going to fix the text about",
+          "createdAt": "2025-08-26T10:10:56Z",
+          "updatedAt": "2025-08-26T10:10:56Z"
         }
       ]
     },
@@ -2587,6 +2595,103 @@
           "body": "",
           "createdAt": "2025-07-07T15:32:09Z",
           "updatedAt": "2025-07-07T15:32:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "id": "PR_kwDOKszxDc6lYN9V",
+      "title": "Issue #43: Reverted to use unencrypted INIT/INIT-ACK for Restart",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/58",
+      "state": "MERGED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-08-26T10:08:23Z",
+      "updatedAt": "2025-08-27T08:13:17Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4fd27cf956ab0a103b0279a4c46b05b1e4107f00",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue43",
+      "headRefOid": "822436a81bb996fee1ef9afd11b240965b1636f0",
+      "closedAt": "2025-08-27T08:13:17Z",
+      "mergedAt": "2025-08-27T08:13:17Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "4336c3beb26e1526aa82e8e57626ddd68f97a1f4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc68RF5W",
+          "commit": {
+            "abbreviatedOid": "46e6f5f"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T07:04:34Z",
+          "updatedAt": "2025-08-27T07:04:34Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDOKszxDc6lYdI5",
+      "title": "Fixed issue #48 in the text",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/59",
+      "state": "MERGED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-08-26T10:31:54Z",
+      "updatedAt": "2025-08-27T07:33:17Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "eabb4b5102c6a6c83c2dd958b28086961c8f9d3e",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue48",
+      "headRefOid": "83e73247bda71bca04280d804f2c7d7d77282d1c",
+      "closedAt": "2025-08-27T07:33:17Z",
+      "mergedAt": "2025-08-27T07:33:17Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "4fd27cf956ab0a103b0279a4c46b05b1e4107f00"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc68LRTd",
+          "commit": {
+            "abbreviatedOid": "63259cd"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-26T19:41:36Z",
+          "updatedAt": "2025-08-26T19:41:36Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc68RBxb",
+          "commit": {
+            "abbreviatedOid": "63259cd"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T06:59:22Z",
+          "updatedAt": "2025-08-27T06:59:22Z",
           "comments": []
         }
       ]
