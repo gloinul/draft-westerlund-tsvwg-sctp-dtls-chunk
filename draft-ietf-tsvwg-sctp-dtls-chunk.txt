@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 28 February 2026                                       Ericsson
+Expires: 6 March 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                          27 August 2025
+                                                        2 September 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 February 2026.
+   This Internet-Draft will expire on 6 March 2026.
 
 Copyright Notice
 
@@ -256,10 +256,8 @@ Table of Contents
    chunks of an SCTP packet.  Information protection is kept during the
    lifetime of the association and no information is sent unprotected
    except the initial SCTP handshake, any initial key-management
-   traffic, the SCTP <<<<<<< HEAD common header, the SCTP DTLS chunk
-   header, and the INIT and INIT-ACK chunks during an SCTP Restart
-   procedure. ======= common header, and the the SCTP DTLS chunk header.
-   >>>>>>> main
+   traffic, the SCTP common header, the SCTP DTLS chunk header, and the
+   INIT and INIT-ACK chunks during an SCTP Restart procedure.
 
    The support of the DTLS chunk and the key-management method to use is
    negotiated by the peers at the setup of the SCTP association using a
