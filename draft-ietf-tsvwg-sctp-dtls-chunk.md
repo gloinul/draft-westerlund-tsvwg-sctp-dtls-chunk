@@ -752,8 +752,8 @@ If the responder to do not support any of the protection solutions
 offered by the association initiator in the Protection Soluiton
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
-including the error cause "Error in DTLS Chunk" {{eprotect}} and
-containing the Extra Cause "No Common Protection Solution".
+including the error cause "No Common Protection" (TBA11)
+(see. {{SCTP-new-errors}}).
 
 
 ## Critical Error from DTLS {#eengine}
@@ -798,11 +798,10 @@ containing the selected protection solution out of the set of supported
 ones. In case there are no common set of supported solutions that are
 accepted by the responder, and the endpoints policy require secured
 association it SHALL reply with an ABORT chunk, include the error
-cause "Error in DTLS Chunk" {{eprotect}} and containing the Extra
-Cause "No Common Protection Solution" {{enocommonpsi}}. Otherwise, the
-responder MAY send an INIT-ACK without the DTLS 1.3 Chunk Protected
-Association parameter to indicate it is willing to create a session
-without security.
+cause "No Common Protection" (TBA11) (see {{SCTP-new-errors}}).
+Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
+Chunk Protected Association parameter to indicate it is willing
+to create a session without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
@@ -1301,34 +1300,10 @@ Parameters group:
 
 *  One new SCTP Chunk Parameter Type
 
-*  One new SCTP Error Cause Code
+*  Three new SCTP Error Cause Code
 
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
-
-## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
-
-IANA is requested to create a new registry called "Protection Error
-Cause Codes". This registry is part of the Stream Control Transmission
-Protocol (SCTP) Parameters grouping.
-
-The purpose of this registry is to enable identification of different
-protection related errors when using DTLS chunk and a protection
-engine.  Entries in the registry requires a Meaning, a reference to
-the specification defining the error, and a contact. Each entry will
-be assigned by IANA a unique 16-bit unsigned integer
-identifier. Values 0-65534 are available for assignment. Value 65535
-is reserved for future extension. The proposed general form of the
-registry is depicted below in {{iana-protection-error-cause}}.
-
-| Cause Code | Meaning | Reference | Contact |
-| 0 | No Common Protection Solution | RFC-To-Be | Authors |
-| 1-65534 | Available for Assignment | RFC-To-Be | Authors |
-| 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-error-cause title="Protection Error Cause Code" cols="r l l l"}
-
-New entries are registered following the Specification Required policy
-as defined by {{RFC8126}}.
 
 ## SCTP Protection Solution Identifiers {#IANA-Protection-Solution-ID}
 
@@ -1394,6 +1369,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 | ID Value | Error Cause Codes | Reference |
 | TBA9 | DTLS Chunk Error | RFC-To-Be |
 | TBA10 | Policy Not Met | RFC-To-Be |
+| TBA11 | No Common Protection | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
