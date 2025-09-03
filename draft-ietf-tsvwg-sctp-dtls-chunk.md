@@ -672,12 +672,12 @@ additional information.
 When an initiator SCTP endpoint sends an INIT chunk that doesn't
 contain the DTLS 1.3 Chunk Protected Association or other protection
 solutions towards an SCTP endpoint that only accepts protected
-associations, the responder endpoint SHALL raise a Missing Mandatory
-Parameter error. The ERROR chunk will contain the cause code 'Missing
-Mandatory Parameter' (2) (see {{RFC9260}} Section 3.3.10.7) and the
-DTLS 1.3 chunk protected association parameter identifier
-{{protectedassoc-parameter}} in the missing param Information
-field. It may also include additional parameters representing other
+associations, the responder endpoint SHALL raise a Policy Not Met
+error. The ERROR chunk will contain the cause code 'Policy Not Met' (TBA10)
+(see {{SCTP-new-errors}} and the DTLS 1.3 chunk protected association
+parameter identifier {{protectedassoc-parameter}} in the missing
+param Information field.
+It may also include additional parameters representing other
 supported protection mechanisms that are acceptable per endpoint
 security policy.
 
@@ -1382,7 +1382,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 {: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
 
 
-## SCTP Error Cause Codes
+## SCTP Error Cause Codes {#SCTP-new-errors}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
@@ -1393,6 +1393,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 
 | ID Value | Error Cause Codes | Reference |
 | TBA9 | DTLS Chunk Error | RFC-To-Be |
+| TBA10 | Policy Not Met | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
