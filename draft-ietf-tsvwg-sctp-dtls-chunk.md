@@ -674,7 +674,7 @@ contain the DTLS 1.3 Chunk Protected Association or other protection
 solutions towards an SCTP endpoint that only accepts protected
 associations, the responder endpoint SHALL raise a Policy Not Met
 error. The ERROR chunk will contain the cause code 'Policy Not Met' (TBA10)
-(see {{SCTP-new-errors}} and the DTLS 1.3 chunk protected association
+(see {{IANA-Extra-Cause}} and the DTLS 1.3 chunk protected association
 parameter identifier {{protectedassoc-parameter}} in the missing
 param Information field.
 It may also include additional parameters representing other
@@ -753,7 +753,7 @@ offered by the association initiator in the Protection Soluiton
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
 including the error cause "No Common Protection" (TBA11)
-(see. {{SCTP-new-errors}}).
+(see {{IANA-Extra-Cause}}).
 
 
 ## Critical Error from DTLS {#eengine}
@@ -798,7 +798,7 @@ containing the selected protection solution out of the set of supported
 ones. In case there are no common set of supported solutions that are
 accepted by the responder, and the endpoints policy require secured
 association it SHALL reply with an ABORT chunk, include the error
-cause "No Common Protection" (TBA11) (see {{SCTP-new-errors}}).
+cause "No Common Protection" (TBA11) (see {{IANA-Extra-Cause}}).
 Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
 Chunk Protected Association parameter to indicate it is willing
 to create a session without security.
@@ -1357,7 +1357,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 {: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
 
 
-## SCTP Error Cause Codes {#SCTP-new-errors}
+## SCTP Error Cause Codes {#IANA-Extra-Cause}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
