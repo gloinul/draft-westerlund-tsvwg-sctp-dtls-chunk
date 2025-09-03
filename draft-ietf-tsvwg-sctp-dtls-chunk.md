@@ -672,8 +672,9 @@ additional information.
 When an initiator SCTP endpoint sends an INIT chunk that doesn't
 contain the DTLS 1.3 Chunk Protected Association or other protection
 solutions towards an SCTP endpoint that only accepts protected
-associations, the responder endpoint SHALL raise a Policy Not Met
-error. The ERROR chunk will contain the cause code 'Policy Not Met' (TBA10)
+associations, SCTP will send an ABORT
+chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}
+including the error cause 'Policy Not Met' (TBA10)
 (see {{IANA-Extra-Cause}} and the DTLS 1.3 chunk protected association
 parameter identifier {{protectedassoc-parameter}} in the missing
 param Information field.
