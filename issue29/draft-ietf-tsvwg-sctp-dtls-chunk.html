@@ -1924,8 +1924,7 @@ storage.<a href="#section-3.9.1-7" class="pilcrow">¶</a></p>
 used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9.1-9" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-10">The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9.1-10" class="pilcrow">¶</a></p>
+previously validated.<a href="#section-3.9.1-10" class="pilcrow">¶</a></p>
 <p id="section-3.9.1-11">A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
