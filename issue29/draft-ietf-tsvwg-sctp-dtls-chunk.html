@@ -1265,6 +1265,9 @@ features provided by SCTP and its extensions but with some limitations.<a href="
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.1">
                     <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-offering-multiple-security-" class="internal xref">Offering Multiple Security Solutions</a></p>
 </li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.2">
+                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-considerations-about-plain-" class="internal xref">Considerations about plain packets during handshake</a></p>
+</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
@@ -2631,6 +2634,40 @@ solutions that can be used simultaneously and include them in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="considerations-about-plain-packets-during-handshake">
+<section id="section-7.1.2">
+          <h4 id="name-considerations-about-plain-">
+<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-considerations-about-plain-" class="section-name selfRef">Considerations about plain packets during handshake</a>
+          </h4>
+<p id="section-7.1.2-1">The SCTP Endpoint will need to be able dealing with packets
+in plain text format or using DTLS Encrypted chunks during the
+Association's life time.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-2">At Association initialization, INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK
+are sent as plain text.
+SCTP allows bundling of DATA chunks with COOCKIE-ACK, here we consider
+DATA chunks with CID=4242 used by DTLS for initial handshaking
+being protected by DTLS, thus from a SCTP perspective the Association
+is being ran unprotected.
+SACK chunks as well as HB/HB-ACK chunks and any other CONTROL chunk
+is being sent as plain text.<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-3">As soon as DTLS has completed the handshake, the EP peers
+will be able setting the DTLS Key context independently.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-4">Once the DTLS Key contexts are set, EP peers still will be able
+sending and receiving plain CONTROL chunks, but not further DATA chunks.<a href="#section-7.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-5">At this time, peers will start sending encrypted HB chunks
+and replying to the peer's HB with encrypted HB-ACK.<a href="#section-7.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-6">Once HB-ACK hasb been received, the EP will discard all non encrypted
+traffic with the exception of the INIT chunks that may belong
+to a SCTP Restart request.<a href="#section-7.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-7">The case of SCTP Restart is triggered by a plain text INIT chunk,
+that shall be replied with a plain text INIT-ACK chunk. No other
+plain text CONTROL or DATA chunk is accepted at this time.
+The following COOCKIE-ECHO/COOKIE-ACK handshake is sent encrypted
+using the Reset Key Context. Since the EP peers have
+been already authenticated at Association initialization,
+there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
