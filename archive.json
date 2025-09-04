@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-28T01:03:58.150011+00:00",
+  "timestamp": "2025-09-04T01:01:06.534274+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -784,21 +784,37 @@
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "tuexen"
+        "tuexen",
+        "teiclap"
       ],
       "labels": [],
       "body": "I think we can't use the 'Missing Mandatory Parameter' error cause. The parameter is not mandatory but optional to negotiate the extension we are specifying. It is used for missing cookies.",
       "createdAt": "2025-07-06T10:29:27Z",
-      "updatedAt": "2025-07-06T10:29:27Z",
+      "updatedAt": "2025-09-03T07:56:17Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am going to work on that",
+          "createdAt": "2025-09-03T07:15:04Z",
+          "updatedAt": "2025-09-03T07:15:04Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We will define a new Error Cause \"Policy not met\". I am working on the text.",
+          "createdAt": "2025-09-03T07:29:37Z",
+          "updatedAt": "2025-09-03T07:56:17Z"
+        }
+      ]
     },
     {
       "number": 43,
       "id": "I_kwDOKszxDc6_HYvh",
       "title": "Protected restart",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/43",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -808,8 +824,8 @@
       "labels": [],
       "body": "I think we need to go back to unprotected INIT and INIT ACK chunks. The reason is that the protected INIT chunk would result in an SCTP packet with verification tag 0 but the first chunk not being an INIT chunk.\nThis would violate\n```\nAccordingly, we stress the requirements, as stated in Section 3.1, that\n(1) an INIT chunk MUST NOT be bundled with any other chunk in a packet and \n(2) a packet containing an INIT chunk MUST have a zero Verification Tag.\n```\nfrom [RFC 9260](https://www.rfc-editor.org/rfc/rfc9260.html#section-12.3)",
       "createdAt": "2025-07-06T10:40:51Z",
-      "updatedAt": "2025-07-07T17:54:14Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-02T14:31:38Z",
+      "closedAt": "2025-09-02T14:31:38Z",
       "comments": [
         {
           "author": "gloinul",
@@ -838,6 +854,27 @@
           "body": "> Hi, I remember that the proposal of plain INIT/INIT-ACK was long and difficult, and at the end I forgot one of the key reasons ;-)\n> \n> Before reverting we may think wider:\n> \n> * Have an exemption to the rule, because this is a special-purpose INIT\n\nThat is possible. I just wanted to see if we need this.\n> * Make use of another RESTART/RESTART-ACK pair of new Chunks\n\nI am hesitant to go down that road, since right now I do not see why this complexity is needed.\n> * Go directly to COOKIE-ECHO/COOKIE-ACK instead of INIT\n\nThe question is which cookie to send back. If you cached it, is it still valid (lifetime not expired).\n> \n> I'd keep this for an ad hoc discussion.\n\nI agree.",
           "createdAt": "2025-07-07T17:54:14Z",
           "updatedAt": "2025-07-07T17:54:14Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So the reason for reverting back to unprotected restart are:\nvtag in init must be 0, thus can't point to the relevant association context and make it through firewalls. Thus, to avoid having impact on this for firewalls we can leave it unprotected. And then perform the mapping the restart anyway requires to the old association and related security context. Then use that to enable encryption using restart context for the association on the cookie echo and cookie ack. ",
+          "createdAt": "2025-09-02T13:09:07Z",
+          "updatedAt": "2025-09-02T13:09:07Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen do you agree that this issue can be closed?",
+          "createdAt": "2025-09-02T13:14:42Z",
+          "updatedAt": "2025-09-02T13:14:42Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes.",
+          "createdAt": "2025-09-02T14:31:38Z",
+          "updatedAt": "2025-09-02T14:31:38Z"
         }
       ]
     },
@@ -986,9 +1023,17 @@
       "labels": [],
       "body": "Once the key management document, which is planned to become a WG document, has been submitted, add reference to it. We need to discuss how to deal with references to the Ericsson document.",
       "createdAt": "2025-07-07T12:44:04Z",
-      "updatedAt": "2025-07-07T12:44:06Z",
+      "updatedAt": "2025-09-02T14:47:10Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I think we can start off with an informational reference for an example of another solution using the DTLS chunk. Closer to the WG last call this can be re-evaluate this. But initially I think there is good for people to be able to have the reference available to an alternative that shows that the DTLS chunk has been defined to work with multiple key-managements.\n",
+          "createdAt": "2025-09-02T14:47:10Z",
+          "updatedAt": "2025-09-02T14:47:10Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2695,6 +2740,68 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOKszxDc6mmLxr",
+      "title": "New \"Policy not met\" ERROR when parameter missing",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/60",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-09-03T08:12:29Z",
+      "updatedAt": "2025-09-03T13:33:43Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue42",
+      "headRefOid": "0fa1650001e68bf9bb783d2c4bf711b3bb135bce",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This commit also fixes the issue #40 ",
+          "createdAt": "2025-09-03T08:33:23Z",
+          "updatedAt": "2025-09-03T08:33:23Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Question: What is the intended behavior if one side wants to use the DTLS chunk and the other not? I see two options:\r\n1. Get the association up and the application decide whether it is acceptable to continue without the protection or not.\r\n2. Ensure that the SCTP layer prohibits the establishment of the association.\r\nIf we can to use the second option, the response to an INIT chunk can't be an ERROR chunk but must be an ABORT chunk.",
+          "createdAt": "2025-09-03T11:33:09Z",
+          "updatedAt": "2025-09-03T11:33:09Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Question: What is the intended behavior if one side wants to use the DTLS chunk and the other not? I see two options:\r\n> \r\n> 1. Get the association up and the application decide whether it is acceptable to continue without the protection or not.\r\n> 2. Ensure that the SCTP layer prohibits the establishment of the association.\r\n>    If we can to use the second option, the response to an INIT chunk can't be an ERROR chunk but must be an ABORT chunk.\r\n\r\nI was wondering if the correct behavior would rather be that if the Endpoint doesn't accept unprotected INIT, it may silently discard it.\r\n\r\nAnyhow I don't support 1. I can easily fix 2.",
+          "createdAt": "2025-09-03T11:38:04Z",
+          "updatedAt": "2025-09-03T11:38:04Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This is where the server endpoint should have a policy set that determine if the ULP requires DTLS security or can accept no security or some other fallback. So if not required the association should be established without the DTLS chunk, if required then the policy not meet error should be returned. \r\n\r\n",
+          "createdAt": "2025-09-03T11:39:12Z",
+          "updatedAt": "2025-09-03T11:39:12Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I would also note that we need too be able to return both \"Policy not met\", \"No common protection solution\" as the later issue triggers the first. Where the later can if there is no require DTLS Chunk policy is in place can be returned as just an error to indicate why DTLS chunk was not returned, but the association can be established. ",
+          "createdAt": "2025-09-03T11:42:32Z",
+          "updatedAt": "2025-09-03T11:45:05Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
