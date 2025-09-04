@@ -482,8 +482,7 @@ used for SCTP Association Restart are transported within DTLS in SCTP.
 
 The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.
+previously validated.
 
 A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
@@ -848,6 +847,41 @@ response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.
 
+### Considerations about plain packets during handshake
+
+The SCTP Endpoint will need to be able dealing with packets
+in plain text format or using DTLS Encrypted chunks during the
+Association's life time.
+
+At Association initialization, INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK
+are sent as plain text.
+SCTP allows bundling of DATA chunks with COOCKIE-ACK, here we consider
+DATA chunks with CID=4242 used by DTLS for initial handshaking
+being protected by DTLS, thus from a SCTP perspective the Association
+is being ran unprotected.
+SACK chunks as well as HB/HB-ACK chunks and any other CONTROL chunk
+is being sent as plain text.
+
+As soon as DTLS has completed the handshake, the EP peers
+will be able setting the DTLS Key context independently.
+
+Once the DTLS Key contexts are set, EP peers still will be able
+sending and receiving plain CONTROL chunks, but not further DATA chunks.
+
+At this time, peers will start sending encrypted HB chunks
+and replying to the peer's HB with encrypted HB-ACK.
+
+Once HB-ACK hasb been received, the EP will discard all non encrypted
+traffic with the exception of the INIT chunks that may belong
+to a SCTP Restart request.
+
+The case of SCTP Restart is triggered by a plain text INIT chunk,
+that shall be replied with a plain text INIT-ACK chunk. No other
+plain text CONTROL or DATA chunk is accepted at this time.
+The following COOCKIE-ECHO/COOKIE-ACK handshake is sent encrypted
+using the Reset Key Context. Since the EP peers have
+been already authenticated at Association initialization,
+there's no need for further handshake.
 
 ## Termination of a Protected Association {#termination-procedure}
 
@@ -1006,6 +1040,9 @@ Parameters :
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
 
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
+
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
@@ -1045,6 +1082,9 @@ Parameters :
 
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
+
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
@@ -1210,7 +1250,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
 
 * Configuration parameters
 
