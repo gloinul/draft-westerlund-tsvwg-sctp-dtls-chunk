@@ -1006,6 +1006,9 @@ Parameters :
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
 
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
+
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
@@ -1045,6 +1048,9 @@ Parameters :
 
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
+
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
@@ -1210,7 +1216,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
 
 * Configuration parameters
 
