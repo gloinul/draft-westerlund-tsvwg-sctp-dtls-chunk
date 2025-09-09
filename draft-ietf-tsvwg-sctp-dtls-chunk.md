@@ -847,41 +847,71 @@ response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.
 
-### Considerations about plain packets during handshake
+### Considerations about handshake over the API
 
-The SCTP Endpoint will need to be able dealing with packets
-in plain text format or using DTLS Encrypted chunks during the
-Association's life time.
+Here it's assumed that the SCTP User has properly configured
+the Protection Operator before using.
 
-At Association initialization, INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK
-are sent as plain text.
-SCTP allows bundling of DATA chunks with COOCKIE-ACK, here we consider
-DATA chunks with CID=4242 used by DTLS for initial handshaking
-being protected by DTLS, thus from a SCTP perspective the Association
-is being ran unprotected.
-SACK chunks as well as HB/HB-ACK chunks and any other CONTROL chunk
-is being sent as plain text.
+SCTP and Protection Operator contribute in creating the
+DTLS Chunks solution via the API, thus SCTP Chunk availability
+for the SCTP User depends on Protection Operator to comply
+with the required primitives.
 
-As soon as DTLS has completed the handshake, the EP peers
-will be able setting the DTLS Key context independently.
+At the Association Initiation, pure SCTP handshake happens, that is
+INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK. At this time those
+Control Chunks are sent as plain text.
 
-Once the DTLS Key contexts are set, EP peers still will be able
-sending and receiving plain CONTROL chunks, but not further DATA chunks.
+As soon as Association Initiation is complete, the Association
+Initiator and the Association Responder will inform the Protection
+Operator that the Association is UP. This information includes
+the INIT Parameters related to the Protecion, as a list with
+in preferred order (see {{protectedassoc-parameter}}).
 
-At this time, peers will start sending encrypted HB chunks
-and replying to the peer's HB with encrypted HB-ACK.
+At the Association Initiator the Protection Operator will initiate
+the handshaking and will derive the Client and Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+As soon as the Key Contexts are ready, they are stored in the Chunk
+Protection Operator.
 
-Once HB-ACK hasb been received, the EP will discard all non encrypted
-traffic with the exception of the INIT chunks that may belong
-to a SCTP Restart request.
+At the Association Responder, the Protection Operator will
+participate to the handshaking and will derive the Client Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order from the Association Initiator
+and the INIT parameter selected by the Association Responder.
+As soon as the Client Key Contexts are ready, they are stored in the Chunk
+Protection Operator.
 
-The case of SCTP Restart is triggered by a plain text INIT chunk,
-that shall be replied with a plain text INIT-ACK chunk. No other
-plain text CONTROL or DATA chunk is accepted at this time.
-The following COOCKIE-ECHO/COOKIE-ACK handshake is sent encrypted
-using the Reset Key Context. Since the EP peers have
-been already authenticated at Association initialization,
-there's no need for further handshake.
+At that point, the Association Initiator can send Encrypted DATA
+Chunk to the Association Responder, but not vice-versa.
+The Association can still handle plain text Control Chunks and
+DATA using Pid=4242.
+
+The Protection Operator at the Association Initiator will send
+a DTLS FINISHED message by using Pid=4242 but encrypting it
+in a DTLS Chunk. This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Responder site
+with the Client Key Context.
+
+If there was no corruption in the handhshake and no downgrade
+attempts, the Protection Operator at the Association Responder
+will be able deriving the Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+It will then store these Key Contexts in the Chunk
+Protection Operator at the Responder Site.
+The Protection Operator will send a DTLS ACK message by using Pid=4242
+but encrypting it in a DTLS Chunk.
+This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Initiator site
+with the Client Key Context.
+
+When sending the DTLS ACK message, the Association Responder will
+stop handling any plain text chunk, except than INIT.
+The Association Initiator will do the same at reception of that
+DTLS ACK message.
 
 ~~~~~~~~~~~ aasvg
 
@@ -889,7 +919,7 @@ Initiator
 ---------
 
         SCTP                                   Protection
-         |                                       Engine
+         |                                      Operator
          |                                         |
  .-------+-------.                                 |
 |                 |                                |
@@ -923,7 +953,7 @@ Responder
 ---------
 
         SCTP                                   Protection
-         |                                       Engine
+         |                                      Operator
          |                                         |
  .-------+-------.                                 |
 |                 |                                |
