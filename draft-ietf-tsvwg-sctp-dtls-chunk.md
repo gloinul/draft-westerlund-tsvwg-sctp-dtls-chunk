@@ -482,8 +482,7 @@ used for SCTP Association Restart are transported within DTLS in SCTP.
 
 The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.
+previously validated.
 
 A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
@@ -848,6 +847,148 @@ response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.
 
+### Considerations about handshake over the API
+
+Here it's assumed that the SCTP User has properly configured
+the Protection Operator before using.
+
+SCTP and Protection Operator contribute in creating the
+DTLS Chunks solution via the API, thus SCTP Chunk availability
+for the SCTP User depends on Protection Operator to comply
+with the required primitives.
+
+At the Association Initiation, pure SCTP handshake happens, that is
+INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK. At this time those
+Control Chunks are sent as plain text.
+
+As soon as Association Initiation is complete, the Association
+Initiator and the Association Responder will inform the Protection
+Operator that the Association is UP. This information includes
+the INIT Parameters related to the Protecion, as a list with
+in preferred order (see {{protectedassoc-parameter}}).
+
+At the Association Initiator the Protection Operator will initiate
+the handshaking and will derive the Client and Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+As soon as the Key Contexts are ready, they are stored in the Chunk
+Protection Operator.
+
+At the Association Responder, the Protection Operator will
+participate to the handshaking and will derive the Client Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order from the Association Initiator
+and the INIT parameter selected by the Association Responder.
+As soon as the Client Key Contexts are ready, they are stored in the Chunk
+Protection Operator.
+
+At that point, the Association Initiator can send Encrypted DATA
+Chunk to the Association Responder, but not vice-versa.
+The Association can still handle plain text Control Chunks and
+DATA using Pid=4242.
+
+The Protection Operator at the Association Initiator will send
+a DTLS FINISHED message by using Pid=4242 but encrypting it
+in a DTLS Chunk. This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Responder site
+with the Client Key Context.
+
+If there was no corruption in the handhshake and no downgrade
+attempts, the Protection Operator at the Association Responder
+will be able deriving the Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+It will then store these Key Contexts in the Chunk
+Protection Operator at the Responder Site.
+The Protection Operator will send a DTLS ACK message by using Pid=4242
+but encrypting it in a DTLS Chunk.
+This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Initiator site
+with the Client Key Context.
+
+When sending the DTLS ACK message, the Association Responder will
+stop handling any plain text chunk, except than INIT.
+The Association Initiator will do the same at reception of that
+DTLS ACK message.
+
+~~~~~~~~~~~ aasvg
+
+Initiator
+---------
+
+        SCTP                                   Protection
+         |                                      Operator
+         |                                         |
+ .-------+-------.                                 |
+|                 |                                |
+|  INIT/INIT-ACK  |                                |
+|  COOCKIE/C-ACK  |                                |
+|                 |                                |
+ '-------+-------'                                 |
+         |             Association UP              |
+         +---------------------------------------->|
+         |           With INIT Parameters          |
+         |                                 .-------+-------.
+         |                                |    Protection   |
+         |                                |    Connection   |
+         |                                |    Handshake    |
+         |                                |    .........    |
+         |                                |   Export Keys   |
+         |                                 '-------+-------'
+         |  Establish Client Write Keying Material |
+         |<----------------------------------------+
+         |  Establish Server Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |                                 .-------+-------.
+         |                                |  Validate Keys  |
+         |                                 '-------+-------'
+         |        Association Ready for DATA       |
+         |<----------------------------------------+
+         |                                         |
+
+Responder
+---------
+
+        SCTP                                   Protection
+         |                                      Operator
+         |                                         |
+ .-------+-------.                                 |
+|                 |                                |
+|  INIT/INIT-ACK  |                                |
+|  COOCKIE/C-ACK  |                                |
+|                 |                                |
+ '-------+-------'                                 |
+         |             Association UP              |
+         +---------------------------------------->|
+         |           With INIT Parameters          |
+         |                                 .-------+-------.
+         |                                |    Protection   |
+         |                                |    Connection   |
+         |                                |    Handshake    |
+         |                                |    .........    |
+         |                                |  Export Client  |
+         |                                |      Keys       |
+         |                                 '-------+-------'
+         |  Establish Client Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |                                 .-------+-------.
+         |                                |  Validate Keys  |
+         |                                |    .........    |
+         |                                |  Export Server  |
+         |                                |      Keys       |
+         |                                 '-------+-------'
+         |  Establish Server Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |        Association Ready for DATA       |
+         |<----------------------------------------+
+         |                                         |
+~~~~~~~~~~~
+{: #DTLS-API-init title="Initialization Phase on API" artwork-align="center"}
 
 ## Termination of a Protected Association {#termination-procedure}
 
@@ -1006,6 +1147,9 @@ Parameters :
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
 
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
+
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
@@ -1045,6 +1189,9 @@ Parameters :
 
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
+
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
@@ -1210,7 +1357,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
 
 * Configuration parameters
 
