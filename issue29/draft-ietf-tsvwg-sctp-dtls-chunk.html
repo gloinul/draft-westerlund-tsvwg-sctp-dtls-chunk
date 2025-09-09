@@ -1266,7 +1266,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                     <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-offering-multiple-security-" class="internal xref">Offering Multiple Security Solutions</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.2">
-                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-considerations-about-plain-" class="internal xref">Considerations about plain packets during handshake</a></p>
+                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-considerations-about-handsh" class="internal xref">Considerations about handshake over the API</a></p>
 </li>
                 </ul>
 </li>
@@ -2635,42 +2635,69 @@ Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="considerations-about-plain-packets-during-handshake">
+<div id="considerations-about-handshake-over-the-api">
 <section id="section-7.1.2">
-          <h4 id="name-considerations-about-plain-">
-<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-considerations-about-plain-" class="section-name selfRef">Considerations about plain packets during handshake</a>
+          <h4 id="name-considerations-about-handsh">
+<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-considerations-about-handsh" class="section-name selfRef">Considerations about handshake over the API</a>
           </h4>
-<p id="section-7.1.2-1">The SCTP Endpoint will need to be able dealing with packets
-in plain text format or using DTLS Encrypted chunks during the
-Association's life time.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-2">At Association initialization, INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK
-are sent as plain text.
-SCTP allows bundling of DATA chunks with COOCKIE-ACK, here we consider
-DATA chunks with CID=4242 used by DTLS for initial handshaking
-being protected by DTLS, thus from a SCTP perspective the Association
-is being ran unprotected.
-SACK chunks as well as HB/HB-ACK chunks and any other CONTROL chunk
-is being sent as plain text.<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-3">As soon as DTLS has completed the handshake, the EP peers
-will be able setting the DTLS Key context independently.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-4">Once the DTLS Key contexts are set, EP peers still will be able
-sending and receiving plain CONTROL chunks, but not further DATA chunks.<a href="#section-7.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-5">At this time, peers will start sending encrypted HB chunks
-and replying to the peer's HB with encrypted HB-ACK.<a href="#section-7.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-6">Once HB-ACK hasb been received, the EP will discard all non encrypted
-traffic with the exception of the INIT chunks that may belong
-to a SCTP Restart request.<a href="#section-7.1.2-6" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-7">The case of SCTP Restart is triggered by a plain text INIT chunk,
-that shall be replied with a plain text INIT-ACK chunk. No other
-plain text CONTROL or DATA chunk is accepted at this time.
-The following COOCKIE-ECHO/COOKIE-ACK handshake is sent encrypted
-using the Reset Key Context. Since the EP peers have
-been already authenticated at Association initialization,
-there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-1">Here it's assumed that the SCTP User has properly configured
+the Protection Operator before using.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-2">SCTP and Protection Operator contribute in creating the
+DTLS Chunks solution via the API, thus SCTP Chunk availability
+for the SCTP User depends on Protection Operator to comply
+with the required primitives.<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-3">At the Association Initiation, pure SCTP handshake happens, that is
+INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK. At this time those
+Control Chunks are sent as plain text.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-4">As soon as Association Initiation is complete, the Association
+Initiator and the Association Responder will inform the Protection
+Operator that the Association is UP. This information includes
+the INIT Parameters related to the Protecion, as a list with
+in preferred order (see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>).<a href="#section-7.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-5">At the Association Initiator the Protection Operator will initiate
+the handshaking and will derive the Client and Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+As soon as the Key Contexts are ready, they are stored in the Chunk
+Protection Operator.<a href="#section-7.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-6">At the Association Responder, the Protection Operator will
+participate to the handshaking and will derive the Client Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order from the Association Initiator
+and the INIT parameter selected by the Association Responder.
+As soon as the Client Key Contexts are ready, they are stored in the Chunk
+Protection Operator.<a href="#section-7.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-7">At that point, the Association Initiator can send Encrypted DATA
+Chunk to the Association Responder, but not vice-versa.
+The Association can still handle plain text Control Chunks and
+DATA using Pid=4242.<a href="#section-7.1.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-8">The Protection Operator at the Association Initiator will send
+a DTLS FINISHED message by using Pid=4242 but encrypting it
+in a DTLS Chunk. This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Responder site
+with the Client Key Context.<a href="#section-7.1.2-8" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-9">If there was no corruption in the handhshake and no downgrade
+attempts, the Protection Operator at the Association Responder
+will be able deriving the Server Keys for
+both the Traffic and Restart Key Contexts using the list of
+INIT parameters in the preferred order and the INIT parameter
+selected by the Association Responder.
+It will then store these Key Contexts in the Chunk
+Protection Operator at the Responder Site.
+The Protection Operator will send a DTLS ACK message by using Pid=4242
+but encrypting it in a DTLS Chunk.
+This DTLS Chunk must be possible to be handled
+by the Protection Operator at the Association Initiator site
+with the Client Key Context.<a href="#section-7.1.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-10">When sending the DTLS ACK message, the Association Responder will
+stop handling any plain text chunk, except than INIT.
+The Association Initiator will do the same at reception of that
+DTLS ACK message.<a href="#section-7.1.2-10" class="pilcrow">¶</a></p>
 <span id="name-initialization-phase-on-api"></span><div id="DTLS-API-init">
 <figure id="figure-7">
-            <div id="section-7.1.2-8.1">
-              <div class="alignCenter art-svg artwork" id="section-7.1.2-8.1.1">
+            <div id="section-7.1.2-11.1">
+              <div class="alignCenter art-svg artwork" id="section-7.1.2-11.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1184" width="496" viewBox="0 0 496 1184" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,144 L 8,192" fill="none" stroke="black"></path>
                   <path d="M 8,688 L 8,736" fill="none" stroke="black"></path>
@@ -2750,7 +2777,7 @@ there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow"
                     <text x="40" y="36">Initiator</text>
                     <text x="84" y="84">SCTP</text>
                     <text x="420" y="84">Protection</text>
-                    <text x="420" y="100">Engine</text>
+                    <text x="420" y="100">Operator</text>
                     <text x="80" y="164">INIT/INIT-ACK</text>
                     <text x="80" y="180">COOCKIE/C-ACK</text>
                     <text x="232" y="228">Association</text>
@@ -2783,7 +2810,7 @@ there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow"
                     <text x="40" y="580">Responder</text>
                     <text x="84" y="628">SCTP</text>
                     <text x="420" y="628">Protection</text>
-                    <text x="420" y="644">Engine</text>
+                    <text x="420" y="644">Operator</text>
                     <text x="80" y="708">INIT/INIT-ACK</text>
                     <text x="80" y="724">COOCKIE/C-ACK</text>
                     <text x="232" y="772">Association</text>
@@ -2819,7 +2846,7 @@ there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow"
                     <text x="304" y="1140">for</text>
                     <text x="340" y="1140">DATA</text>
                   </g>
-                </svg><a href="#section-7.1.2-8.1.1" class="pilcrow">¶</a>
+                </svg><a href="#section-7.1.2-11.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
