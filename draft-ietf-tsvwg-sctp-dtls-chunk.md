@@ -883,6 +883,83 @@ using the Reset Key Context. Since the EP peers have
 been already authenticated at Association initialization,
 there's no need for further handshake.
 
+~~~~~~~~~~~ aasvg
+
+Initiator
+---------
+
+        SCTP                                   Protection
+         |                                       Engine
+         |                                         |
+ .-------+-------.                                 |
+|                 |                                |
+|  INIT/INIT-ACK  |                                |
+|  COOCKIE/C-ACK  |                                |
+|                 |                                |
+ '-------+-------'                                 |
+         |             Association UP              |
+         +---------------------------------------->|
+         |           With INIT Parameters          |
+         |                                 .-------+-------.
+         |                                |    Protection   |
+         |                                |    Connection   |
+         |                                |    Handshake    |
+         |                                |    .........    |
+         |                                |   Export Keys   |
+         |                                 '-------+-------'
+         |  Establish Client Write Keying Material |
+         |<----------------------------------------+
+         |  Establish Server Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |                                 .-------+-------.
+         |                                |  Validate Keys  |
+         |                                 '-------+-------'
+         |        Association Ready for DATA       |
+         |<----------------------------------------+
+         |                                         |
+
+Responder
+---------
+
+        SCTP                                   Protection
+         |                                       Engine
+         |                                         |
+ .-------+-------.                                 |
+|                 |                                |
+|  INIT/INIT-ACK  |                                |
+|  COOCKIE/C-ACK  |                                |
+|                 |                                |
+ '-------+-------'                                 |
+         |             Association UP              |
+         +---------------------------------------->|
+         |           With INIT Parameters          |
+         |                                 .-------+-------.
+         |                                |    Protection   |
+         |                                |    Connection   |
+         |                                |    Handshake    |
+         |                                |    .........    |
+         |                                |  Export Client  |
+         |                                |      Keys       |
+         |                                 '-------+-------'
+         |  Establish Client Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |                                 .-------+-------.
+         |                                |  Validate Keys  |
+         |                                |    .........    |
+         |                                |  Export Server  |
+         |                                |      Keys       |
+         |                                 '-------+-------'
+         |  Establish Server Write Keying Material |
+         |<----------------------------------------+
+         |                                         |
+         |        Association Ready for DATA       |
+         |<----------------------------------------+
+         |                                         |
+~~~~~~~~~~~
+{: #DTLS-API-init title="Initialization Phase on API" artwork-align="center"}
+
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
