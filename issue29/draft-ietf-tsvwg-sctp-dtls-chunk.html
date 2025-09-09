@@ -1057,7 +1057,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 8 March 2026</td>
+<td class="center">Expires 13 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1070,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-09-04" class="published">4 September 2025</time>
+<time datetime="2025-09-09" class="published">9 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-08">8 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-13">13 March 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2667,6 +2667,165 @@ The following COOCKIE-ECHO/COOKIE-ACK handshake is sent encrypted
 using the Reset Key Context. Since the EP peers have
 been already authenticated at Association initialization,
 there's no need for further handshake.<a href="#section-7.1.2-7" class="pilcrow">¶</a></p>
+<span id="name-initialization-phase-on-api"></span><div id="DTLS-API-init">
+<figure id="figure-7">
+            <div id="section-7.1.2-8.1">
+              <div class="alignCenter art-svg artwork" id="section-7.1.2-8.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1184" width="496" viewBox="0 0 496 1184" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,144 L 8,192" fill="none" stroke="black"></path>
+                  <path d="M 8,688 L 8,736" fill="none" stroke="black"></path>
+                  <path d="M 80,96 L 80,128" fill="none" stroke="black"></path>
+                  <path d="M 80,208 L 80,544" fill="none" stroke="black"></path>
+                  <path d="M 80,640 L 80,672" fill="none" stroke="black"></path>
+                  <path d="M 80,752 L 80,1168" fill="none" stroke="black"></path>
+                  <path d="M 152,144 L 152,192" fill="none" stroke="black"></path>
+                  <path d="M 152,688 L 152,736" fill="none" stroke="black"></path>
+                  <path d="M 344,288 L 344,352" fill="none" stroke="black"></path>
+                  <path d="M 344,832 L 344,912" fill="none" stroke="black"></path>
+                  <path d="M 344,1008 L 344,1056" fill="none" stroke="black"></path>
+                  <path d="M 416,112 L 416,272" fill="none" stroke="black"></path>
+                  <path d="M 416,368 L 416,464" fill="none" stroke="black"></path>
+                  <path d="M 416,496 L 416,544" fill="none" stroke="black"></path>
+                  <path d="M 416,656 L 416,816" fill="none" stroke="black"></path>
+                  <path d="M 416,928 L 416,992" fill="none" stroke="black"></path>
+                  <path d="M 416,1072 L 416,1168" fill="none" stroke="black"></path>
+                  <path d="M 488,288 L 488,352" fill="none" stroke="black"></path>
+                  <path d="M 488,832 L 488,912" fill="none" stroke="black"></path>
+                  <path d="M 488,1008 L 488,1056" fill="none" stroke="black"></path>
+                  <path d="M 8,48 L 72,48" fill="none" stroke="black"></path>
+                  <path d="M 24,128 L 136,128" fill="none" stroke="black"></path>
+                  <path d="M 24,208 L 136,208" fill="none" stroke="black"></path>
+                  <path d="M 80,240 L 408,240" fill="none" stroke="black"></path>
+                  <path d="M 360,272 L 472,272" fill="none" stroke="black"></path>
+                  <path d="M 360,368 L 472,368" fill="none" stroke="black"></path>
+                  <path d="M 88,400 L 416,400" fill="none" stroke="black"></path>
+                  <path d="M 88,432 L 416,432" fill="none" stroke="black"></path>
+                  <path d="M 360,464 L 472,464" fill="none" stroke="black"></path>
+                  <path d="M 360,496 L 472,496" fill="none" stroke="black"></path>
+                  <path d="M 88,528 L 416,528" fill="none" stroke="black"></path>
+                  <path d="M 8,592 L 72,592" fill="none" stroke="black"></path>
+                  <path d="M 24,672 L 136,672" fill="none" stroke="black"></path>
+                  <path d="M 24,752 L 136,752" fill="none" stroke="black"></path>
+                  <path d="M 80,784 L 408,784" fill="none" stroke="black"></path>
+                  <path d="M 360,816 L 472,816" fill="none" stroke="black"></path>
+                  <path d="M 360,928 L 472,928" fill="none" stroke="black"></path>
+                  <path d="M 88,960 L 416,960" fill="none" stroke="black"></path>
+                  <path d="M 360,992 L 472,992" fill="none" stroke="black"></path>
+                  <path d="M 360,1072 L 472,1072" fill="none" stroke="black"></path>
+                  <path d="M 88,1104 L 416,1104" fill="none" stroke="black"></path>
+                  <path d="M 88,1152 L 416,1152" fill="none" stroke="black"></path>
+                  <path d="M 24,128 C 15.16936,128 8,135.16936 8,144" fill="none" stroke="black"></path>
+                  <path d="M 136,128 C 144.83064,128 152,135.16936 152,144" fill="none" stroke="black"></path>
+                  <path d="M 24,208 C 15.16936,208 8,200.83064 8,192" fill="none" stroke="black"></path>
+                  <path d="M 136,208 C 144.83064,208 152,200.83064 152,192" fill="none" stroke="black"></path>
+                  <path d="M 360,272 C 351.16936,272 344,279.16936 344,288" fill="none" stroke="black"></path>
+                  <path d="M 472,272 C 480.83064,272 488,279.16936 488,288" fill="none" stroke="black"></path>
+                  <path d="M 360,368 C 351.16936,368 344,360.83064 344,352" fill="none" stroke="black"></path>
+                  <path d="M 472,368 C 480.83064,368 488,360.83064 488,352" fill="none" stroke="black"></path>
+                  <path d="M 360,464 C 351.16936,464 344,471.16936 344,480" fill="none" stroke="black"></path>
+                  <path d="M 472,464 C 480.83064,464 488,471.16936 488,480" fill="none" stroke="black"></path>
+                  <path d="M 360,496 C 351.16936,496 344,488.83064 344,480" fill="none" stroke="black"></path>
+                  <path d="M 472,496 C 480.83064,496 488,488.83064 488,480" fill="none" stroke="black"></path>
+                  <path d="M 24,672 C 15.16936,672 8,679.16936 8,688" fill="none" stroke="black"></path>
+                  <path d="M 136,672 C 144.83064,672 152,679.16936 152,688" fill="none" stroke="black"></path>
+                  <path d="M 24,752 C 15.16936,752 8,744.83064 8,736" fill="none" stroke="black"></path>
+                  <path d="M 136,752 C 144.83064,752 152,744.83064 152,736" fill="none" stroke="black"></path>
+                  <path d="M 360,816 C 351.16936,816 344,823.16936 344,832" fill="none" stroke="black"></path>
+                  <path d="M 472,816 C 480.83064,816 488,823.16936 488,832" fill="none" stroke="black"></path>
+                  <path d="M 360,928 C 351.16936,928 344,920.83064 344,912" fill="none" stroke="black"></path>
+                  <path d="M 472,928 C 480.83064,928 488,920.83064 488,912" fill="none" stroke="black"></path>
+                  <path d="M 360,992 C 351.16936,992 344,999.16936 344,1008" fill="none" stroke="black"></path>
+                  <path d="M 472,992 C 480.83064,992 488,999.16936 488,1008" fill="none" stroke="black"></path>
+                  <path d="M 360,1072 C 351.16936,1072 344,1064.83064 344,1056" fill="none" stroke="black"></path>
+                  <path d="M 472,1072 C 480.83064,1072 488,1064.83064 488,1056" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="416,784 404,778.4 404,789.6" fill="black" transform="rotate(0,408,784)"></polygon>
+                  <polygon class="arrowhead" points="416,240 404,234.4 404,245.6" fill="black" transform="rotate(0,408,240)"></polygon>
+                  <polygon class="arrowhead" points="96,1152 84,1146.4 84,1157.6" fill="black" transform="rotate(180,88,1152)"></polygon>
+                  <polygon class="arrowhead" points="96,1104 84,1098.4 84,1109.6" fill="black" transform="rotate(180,88,1104)"></polygon>
+                  <polygon class="arrowhead" points="96,960 84,954.4 84,965.6" fill="black" transform="rotate(180,88,960)"></polygon>
+                  <polygon class="arrowhead" points="96,528 84,522.4 84,533.6" fill="black" transform="rotate(180,88,528)"></polygon>
+                  <polygon class="arrowhead" points="96,432 84,426.4 84,437.6" fill="black" transform="rotate(180,88,432)"></polygon>
+                  <polygon class="arrowhead" points="96,400 84,394.4 84,405.6" fill="black" transform="rotate(180,88,400)"></polygon>
+                  <g class="text">
+                    <text x="40" y="36">Initiator</text>
+                    <text x="84" y="84">SCTP</text>
+                    <text x="420" y="84">Protection</text>
+                    <text x="420" y="100">Engine</text>
+                    <text x="80" y="164">INIT/INIT-ACK</text>
+                    <text x="80" y="180">COOCKIE/C-ACK</text>
+                    <text x="232" y="228">Association</text>
+                    <text x="292" y="228">UP</text>
+                    <text x="188" y="260">With</text>
+                    <text x="228" y="260">INIT</text>
+                    <text x="292" y="260">Parameters</text>
+                    <text x="420" y="292">Protection</text>
+                    <text x="420" y="308">Connection</text>
+                    <text x="416" y="324">Handshake</text>
+                    <text x="416" y="340">.........</text>
+                    <text x="396" y="356">Export</text>
+                    <text x="444" y="356">Keys</text>
+                    <text x="136" y="388">Establish</text>
+                    <text x="204" y="388">Client</text>
+                    <text x="256" y="388">Write</text>
+                    <text x="308" y="388">Keying</text>
+                    <text x="372" y="388">Material</text>
+                    <text x="136" y="420">Establish</text>
+                    <text x="204" y="420">Server</text>
+                    <text x="256" y="420">Write</text>
+                    <text x="308" y="420">Keying</text>
+                    <text x="372" y="420">Material</text>
+                    <text x="396" y="484">Validate</text>
+                    <text x="452" y="484">Keys</text>
+                    <text x="192" y="516">Association</text>
+                    <text x="264" y="516">Ready</text>
+                    <text x="304" y="516">for</text>
+                    <text x="340" y="516">DATA</text>
+                    <text x="40" y="580">Responder</text>
+                    <text x="84" y="628">SCTP</text>
+                    <text x="420" y="628">Protection</text>
+                    <text x="420" y="644">Engine</text>
+                    <text x="80" y="708">INIT/INIT-ACK</text>
+                    <text x="80" y="724">COOCKIE/C-ACK</text>
+                    <text x="232" y="772">Association</text>
+                    <text x="292" y="772">UP</text>
+                    <text x="188" y="804">With</text>
+                    <text x="228" y="804">INIT</text>
+                    <text x="292" y="804">Parameters</text>
+                    <text x="420" y="836">Protection</text>
+                    <text x="420" y="852">Connection</text>
+                    <text x="416" y="868">Handshake</text>
+                    <text x="416" y="884">.........</text>
+                    <text x="388" y="900">Export</text>
+                    <text x="444" y="900">Client</text>
+                    <text x="412" y="916">Keys</text>
+                    <text x="136" y="948">Establish</text>
+                    <text x="204" y="948">Client</text>
+                    <text x="256" y="948">Write</text>
+                    <text x="308" y="948">Keying</text>
+                    <text x="372" y="948">Material</text>
+                    <text x="396" y="1012">Validate</text>
+                    <text x="452" y="1012">Keys</text>
+                    <text x="416" y="1028">.........</text>
+                    <text x="388" y="1044">Export</text>
+                    <text x="444" y="1044">Server</text>
+                    <text x="412" y="1060">Keys</text>
+                    <text x="136" y="1092">Establish</text>
+                    <text x="204" y="1092">Server</text>
+                    <text x="256" y="1092">Write</text>
+                    <text x="308" y="1092">Keying</text>
+                    <text x="372" y="1092">Material</text>
+                    <text x="192" y="1140">Association</text>
+                    <text x="264" y="1140">Ready</text>
+                    <text x="304" y="1140">for</text>
+                    <text x="340" y="1140">DATA</text>
+                  </g>
+                </svg><a href="#section-7.1.2-8.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-initialization-phase-on-api" class="selfRef">Initialization Phase on API</a>
+            </figcaption></figure>
+</div>
 </section>
 </div>
 </section>
@@ -2727,7 +2886,7 @@ key-management method.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 <p id="section-8-1">The DTLS chunk MUST NOT be bundled with any other chunk.
 In particular, it MUST be the first chunk.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <span id="name-unprotected-sctp-packet"></span><div id="sctp-DTLS-encrypt-chunk-states-1">
-<figure id="figure-7">
+<figure id="figure-8">
         <div id="section-8-2.1">
           <div class="alignCenter art-svg artwork" id="section-8-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2788,14 +2947,14 @@ In particular, it MUST be the first chunk.<a href="#section-8-1" class="pilcrow"
             </svg><a href="#section-8-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-unprotected-sctp-packet" class="selfRef">Unprotected SCTP Packet</a>
         </figcaption></figure>
 </div>
-<p id="section-8-3">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 7</a> describes
+<p id="section-8-3">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 8</a> describes
 the structure of an unprotected SCTP packet as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-8-3" class="pilcrow">¶</a></p>
 <span id="name-protected-sctp-packets"></span><div id="sctp-DTLS-encrypt-chunk-states-2">
-<figure id="figure-8">
+<figure id="figure-9">
         <div id="section-8-4.1">
           <div class="alignCenter art-svg artwork" id="section-8-4.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="144" width="528" viewBox="0 0 528 144" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2849,11 +3008,11 @@ the structure of an unprotected SCTP packet as described in <span>[<a href="#RFC
             </svg><a href="#section-8-4.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-protected-sctp-packets" class="selfRef">Protected SCTP Packets</a>
         </figcaption></figure>
 </div>
-<p id="section-8-5">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 8</a> describes
+<p id="section-8-5">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 9</a> describes
 the structure of a protected SCTP packet being sent.
 Such packets are built with the SCTP common header.
 Only one DTLS chunk can be sent in a SCTP packet.<a href="#section-8-5" class="pilcrow">¶</a></p>
