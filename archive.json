@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-07T01:07:44.400456+00:00",
+  "timestamp": "2025-09-11T01:03:16.839573+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1064,6 +1064,38 @@
       "body": "In DTLS chunk the whole key-management function is actually a black box that provides key contexts, may send DATA messages and interacts with the DTLS chunk API. So figure maybe should be simplified for that reason. ",
       "createdAt": "2025-09-05T08:39:47Z",
       "updatedAt": "2025-09-05T08:39:47Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 63,
+      "id": "I_kwDOKszxDc7Kfhix",
+      "title": "Add to Abstact API to modify Assocation UP message to include offered Protection Solution Vector",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/63",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-09-09T08:28:39Z",
+      "updatedAt": "2025-09-09T08:28:39Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 64,
+      "id": "I_kwDOKszxDc7KktCy",
+      "title": "Missing API to set sn_key for sequence number mask",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/64",
+      "state": "OPEN",
+      "author": "lxin",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "According to https://www.rfc-editor.org/rfc/rfc9147.html#section-4.2.3, it requires 'sn_key' to generate 'Mask' to mask the sequence number for record number encryption. Maybe it should just be included in \"wirte key and iv\", and set it by SCTP_DTLS_SET_SEND_KEYS.",
+      "createdAt": "2025-09-09T13:58:03Z",
+      "updatedAt": "2025-09-09T13:58:03Z",
       "closedAt": null,
       "comments": []
     }
@@ -2847,13 +2879,13 @@
       "labels": [],
       "body": "Added a description on how to deal with plain text messages.\r\nAdded references to the INIT parameter list in the abstract API.\r\n\r\nWe may not need any State Machine to be added.",
       "createdAt": "2025-09-04T12:45:58Z",
-      "updatedAt": "2025-09-05T08:46:23Z",
+      "updatedAt": "2025-09-09T12:14:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue29",
-      "headRefOid": "8a141c067db9fc381ddd5ecc8f98c595afeef3a8",
+      "headRefOid": "dd492739ec38878c00663f74111515a577d5195e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
