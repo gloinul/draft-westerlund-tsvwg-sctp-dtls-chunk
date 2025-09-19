@@ -149,8 +149,12 @@ been used to identify the SCTP association, the DTLS chunk is processed by
 the Chunk Protection Operator that will perform replay protection, decrypt,
 verify authenticity, and if the DTLS chunk is successfully processed provides
 the protected SCTP chunks for further processing.
-{{sctp-DTLS-chunk-layering}} illustrates the DTLS chunk processing in regard
-to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
+{{sctp-DTLS-chunk-layering}} is an example
+illustrating the DTLS chunk processing in regard
+to SCTP and the Upper Layer Protocol (ULP) using
+DTLS 1.3 for key management. Here the Key Management function
+contains validation, i.e. using certificates, handshaking,
+updating policies etc.
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +-------------------------------+
@@ -161,20 +165,8 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
 |               | | |                           | |
 |               | | |  +---------------------+  | |
 |               | | +--+    Key Management   +  | |
-|               | | |  +---------------------+  | |
-|               | | |     +---+ +---+           | |
-|               | | |     | H | |   |           | |
-|               | | |     | a | |   |           | |
-|               | | | k   | n | | A |         k | |
-|               | | | e   | d | | l |         e | |
-|               | | | y   | s | | e |    ...  y | |
-|               | | | s   | h | | r |         s | |
-|               | | |     | a | | t |           | |
-|               | | |     | k | |   |           | |
-|               | | |     | e | |   |           | |
-|               | | |     +-+-+ +-+-+           | |
-|               | | |       |     |             | |
-|               | | |       +-----+---...       | |
+|               | | |  +----------+----------+  | |
+|               | | |             |             | |
 |               | | | ContentType |             | |
 |               | | |  +----------+----------+  | |
 |               | | +->|        Record       |  | |
