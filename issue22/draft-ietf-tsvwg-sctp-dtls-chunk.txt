@@ -88,6 +88,7 @@ Table of Contents
      3.9.  SCTP Restart Considerations
        3.9.1.  Protected SCTP Restart
        3.9.2.  Compatibility with Legacy SCTP Restart
+     3.10. Considerations about validating the protection
    4.  New Parameter Type
      4.1.  DTLS 1.3 Chunk Protected Association
    5.  New Chunk Type
@@ -573,6 +574,14 @@ Table of Contents
    SCTP Source port number so that the peer SCTP Endpoint will accept
    the initiation of the new Association while still supervising the old
    one.
+
+3.10.  Considerations about validating the protection
+
+   Since the SCTP initial handshake is plain text as specified in
+   [RFC9260], it's possible that a man-in-the-middle attack will try to
+   manipulate it in order to downgrade the protection.  The Protection
+   Mechanism SHALL have a validation mechanism that is robust against
+   downgrade attacks.
 
 4.  New Parameter Type
 
@@ -1329,9 +1338,9 @@ Table of Contents
    This document defines two new registries in the Stream Control
    Transmission Protocol (SCTP) Parameters group that IANA maintains.
    Theses registries are for the extra cause codes for protection
-   related errors and the Protection Options identifiers for the PVALID
-   chunk.  It also adds registry entries into several other registries
-   in the Stream Control Transmission Protocol (SCTP) Parameters group:
+   related errors.  It also adds registry entries into several other
+   registries in the Stream Control Transmission Protocol (SCTP)
+   Parameters group:
 
    *  One new SCTP Chunk Types
 
@@ -1379,12 +1388,11 @@ Table of Contents
    Transmission Protocol (SCTP) Parameters grouping.
 
    The purpose of this registry is to assign Protection Solution
-   Identifier for any security solution that is either using the DTLS
-   Chunk combined with a key-management method, offered as an
-   alternative to DTLS chunk, or themselves want to use the PVALID
-   message mechanism to detect downgrade attacks.  Any security solution
-   that is offered through a parameter exchange during the SCTP
-   handshake are potential to be included here.
+   Identifier for any security solution that is either the DTLS Chunk
+   combined with a key-management method, offered as an alternative to
+   DTLS chunk.  Any security solution that is offered through a
+   parameter exchange during the SCTP handshake are potential to be
+   included here.
 
    Each entry will be assigned a 16-bit unsigned integer value from the
    suitable range.
@@ -1404,7 +1412,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-              Table 4: PVALID Protection Solution Identifiers
+                  Table 4: Protection Solution Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
