@@ -1292,8 +1292,8 @@ padding. Use of DTLS padding hides this packet expansion from SCTP.
 This document defines two new registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group that IANA
 maintains. Theses registries are for the extra cause codes for
-protection related errors and the Protection Options identifiers for
-the PVALID chunk. It also adds registry entries into several other
+protection related errors.
+It also adds registry entries into several other
 registries in the Stream Control Transmission Protocol (SCTP)
 Parameters group:
 
@@ -1337,10 +1337,9 @@ Solutions". This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
 The purpose of this registry is to assign Protection Solution
-Identifier for any security solution that is either using the DTLS
+Identifier for any security solution that is either the DTLS
 Chunk combined with a key-management method, offered as an alternative
-to DTLS chunk, or themselves want to use the PVALID message mechanism
-to detect downgrade attacks. Any security solution that is offered
+to DTLS chunk. Any security solution that is offered
 through a parameter exchange during the SCTP handshake are potential
 to be included here.
 
