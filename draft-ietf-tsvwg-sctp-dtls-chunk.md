@@ -975,6 +975,30 @@ initilization vector (IV) is cryptographical random material used to
 XOR with the sequence number to create the nonce per Section 5.3 of
 {{RFC8446}}.
 
+## Get Protection Solutions
+
+In order to decide whether the agreed SCTP Protection Solution
+fits with the ULP policy, the ULP can request what is the list
+of offered SCTP Protection Solutions and what is the one agrred
+at Association's initial handshake.
+
+Request : Get Protection Solutions
+
+Parameters :
+
+* SCTP Association:
+: Reference to the relevant SCTP association to ask the Protection Solution from.
+
+Reply : Protection Solutions
+
+Parameters :
+
+* SCTP Protection Solutions:
+: The list of offered SCTP Protection Solutions at INIT Chunk
+
+* Agreed Protection Solution:
+: The Protection Solution being agreed at INIT-ACK Chunk
+
 ## Cipher Suit Capabilities
 
 The key-management function needs to know which cipher suits defined
