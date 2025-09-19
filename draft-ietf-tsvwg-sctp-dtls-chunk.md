@@ -530,6 +530,14 @@ it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
 will accept the initiation of the new Association while still supervising
 the old one.
 
+## Considerations about validating the protection {#validation}
+
+Since the SCTP initial handshake is plain text as specified
+in {{RFC9260}}, it's possible that a man-in-the-middle attack
+will try to manipulate it in order to downgrade the protection.
+The Protection Mechanism SHALL have a validation mechanism
+that is robust against downgrade attacks.
+
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
@@ -1292,8 +1300,8 @@ padding. Use of DTLS padding hides this packet expansion from SCTP.
 This document defines two new registries in the Stream Control
 Transmission Protocol (SCTP) Parameters group that IANA
 maintains. Theses registries are for the extra cause codes for
-protection related errors and the Protection Options identifiers for
-the PVALID chunk. It also adds registry entries into several other
+protection related errors.
+It also adds registry entries into several other
 registries in the Stream Control Transmission Protocol (SCTP)
 Parameters group:
 
@@ -1337,10 +1345,9 @@ Solutions". This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
 The purpose of this registry is to assign Protection Solution
-Identifier for any security solution that is either using the DTLS
+Identifier for any security solution that is either the DTLS
 Chunk combined with a key-management method, offered as an alternative
-to DTLS chunk, or themselves want to use the PVALID message mechanism
-to detect downgrade attacks. Any security solution that is offered
+to DTLS chunk. Any security solution that is offered
 through a parameter exchange during the SCTP handshake are potential
 to be included here.
 
@@ -1350,7 +1357,7 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 | 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
-{: #iana-psi title="PVALID Protection Solution Identifiers" cols="r l l l"}
+{: #iana-psi title="Protection Solution Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
 as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
