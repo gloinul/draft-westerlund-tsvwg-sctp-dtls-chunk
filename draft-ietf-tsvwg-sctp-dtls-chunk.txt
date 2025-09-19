@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 6 March 2026                                           Ericsson
+Expires: 23 March 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        2 September 2025
+                                                       19 September 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 March 2026.
+   This Internet-Draft will expire on 23 March 2026.
 
 Copyright Notice
 
@@ -1329,9 +1329,9 @@ Table of Contents
    This document defines two new registries in the Stream Control
    Transmission Protocol (SCTP) Parameters group that IANA maintains.
    Theses registries are for the extra cause codes for protection
-   related errors and the Protection Options identifiers for the PVALID
-   chunk.  It also adds registry entries into several other registries
-   in the Stream Control Transmission Protocol (SCTP) Parameters group:
+   related errors.  It also adds registry entries into several other
+   registries in the Stream Control Transmission Protocol (SCTP)
+   Parameters group:
 
    *  One new SCTP Chunk Types
 
@@ -1379,12 +1379,11 @@ Table of Contents
    Transmission Protocol (SCTP) Parameters grouping.
 
    The purpose of this registry is to assign Protection Solution
-   Identifier for any security solution that is either using the DTLS
-   Chunk combined with a key-management method, offered as an
-   alternative to DTLS chunk, or themselves want to use the PVALID
-   message mechanism to detect downgrade attacks.  Any security solution
-   that is offered through a parameter exchange during the SCTP
-   handshake are potential to be included here.
+   Identifier for any security solution that is either the DTLS Chunk
+   combined with a key-management method, offered as an alternative to
+   DTLS chunk.  Any security solution that is offered through a
+   parameter exchange during the SCTP handshake are potential to be
+   included here.
 
    Each entry will be assigned a 16-bit unsigned integer value from the
    suitable range.
