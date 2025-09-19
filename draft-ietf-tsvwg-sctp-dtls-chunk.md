@@ -1,5 +1,5 @@
 ---
-docname: draft-westerlund-tsvwg-sctp-dtls-chunk-latest
+docname: draft-ietf-tsvwg-sctp-dtls-chunk-latest
 title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
 abbrev: SCTP DTLS Chunk
 obsoletes:
@@ -12,7 +12,7 @@ submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 venue:
   group: Transport Area Working Group (tsvwg)
   mail: tsvwg@ietf.org
-  github: gloinul/draft-westerlund-tsvwg-sctp-DTLS-chunk
+  github: gloinul/draft-ietf-tsvwg-sctp-dtls-chunk
 
 author:
 -
