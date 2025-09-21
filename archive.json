@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-11T01:03:16.839573+00:00",
+  "timestamp": "2025-09-21T01:08:35.930083+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -357,7 +357,7 @@
       "id": "I_kwDOKszxDc64MTMy",
       "title": "DT : Replace PVALID with a Data Chunk and a new PPID",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/22",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -367,8 +367,8 @@
       "labels": [],
       "body": "From the Design Team : the PVALID chunk is not a preferred solution, it shall be replaced by using a legacy DATA Chunk having a new PPID.",
       "createdAt": "2025-05-26T06:58:06Z",
-      "updatedAt": "2025-07-03T11:00:52Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T10:34:11Z",
+      "closedAt": "2025-09-19T10:34:11Z",
       "comments": [
         {
           "author": "gloinul",
@@ -782,14 +782,23 @@
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "tuexen"
+        "tuexen",
+        "teiclap"
       ],
       "labels": [],
       "body": "Affected Section: 11.3",
       "createdAt": "2025-07-06T10:26:13Z",
-      "updatedAt": "2025-07-07T08:45:07Z",
+      "updatedAt": "2025-09-19T13:47:27Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Implemented",
+          "createdAt": "2025-09-19T13:47:27Z",
+          "updatedAt": "2025-09-19T13:47:27Z"
+        }
+      ]
     },
     {
       "number": 42,
@@ -806,7 +815,7 @@
       "labels": [],
       "body": "I think we can't use the 'Missing Mandatory Parameter' error cause. The parameter is not mandatory but optional to negotiate the extension we are specifying. It is used for missing cookies.",
       "createdAt": "2025-07-06T10:29:27Z",
-      "updatedAt": "2025-09-03T07:56:17Z",
+      "updatedAt": "2025-09-19T08:10:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -822,6 +831,13 @@
           "body": "We will define a new Error Cause \"Policy not met\". I am working on the text.",
           "createdAt": "2025-09-03T07:29:37Z",
           "updatedAt": "2025-09-03T07:56:17Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "#60 attempt to address this issue.",
+          "createdAt": "2025-09-19T08:10:52Z",
+          "updatedAt": "2025-09-19T08:10:52Z"
         }
       ]
     },
@@ -902,11 +918,13 @@
       "state": "OPEN",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "teiclap"
+      ],
       "labels": [],
       "body": "I have no idea what this means. It also seems to be an API issue, since it is about the local endpoint.\nEither remove or clarify.",
       "createdAt": "2025-07-06T11:43:50Z",
-      "updatedAt": "2025-07-07T08:52:14Z",
+      "updatedAt": "2025-09-19T08:22:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -1034,12 +1052,13 @@
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "tuexen"
+        "tuexen",
+        "teiclap"
       ],
       "labels": [],
       "body": "Once the key management document, which is planned to become a WG document, has been submitted, add reference to it. We need to discuss how to deal with references to the Ericsson document.",
       "createdAt": "2025-07-07T12:44:04Z",
-      "updatedAt": "2025-09-02T14:47:10Z",
+      "updatedAt": "2025-09-19T08:30:03Z",
       "closedAt": null,
       "comments": [
         {
@@ -1059,13 +1078,23 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "teiclap"
+      ],
       "labels": [],
       "body": "In DTLS chunk the whole key-management function is actually a black box that provides key contexts, may send DATA messages and interacts with the DTLS chunk API. So figure maybe should be simplified for that reason. ",
       "createdAt": "2025-09-05T08:39:47Z",
-      "updatedAt": "2025-09-05T08:39:47Z",
+      "updatedAt": "2025-09-19T07:34:32Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree. There's no reason to show the Handshake and Alert boxes. Since the Handshake is described in another document, only Key Management should exist.\nI am going to implement that.",
+          "createdAt": "2025-09-19T07:34:31Z",
+          "updatedAt": "2025-09-19T07:34:31Z"
+        }
+      ]
     },
     {
       "number": 63,
@@ -1075,18 +1104,28 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "teiclap"
+      ],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-09T08:28:39Z",
-      "updatedAt": "2025-09-09T08:28:39Z",
+      "updatedAt": "2025-09-19T12:35:18Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Rather than modifying the UP indication, I've added a new API for ULP to query about the Protection Solution Vector.",
+          "createdAt": "2025-09-19T12:35:18Z",
+          "updatedAt": "2025-09-19T12:35:18Z"
+        }
+      ]
     },
     {
       "number": 64,
       "id": "I_kwDOKszxDc7KktCy",
-      "title": "Missing API to set sn_key for sequence number mask",
+      "title": "Moving to traffic secret in API or define sn_key in API. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/64",
       "state": "OPEN",
       "author": "lxin",
@@ -1095,9 +1134,45 @@
       "labels": [],
       "body": "According to https://www.rfc-editor.org/rfc/rfc9147.html#section-4.2.3, it requires 'sn_key' to generate 'Mask' to mask the sequence number for record number encryption. Maybe it should just be included in \"wirte key and iv\", and set it by SCTP_DTLS_SET_SEND_KEYS.",
       "createdAt": "2025-09-09T13:58:03Z",
-      "updatedAt": "2025-09-09T13:58:03Z",
+      "updatedAt": "2025-09-20T04:05:43Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "To my understanding the sn_key is derived from the encrypting side's secret. See further down in the referenced section it states:\n\n    The sn_key is computed as follows:\n\n    [sender]_sn_key = HKDF-Expand-Label(Secret, \"sn\", \"\", key_length)\n\n    [sender] denotes the sending side.\n\nThus, I think no changes are needed. This derivation is part of the implementation of the DTLS record processing.",
+          "createdAt": "2025-09-19T08:35:21Z",
+          "updatedAt": "2025-09-19T08:35:21Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "NONE",
+          "body": "> To my understanding the sn_key is derived from the encrypting side's secret. See further down in the referenced section it states:\n> \n> ```\n> The sn_key is computed as follows:\n> \n> [sender]_sn_key = HKDF-Expand-Label(Secret, \"sn\", \"\", key_length)\n> \n> [sender] denotes the sending side.\n> ```\n> \n> Thus, I think no changes are needed. This derivation is part of the implementation of the DTLS record processing.\n\n@gloinul I don't see how 'Secret' is provided when setting Client/Server Write (transmit) Keying material (Secret is not 'Write Key'), like, when setting Keying material to kernel, How to pass 'Secret' or derived 'sn_key' to kernel? this should be clarified in the doc.",
+          "createdAt": "2025-09-19T13:21:52Z",
+          "updatedAt": "2025-09-19T13:22:51Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Okay, I think you are right in that something have to be done here. As we do have a mismatch due to this keying. \n\nSo Section 7.3 of RFC 8446 (TLS 1.3) is defining how one take the traffic secret to derive write_key and write_iv per direction.\n\n> [[sender](https://www.rfc-editor.org/rfc/rfc8446.html#ref-sender)]_write_key = HKDF-Expand-Label(Secret, \"key\", \"\", key_length)\n>   [[sender](https://www.rfc-editor.org/rfc/rfc8446.html#ref-sender)]_write_iv  = HKDF-Expand-Label(Secret, \"iv\", \"\", iv_length)\n>\n>   [sender] denotes the sending side.  The value of Secret for each\n>   record type is shown in the table below.\n>\n>       +-------------------+---------------------------------------+\n>       | Record Type       | Secret                                |\n>       +-------------------+---------------------------------------+\n>       | 0-RTT Application | client_early_traffic_secret           |\n>       |                   |                                       |\n>       | Handshake         | [[sender](https://www.rfc-editor.org/rfc/rfc8446.html#ref-sender)]_handshake_traffic_secret     |\n>       |                   |                                       |\n>       | Application Data  | [[sender](https://www.rfc-editor.org/rfc/rfc8446.html#ref-sender)]_application_traffic_secret_N |\n>       +-------------------+---------------------------------------+\n\nThus to get the client_sn_key one need to traffic secret for the client. \n\nI think this results in that we either need to expand the API as you say to include the client_sn_key and server_sn_key, alternatively we could redefine the API to take a traffic secret, and define that the SCTP chunk implementation under the API will perform the derivations for the write_key, the write_iv (per 7.3 of TLS 1.3) and the sn_key per 4.2.3 (DTLS 1.3).\n\n",
+          "createdAt": "2025-09-19T15:01:52Z",
+          "updatedAt": "2025-09-19T15:01:52Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "NONE",
+          "body": "From kernel's perspective, expanding the API include the client_sn_key and server_sn_key is a better solution than letting kernel perform the derivations of keys. AFAIK, in kTLS, the key derivation is the userspace work.",
+          "createdAt": "2025-09-19T15:07:18Z",
+          "updatedAt": "2025-09-19T15:07:18Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think this results in that we either need to expand the API as you say to include the client_sn_key and server_sn_key, alternatively we could redefine the API to take a traffic secret, and define that the SCTP chunk implementation under the API will perform the derivations for the write_key, the write_iv (per 7.3 of TLS 1.3) and the sn_key per 4.2.3 (DTLS 1.3).\n\nYes",
+          "createdAt": "2025-09-20T04:05:43Z",
+          "updatedAt": "2025-09-20T04:05:43Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2946,6 +3021,140 @@
           ]
         }
       ]
+    },
+    {
+      "number": 65,
+      "id": "PR_kwDOKszxDc6pc4-J",
+      "title": "Updated Fig.1 and description",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/65",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-09-19T08:01:44Z",
+      "updatedAt": "2025-09-19T08:01:44Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue62",
+      "headRefOid": "a9098aa1a1b67cddabc590e8f0ce7da7c5131d6f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 66,
+      "id": "PR_kwDOKszxDc6pdo2A",
+      "title": "Issue22",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/66",
+      "state": "MERGED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Moved the validation to handshake mechanism as a requirement for issue #22 ",
+      "createdAt": "2025-09-19T09:07:02Z",
+      "updatedAt": "2025-09-19T09:13:54Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue22",
+      "headRefOid": "5fe6d57b5fe94944941c10131df26204588a9fdb",
+      "closedAt": "2025-09-19T09:13:54Z",
+      "mergedAt": "2025-09-19T09:13:54Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "4855aadb25b4224fab87257ca6780ff12a1d6e33"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 67,
+      "id": "PR_kwDOKszxDc6pe2V0",
+      "title": "New Chunk Flag register for issue #41",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/67",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "Fix for issue #41 ",
+      "createdAt": "2025-09-19T10:55:12Z",
+      "updatedAt": "2025-09-19T13:46:09Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue41",
+      "headRefOid": "6a9e3dad5ef4a64ae9c8364f223a05bfc410d8b4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 68,
+      "id": "PR_kwDOKszxDc6pfqpp",
+      "title": "Moved references to Key Management in own section #56",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/68",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixed Issue #56 ",
+      "createdAt": "2025-09-19T12:16:22Z",
+      "updatedAt": "2025-09-19T12:16:22Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue56",
+      "headRefOid": "a86274952a67118e23b9ba24d37fb6c1ab577b51",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 69,
+      "id": "PR_kwDOKszxDc6pf4Ch",
+      "title": "Added API for including Protection Solution Vector",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/69",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-09-19T12:35:50Z",
+      "updatedAt": "2025-09-19T12:35:50Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue63",
+      "headRefOid": "a588c0fad02b4c614ae75a1ac904d53db1cdbaa9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
