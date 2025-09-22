@@ -975,29 +975,58 @@ initilization vector (IV) is cryptographical random material used to
 XOR with the sequence number to create the nonce per Section 5.3 of
 {{RFC8446}}.
 
-## Get Protection Solutions
+## Association UP Indication
 
-In order to decide whether the agreed SCTP Protection Solution
-fits with the ULP policy, the ULP can request what is the list
-of offered SCTP Protection Solutions and what is the one agrred
-at Association's initial handshake.
+As soon as the SCTP initial handshake has been completed,
+the SCTP protocol informs the Protection Operator about.
+The protection operator validates the Protection Solution
+and replies by informing the SCTP protocol if the validation
+has succeeded or has failed.
 
-Request : Get Protection Solutions
+Event : Association established
 
 Parameters :
 
 * SCTP Association:
-: Reference to the relevant SCTP association to ask the Protection Solution from.
-
-Reply : Protection Solutions
-
-Parameters :
+: Reference to the relevant SCTP association.
 
 * SCTP Protection Solutions:
 : The list of offered SCTP Protection Solutions at INIT Chunk
 
 * Agreed Protection Solution:
 : The Protection Solution being agreed at INIT-ACK Chunk
+
+Reply :
+
+* Protection Solutions validated:
+: A boolean value indicating whether the Protection Solution is valid or not.
+
+## Association DOWN Indication
+
+When SCTP protocol terminates the Association for any possible reason,
+either local or remote, it will infomr the Protection Operator about.
+The event has not return values.
+
+Event : Association established
+
+Parameters :
+
+* SCTP Association:
+: Reference to the relevant SCTP association.
+
+## Association RESTART Indication
+
+When SCTP protocol has achieved an SCTP Restart
+it will infomr the Protection Operator about.
+The event has not return values.
+
+Event : Association established
+
+Parameters :
+
+* SCTP Association:
+: Reference to the relevant SCTP association.
+
 
 ## Cipher Suit Capabilities
 
