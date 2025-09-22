@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 23 March 2026                                          Ericsson
+Expires: 26 March 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                       19 September 2025
+                                                       22 September 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2026.
+   This Internet-Draft will expire on 26 March 2026.
 
 Copyright Notice
 
@@ -107,17 +107,19 @@ Table of Contents
      8.1.  Sending of DTLS Chunks
      8.2.  Receiving of DTLS Chunks
    9.  Abstract API
-     9.1.  Get Protection Solutions
-     9.2.  Cipher Suit Capabilities
-     9.3.  Establish Client Write Keying Material
-     9.4.  Establish Server Write Keying Material
-     9.5.  Destroy Client Write Keying Material
-     9.6.  Destroy Server Write Keying Material
-     9.7.  Set Key to Use
-     9.8.  Require Protected SCTP Packets
-     9.9.  Get q
-     9.10. Get v
-     9.11. Configure Replay Protection
+     9.1.  Association UP Indication
+     9.2.  Association DOWN Indication
+     9.3.  Association RESTART Indication
+     9.4.  Cipher Suit Capabilities
+     9.5.  Establish Client Write Keying Material
+     9.6.  Establish Server Write Keying Material
+     9.7.  Destroy Client Write Keying Material
+     9.8.  Destroy Server Write Keying Material
+     9.9.  Set Key to Use
+     9.10. Require Protected SCTP Packets
+     9.11. Get q
+     9.12. Get v
+     9.13. Configure Replay Protection
    10. Socket API Considerations
      10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
      10.2.  Get the Supported Cipher Suits
@@ -1014,23 +1016,18 @@ Table of Contents
    to XOR with the sequence number to create the nonce per Section 5.3
    of [RFC8446].
 
-9.1.  Get Protection Solutions
+9.1.  Association UP Indication
 
-   In order to decide whether the agreed SCTP Protection Solution fits
-   with the ULP policy, the ULP can request what is the list of offered
-   SCTP Protection Solutions and what is the one agrred at Association's
-   initial handshake.
+   As soon as the SCTP initial handshake has been completed, the SCTP
+   protocol informs the Protection Operator about.  The protection
+   operator validates the Protection Solution and replies by informing
+   the SCTP protocol if the validation has succeeded or has failed.
 
-   Request : Get Protection Solutions
-
-   Parameters :
-
-   *  SCTP Association:  Reference to the relevant SCTP association to
-         ask the Protection Solution from.
-
-   Reply : Protection Solutions
+   Event : Association established
 
    Parameters :
+
+   *  SCTP Association:  Reference to the relevant SCTP association.
 
    *  SCTP Protection Solutions:  The list of offered SCTP Protection
          Solutions at INIT Chunk
@@ -1038,7 +1035,35 @@ Table of Contents
    *  Agreed Protection Solution:  The Protection Solution being agreed
          at INIT-ACK Chunk
 
-9.2.  Cipher Suit Capabilities
+   Reply :
+
+   *  Protection Solutions validated:  A boolean value indicating
+         whether the Protection Solution is valid or not.
+
+9.2.  Association DOWN Indication
+
+   When SCTP protocol terminates the Association for any possible
+   reason, either local or remote, it will infomr the Protection
+   Operator about.  The event has not return values.
+
+   Event : Association established
+
+   Parameters :
+
+   *  SCTP Association:  Reference to the relevant SCTP association.
+
+9.3.  Association RESTART Indication
+
+   When SCTP protocol has achieved an SCTP Restart it will infomr the
+   Protection Operator about.  The event has not return values.
+
+   Event : Association established
+
+   Parameters :
+
+   *  SCTP Association:  Reference to the relevant SCTP association.
+
+9.4.  Cipher Suit Capabilities
 
    The key-management function needs to know which cipher suits defined
    for usage with DTLS 1.3 that are supported by the DTLS chunk and its
@@ -1055,7 +1080,7 @@ Table of Contents
 
    Parameters : list of cipher suits
 
-9.3.  Establish Client Write Keying Material
+9.5.  Establish Client Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1095,7 +1120,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.4.  Establish Server Write Keying Material
+9.6.  Establish Server Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1135,7 +1160,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.5.  Destroy Client Write Keying Material
+9.7.  Destroy Client Write Keying Material
 
    A function to destroy the Client Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1156,7 +1181,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.6.  Destroy Server Write Keying Material
+9.8.  Destroy Server Write Keying Material
 
    A function to destroy the Server Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1177,7 +1202,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.7.  Set Key to Use
+9.9.  Set Key to Use
 
    Set which key to use to protect the future SCTP packets sent by the
    SCTP Association.
@@ -1198,7 +1223,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.8.  Require Protected SCTP Packets
+9.10.  Require Protected SCTP Packets
 
    A function to configure an SCTP association to require that normal
    SCTP packets must be protected in a DTLS Chunk going forward.
@@ -1209,7 +1234,7 @@ Table of Contents
 
    Reply: Acknowledgement
 
-9.9.  Get q
+9.11.  Get q
 
    Get q, the number of protected messages (AEAD encryption invocations)
    for a given epoch.
@@ -1230,7 +1255,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.10.  Get v
+9.12.  Get v
 
    Get v, the number of attacker forgery attempts (failed AEAD
    decryption invocations) for a given epoch.
@@ -1251,7 +1276,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.11.  Configure Replay Protection
+9.13.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
