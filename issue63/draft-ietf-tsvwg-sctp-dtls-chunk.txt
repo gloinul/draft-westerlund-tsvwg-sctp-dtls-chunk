@@ -108,18 +108,16 @@ Table of Contents
      8.2.  Receiving of DTLS Chunks
    9.  Abstract API
      9.1.  Association UP Indication
-     9.2.  Association DOWN Indication
-     9.3.  Association RESTART Indication
-     9.4.  Cipher Suit Capabilities
-     9.5.  Establish Client Write Keying Material
-     9.6.  Establish Server Write Keying Material
-     9.7.  Destroy Client Write Keying Material
-     9.8.  Destroy Server Write Keying Material
-     9.9.  Set Key to Use
-     9.10. Require Protected SCTP Packets
-     9.11. Get q
-     9.12. Get v
-     9.13. Configure Replay Protection
+     9.2.  Cipher Suit Capabilities
+     9.3.  Establish Client Write Keying Material
+     9.4.  Establish Server Write Keying Material
+     9.5.  Destroy Client Write Keying Material
+     9.6.  Destroy Server Write Keying Material
+     9.7.  Set Key to Use
+     9.8.  Require Protected SCTP Packets
+     9.9.  Get q
+     9.10. Get v
+     9.11. Configure Replay Protection
    10. Socket API Considerations
      10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
      10.2.  Get the Supported Cipher Suits
@@ -1019,9 +1017,11 @@ Table of Contents
 9.1.  Association UP Indication
 
    As soon as the SCTP initial handshake has been completed, the SCTP
-   protocol informs the Protection Operator about.  The protection
-   operator validates the Protection Solution and replies by informing
-   the SCTP protocol if the validation has succeeded or has failed.
+   protocol informs the Protection Operator about.  On the socket
+   interface this uses the message SCTP_ASSOC_CHANGE as specified in
+   section 6.1.1 of [RFC6458].  The protection operator validates the
+   Protection Solution taking the appropriate decision about terminating
+   the Association when policy is not met.
 
    Event : Association established
 
@@ -1035,35 +1035,27 @@ Table of Contents
    *  Agreed Protection Solution:  The Protection Solution being agreed
          at INIT-ACK Chunk
 
-   Reply :
+   With reference to [RFC6458], the structure sctp_assoc_change is
+   changed as described in Figure 9
 
-   *  Protection Solutions validated:  A boolean value indicating
-         whether the Protection Solution is valid or not.
+           struct sctp_assoc_change {
+             uint16_t sac_type;
+             uint16_t sac_flags;
+             uint32_t sac_length;
+             uint16_t sac_state;
+             uint16_t sac_error;
+             uint16_t sac_outbound_streams;
+             uint16_t sac_inbound_streams;
+             sctp_assoc_t sac_assoc_id;
+             union {
+                uint8_t  sac_info[];
+                uint8_t  psec_info[][]; // Protection Solution Info
+             } data;
+           };
 
-9.2.  Association DOWN Indication
+                   Figure 9: Changes in sctp_assoc_change
 
-   When SCTP protocol terminates the Association for any possible
-   reason, either local or remote, it will infomr the Protection
-   Operator about.  The event has not return values.
-
-   Event : Association established
-
-   Parameters :
-
-   *  SCTP Association:  Reference to the relevant SCTP association.
-
-9.3.  Association RESTART Indication
-
-   When SCTP protocol has achieved an SCTP Restart it will infomr the
-   Protection Operator about.  The event has not return values.
-
-   Event : Association established
-
-   Parameters :
-
-   *  SCTP Association:  Reference to the relevant SCTP association.
-
-9.4.  Cipher Suit Capabilities
+9.2.  Cipher Suit Capabilities
 
    The key-management function needs to know which cipher suits defined
    for usage with DTLS 1.3 that are supported by the DTLS chunk and its
@@ -1080,7 +1072,7 @@ Table of Contents
 
    Parameters : list of cipher suits
 
-9.5.  Establish Client Write Keying Material
+9.3.  Establish Client Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1120,7 +1112,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.6.  Establish Server Write Keying Material
+9.4.  Establish Server Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1160,7 +1152,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.7.  Destroy Client Write Keying Material
+9.5.  Destroy Client Write Keying Material
 
    A function to destroy the Client Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1181,7 +1173,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.8.  Destroy Server Write Keying Material
+9.6.  Destroy Server Write Keying Material
 
    A function to destroy the Server Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1202,7 +1194,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.9.  Set Key to Use
+9.7.  Set Key to Use
 
    Set which key to use to protect the future SCTP packets sent by the
    SCTP Association.
@@ -1223,7 +1215,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.10.  Require Protected SCTP Packets
+9.8.  Require Protected SCTP Packets
 
    A function to configure an SCTP association to require that normal
    SCTP packets must be protected in a DTLS Chunk going forward.
@@ -1234,7 +1226,7 @@ Table of Contents
 
    Reply: Acknowledgement
 
-9.11.  Get q
+9.9.  Get q
 
    Get q, the number of protected messages (AEAD encryption invocations)
    for a given epoch.
@@ -1255,7 +1247,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.12.  Get v
+9.10.  Get v
 
    Get v, the number of attacker forgery attempts (failed AEAD
    decryption invocations) for a given epoch.
@@ -1276,7 +1268,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.13.  Configure Replay Protection
+9.11.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
