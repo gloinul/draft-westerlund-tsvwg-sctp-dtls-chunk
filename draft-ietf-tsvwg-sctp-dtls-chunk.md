@@ -1020,6 +1020,22 @@ described in {{sctp-sctp_assoc_change}}
 ~~~~~~~~~~~
 {: #sctp-sctp_assoc_change title="Changes in sctp_assoc_change" artwork-align="center"}
 
+A new value is introduced for sac_state:
+
+* SCTP_CRYPTO_COMM_UP: A new association using Crypto Chunks
+is now ready, and data may be
+exchanged with this peer.  When an association has been
+established successfully, this notification should be the
+first one.
+
+A psec_info structure has been introduced that is only
+valid when sac_state is SCTP_CRYPTO_COMM_UP. The first array
+contains the complete Protected Association Parameters sent from the
+Association Initiator in the INIT Chunk as a sequence of octets;
+the second array contains the complete Protected Association Parameters
+indicating the selected Protection Selection sent from the
+Association Responder in the INIT-ACK Chunk as a sequence of octets.
+
 ## Cipher Suit Capabilities
 
 The key-management function needs to know which cipher suits defined
