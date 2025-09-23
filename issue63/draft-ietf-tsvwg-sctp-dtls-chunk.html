@@ -1057,7 +1057,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 26 March 2026</td>
+<td class="center">Expires 27 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1070,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-09-22" class="published">22 September 2025</time>
+<time datetime="2025-09-23" class="published">23 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-26">26 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-27">27 March 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2966,6 +2966,23 @@ described in <a href="#sctp-sctp_assoc_change" class="auto internal xref">Figure
 <a href="#name-changes-in-sctp_assoc_chang" class="selfRef">Changes in sctp_assoc_change</a>
           </figcaption></figure>
 </div>
+<p id="section-9.1-7">A new value is introduced for sac_state:<a href="#section-9.1-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-8.1">
+            <p id="section-9.1-8.1.1">SCTP_CRYPTO_COMM_UP: A new association using Crypto Chunks
+is now ready, and data may be
+exchanged with this peer.  When an association has been
+established successfully, this notification should be the
+first one.<a href="#section-9.1-8.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.1-9">A psec_info structure has been introduced that is only
+valid when sac_state is SCTP_CRYPTO_COMM_UP. The first array
+contains the complete Protected Association Parameters sent from the
+Association Initiator in the INIT Chunk as a sequence of octets;
+the second array contains the complete Protected Association Parameters
+indicating the selected Protection Selection sent from the
+Association Responder in the INIT-ACK Chunk as a sequence of octets.<a href="#section-9.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cipher-suit-capabilities">
