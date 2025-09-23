@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-21T01:08:35.930083+00:00",
+  "timestamp": "2025-09-23T01:01:45.293438+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1171,6 +1171,39 @@
           "body": "> I think this results in that we either need to expand the API as you say to include the client_sn_key and server_sn_key, alternatively we could redefine the API to take a traffic secret, and define that the SCTP chunk implementation under the API will perform the derivations for the write_key, the write_iv (per 7.3 of TLS 1.3) and the sn_key per 4.2.3 (DTLS 1.3).\n\nYes",
           "createdAt": "2025-09-20T04:05:43Z",
           "updatedAt": "2025-09-20T04:05:43Z"
+        }
+      ]
+    },
+    {
+      "number": 70,
+      "id": "I_kwDOKszxDc7NCMb3",
+      "title": "API for managing the Security Aging",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/70",
+      "state": "CLOSED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "Do we need to have aging management on the API? \nWe would need:\n1. Set the aging criteria: on elapsed time, on data transferred\n2. Set the warning threshold: at what percentage of time or data shall the Protection Operator be informed?\n3. Event from SCTP to Protection Operator: threshold for time/data reached",
+      "createdAt": "2025-09-22T09:08:54Z",
+      "updatedAt": "2025-09-22T09:40:33Z",
+      "closedAt": "2025-09-22T09:35:33Z",
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closed after conversation with Magnus",
+          "createdAt": "2025-09-22T09:35:33Z",
+          "updatedAt": "2025-09-22T09:35:33Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "For public discourse: Any time based rekeying will be the responsibility of the key-manangement implementation that resides above the API. For data amount based rekeying we already have a get Q API call, https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-q",
+          "createdAt": "2025-09-22T09:40:33Z",
+          "updatedAt": "2025-09-22T09:40:33Z"
         }
       ]
     }
@@ -3142,18 +3175,26 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-09-19T12:35:50Z",
+      "updatedAt": "2025-09-22T10:19:00Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue63",
-      "headRefOid": "a588c0fad02b4c614ae75a1ac904d53db1cdbaa9",
+      "headRefOid": "12406908476dcc3d61c914ece0b7583459529764",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Michael, this implies changes in the Socket API, may you comment?",
+          "createdAt": "2025-09-22T10:19:00Z",
+          "updatedAt": "2025-09-22T10:19:00Z"
+        }
+      ],
       "reviews": []
     }
   ]
