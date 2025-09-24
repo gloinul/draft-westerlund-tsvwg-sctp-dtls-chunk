@@ -1023,8 +1023,8 @@ described in {{sctp-sctp_assoc_change}}
 A new value is introduced for sac_state:
 
 * SCTP_CRYPTO_COMM_UP: A new association using Crypto Chunks
-is now ready, and data may be
-exchanged with this peer.  When an association has been
+is now ready. It may be used for DTLS handshaking but not for
+user data traffic. When a DTLS Crypto association has been
 established successfully, this notification should be the
 first one.
 
