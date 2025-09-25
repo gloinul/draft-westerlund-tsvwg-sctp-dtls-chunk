@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-23T01:01:45.293438+00:00",
+  "timestamp": "2025-09-25T01:03:06.348667+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -591,12 +591,14 @@
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
-        "gloinul"
+        "tuexen",
+        "gloinul",
+        "teiclap"
       ],
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-09-04T08:26:41Z",
+      "updatedAt": "2025-09-24T08:35:41Z",
       "closedAt": null,
       "comments": [
         {
@@ -3175,13 +3177,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-09-22T10:19:00Z",
+      "updatedAt": "2025-09-24T07:12:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue63",
-      "headRefOid": "12406908476dcc3d61c914ece0b7583459529764",
+      "headRefOid": "520adf6930536ab9b55ef32f4dc35f432a45a49c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3193,6 +3195,13 @@
           "body": "Michael, this implies changes in the Socket API, may you comment?",
           "createdAt": "2025-09-22T10:19:00Z",
           "updatedAt": "2025-09-22T10:19:00Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Michael, this implies changes in the Socket API, may you comment?\r\n\r\nYes, sure, will do. I just was ill the last days and was not really able to provide useful feedback. Thanks for the patience.",
+          "createdAt": "2025-09-23T21:36:35Z",
+          "updatedAt": "2025-09-23T21:36:35Z"
         }
       ],
       "reviews": []
