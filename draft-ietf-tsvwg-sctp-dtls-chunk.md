@@ -1028,11 +1028,13 @@ user data traffic. When a DTLS Crypto association has been
 established successfully, this notification should be the
 first one.
 
-A psec_info structure has been introduced that is only
-valid when sac_state is SCTP_CRYPTO_COMM_UP. The first array
+A new data structure is introduced for validation purposes:
+
+* psec_info: A bidimensional structure of octets has been introduced that is only
+valid when sac_state is SCTP_CRYPTO_COMM_UP. The first element
 contains the complete Protected Association Parameters sent from the
 Association Initiator in the INIT Chunk as a sequence of octets;
-the second array contains the complete Protected Association Parameters
+the second element contains the complete Protected Association Parameters
 indicating the selected Protection Selection sent from the
 Association Responder in the INIT-ACK Chunk as a sequence of octets.
 
