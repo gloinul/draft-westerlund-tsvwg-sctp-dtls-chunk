@@ -975,7 +975,7 @@ initilization vector (IV) is cryptographical random material used to
 XOR with the sequence number to create the nonce per Section 5.3 of
 {{RFC8446}}.
 
-## Association UP Indication
+## Crypto Association UP Indication
 
 As soon as the SCTP initial handshake has been completed,
 the SCTP protocol informs the Protection Operator about.
@@ -985,7 +985,7 @@ The protection operator validates the Protection Solution
 taking the appropriate decision about terminating the
 Association when policy is not met.
 
-Event : Association established
+Event : Crypto Association established
 
 Parameters :
 
