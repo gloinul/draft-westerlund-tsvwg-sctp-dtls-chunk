@@ -1038,6 +1038,8 @@ the second element contains the complete Protected Association Parameters
 indicating the selected Protection Selection sent from the
 Association Responder in the INIT-ACK Chunk as a sequence of octets.
 
+Reply   : Association Validated or Failed
+
 ## Cipher Suit Capabilities
 
 The key-management function needs to know which cipher suits defined
