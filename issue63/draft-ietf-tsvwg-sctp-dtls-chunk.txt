@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 28 March 2026                                          Ericsson
+Expires: 3 April 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                       24 September 2025
+                                                       30 September 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2026.
+   This Internet-Draft will expire on 3 April 2026.
 
 Copyright Notice
 
@@ -107,7 +107,7 @@ Table of Contents
      8.1.  Sending of DTLS Chunks
      8.2.  Receiving of DTLS Chunks
    9.  Abstract API
-     9.1.  Association UP Indication
+     9.1.  Crypto Association UP Indication
      9.2.  Cipher Suit Capabilities
      9.3.  Establish Client Write Keying Material
      9.4.  Establish Server Write Keying Material
@@ -1014,7 +1014,7 @@ Table of Contents
    to XOR with the sequence number to create the nonce per Section 5.3
    of [RFC8446].
 
-9.1.  Association UP Indication
+9.1.  Crypto Association UP Indication
 
    As soon as the SCTP initial handshake has been completed, the SCTP
    protocol informs the Protection Operator about.  On the socket
@@ -1023,7 +1023,7 @@ Table of Contents
    Protection Solution taking the appropriate decision about terminating
    the Association when policy is not met.
 
-   Event : Association established
+   Event : Crypto Association established
 
    Parameters :
 
@@ -1062,13 +1062,18 @@ Table of Contents
       traffic.  When a DTLS Crypto association has been established
       successfully, this notification should be the first one.
 
-   A psec_info structure has been introduced that is only valid when
-   sac_state is SCTP_CRYPTO_COMM_UP.  The first array contains the
-   complete Protected Association Parameters sent from the Association
-   Initiator in the INIT Chunk as a sequence of octets; the second array
-   contains the complete Protected Association Parameters indicating the
-   selected Protection Selection sent from the Association Responder in
-   the INIT-ACK Chunk as a sequence of octets.
+   A new data structure is introduced for validation purposes:
+
+   *  psec_info: A bidimensional structure of octets has been introduced
+      that is only valid when sac_state is SCTP_CRYPTO_COMM_UP.  The
+      first element contains the complete Protected Association
+      Parameters sent from the Association Initiator in the INIT Chunk
+      as a sequence of octets; the second element contains the complete
+      Protected Association Parameters indicating the selected
+      Protection Selection sent from the Association Responder in the
+      INIT-ACK Chunk as a sequence of octets.
+
+   Reply : Association Validated or Failed
 
 9.2.  Cipher Suit Capabilities
 
