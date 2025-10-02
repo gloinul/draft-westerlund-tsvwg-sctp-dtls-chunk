@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-25T01:03:06.348667+00:00",
+  "timestamp": "2025-10-02T01:01:48.041634+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1112,7 +1112,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-09T08:28:39Z",
-      "updatedAt": "2025-09-19T12:35:18Z",
+      "updatedAt": "2025-09-30T07:44:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1121,6 +1121,13 @@
           "body": "Rather than modifying the UP indication, I've added a new API for ULP to query about the Protection Solution Vector.",
           "createdAt": "2025-09-19T12:35:18Z",
           "updatedAt": "2025-09-19T12:35:18Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Changed in Crypto Association UP, this is meant to be sent to the Protection Solution.\nProtection Solution will validate the Association and confirm it to SCTP stack, if success SCTP will send Association UP Indication to the SCTP User, otherwise will abort the Association.",
+          "createdAt": "2025-09-30T07:44:26Z",
+          "updatedAt": "2025-09-30T07:44:26Z"
         }
       ]
     },
@@ -3177,13 +3184,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-09-24T07:12:33Z",
+      "updatedAt": "2025-09-30T07:42:10Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue63",
-      "headRefOid": "520adf6930536ab9b55ef32f4dc35f432a45a49c",
+      "headRefOid": "6f43b141232a92b5a69908260ae7c51012ed4ace",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
