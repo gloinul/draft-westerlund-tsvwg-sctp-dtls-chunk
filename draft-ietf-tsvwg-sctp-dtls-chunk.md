@@ -1303,7 +1303,7 @@ Parameters group:
 
 *  One new SCTP Error Cause Code
 
-*  One new Chunk Flag
+*  One new Chunk Flag Entry
 
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
@@ -1319,7 +1319,7 @@ protection related errors when using DTLS chunk and a protection
 engine.  Entries in the registry requires a Meaning, a reference to
 the specification defining the error, and a contact. Each entry will
 be assigned by IANA a unique 16-bit unsigned integer
-identifier. Values 0-65534 are available for assignment. Value 65535
+identifier. Values 1-65534 are available for assignment. Value 65535
 is reserved for future extension. The proposed general form of the
 registry is depicted below in {{iana-protection-error-cause}}.
 
@@ -1371,14 +1371,21 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 ## SCTP Chunk Flag
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Flags" registry, IANA is requested to add the one new entry
+"Chunk Flags" registry, IANA is requested to add the one new entry for DTLS Chunk Flags
 depicted below in in {{iana-chunk-flags}} with a reference to this
 document. The registry at time of writing was available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-3
 
 | Chunk Flag Value | Chunk Flag Name | Reference |
 | 0x01 | R bit | RFC-To-Be |
-{: #iana-chunk-flags title="New Chunk Flag Registered" cols="r l l"}
+| 0x02| Unassigned |  |
+| 0x04| Unassigned |  |
+| 0x08| Unassigned |  |
+| 0x10| Unassigned |  |
+| 0x20| Unassigned |  |
+| 0x40| Unassigned |  |
+| 0x80| Unassigned |  |
+{: #iana-chunk-flags title="DTLS Chunk Flags" cols="r l l"}
 
 ## SCTP Chunk Parameter Types
 
