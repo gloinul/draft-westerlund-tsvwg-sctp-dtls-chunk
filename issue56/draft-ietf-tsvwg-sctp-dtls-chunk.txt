@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 23 March 2026                                          Ericsson
+Expires: 16 April 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                       19 September 2025
+                                                         13 October 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2026.
+   This Internet-Draft will expire on 16 April 2026.
 
 Copyright Notice
 
@@ -343,11 +343,16 @@ Table of Contents
    authentication, rekeying etc.  The DTLS Chunk solution may use a
    number of Key Management mechanisms depending on what is being
    implemented and available and/or according to the local policies.
-   Key Management Types are called here Protection Solutions, they are
-   defined in IANA Registry "SCTP Protection Solutions" and are defined
-   in specific documents.  This document constitutes a requirement
-   towards any SCTP Protection Solution.  One example of such a in-band
-   DTLS key management is [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
+   Key Management methods are called here Protection Solutions, they are
+   defined in their own specific documents, and needs to be registered
+   in the IANA Registry "SCTP Protection Solutions" to get their own
+   unique identifier.  This document constitutes a requirement towards
+   any SCTP Protection Solution.
+
+   Currently there are two in-band DTLS key management solutions
+   defined, they have different properties.  See
+   [I-D.ietf-tsvwg-dtls-chunk-key-management] and
+   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
 
 3.4.  SCTP DTLS Chunk Buffering and Flow Control
 
@@ -1619,6 +1624,15 @@ Table of Contents
               ietf-tsvwg-rfc4895-bis-05, 21 April 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-
               rfc4895-bis-05>.
+
+   [I-D.ietf-tsvwg-dtls-chunk-key-management]
+              Tüxen, M., Tschofenig, H., and T. Reddy.K, "Using Datagram
+              Transport Layer Security (DTLS) for Key Management for the
+              Stream Control Transmission Protocol (SCTP) DTLS Chunk",
+              Work in Progress, Internet-Draft, draft-ietf-tsvwg-dtls-
+              chunk-key-management-00, 4 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-
+              dtls-chunk-key-management-00>.
 
    [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
               Westerlund, M., Preuß Mattsson, J., and C. Porfiri,
