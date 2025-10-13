@@ -868,15 +868,15 @@ Now the Protection Operator MAY exchange handshake messages
 using SCTP Messages that are unprotected, as long as it used
 PPID=4242 for the messages. At some point the handshake will
 derive client and server write keys for the current epoch transport
-and restart keys, that derivation MUST include the full preference 
+and restart keys, that derivation MUST include the full preference
 list of protection operators provided in
-{{protectedassoc-parameter}} the INIT chunk for down-grade 
+{{protectedassoc-parameter}} the INIT chunk for down-grade
 prevention. The requirement here is that if not both parties
-use the same ordered list of offered protection operators 
-they will arrive at different keys and the communication 
-will fail, thus preventing attempts to manipulate the 
-protection operator negotiation even if it is in 
-clear text when it is exchanged. 
+use the same ordered list of offered protection operators
+they will arrive at different keys and the communication
+will fail, thus preventing attempts to manipulate the
+protection operator negotiation even if it is in
+clear text when it is exchanged.
 
 ## Termination of a Protected Association {#termination-procedure}
 
