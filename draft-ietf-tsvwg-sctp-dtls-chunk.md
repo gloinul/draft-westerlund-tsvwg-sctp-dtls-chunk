@@ -45,7 +45,7 @@ informative:
   RFC6458:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
-
+  I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.westerlund-tsvwg-sctp-DTLS-handshake:
     target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
     title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
@@ -284,23 +284,24 @@ a DTLS key-management connection.
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
-This document specifies the mechanisms for SCTP to be protected
-with DTLS, it doesn't specify how the Key Management works,
-being limited on what the Key Management SHALL provide for
-achieving the protection.
-Even though DTLS1.3 is indicated as protocol for providing
-Key Contexts, different implementations can achieve that
-and different mechanisms may be used for features such as
-mutual authentication, rekeying etc.
-The DTLS Chunk solution may use a number of Key Management
-mechanisms depending on what is being implemented and available
-and/or according to the local policies.
-Key Management Types are called here Protection Solutions,
-they are defined in IANA Registry "SCTP Protection Solutions"
-and are defined in specific documents.
-This document constitutes a requirement towards any
-SCTP Protection Solution.
-One example of such a in-band DTLS key management is
+This document specifies the mechanisms for SCTP to be protected with
+DTLS, it doesn't specify how the Key Management works, being limited
+on what the Key Management SHALL provide for achieving the protection.
+Even though DTLS1.3 is indicated as protocol for providing Key
+Contexts, different implementations can achieve that and different
+mechanisms may be used for features such as mutual authentication,
+rekeying etc.  The DTLS Chunk solution may use a number of Key
+Management mechanisms depending on what is being implemented and
+available and/or according to the local policies.  Key Management
+methods are called here Protection Solutions, they are defined in
+their own specific documents, and needs to be registered in the IANA
+Registry "SCTP Protection Solutions" to get their own unique identifier.
+This document constitutes a requirement towards any SCTP
+Protection Solution.
+
+Currently there are two in-band DTLS key management solutions defined,
+they have different properties. See
+{{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
