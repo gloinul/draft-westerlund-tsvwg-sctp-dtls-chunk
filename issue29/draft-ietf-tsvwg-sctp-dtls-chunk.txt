@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 13 March 2026                                          Ericsson
+Expires: 16 April 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        9 September 2025
+                                                         13 October 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 March 2026.
+   This Internet-Draft will expire on 16 April 2026.
 
 Copyright Notice
 
@@ -893,9 +893,6 @@ Table of Contents
 
 7.1.2.  Considerations about handshake over the API
 
-   Here it's assumed that the SCTP User has properly configured the
-   Protection Operator before using.
-
    SCTP and Protection Operator contribute in creating the DTLS Chunks
    solution via the API, thus SCTP Chunk availability for the SCTP User
    depends on Protection Operator to comply with the required
@@ -911,122 +908,17 @@ Table of Contents
    INIT Parameters related to the Protecion, as a list with in preferred
    order (see Section 4.1).
 
-   At the Association Initiator the Protection Operator will initiate
-   the handshaking and will derive the Client and Server Keys for both
-   the Traffic and Restart Key Contexts using the list of INIT
-   parameters in the preferred order and the INIT parameter selected by
-   the Association Responder.  As soon as the Key Contexts are ready,
-   they are stored in the Chunk Protection Operator.
-
-   At the Association Responder, the Protection Operator will
-   participate to the handshaking and will derive the Client Keys for
-   both the Traffic and Restart Key Contexts using the list of INIT
-   parameters in the preferred order from the Association Initiator and
-   the INIT parameter selected by the Association Responder.  As soon as
-   the Client Key Contexts are ready, they are stored in the Chunk
-   Protection Operator.
-
-   At that point, the Association Initiator can send Encrypted DATA
-   Chunk to the Association Responder, but not vice-versa.  The
-   Association can still handle plain text Control Chunks and DATA using
-   Pid=4242.
-
-   The Protection Operator at the Association Initiator will send a DTLS
-   FINISHED message by using Pid=4242 but encrypting it in a DTLS Chunk.
-   This DTLS Chunk must be possible to be handled by the Protection
-   Operator at the Association Responder site with the Client Key
-   Context.
-
-   If there was no corruption in the handhshake and no downgrade
-   attempts, the Protection Operator at the Association Responder will
-   be able deriving the Server Keys for both the Traffic and Restart Key
-   Contexts using the list of INIT parameters in the preferred order and
-   the INIT parameter selected by the Association Responder.  It will
-   then store these Key Contexts in the Chunk Protection Operator at the
-   Responder Site.  The Protection Operator will send a DTLS ACK message
-   by using Pid=4242 but encrypting it in a DTLS Chunk.  This DTLS Chunk
-   must be possible to be handled by the Protection Operator at the
-   Association Initiator site with the Client Key Context.
-
-   When sending the DTLS ACK message, the Association Responder will
-   stop handling any plain text chunk, except than INIT.  The
-   Association Initiator will do the same at reception of that DTLS ACK
-   message.
-
-       Initiator
-       ---------
-
-               SCTP                                   Protection
-                |                                      Operator
-                |                                         |
-        .-------+-------.                                 |
-       |                 |                                |
-       |  INIT/INIT-ACK  |                                |
-       |  COOCKIE/C-ACK  |                                |
-       |                 |                                |
-        '-------+-------'                                 |
-                |             Association UP              |
-                +---------------------------------------->|
-                |           With INIT Parameters          |
-                |                                 .-------+-------.
-                |                                |    Protection   |
-                |                                |    Connection   |
-                |                                |    Handshake    |
-                |                                |    .........    |
-                |                                |   Export Keys   |
-                |                                 '-------+-------'
-                |  Establish Client Write Keying Material |
-                |<----------------------------------------+
-                |  Establish Server Write Keying Material |
-                |<----------------------------------------+
-                |                                         |
-                |                                 .-------+-------.
-                |                                |  Validate Keys  |
-                |                                 '-------+-------'
-                |        Association Ready for DATA       |
-                |<----------------------------------------+
-                |                                         |
-
-       Responder
-       ---------
-
-               SCTP                                   Protection
-                |                                      Operator
-                |                                         |
-        .-------+-------.                                 |
-       |                 |                                |
-       |  INIT/INIT-ACK  |                                |
-       |  COOCKIE/C-ACK  |                                |
-       |                 |                                |
-        '-------+-------'                                 |
-                |             Association UP              |
-                +---------------------------------------->|
-                |           With INIT Parameters          |
-                |                                 .-------+-------.
-                |                                |    Protection   |
-                |                                |    Connection   |
-                |                                |    Handshake    |
-                |                                |    .........    |
-                |                                |  Export Client  |
-                |                                |      Keys       |
-                |                                 '-------+-------'
-                |  Establish Client Write Keying Material |
-                |<----------------------------------------+
-                |                                         |
-                |                                 .-------+-------.
-                |                                |  Validate Keys  |
-                |                                |    .........    |
-                |                                |  Export Server  |
-                |                                |      Keys       |
-                |                                 '-------+-------'
-                |  Establish Server Write Keying Material |
-                |<----------------------------------------+
-                |                                         |
-                |        Association Ready for DATA       |
-                |<----------------------------------------+
-                |                                         |
-
-                   Figure 7: Initialization Phase on API
+   Now the Protection Operator MAY exchange handshake messages using
+   SCTP Messages that are unprotected, as long as it used PPID=4242 for
+   the messages.  At some point the handshake will derive client and
+   server write keys for the current epoch transport and restart keys,
+   that derivation MUST include the full preference list of protection
+   operators provided in Section 4.1 the INIT chunk for down-grade
+   prevention.  The requirement here is that if not both parties use the
+   same ordered list of offered protection operators they will arrive at
+   different keys and the communication will fail, thus preventing
+   attempts to manipulate the protection operator negotiation even if it
+   is in clear text when it is exchanged.
 
 7.2.  Termination of a Protected Association
 
@@ -1085,9 +977,9 @@ Table of Contents
      |                           Chunk #n                            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 8: Unprotected SCTP Packet
+                     Figure 7: Unprotected SCTP Packet
 
-   The diagram shown in Figure 8 describes the structure of an
+   The diagram shown in Figure 7 describes the structure of an
    unprotected SCTP packet as described in [RFC9260].
 
       0                   1                   2                   3
@@ -1098,9 +990,9 @@ Table of Contents
      |                          DTLS Chunk                           |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 9: Protected SCTP Packets
+                      Figure 8: Protected SCTP Packets
 
-   The diagram shown in Figure 9 describes the structure of a protected
+   The diagram shown in Figure 8 describes the structure of a protected
    SCTP packet being sent.  Such packets are built with the SCTP common
    header.  Only one DTLS chunk can be sent in a SCTP packet.
 
