@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 23 March 2026                                          Ericsson
+Expires: 16 April 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                       19 September 2025
+                                                         13 October 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2026.
+   This Internet-Draft will expire on 16 April 2026.
 
 Copyright Notice
 
@@ -1340,7 +1340,7 @@ Table of Contents
 
    *  One new SCTP Error Cause Code
 
-   *  One new Chunk Flag
+   *  One new Chunk Flag Entry
 
    And finally the update of one registered SCTP Payload Protocol
    Identifier.
@@ -1356,7 +1356,7 @@ Table of Contents
    engine.  Entries in the registry requires a Meaning, a reference to
    the specification defining the error, and a contact.  Each entry will
    be assigned by IANA a unique 16-bit unsigned integer identifier.
-   Values 0-65534 are available for assignment.  Value 65535 is reserved
+   Values 1-65534 are available for assignment.  Value 65535 is reserved
    for future extension.  The proposed general form of the registry is
    depicted below in Table 3.
 
@@ -1433,8 +1433,8 @@ Table of Contents
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Flags" registry, IANA is requested to add the one new entry
-   depicted below in in Table 6 with a reference to this document.  The
-   registry at time of writing was available at:
+   for DTLS Chunk Flags depicted below in in Table 6 with a reference to
+   this document.  The registry at time of writing was available at:
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-3
 
@@ -1443,8 +1443,22 @@ Table of Contents
             +==================+=================+===========+
             |             0x01 | R bit           | RFC-To-Be |
             +------------------+-----------------+-----------+
+            |             0x02 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x04 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x08 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x10 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x20 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x40 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x80 | Unassigned      |           |
+            +------------------+-----------------+-----------+
 
-                    Table 6: New Chunk Flag Registered
+                        Table 6: DTLS Chunk Flags
 
 12.5.  SCTP Chunk Parameter Types
 
