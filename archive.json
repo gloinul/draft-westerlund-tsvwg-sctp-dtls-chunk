@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-02T01:01:48.041634+00:00",
+  "timestamp": "2025-10-14T01:03:13.896645+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1077,7 +1077,7 @@
       "id": "I_kwDOKszxDc7J3dCD",
       "title": "Around Figure 1 clarify that DTLS is an example of key-management.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/62",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1086,8 +1086,8 @@
       "labels": [],
       "body": "In DTLS chunk the whole key-management function is actually a black box that provides key contexts, may send DATA messages and interacts with the DTLS chunk API. So figure maybe should be simplified for that reason. ",
       "createdAt": "2025-09-05T08:39:47Z",
-      "updatedAt": "2025-09-19T07:34:32Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-13T07:54:31Z",
+      "closedAt": "2025-10-13T07:54:31Z",
       "comments": [
         {
           "author": "teiclap",
@@ -2934,7 +2934,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-03T08:12:29Z",
-      "updatedAt": "2025-09-03T13:33:43Z",
+      "updatedAt": "2025-10-13T06:46:21Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
@@ -2982,7 +2982,21 @@
           "updatedAt": "2025-09-03T11:45:05Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Gfj1o",
+          "commit": {
+            "abbreviatedOid": "0fa1650"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-13T06:46:21Z",
+          "updatedAt": "2025-10-13T06:46:21Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 61,
@@ -2996,13 +3010,13 @@
       "labels": [],
       "body": "Added a description on how to deal with plain text messages.\r\nAdded references to the INIT parameter list in the abstract API.\r\n\r\nWe may not need any State Machine to be added.",
       "createdAt": "2025-09-04T12:45:58Z",
-      "updatedAt": "2025-09-09T12:14:33Z",
+      "updatedAt": "2025-10-13T07:48:09Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue29",
-      "headRefOid": "dd492739ec38878c00663f74111515a577d5195e",
+      "headRefOid": "a6ca0dffd43bcf5b2f3e9b82bd94edcef60c1ed5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3061,6 +3075,19 @@
               "updatedAt": "2025-09-05T08:12:16Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7GgMKB",
+          "commit": {
+            "abbreviatedOid": "7aadb8b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "I think this is a reasonable start. I think we can consider if there are more general procedure, or if we actually have a API related state machine that can provide a clearer understanding for the reader of how the interaction with the keys for a given epoch exists. But I think we can merge this. ",
+          "createdAt": "2025-10-13T07:45:15Z",
+          "updatedAt": "2025-10-13T07:45:15Z",
+          "comments": []
         }
       ]
     },
@@ -3069,26 +3096,42 @@
       "id": "PR_kwDOKszxDc6pc4-J",
       "title": "Updated Fig.1 and description",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/65",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T08:01:44Z",
-      "updatedAt": "2025-09-19T08:01:44Z",
+      "updatedAt": "2025-10-13T07:54:30Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue62",
       "headRefOid": "a9098aa1a1b67cddabc590e8f0ce7da7c5131d6f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-13T07:54:30Z",
+      "mergedAt": "2025-10-13T07:54:30Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "254dbc338149eb96292cd7eac6eb28e25450aad3"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7GgSSZ",
+          "commit": {
+            "abbreviatedOid": "a9098aa"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-13T07:54:22Z",
+          "updatedAt": "2025-10-13T07:54:22Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 66,
@@ -3132,19 +3175,33 @@
       "labels": [],
       "body": "Fix for issue #41 ",
       "createdAt": "2025-09-19T10:55:12Z",
-      "updatedAt": "2025-09-19T13:46:09Z",
+      "updatedAt": "2025-10-13T08:34:32Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue41",
-      "headRefOid": "6a9e3dad5ef4a64ae9c8364f223a05bfc410d8b4",
+      "headRefOid": "d886527edacc91f7f57bde64f83b9c70ccf0b000",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Ggw4n",
+          "commit": {
+            "abbreviatedOid": "6a9e3da"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-13T08:34:32Z",
+          "updatedAt": "2025-10-13T08:34:32Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 68,
@@ -3158,13 +3215,13 @@
       "labels": [],
       "body": "Fixed Issue #56 ",
       "createdAt": "2025-09-19T12:16:22Z",
-      "updatedAt": "2025-09-19T12:16:22Z",
+      "updatedAt": "2025-10-13T08:51:38Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue56",
-      "headRefOid": "a86274952a67118e23b9ba24d37fb6c1ab577b51",
+      "headRefOid": "92c7daa8eca2e2ea655a2be0bd9e3bf496148d82",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3184,7 +3241,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-09-30T07:42:10Z",
+      "updatedAt": "2025-10-13T09:06:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -3211,7 +3268,21 @@
           "updatedAt": "2025-09-23T21:36:35Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7GhLt9",
+          "commit": {
+            "abbreviatedOid": "6f43b14"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "I think this looks okay as direction for the solution.\r\n\r\nWould it be better to include the selected as the first element, as that is known to be a single 16-bit value, then followed by N 16-bit values for the ordered list that was offered?",
+          "createdAt": "2025-10-13T09:06:33Z",
+          "updatedAt": "2025-10-13T09:06:33Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
