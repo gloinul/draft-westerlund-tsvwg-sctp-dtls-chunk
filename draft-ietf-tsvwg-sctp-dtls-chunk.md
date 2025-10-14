@@ -960,13 +960,13 @@ establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.
 
 This API enables the cryptographical protection operations by setting
-client/server write key, sequence number key, and IV for primary and
-restart DTLS key context. The write key is the primary cryptograpical
-key used by the cipher suit for DTLS record protection (Section 5.2 of
-{{RFC8446}}. The sequence number key is used for Record Number
-Encryption (Section 4.2.3 of {{RFC8446}}). The initilization vector
-(IV) is cryptographical random material used to XOR with the sequence
+client/server write keys, sequence number keys, and IVs for primary and
+restart DTLS contexts. The write key is the used by the cipher suite
+for DTLS record protection (Section 5.2 of {{RFC8446}}. The initilization
+vector (IV) is random material used to XOR with the sequence
 number to create the nonce per Section 5.3 of {{RFC8446}}.
+The sequence number key is used to encrypt the sequence number
+(Section 4.2.3 of {{RFC9147}}).
 
 ## Cipher Suit Capabilities
 
