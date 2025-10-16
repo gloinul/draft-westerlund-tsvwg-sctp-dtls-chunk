@@ -45,7 +45,7 @@ informative:
   RFC6458:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
-
+  I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.westerlund-tsvwg-sctp-DTLS-handshake:
     target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
     title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
@@ -210,7 +210,7 @@ key the Chunk protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
 well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defined in separate documents,
-e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. To prevent
+(see {{sctp-protection-solutions}}). To prevent
 downgrade attacks of the key-management negotiation the key-management
 should implement specific procedures when deriving keys.
 
@@ -273,6 +273,28 @@ The first established DTLS key context for any SCTP association and DTLS
 connection ID (if used) SHALL use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
 a DTLS key-management connection.
+
+## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
+
+This document specifies the mechanisms for SCTP to be protected with
+DTLS, it doesn't specify how the Key Management works, being limited
+on what the Key Management SHALL provide for achieving the protection.
+Even though DTLS1.3 is indicated as protocol for providing Key
+Contexts, different implementations can achieve that and different
+mechanisms may be used for features such as mutual authentication,
+rekeying etc.  The DTLS Chunk solution may use a number of Key
+Management mechanisms depending on what is being implemented and
+available and/or according to the local policies.  Key Management
+methods are called here Protection Solutions, they are defined in
+their own specific documents, and needs to be registered in the IANA
+Registry "SCTP Protection Solutions" to get their own unique identifier.
+This document constitutes a requirement towards any SCTP
+Protection Solution.
+
+Currently there are two in-band DTLS key management solutions defined,
+they have different properties. See
+{{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
@@ -857,8 +879,8 @@ capability is out of the scope of the current document.
 ## Considerations on Key Management {#key-management-considerations}
 
 It is up to the upper layer to manage the keys for the DTLS chunk.
-One example of such a in-band DTLS key management is
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+The meaning of key management is described in {{sctp-protection-solutions}}.
+
 The key management SHOULD use a dedicated PPID to ensure that the
 user messages are handled by the appropriate layer.
 
@@ -869,18 +891,6 @@ that were sent and received.
 
 The communication is only protected after both sides have configured the keys
 for sending and both sides have enforced the protection.
-
-To prevent downgrade attacks the key-management methods SHOULD include
-in its input to key derivation the offered list in priority order of
-protections solutions from the SCTP associations INIT chunk's DTLS 1.3
-Chunk Protected Association parameter. By both peers including the
-sent and received list, respectively, in the key derivation any
-downgrade will result in a key-missmatch between the SCTP assocation
-initiator and responder, resulting in the SCTP assocation failing
-after having installed key contexts, thus preventing any down-grade
-attempt to weaking the security. Methods not including the list of
-offered protection solutions will enable a downgrade to such a
-key-management method.
 
 
 # DTLS Chunk Handling {#dtls-chunk-handling}
@@ -1317,7 +1327,7 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 | 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
-{: #iana-psi title="PVALID Protection Solution Identifiers" cols="r l l l"}
+{: #iana-psi title="Protection Solution Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
 as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
