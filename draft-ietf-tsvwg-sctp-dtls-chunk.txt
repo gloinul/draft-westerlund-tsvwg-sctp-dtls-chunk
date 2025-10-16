@@ -79,15 +79,16 @@ Table of Contents
    3.  Overview
      3.1.  Protocol Overview
      3.2.  DTLS Considerations
-     3.3.  SCTP DTLS Chunk Buffering and Flow Control
-     3.4.  PMTU Considerations
-     3.5.  Congestion Control Considerations
-     3.6.  ICMP Considerations
-     3.7.  Path Selection Considerations
-     3.8.  Dynamic Address Reconfiguration Considerations
-     3.9.  SCTP Restart Considerations
-       3.9.1.  Protected SCTP Restart
-       3.9.2.  Compatibility with Legacy SCTP Restart
+     3.3.  Considerations about SCTP Protection Solutions
+     3.4.  SCTP DTLS Chunk Buffering and Flow Control
+     3.5.  PMTU Considerations
+     3.6.  Congestion Control Considerations
+     3.7.  ICMP Considerations
+     3.8.  Path Selection Considerations
+     3.9.  Dynamic Address Reconfiguration Considerations
+     3.10. SCTP Restart Considerations
+       3.10.1.  Protected SCTP Restart
+       3.10.2.  Compatibility with Legacy SCTP Restart
    4.  New Parameter Type
      4.1.  DTLS 1.3 Chunk Protected Association
    5.  New Chunk Type
@@ -171,7 +172,7 @@ Table of Contents
    provided by SCTP and its extensions.  However, there can be some
    limitations or additional requirements for them to function such as
    those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see Section 3.8 and Section 3.9.  Due to its level
+   Reconfiguration, see Section 3.9 and Section 3.10.  Due to its level
    of integration as discussed in next section it will provide its
    security functions on all content of the SCTP packet, and will thus
    not impact the potential to utilize any SCTP functionalities or
@@ -257,10 +258,10 @@ Table of Contents
    to key the Chunk protection operation function.  Usage of the DTLS
    1.3 handshake for initial mutual authentication and key establishment
    as well as periodic re-authentication and rekeying with Diffe-Hellman
-   of the DTLS chunk protection is defined in separate documents, e.g.
-   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].  To prevent downgrade
-   attacks of the key-management negotiation the key-management should
-   implement specific procedures when deriving keys.
+   of the DTLS chunk protection is defined in separate documents, (see
+   Section 3.3).  To prevent downgrade attacks of the key-management
+   negotiation the key-management should implement specific procedures
+   when deriving keys.
 
    When the endpoint authentication and key establishment has been
    completed, the association is considered to be secured and the ULP is
@@ -321,7 +322,29 @@ Table of Contents
    the epoch of the DTLS key context will normally match the epoch of a
    DTLS key-management connection.
 
-3.3.  SCTP DTLS Chunk Buffering and Flow Control
+3.3.  Considerations about SCTP Protection Solutions
+
+   This document specifies the mechanisms for SCTP to be protected with
+   DTLS, it doesn't specify how the Key Management works, being limited
+   on what the Key Management SHALL provide for achieving the
+   protection.  Even though DTLS1.3 is indicated as protocol for
+   providing Key Contexts, different implementations can achieve that
+   and different mechanisms may be used for features such as mutual
+   authentication, rekeying etc.  The DTLS Chunk solution may use a
+   number of Key Management mechanisms depending on what is being
+   implemented and available and/or according to the local policies.
+   Key Management methods are called here Protection Solutions, they are
+   defined in their own specific documents, and needs to be registered
+   in the IANA Registry "SCTP Protection Solutions" to get their own
+   unique identifier.  This document constitutes a requirement towards
+   any SCTP Protection Solution.
+
+   Currently there are two in-band DTLS key management solutions
+   defined, they have different properties.  See
+   [I-D.ietf-tsvwg-dtls-chunk-key-management] and
+   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
+
+3.4.  SCTP DTLS Chunk Buffering and Flow Control
 
    DTLS 1.3 operations and SCTP are asynchronous, meaning that the Chunk
    Protection Operator may deliver the decrypted SCTP Payload to the
@@ -337,7 +360,7 @@ Table of Contents
    chunks is not desired and may cause false congestion signals and
    trigger retransmissions.
 
-3.4.  PMTU Considerations
+3.5.  PMTU Considerations
 
    The addition of the DTLS chunk to SCTP reduces the room for payload,
    due to the size of the DTLS chunk header, padding, and the AEAD
@@ -355,7 +378,7 @@ Table of Contents
    to the maximum plain text plus DTLS chunk and algorithm overhead plus
    the SCTP common header.
 
-3.5.  Congestion Control Considerations
+3.6.  Congestion Control Considerations
 
    The SCTP mechanism for handling congestion control does depend on
    successful data transfer for enlarging or reducing the congestion
@@ -374,7 +397,7 @@ Table of Contents
    perspective the congestion control is exactly the same as how
    specified in [RFC9260].
 
-3.6.  ICMP Considerations
+3.7.  ICMP Considerations
 
    The SCTP implementation will be responsible for handling ICMP
    messages and their validation as specified in [RFC9260] Section 10.
@@ -382,7 +405,7 @@ Table of Contents
    the actual sent SCTP packets with the DTLS chunk and not the
    unprotected payload.
 
-3.7.  Path Selection Considerations
+3.8.  Path Selection Considerations
 
    When an Association is multihomed there are multiple paths between
    Endpoints.  The selection of the specific path to be used at a
@@ -396,7 +419,7 @@ Table of Contents
    paths in multihomed Associations, thus it needs to be large enough to
    accommodate latency differences.
 
-3.8.  Dynamic Address Reconfiguration Considerations
+3.9.  Dynamic Address Reconfiguration Considerations
 
    When using Dynamic Address Reconfiguration [RFC5061] in an SCTP
    association using DTLS Chunk the ASCONF chunk is protected, thus it
@@ -419,7 +442,7 @@ Table of Contents
    We recommend to amend [RFC5061] for including DTLS Chunks as
    Authentication mechanism for ASCONF chunks.
 
-3.9.  SCTP Restart Considerations
+3.10.  SCTP Restart Considerations
 
    This section deals with the handling of an unexpected INIT chunk
    during an Association lifetime as described in Section 5.2 of
@@ -428,19 +451,19 @@ Table of Contents
 
    This specification doesn't support SCTP Restart as described in
    [RFC9260] because the COOCKIE-ECHO and COOKIE-ACK chunks are sent
-   encrypted (see Section 3.9.1);
+   encrypted (see Section 3.10.1);
 
    When the upper layer protocols require support of SCTP Restart, as in
    case of 3GPP NG-C protocol [ETSI-TS-38.413], the endpoint needs to
    support also initiating protected SCTP Restart procedure described in
-   Section 3.9.1.  Implementing initiating protected restart procedure
+   Section 3.10.1.  Implementing initiating protected restart procedure
    is RECOMMENDED, however not required as persistent secure storage of
    the restart DTLS Key Context is needed.
 
    The cases where one of the SCTP Endpoints only implements initiating
-   legacy SCTP Restart are described in Section 3.9.2.
+   legacy SCTP Restart are described in Section 3.10.2.
 
-3.9.1.  Protected SCTP Restart
+3.10.1.  Protected SCTP Restart
 
    The protected SCTP Restart procedure keeps the security
    characteristics of an SCTP Association using DTLS Chunk.
@@ -538,7 +561,7 @@ Table of Contents
    Context is only installed after any old in-flight restart packets
    will have been received.
 
-3.9.2.  Compatibility with Legacy SCTP Restart
+3.10.2.  Compatibility with Legacy SCTP Restart
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
@@ -549,7 +572,7 @@ Table of Contents
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
-   chunk protected by DTLS chunk as described in Section 3.9.1, thus
+   chunk protected by DTLS chunk as described in Section 3.10.1, thus
    having the R bit (Restart Indicator) set in the DTLS Chunk (see
    Figure 4), will silently discard it.
 
@@ -894,10 +917,10 @@ Table of Contents
 7.3.  Considerations on Key Management
 
    It is up to the upper layer to manage the keys for the DTLS chunk.
-   One example of such a in-band DTLS key management is
-   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].  The key management
-   SHOULD use a dedicated PPID to ensure that the user messages are
-   handled by the appropriate layer.
+   The meaning of key management is described in Section 3.3.
+
+   The key management SHOULD use a dedicated PPID to ensure that the
+   user messages are handled by the appropriate layer.
 
    When performing key management, the keys for receiving SHOULD be
    installed before the corresponding send keys at the peer.  For
@@ -906,18 +929,6 @@ Table of Contents
 
    The communication is only protected after both sides have configured
    the keys for sending and both sides have enforced the protection.
-
-   To prevent downgrade attacks the key-management methods SHOULD
-   include in its input to key derivation the offered list in priority
-   order of protections solutions from the SCTP associations INIT
-   chunk's DTLS 1.3 Chunk Protected Association parameter.  By both
-   peers including the sent and received list, respectively, in the key
-   derivation any downgrade will result in a key-missmatch between the
-   SCTP assocation initiator and responder, resulting in the SCTP
-   assocation failing after having installed key contexts, thus
-   preventing any down-grade attempt to weaking the security.  Methods
-   not including the list of offered protection solutions will enable a
-   downgrade to such a key-management method.
 
 8.  DTLS Chunk Handling
 
@@ -1361,7 +1372,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-              Table 3: PVALID Protection Solution Identifiers
+                  Table 3: Protection Solution Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
@@ -1575,6 +1586,15 @@ Table of Contents
               ietf-tsvwg-rfc4895-bis-05, 21 April 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-
               rfc4895-bis-05>.
+
+   [I-D.ietf-tsvwg-dtls-chunk-key-management]
+              Tüxen, M., Tschofenig, H., and T. Reddy.K, "Using Datagram
+              Transport Layer Security (DTLS) for Key Management for the
+              Stream Control Transmission Protocol (SCTP) DTLS Chunk",
+              Work in Progress, Internet-Draft, draft-ietf-tsvwg-dtls-
+              chunk-key-management-00, 4 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-
+              dtls-chunk-key-management-00>.
 
    [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
               Westerlund, M., Preuß Mattsson, J., and C. Porfiri,
