@@ -1200,19 +1200,16 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-congestion-control-consider" class="internal xref">Congestion Control Considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
-                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-path-selection-consideratio" class="internal xref">Path Selection Considerations</a></p>
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-dynamic-address-reconfigura" class="internal xref">Dynamic Address Reconfiguration Considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
-                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="auto internal xref">3.8</a>.  <a href="#name-dynamic-address-reconfigura" class="internal xref">Dynamic Address Reconfiguration Considerations</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9">
-                <p id="section-toc.1-1.3.2.9.1"><a href="#section-3.9" class="auto internal xref">3.9</a>.  <a href="#name-sctp-restart-considerations" class="internal xref">SCTP Restart Considerations</a></p>
+                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="auto internal xref">3.8</a>.  <a href="#name-sctp-restart-considerations" class="internal xref">SCTP Restart Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9.2.1">
-                    <p id="section-toc.1-1.3.2.9.2.1.1"><a href="#section-3.9.1" class="auto internal xref">3.9.1</a>.  <a href="#name-protected-sctp-restart" class="internal xref">Protected SCTP Restart</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8.2.1">
+                    <p id="section-toc.1-1.3.2.8.2.1.1"><a href="#section-3.8.1" class="auto internal xref">3.8.1</a>.  <a href="#name-protected-sctp-restart" class="internal xref">Protected SCTP Restart</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9.2.2">
-                    <p id="section-toc.1-1.3.2.9.2.2.1"><a href="#section-3.9.2" class="auto internal xref">3.9.2</a>.  <a href="#name-compatibility-with-legacy-s" class="internal xref">Compatibility with Legacy SCTP Restart</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8.2.2">
+                    <p id="section-toc.1-1.3.2.8.2.2.1"><a href="#section-3.8.2" class="auto internal xref">3.8.2</a>.  <a href="#name-compatibility-with-legacy-s" class="internal xref">Compatibility with Legacy SCTP Restart</a></p>
 </li>
                 </ul>
 </li>
@@ -1443,7 +1440,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
    provided by SCTP and its extensions. However, there can be some
    limitations or additional requirements for them to function such as
    those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see <a href="#sec-asconf" class="auto internal xref">Section 3.8</a> and <a href="#sec-restart" class="auto internal xref">Section 3.9</a>. Due to its
+   Reconfiguration, see <a href="#sec-asconf" class="auto internal xref">Section 3.7</a> and <a href="#sec-restart" class="auto internal xref">Section 3.8</a>. Due to its
    level of integration as discussed in next section it will provide
    its security functions on all content of the SCTP packet, and will
    thus not impact the potential to utilize any SCTP functionalities
@@ -1643,6 +1640,10 @@ function.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
 connection ID (if used) SHALL use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
 a DTLS key-management connection.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<p id="section-3.2-9">The Replay window for the DTLS Sequence Number will need to take into
+account that heartbeat (HB) chunks are sent concurrently over all
+paths in multihomed Associations, thus it needs to be large enough to
+accommodate latency differences.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-protection-solutions">
@@ -1730,29 +1731,12 @@ the congestion control is exactly the same as how specified
 in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="multipath">
-<section id="section-3.7">
-        <h3 id="name-path-selection-consideratio">
-<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-path-selection-consideratio" class="section-name selfRef">Path Selection Considerations</a>
-        </h3>
-<p id="section-3.7-1">When an Association is multihomed there are multiple paths between
-Endpoints.  The selection of the specific path to be used at a certain
-time belongs to SCTP protocol that will decide according to
-<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.  The Chunk Protection Operator shall not influence the path
-selection algorithm, actually the Chunk Protection Operator will not even
-know what path is being used.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
-<p id="section-3.7-2">The Replay window for the DTLS Sequence Number will need to take into
-account that heartbeat (HB) chunks are sent concurrently over all
-paths in multihomed Associations, thus it needs to be large enough to
-accommodate latency differences.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="sec-asconf">
-<section id="section-3.8">
+<section id="section-3.7">
         <h3 id="name-dynamic-address-reconfigura">
-<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-dynamic-address-reconfigura" class="section-name selfRef">Dynamic Address Reconfiguration Considerations</a>
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-dynamic-address-reconfigura" class="section-name selfRef">Dynamic Address Reconfiguration Considerations</a>
         </h3>
-<p id="section-3.8-1">When using Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
+<p id="section-3.7-1">When using Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
 association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
@@ -1764,59 +1748,59 @@ order to find the right one. The association will attempt
 de-protection operations on the DTLS chunk, and if that is successful
 the ASCONF chunk can be processed. Note that trial decoding should
 have a limit in number of tried contexts to prevent denial of service
-attacks on the endpoint.<a href="#section-3.8-1" class="pilcrow">¶</a></p>
-<p id="section-3.8-2">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
+attacks on the endpoint.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<p id="section-3.7-2">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>.  For
 SCTP associations using DTLS Chunk this results in the use of
 redundant mechanism for Authentication with both SCTP-AUTH and the
 DTLS Chunk. We recommend to amend <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> for including DTLS
-Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.8-2" class="pilcrow">¶</a></p>
+Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-restart">
-<section id="section-3.9">
+<section id="section-3.8">
         <h3 id="name-sctp-restart-considerations">
-<a href="#section-3.9" class="section-number selfRef">3.9. </a><a href="#name-sctp-restart-considerations" class="section-name selfRef">SCTP Restart Considerations</a>
+<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-sctp-restart-considerations" class="section-name selfRef">SCTP Restart Considerations</a>
         </h3>
-<p id="section-3.9-1">This section deals with the handling of an unexpected INIT chunk
+<p id="section-3.8-1">This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in Section 5.2 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>
 with the purpose of achieving a Restart of the current Association,
-thus implementing SCTP Restart.<a href="#section-3.9-1" class="pilcrow">¶</a></p>
-<p id="section-3.9-2">This specification doesn't support SCTP Restart as described in
+thus implementing SCTP Restart.<a href="#section-3.8-1" class="pilcrow">¶</a></p>
+<p id="section-3.8-2">This specification doesn't support SCTP Restart as described in
 <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> because the COOCKIE-ECHO and COOKIE-ACK chunks
-are sent encrypted (see <a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>);<a href="#section-3.9-2" class="pilcrow">¶</a></p>
-<p id="section-3.9-3">When the upper layer protocols require support of SCTP Restart, as in
+are sent encrypted (see <a href="#protected-restart" class="auto internal xref">Section 3.8.1</a>);<a href="#section-3.8-2" class="pilcrow">¶</a></p>
+<p id="section-3.8-3">When the upper layer protocols require support of SCTP Restart, as in
 case of 3GPP NG-C protocol <span>[<a href="#ETSI-TS-38.413" class="cite xref">ETSI-TS-38.413</a>]</span>, the endpoint needs to
 support also initiating protected SCTP Restart procedure described in
-<a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>. Implementing initiating protected restart
+<a href="#protected-restart" class="auto internal xref">Section 3.8.1</a>. Implementing initiating protected restart
 procedure is RECOMMENDED, however not required as persistent secure
-storage of the restart DTLS Key Context is needed.<a href="#section-3.9-3" class="pilcrow">¶</a></p>
-<p id="section-3.9-4">The cases where one of the SCTP Endpoints only implements initiating
-legacy SCTP Restart are described in <a href="#sctp-rest-comp" class="auto internal xref">Section 3.9.2</a>.<a href="#section-3.9-4" class="pilcrow">¶</a></p>
+storage of the restart DTLS Key Context is needed.<a href="#section-3.8-3" class="pilcrow">¶</a></p>
+<p id="section-3.8-4">The cases where one of the SCTP Endpoints only implements initiating
+legacy SCTP Restart are described in <a href="#sctp-rest-comp" class="auto internal xref">Section 3.8.2</a>.<a href="#section-3.8-4" class="pilcrow">¶</a></p>
 <div id="protected-restart">
-<section id="section-3.9.1">
+<section id="section-3.8.1">
           <h4 id="name-protected-sctp-restart">
-<a href="#section-3.9.1" class="section-number selfRef">3.9.1. </a><a href="#name-protected-sctp-restart" class="section-name selfRef">Protected SCTP Restart</a>
+<a href="#section-3.8.1" class="section-number selfRef">3.8.1. </a><a href="#name-protected-sctp-restart" class="section-name selfRef">Protected SCTP Restart</a>
           </h4>
-<p id="section-3.9.1-1">The protected SCTP Restart procedure keeps the security
-characteristics of an SCTP Association using DTLS Chunk.<a href="#section-3.9.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-2">In protected SCTP Restart, INIT and INIT-ACK chunks are sent
+<p id="section-3.8.1-1">The protected SCTP Restart procedure keeps the security
+characteristics of an SCTP Association using DTLS Chunk.<a href="#section-3.8.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-2">In protected SCTP Restart, INIT and INIT-ACK chunks are sent
 strictly according to  <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, but COOCKIE-ECHO and COOKIE-ACK chunks
-are encrypted using DTLS Chunks and Restart DTLS Key contexts.<a href="#section-3.9.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-3">In order to support protected SCTP Restart, the SCTP Endpoints shall allocate
+are encrypted using DTLS Chunks and Restart DTLS Key contexts.<a href="#section-3.8.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-3">In order to support protected SCTP Restart, the SCTP Endpoints shall allocate
 and maintain dedicated Restart DTLS Key contexts, SCTP packets
 protected by these contexts will be identified in the DTLS chunk with
 the R (Restart) bit set (see <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>).  Both SCTP Endpoints
 needs to ensure that Restart DTLS key contexts is preserved for
-supporting the protected SCTP Restart use case.<a href="#section-3.9.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-4">In order for the protected SCTP endpoint to be available for protected SCTP
+supporting the protected SCTP Restart use case.<a href="#section-3.8.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-4">In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs access to a DTLS Key context for
 this SCTP association that needs to be kept in a well-known state so
 that both SCTP Endpoints are aware of the DTLS sequence numbers and
 replay window, i.e. initialized but never used. An SCTP Endpoint SHALL
 NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
-association restart.<a href="#section-3.9.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
+association restart.<a href="#section-3.8.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
 restart needs to store securely and persistently the restart Keys, DTLS
 connection ID (if used) and related DTLS epoch, indexed so that when
 performing a restart with the peer node it had a protected SCTP
@@ -1827,12 +1811,12 @@ secure and persistently so that they survive the events that are
 causing protected SCTP Restart procedure to be used, for instance a
 crash of the SCTP stack. The security considerations for persistent
 secure storage of keying materials is further discussed in
-<a href="#sec-considertation-storage" class="auto internal xref">Section 13.4</a>.<a href="#section-3.9.1-5" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
+<a href="#sec-considertation-storage" class="auto internal xref">Section 13.4</a>.<a href="#section-3.8.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-6">The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
 exactly as in legacy SCTP Restart case; INIT, INIT-ACK SHALL be
 sent plain as in the legacy, whereas COOCKIE-ECHO, COOKIE-ACK
-Chunks SHALL be sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.9.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-7">A DTLS Chunk using the restart DTLS key context is identified by
+Chunks SHALL be sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-3.8.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-7">A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>).  There's exactly one
 active Restart DTLS Context at a time, the newest. However, a crash at
@@ -1844,11 +1828,11 @@ key-management confirms the new ones are committed to secure storage.
 This can for example be ensure that at key-changes signals to
 terminate the old DTLS Key Contexts (including the restart) is never
 sent until the new restart DTLS Key Context has been committed to
-storage.<a href="#section-3.9.1-7" class="pilcrow">¶</a></p>
+storage.<a href="#section-3.8.1-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-2">
-            <div id="section-3.9.1-8.1">
-              <div class="alignCenter art-svg artwork" id="section-3.9.1-8.1.1">
+            <div id="section-3.8.1-8.1">
+              <div class="alignCenter art-svg artwork" id="section-3.8.1-8.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="536" viewBox="0 0 536 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 40,48 L 40,208" fill="none" stroke="black"></path>
                   <path d="M 408,48 L 408,208" fill="none" stroke="black"></path>
@@ -1890,55 +1874,55 @@ storage.<a href="#section-3.9.1-7" class="pilcrow">¶</a></p>
                     <text x="288" y="180">ACK)]</text>
                     <text x="476" y="180">Chunks</text>
                   </g>
-                </svg><a href="#section-3.9.1-8.1.1" class="pilcrow">¶</a>
+                </svg><a href="#section-3.8.1-8.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
             </figcaption></figure>
 </div>
-<p id="section-3.9.1-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
-used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.9.1-9" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-10">The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
+<p id="section-3.8.1-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 2</a> shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-3.8.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-10">The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.9.1-10" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-11">A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
+ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-3.8.1-10" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-11">A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a new DTLS keying as soon as possible,
 and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
-to restart the SCTP association.<a href="#section-3.9.1-11" class="pilcrow">¶</a></p>
-<p id="section-3.9.1-12">After restart the next primary DTLS key context SHALL use epoch=3,
+to restart the SCTP association.<a href="#section-3.8.1-11" class="pilcrow">¶</a></p>
+<p id="section-3.8.1-12">After restart the next primary DTLS key context SHALL use epoch=3,
 i.e. the epoch value is reset. Note that if the restart epoch used
 also was 3 when not using any DTLS connection ID, then the
 installation of the new restart DTLS key context needs to be done with
 some care to avoid dropping valid packets. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
-after any old in-flight restart packets will have been received.<a href="#section-3.9.1-12" class="pilcrow">¶</a></p>
+after any old in-flight restart packets will have been received.<a href="#section-3.8.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-rest-comp">
-<section id="section-3.9.2">
+<section id="section-3.8.2">
           <h4 id="name-compatibility-with-legacy-s">
-<a href="#section-3.9.2" class="section-number selfRef">3.9.2. </a><a href="#name-compatibility-with-legacy-s" class="section-name selfRef">Compatibility with Legacy SCTP Restart</a>
+<a href="#section-3.8.2" class="section-number selfRef">3.8.2. </a><a href="#name-compatibility-with-legacy-s" class="section-name selfRef">Compatibility with Legacy SCTP Restart</a>
           </h4>
-<p id="section-3.9.2-1">An SCTP Endpoint supporting only legacy SCTP Restart and involved
+<p id="section-3.8.2-1">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks SHOULD NOT attempt to
 restart the Association. The effect
 will be that the restart initiator will receive INIT-ACK back
 but then COOCKE-ECHO will be dropped until the peer nodes times
 out the SCTP Association from lack of any response from the
-restarting node.<a href="#section-3.9.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.9.2-2">An SCTP Endpoint supporting only legacy SCTP Restart and involved
+restarting node.<a href="#section-3.8.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.8.2-2">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
-chunk protected by DTLS chunk as described in <a href="#protected-restart" class="auto internal xref">Section 3.9.1</a>,
+chunk protected by DTLS chunk as described in <a href="#protected-restart" class="auto internal xref">Section 3.8.1</a>,
 thus having the R bit (Restart Indicator) set in the DTLS Chunk (see
-<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>), will silently discard it.<a href="#section-3.9.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.9.2-3">Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
+<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 4</a>), will silently discard it.<a href="#section-3.8.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.8.2-3">Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks cannot use SCTP Restart
 legacy procedure, in case of need to restart the Association
 it SHOULD keep on retrying initiating a new Association
@@ -1947,7 +1931,7 @@ until the remote SCTP Endpoint have closed the existing Association
 As alternative, depending on the Use Case and the Upper Layer protocol,
 it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
 will accept the initiation of the new Association while still supervising
-the old one.<a href="#section-3.9.2-3" class="pilcrow">¶</a></p>
+the old one.<a href="#section-3.8.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
