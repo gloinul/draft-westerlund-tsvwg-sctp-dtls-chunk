@@ -1327,6 +1327,19 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 | TBA6 | DTLS Chunk (DTLS) | RFC-To-Be |
 {: #iana-chunk-types title="New Chunk Type Registered" cols="r l l"}
 
+The registration table for the chunk flags of this chunk
+type is initially:
+
+| Chunk Flag Value | Chunk Flag Name | Reference |
+| 0x01 | R bit | RFC-To-Be |
+| 0x02| Unassigned |  |
+| 0x04| Unassigned |  |
+| 0x08| Unassigned |  |
+| 0x10| Unassigned |  |
+| 0x20| Unassigned |  |
+| 0x40| Unassigned |  |
+| 0x80| Unassigned |  |
+{: #iana-chunk-flags title="DTLS Chunk Flags" cols="r l l"}
 
 ## SCTP Chunk Parameter Types
 
