@@ -581,8 +581,7 @@ Parameter Type: 16 bits (unsigned integer)
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be the
-  number of Protection Solution fields (N) times two plus 4 and, if N
-  is odd, plus 2 bytes of padding.
+  number of Protection Solution fields (N) times two plus 4.
 
 Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:
 : Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
