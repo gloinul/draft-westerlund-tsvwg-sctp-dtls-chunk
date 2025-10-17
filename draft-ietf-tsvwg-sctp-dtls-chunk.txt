@@ -83,12 +83,11 @@ Table of Contents
      3.4.  SCTP DTLS Chunk Buffering and Flow Control
      3.5.  PMTU Considerations
      3.6.  Congestion Control Considerations
-     3.7.  ICMP Considerations
-     3.8.  Path Selection Considerations
-     3.9.  Dynamic Address Reconfiguration Considerations
-     3.10. SCTP Restart Considerations
-       3.10.1.  Protected SCTP Restart
-       3.10.2.  Compatibility with Legacy SCTP Restart
+     3.7.  Path Selection Considerations
+     3.8.  Dynamic Address Reconfiguration Considerations
+     3.9.  SCTP Restart Considerations
+       3.9.1.  Protected SCTP Restart
+       3.9.2.  Compatibility with Legacy SCTP Restart
    4.  New Parameter Type
      4.1.  DTLS 1.3 Chunk Protected Association
    5.  New Chunk Type
@@ -172,7 +171,7 @@ Table of Contents
    provided by SCTP and its extensions.  However, there can be some
    limitations or additional requirements for them to function such as
    those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see Section 3.9 and Section 3.10.  Due to its level
+   Reconfiguration, see Section 3.8 and Section 3.9.  Due to its level
    of integration as discussed in next section it will provide its
    security functions on all content of the SCTP packet, and will thus
    not impact the potential to utilize any SCTP functionalities or
@@ -397,15 +396,7 @@ Table of Contents
    perspective the congestion control is exactly the same as how
    specified in [RFC9260].
 
-3.7.  ICMP Considerations
-
-   The SCTP implementation will be responsible for handling ICMP
-   messages and their validation as specified in [RFC9260] Section 10.
-   This means that the ICMP validation needs to be done in relation to
-   the actual sent SCTP packets with the DTLS chunk and not the
-   unprotected payload.
-
-3.8.  Path Selection Considerations
+3.7.  Path Selection Considerations
 
    When an Association is multihomed there are multiple paths between
    Endpoints.  The selection of the specific path to be used at a
@@ -419,7 +410,7 @@ Table of Contents
    paths in multihomed Associations, thus it needs to be large enough to
    accommodate latency differences.
 
-3.9.  Dynamic Address Reconfiguration Considerations
+3.8.  Dynamic Address Reconfiguration Considerations
 
    When using Dynamic Address Reconfiguration [RFC5061] in an SCTP
    association using DTLS Chunk the ASCONF chunk is protected, thus it
@@ -442,7 +433,7 @@ Table of Contents
    We recommend to amend [RFC5061] for including DTLS Chunks as
    Authentication mechanism for ASCONF chunks.
 
-3.10.  SCTP Restart Considerations
+3.9.  SCTP Restart Considerations
 
    This section deals with the handling of an unexpected INIT chunk
    during an Association lifetime as described in Section 5.2 of
@@ -451,19 +442,19 @@ Table of Contents
 
    This specification doesn't support SCTP Restart as described in
    [RFC9260] because the COOCKIE-ECHO and COOKIE-ACK chunks are sent
-   encrypted (see Section 3.10.1);
+   encrypted (see Section 3.9.1);
 
    When the upper layer protocols require support of SCTP Restart, as in
    case of 3GPP NG-C protocol [ETSI-TS-38.413], the endpoint needs to
    support also initiating protected SCTP Restart procedure described in
-   Section 3.10.1.  Implementing initiating protected restart procedure
+   Section 3.9.1.  Implementing initiating protected restart procedure
    is RECOMMENDED, however not required as persistent secure storage of
    the restart DTLS Key Context is needed.
 
    The cases where one of the SCTP Endpoints only implements initiating
-   legacy SCTP Restart are described in Section 3.10.2.
+   legacy SCTP Restart are described in Section 3.9.2.
 
-3.10.1.  Protected SCTP Restart
+3.9.1.  Protected SCTP Restart
 
    The protected SCTP Restart procedure keeps the security
    characteristics of an SCTP Association using DTLS Chunk.
@@ -561,7 +552,7 @@ Table of Contents
    Context is only installed after any old in-flight restart packets
    will have been received.
 
-3.10.2.  Compatibility with Legacy SCTP Restart
+3.9.2.  Compatibility with Legacy SCTP Restart
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
@@ -572,7 +563,7 @@ Table of Contents
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
-   chunk protected by DTLS chunk as described in Section 3.10.1, thus
+   chunk protected by DTLS chunk as described in Section 3.9.1, thus
    having the R bit (Restart Indicator) set in the DTLS Chunk (see
    Figure 4), will silently discard it.
 
