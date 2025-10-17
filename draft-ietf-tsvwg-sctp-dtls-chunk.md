@@ -354,14 +354,6 @@ control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
 
-## ICMP Considerations {#icmp}
-
-The SCTP implementation will be responsible for handling ICMP messages
-and their validation as specified in {{RFC9260}} Section 10. This
-means that the ICMP validation needs to be done in relation to the
-actual sent SCTP packets with the DTLS chunk and not the unprotected
-payload.
-
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
 When using Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
@@ -580,8 +572,7 @@ Parameter Type: 16 bits (unsigned integer)
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be the
-  number of Protection Solution fields (N) times two plus 4 and, if N
-  is odd, plus 2 bytes of padding.
+  number of Protection Solution fields (N) times two plus 4.
 
 Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:
 : Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
