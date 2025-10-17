@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 16 April 2026                                          Ericsson
+Expires: 20 April 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         13 October 2025
+                                                         17 October 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2026.
+   This Internet-Draft will expire on 20 April 2026.
 
 Copyright Notice
 
@@ -136,10 +136,9 @@ Table of Contents
      12.1.  Protection Error Cause Codes Registry
      12.2.  SCTP Protection Solution Identifiers
      12.3.  SCTP Chunk Type
-     12.4.  SCTP Chunk Flag
-     12.5.  SCTP Chunk Parameter Types
-     12.6.  SCTP Error Cause Codes
-     12.7.  SCTP Payload Protocol Identifier
+     12.4.  SCTP Chunk Parameter Types
+     12.5.  SCTP Error Cause Codes
+     12.6.  SCTP Payload Protocol Identifier
    13. Security Considerations
      13.1.  Privacy Considerations
      13.2.  AEAD Limit Considerations
@@ -1340,8 +1339,6 @@ Table of Contents
 
    *  One new SCTP Error Cause Code
 
-   *  One new Chunk Flag Entry
-
    And finally the update of one registered SCTP Payload Protocol
    Identifier.
 
@@ -1429,14 +1426,8 @@ Table of Contents
 
                     Table 5: New Chunk Type Registered
 
-12.4.  SCTP Chunk Flag
-
-   In the Stream Control Transmission Protocol (SCTP) Parameters group's
-   "Chunk Flags" registry, IANA is requested to add the one new entry
-   for DTLS Chunk Flags depicted below in in Table 6 with a reference to
-   this document.  The registry at time of writing was available at:
-   https://www.iana.org/assignments/sctp-parameters/sctp-
-   parameters.xhtml#sctp-parameters-3
+   The registration table for the chunk flags of this chunk type is
+   initially:
 
             +==================+=================+===========+
             | Chunk Flag Value | Chunk Flag Name | Reference |
@@ -1460,7 +1451,7 @@ Table of Contents
 
                         Table 6: DTLS Chunk Flags
 
-12.5.  SCTP Chunk Parameter Types
+12.4.  SCTP Chunk Parameter Types
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Parameter Types" registry, IANA is requested to add the new
@@ -1477,7 +1468,7 @@ Table of Contents
 
                Table 7: New Chunk Type Parameters Registered
 
-12.6.  SCTP Error Cause Codes
+12.5.  SCTP Error Cause Codes
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Error Cause Codes" registry, IANA is requested to add the new entry
@@ -1495,7 +1486,7 @@ Table of Contents
                   Table 8: Error Cause Codes Parameters
                                 Registered
 
-12.7.  SCTP Payload Protocol Identifier
+12.6.  SCTP Payload Protocol Identifier
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Payload Protocol Identifiers" registry, IANA is requested to update
