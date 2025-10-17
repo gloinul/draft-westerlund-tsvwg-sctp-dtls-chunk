@@ -1618,7 +1618,7 @@ function achieves these features behaving as a user of the SCTP
 association.  Key Management sends and receives its own data via the
 SCTP User Level interface.  Key Management's own data are
 distinguished from any other data by means of a dedicated PPID using
-the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 7</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">Once Key Management has established a DTLS 1.3 connection, it can
 derive primary and restart keys and set the Chunk Protection Operator
 for SCTP Packet Payload encryption/decryption via an API to create the
@@ -3398,6 +3398,65 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
           </tbody>
         </table>
 </div>
+<p id="section-12.2-3">The registration table for the chunk flags of this chunk
+type is initially:<a href="#section-12.2-3" class="pilcrow">¶</a></p>
+<span id="name-dtls-chunk-flags"></span><div id="iana-chunk-flags">
+<table class="center" id="table-5">
+          <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-dtls-chunk-flags" class="selfRef">DTLS Chunk Flags</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Chunk Flag Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Chunk Flag Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x01</td>
+              <td class="text-left" rowspan="1" colspan="1">R bit</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x02</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x04</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x08</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x10</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x20</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x40</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x80</td>
+              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+</div>
 </section>
 </div>
 <div id="sctp-chunk-parameter-types">
@@ -3407,14 +3466,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
         </h3>
 <p id="section-12.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Parameter Types" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 5</a> with a
+entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 6</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-12.3-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-type-parameters-r"></span><div id="iana-chunk-parameter-types">
-<table class="center" id="table-5">
+<table class="center" id="table-6">
           <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#table-6" class="selfRef">Table 6</a>:
 <a href="#name-new-chunk-type-parameters-r" class="selfRef">New Chunk Type Parameters Registered</a>
           </caption>
 <thead>
@@ -3442,14 +3501,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
         </h3>
 <p id="section-12.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 6</a> with a
+entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 7</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-12.4-1" class="pilcrow">¶</a></p>
 <span id="name-error-cause-codes-parameter"></span><div id="iana-error-cause-codes">
-<table class="center" id="table-6">
+<table class="center" id="table-7">
           <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#table-7" class="selfRef">Table 7</a>:
 <a href="#name-error-cause-codes-parameter" class="selfRef">Error Cause Codes Parameters Registered</a>
           </caption>
 <thead>
@@ -3487,14 +3546,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
         </h3>
 <p id="section-12.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
-entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 7</a> with a
+entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-12.5-1" class="pilcrow">¶</a></p>
 <span id="name-protection-operator-protoco"></span><div id="iana-payload-protection-id">
-<table class="center" id="table-7">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-protection-operator-protoco" class="selfRef">Protection Operator Protocol Identifier Registered</a>
           </caption>
 <thead>
