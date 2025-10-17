@@ -349,14 +349,6 @@ control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
 
-## ICMP Considerations {#icmp}
-
-The SCTP implementation will be responsible for handling ICMP messages
-and their validation as specified in {{RFC9260}} Section 10. This
-means that the ICMP validation needs to be done in relation to the
-actual sent SCTP packets with the DTLS chunk and not the unprotected
-payload.
-
 ## Path Selection Considerations {#multipath}
 
 When an Association is multihomed there are multiple paths between
