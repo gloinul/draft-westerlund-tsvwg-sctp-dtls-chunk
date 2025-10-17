@@ -45,7 +45,7 @@ informative:
   RFC6458:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
-
+  I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.westerlund-tsvwg-sctp-DTLS-handshake:
     target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
     title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
@@ -149,8 +149,12 @@ been used to identify the SCTP association, the DTLS chunk is processed by
 the Chunk Protection Operator that will perform replay protection, decrypt,
 verify authenticity, and if the DTLS chunk is successfully processed provides
 the protected SCTP chunks for further processing.
-{{sctp-DTLS-chunk-layering}} illustrates the DTLS chunk processing in regard
-to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
+{{sctp-DTLS-chunk-layering}} is an example
+illustrating the DTLS chunk processing in regard
+to SCTP and the Upper Layer Protocol (ULP) using
+DTLS 1.3 for key management. Here the Key Management function
+contains validation, i.e. using certificates, handshaking,
+updating policies etc.
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +-------------------------------+
@@ -161,20 +165,8 @@ to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 for key management.
 |               | | |                           | |
 |               | | |  +---------------------+  | |
 |               | | +--+    Key Management   +  | |
-|               | | |  +---------------------+  | |
-|               | | |     +---+ +---+           | |
-|               | | |     | H | |   |           | |
-|               | | |     | a | |   |           | |
-|               | | | k   | n | | A |         k | |
-|               | | | e   | d | | l |         e | |
-|               | | | y   | s | | e |    ...  y | |
-|               | | | s   | h | | r |         s | |
-|               | | |     | a | | t |           | |
-|               | | |     | k | |   |           | |
-|               | | |     | e | |   |           | |
-|               | | |     +-+-+ +-+-+           | |
-|               | | |       |     |             | |
-|               | | |       +-----+---...       | |
+|               | | |  +----------+----------+  | |
+|               | | |             |             | |
 |               | | | ContentType |             | |
 |               | | |  +----------+----------+  | |
 |               | | +->|        Record       |  | |
@@ -218,7 +210,7 @@ key the Chunk protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
 well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defined in separate documents,
-e.g. {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}. To prevent
+(see {{sctp-protection-solutions}}). To prevent
 downgrade attacks of the key-management negotiation the key-management
 should implement specific procedures when deriving keys.
 
@@ -282,6 +274,33 @@ connection ID (if used) SHALL use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
 a DTLS key-management connection.
 
+The Replay window for the DTLS Sequence Number will need to take into
+account that heartbeat (HB) chunks are sent concurrently over all
+paths in multihomed Associations, thus it needs to be large enough to
+accommodate latency differences.
+
+## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
+
+This document specifies the mechanisms for SCTP to be protected with
+DTLS, it doesn't specify how the Key Management works, being limited
+on what the Key Management SHALL provide for achieving the protection.
+Even though DTLS1.3 is indicated as protocol for providing Key
+Contexts, different implementations can achieve that and different
+mechanisms may be used for features such as mutual authentication,
+rekeying etc.  The DTLS Chunk solution may use a number of Key
+Management mechanisms depending on what is being implemented and
+available and/or according to the local policies.  Key Management
+methods are called here Protection Solutions, they are defined in
+their own specific documents, and needs to be registered in the IANA
+Registry "SCTP Protection Solutions" to get their own unique identifier.
+This document constitutes a requirement towards any SCTP
+Protection Solution.
+
+Currently there are two in-band DTLS key management solutions defined,
+they have different properties. See
+{{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
+{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+
 ## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
 
 DTLS 1.3 operations and SCTP are asynchronous, meaning that the
@@ -334,28 +353,6 @@ The Chunk Protection Operator will not interfere with the SCTP congestion
 control mechanism, this basically means that from SCTP perspective
 the congestion control is exactly the same as how specified
 in {{RFC9260}}.
-
-## ICMP Considerations {#icmp}
-
-The SCTP implementation will be responsible for handling ICMP messages
-and their validation as specified in {{RFC9260}} Section 10. This
-means that the ICMP validation needs to be done in relation to the
-actual sent SCTP packets with the DTLS chunk and not the unprotected
-payload.
-
-## Path Selection Considerations {#multipath}
-
-When an Association is multihomed there are multiple paths between
-Endpoints.  The selection of the specific path to be used at a certain
-time belongs to SCTP protocol that will decide according to
-{{RFC9260}}.  The Chunk Protection Operator shall not influence the path
-selection algorithm, actually the Chunk Protection Operator will not even
-know what path is being used.
-
-The Replay window for the DTLS Sequence Number will need to take into
-account that heartbeat (HB) chunks are sent concurrently over all
-paths in multihomed Associations, thus it needs to be large enough to
-accommodate latency differences.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
@@ -575,8 +572,7 @@ Parameter Type: 16 bits (unsigned integer)
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be the
-  number of Protection Solution fields (N) times two plus 4 and, if N
-  is odd, plus 2 bytes of padding.
+  number of Protection Solution fields (N) times two plus 4.
 
 Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:
 : Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
@@ -672,12 +668,13 @@ additional information.
 When an initiator SCTP endpoint sends an INIT chunk that doesn't
 contain the DTLS 1.3 Chunk Protected Association or other protection
 solutions towards an SCTP endpoint that only accepts protected
-associations, the responder endpoint SHALL raise a Missing Mandatory
-Parameter error. The ERROR chunk will contain the cause code 'Missing
-Mandatory Parameter' (2) (see {{RFC9260}} Section 3.3.10.7) and the
-DTLS 1.3 chunk protected association parameter identifier
-{{protectedassoc-parameter}} in the missing param Information
-field. It may also include additional parameters representing other
+associations, SCTP will send an ABORT
+chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}
+including the error cause 'Policy Not Met' (TBA10)
+(see {{IANA-Extra-Cause}} and the DTLS 1.3 chunk protected association
+parameter identifier {{protectedassoc-parameter}} in the missing
+param Information field.
+It may also include additional parameters representing other
 supported protection mechanisms that are acceptable per endpoint
 security policy.
 
@@ -752,8 +749,8 @@ If the responder to do not support any of the protection solutions
 offered by the association initiator in the Protection Soluiton
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
-including the error cause "Error in DTLS Chunk" {{eprotect}} and
-containing the Extra Cause "No Common Protection Solution".
+including the error cause "No Common Protection" (TBA11)
+(see {{IANA-Extra-Cause}}).
 
 
 ## Critical Error from DTLS {#eengine}
@@ -798,11 +795,10 @@ containing the selected protection solution out of the set of supported
 ones. In case there are no common set of supported solutions that are
 accepted by the responder, and the endpoints policy require secured
 association it SHALL reply with an ABORT chunk, include the error
-cause "Error in DTLS Chunk" {{eprotect}} and containing the Extra
-Cause "No Common Protection Solution" {{enocommonpsi}}. Otherwise, the
-responder MAY send an INIT-ACK without the DTLS 1.3 Chunk Protected
-Association parameter to indicate it is willing to create a session
-without security.
+cause "No Common Protection" (TBA11) (see {{IANA-Extra-Cause}}).
+Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
+Chunk Protected Association parameter to indicate it is willing
+to create a session without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations shall consider an INIT chunk not containing
@@ -865,8 +861,8 @@ capability is out of the scope of the current document.
 ## Considerations on Key Management {#key-management-considerations}
 
 It is up to the upper layer to manage the keys for the DTLS chunk.
-One example of such a in-band DTLS key management is
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+The meaning of key management is described in {{sctp-protection-solutions}}.
+
 The key management SHOULD use a dedicated PPID to ensure that the
 user messages are handled by the appropriate layer.
 
@@ -877,18 +873,6 @@ that were sent and received.
 
 The communication is only protected after both sides have configured the keys
 for sending and both sides have enforced the protection.
-
-To prevent downgrade attacks the key-management methods SHOULD include
-in its input to key derivation the offered list in priority order of
-protections solutions from the SCTP associations INIT chunk's DTLS 1.3
-Chunk Protected Association parameter. By both peers including the
-sent and received list, respectively, in the key derivation any
-downgrade will result in a key-missmatch between the SCTP assocation
-initiator and responder, resulting in the SCTP assocation failing
-after having installed key contexts, thus preventing any down-grade
-attempt to weaking the security. Methods not including the list of
-offered protection solutions will enable a downgrade to such a
-key-management method.
 
 
 # DTLS Chunk Handling {#dtls-chunk-handling}
@@ -968,12 +952,13 @@ establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.
 
 This API enables the cryptographical protection operations by setting
-client/server write key and IV for primary and restart DTLS key
-context. The key is the primary cryptograpical key used by the cipher
-suit for DTLS record protection (Section 5.2 of {{RFC8446}}. The
-initilization vector (IV) is cryptographical random material used to
-XOR with the sequence number to create the nonce per Section 5.3 of
-{{RFC8446}}.
+client/server write keys, sequence number keys, and IVs for primary and
+restart DTLS contexts. The write key is the used by the cipher suite
+for DTLS record protection (Section 5.2 of {{RFC8446}}. The initilization
+vector (IV) is random material used to XOR with the sequence
+number to create the nonce per Section 5.3 of {{RFC8446}}.
+The sequence number key is used to encrypt the sequence number
+(Section 4.2.3 of {{RFC9147}}).
 
 ## Cipher Suit Capabilities
 
@@ -1022,7 +1007,7 @@ Parameters :
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
-* Write Key and IV:
+* Write Key, Sequence Number Key and IV:
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
@@ -1062,7 +1047,7 @@ Parameters :
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
-* Write Key and IV:
+* Write Key, Sequence Number Key and IV:
 : The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
@@ -1301,34 +1286,10 @@ Parameters group:
 
 *  One new SCTP Chunk Parameter Type
 
-*  One new SCTP Error Cause Code
+*  Three new SCTP Error Cause Code
 
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
-
-## Protection Error Cause Codes Registry {#IANA-Extra-Cause}
-
-IANA is requested to create a new registry called "Protection Error
-Cause Codes". This registry is part of the Stream Control Transmission
-Protocol (SCTP) Parameters grouping.
-
-The purpose of this registry is to enable identification of different
-protection related errors when using DTLS chunk and a protection
-engine.  Entries in the registry requires a Meaning, a reference to
-the specification defining the error, and a contact. Each entry will
-be assigned by IANA a unique 16-bit unsigned integer
-identifier. Values 1-65534 are available for assignment. Value 65535
-is reserved for future extension. The proposed general form of the
-registry is depicted below in {{iana-protection-error-cause}}.
-
-| Cause Code | Meaning | Reference | Contact |
-| 0 | No Common Protection Solution | RFC-To-Be | Authors |
-| 1-65534 | Available for Assignment | RFC-To-Be | Authors |
-| 65535 | Reserved | RFC-To-Be | Authors |
-{: #iana-protection-error-cause title="Protection Error Cause Code" cols="r l l l"}
-
-New entries are registered following the Specification Required policy
-as defined by {{RFC8126}}.
 
 ## SCTP Protection Solution Identifiers {#IANA-Protection-Solution-ID}
 
@@ -1349,7 +1310,7 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 | 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
-{: #iana-psi title="PVALID Protection Solution Identifiers" cols="r l l l"}
+{: #iana-psi title="Protection Solution Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
 as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
@@ -1394,7 +1355,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 {: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
 
 
-## SCTP Error Cause Codes
+## SCTP Error Cause Codes {#IANA-Extra-Cause}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
@@ -1405,6 +1366,8 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 
 | ID Value | Error Cause Codes | Reference |
 | TBA9 | DTLS Chunk Error | RFC-To-Be |
+| TBA10 | Policy Not Met | RFC-To-Be |
+| TBA11 | No Common Protection | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
