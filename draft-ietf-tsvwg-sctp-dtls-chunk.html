@@ -1057,7 +1057,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 19 April 2026</td>
+<td class="center">Expires 20 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1070,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-16" class="published">16 October 2025</time>
+<time datetime="2025-10-17" class="published">17 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-19">19 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-20">20 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2849,12 +2849,13 @@ defined in the corresponding specifications.<a href="#section-8.2-4" class="pilc
 establishment part and the DTLS 1.3 protection chunk. This is an
 example API and there are alternative implementations.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">This API enables the cryptographical protection operations by setting
-client/server write key and IV for primary and restart DTLS key
-context. The key is the primary cryptograpical key used by the cipher
-suit for DTLS record protection (Section 5.2 of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>. The
-initilization vector (IV) is cryptographical random material used to
-XOR with the sequence number to create the nonce per Section 5.3 of
-<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-9-2" class="pilcrow">¶</a></p>
+client/server write keys, sequence number keys, and IVs for primary and
+restart DTLS contexts. The write key is the used by the cipher suite
+for DTLS record protection (Section 5.2 of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>. The initilization
+vector (IV) is random material used to XOR with the sequence
+number to create the nonce per Section 5.3 of <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.
+The sequence number key is used to encrypt the sequence number
+(Section 4.2.3 of <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>).<a href="#section-9-2" class="pilcrow">¶</a></p>
 <div id="cipher-suit-capabilities">
 <section id="section-9.1">
         <h3 id="name-cipher-suit-capabilities">
@@ -2929,7 +2930,7 @@ The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9
 </li>
           <li class="normal" id="section-9.2-5.6">
             <span class="break"></span><dl class="dlParallel" id="section-9.2-5.6.1">
-              <dt id="section-9.2-5.6.1.1">Write Key and IV:</dt>
+              <dt id="section-9.2-5.6.1.1">Write Key, Sequence Number Key and IV:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.6.1.2">
                 <p id="section-9.2-5.6.1.2.1">The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
@@ -3000,7 +3001,7 @@ The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9
 </li>
           <li class="normal" id="section-9.3-5.6">
             <span class="break"></span><dl class="dlParallel" id="section-9.3-5.6.1">
-              <dt id="section-9.3-5.6.1.1">Write Key and IV:</dt>
+              <dt id="section-9.3-5.6.1.1">Write Key, Sequence Number Key and IV:</dt>
               <dd style="margin-left: 1.5em" id="section-9.3-5.6.1.2">
                 <p id="section-9.3-5.6.1.2.1">The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
