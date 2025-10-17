@@ -479,8 +479,7 @@ used for SCTP Association Restart are transported within DTLS in SCTP.
 
 The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.
+previously validated.
 
 A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
@@ -844,6 +843,36 @@ response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints can know that down-grade did not happen.
 
+### Considerations about handshake over the API
+
+SCTP and Protection Operator contribute in creating the
+DTLS Chunks solution via the API, thus SCTP Chunk availability
+for the SCTP User depends on Protection Operator to comply
+with the required primitives.
+
+At the Association Initiation, pure SCTP handshake happens, that is
+INIT/INIT-ACK, COOKIE-ECHO/COOKIE-ACK. At this time those
+Control Chunks are sent as plain text.
+
+As soon as Association Initiation is complete, the Association
+Initiator and the Association Responder will inform the Protection
+Operator that the Association is UP. This information includes
+the INIT Parameters related to the Protecion, as a list with
+in preferred order (see {{protectedassoc-parameter}}).
+
+Now the Protection Operator MAY exchange handshake messages
+using SCTP Messages that are unprotected, as long as it used
+PPID=4242 for the messages. At some point the handshake will
+derive client and server write keys for the current epoch transport
+and restart keys, that derivation MUST include the full preference
+list of protection operators provided in
+{{protectedassoc-parameter}} the INIT chunk for down-grade
+prevention. The requirement here is that if not both parties
+use the same ordered list of offered protection operators
+they will arrive at different keys and the communication
+will fail, thus preventing attempts to manipulate the
+protection operator negotiation even if it is in
+clear text when it is exchanged.
 
 ## Termination of a Protected Association {#termination-procedure}
 
@@ -991,6 +1020,9 @@ Parameters :
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
 
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
+
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
@@ -1030,6 +1062,9 @@ Parameters :
 
 * SCTP Association:
 : Reference to the relevant SCTP association to set the keying material for.
+
+* Association Parameters:
+: List in priority order of protections solutions from the SCTP associations INIT chunk's DTLS 1.3 Chunk Protected Association parameter.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
@@ -1195,7 +1230,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
 
 * Configuration parameters
 
