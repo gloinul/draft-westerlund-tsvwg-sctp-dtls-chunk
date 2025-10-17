@@ -1303,8 +1303,6 @@ Parameters group:
 
 *  One new SCTP Error Cause Code
 
-*  One new Chunk Flag Entry
-
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
 
@@ -1368,13 +1366,8 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 | TBA6 | DTLS Chunk (DTLS) | RFC-To-Be |
 {: #iana-chunk-types title="New Chunk Type Registered" cols="r l l"}
 
-## SCTP Chunk Flag
-
-In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Flags" registry, IANA is requested to add the one new entry for DTLS Chunk Flags
-depicted below in in {{iana-chunk-flags}} with a reference to this
-document. The registry at time of writing was available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-3
+The registration table for the chunk flags of this chunk
+type is initially:
 
 | Chunk Flag Value | Chunk Flag Name | Reference |
 | 0x01 | R bit | RFC-To-Be |
