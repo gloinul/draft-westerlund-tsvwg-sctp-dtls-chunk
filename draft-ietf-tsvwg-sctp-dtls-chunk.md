@@ -274,6 +274,11 @@ connection ID (if used) SHALL use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
 a DTLS key-management connection.
 
+The Replay window for the DTLS Sequence Number will need to take into
+account that heartbeat (HB) chunks are sent concurrently over all
+paths in multihomed Associations, thus it needs to be large enough to
+accommodate latency differences.
+
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
 This document specifies the mechanisms for SCTP to be protected with
@@ -356,20 +361,6 @@ and their validation as specified in {{RFC9260}} Section 10. This
 means that the ICMP validation needs to be done in relation to the
 actual sent SCTP packets with the DTLS chunk and not the unprotected
 payload.
-
-## Path Selection Considerations {#multipath}
-
-When an Association is multihomed there are multiple paths between
-Endpoints.  The selection of the specific path to be used at a certain
-time belongs to SCTP protocol that will decide according to
-{{RFC9260}}.  The Chunk Protection Operator shall not influence the path
-selection algorithm, actually the Chunk Protection Operator will not even
-know what path is being used.
-
-The Replay window for the DTLS Sequence Number will need to take into
-account that heartbeat (HB) chunks are sent concurrently over all
-paths in multihomed Associations, thus it needs to be large enough to
-accommodate latency differences.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
