@@ -1217,31 +1217,408 @@ some extension of the socket API.
 Please note that this section is informational only.
 
 A socket API implementation based on {{RFC6458}} is extended by supporting
-several new IPPROTO_SCTP-level socket options and a new flag for recvmsg().
+several new ``IPPROTO_SCTP``-level socket options and a new flag for
+``recvmsg()``.
 
-## A New Flag for recvmsg() (MSG_PROTECTED)
+## ``SCTP_ASSOC_CHANGE`` Notification
+When an ``SCTP_ASSOC_CHANGE`` notification (specified in Section 6.1.1 of
+{{RFC6458}}) is delivered indicating a ``sac_state`` of ``SCTP_COMM_UP`` or
+``SCTP_RESTART`` for an SCTP association where both peers support the
+DTLS chunk, ``SCTP_ASSOC_SUPPORTS_DTLS`` should be listed in the
+``sac_info`` field.
 
-This flag is returned by recvmsg() in msg_flags for all user messages for
-which all DATA chunks where received in protected SCTP packets.
-This also means that if sctp_recvv() is used, MSG_PROTECTED is returned in
-the *flags argument.
+## A New Flag for ``recvmsg()`` (``MSG_PROTECTED``)
 
-## Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
+This flag is returned by ``recvmsg()`` in ``msg_flags`` for all user messages
+for which all DATA chunks where received in protected SCTP packets.
+This also means that if ``sctp_recvv()`` is used, ``MSG_PROTECTED`` is returned
+in the ``*flags`` argument.
 
-## Get or Set the Local Protection Method Identifiers (SCTP_DTLS_LOCAL_PMIDS)
+## Functions
 
-## Get the Remote Protection Method Identifiers (SCTP_DTLS_REMOTE_PMIDS)
+### ``sctp_dtls_nr_cipher_suits()``
 
-## Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
+``sctp_dtls_nr_cipher_suits()`` returns the number of cypher suits supported
+by the SCTP implementation.
 
-## Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+The function prototype is:
 
-## Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+~~~ c
+unsigned int
+sctp_dtls_nr_cipher_suits(void);
+~~~
 
-## Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
+This function can be used in combination with ``sctp_dtls_cipher_suits()``.
 
-## Get Statistic Counters (SCTP_DTLS_STATS)
+### ``sctp_dtls_cipher_suits()``
 
+``sctp_dtls_cipher_suits()`` returns the cypher suits supported by the
+SCTP implementation.
+
+The function prototype is:
+
+~~~ c
+int
+sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
+~~~
+
+and the arguments are
+``cipher_suits``:
+: An array where the supported cypher suits are stored. A cypher suit is
+  represented by two ``uint8_t`` using the IANA assigned values.
+
+``n``:
+The number of cipher suits which can be stored in ``cipher_suits``.
+
+``sctp_dtls_cipher_suits`` returns ``-1``, if ``n`` is smaller than the number
+of cipher suites supported by the stack. If ``n`` is equal to or larger than
+the number of cipher suites supported the the SCTP implementation, the
+cipher suits are stored in ``cipher_suits`` and the number of supported
+cipher suits is returned.
+
+## Socket Options
+
+The following table provides an overview of the ``IPPROTO_SCTP``-level socket
+options defined by this section.
+
+| Option Name                          | Data Type                    | Set | Get |
+| ``SCTP_DTLS_LOCAL_PMIDS``            | ``struct sctp_dtls_pmids``   | X   | X   |
+| ``SCTP_DTLS_REMOTE_PMIDS``           | ``struct sctp_dtls_pmids``   |     | X   |
+| ``SCTP_DTLS_SET_SEND_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
+| ``SCTP_DTLS_ADD_RECV_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
+| ``SCTP_DTLS_DEL_RECV_KEYS``          | ``struct sctp_dtls_keys_id`` | X   |     |
+| ``SCTP_DTLS_ENFORCE_PROTECTION``     | ``struct sctp_assoc_value``  | X   | X   |
+| ``SCTP_DTLS_STATS``                  | ``struct sctp_dtls_stats``   |     | X   |
+{: #socket-options-table title="Socket Options" cols="l l l l"}
+
+``sctp_opt_info()`` needs to be extended to support:
+
+* ``SCTP_DTLS_LOCAL_PMIDS``,
+* ``SCTP_DTLS_REMOTE_PMIDS``,
+* ``SCTP_DTLS_ENFORCE_PROTECTION``, and
+* ``SCTP_DTLS_STATS``.
+
+### Get or Set the Local Protection Method Identifiers (``SCTP_DTLS_LOCAL_PMIDS``)
+
+This socket option sets the protection method identifiers which will be sent
+to the peer during the handshake.
+It can also be used to retrieve the protection method identifiers which were
+sent during the handshake.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_pmids {
+	sctp_assoc_t sds_assoc_id;
+	uint16_t sdp_nr_pmids;
+	uint16_t sdp_pmids[];
+};
+~~~
+
+``sds_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  For ``setsockopt()``, only ``SCTP_FUTURE_ASSOC`` can be used.
+  For ``getsockopt()``, it is an error to use ``SCTP_{CURRENT|ALL}_ASSOC``.
+
+``sdp_nr_pmids``:
+: The number of entries in ``sdp_pmids``.
+
+``sdp_pmids``:
+: The protection method identifiers which will be or have been sent to the peer
+  in the sequence they were contained in the DTLS 1.3 Chunk Protected
+  Association parameter and in host byte order.
+
+This socket option can be used with setsockopt() for SCTP end points in the
+``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
+identifiers to be sent.
+When used with ``getsockopt()`` on an SCTP end point in the ``SCTP_LISTEN``
+state, the protection method identifiers which will be sent can be retrieved.
+ If the SCTP end point is in a state other that ``SCTP_CLOSED`` or
+``SCTP_LISTEN``, the protection method identifiers which have been sent can
+be retrieved.
+
+### Get the Remote Protection Method Identifiers (``SCTP_DTLS_REMOTE_PMIDS``)
+
+This socket option reports the protection method identifiers reported by the
+peer during the handshake.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_pmids {
+	sctp_assoc_t sds_assoc_id;
+	uint16_t sdp_nr_pmids;
+	uint16_t sdp_pmids[];
+};
+~~~
+
+``sds_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``sdp_nr_pmids``:
+: The number of entries in ``sdp_pmids``.
+
+``sdp_pmids``:
+: The protection method identifiers reported by the peer in the sequence they
+  were contained in the DTLS 1.3 Chunk Protected Association parameter and in
+  host byte order.
+
+This socket option will fail on any SCTP association in state ``SCTP_CLOSED``,
+``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+
+### Set Send Keys (``SCTP_DTLS_SET_SEND_KEYS``)
+
+Using this socket option allows to add a particular set of keys used for
+sending DTLS chunks.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_keys {
+	sctp_assoc_t sdk_assoc_id;
+	uint8_t sdk_cipher_suit[2];
+	uint8_t sdk_restart;
+	uint8_t sdk_conn_id_len;
+	uint16_t sdk_key_len;
+	uint16_t sdk_iv_len;
+	uint16_t sdk_sn_key_len;
+	uint16_t sdk_unused;
+	uint64_t sdk_epoch;
+	uint8_t *sdk_conn_id;
+	uint8_t *sdk_key;
+	uint8_t *sdk_iv;
+	uint8_t *sdk_sn_key;
+};
+~~~
+
+``sdk_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``sdk_cipher_suit``:
+: The cipher suit for which the keys are used.
+
+``sdk_restart``:
+: If the value is ``0``, the regular keys are added, if a value different
+  from ``0`` is used, the restart keys are added.
+
+``sdk_conn_id_len``:
+: The length of the DTLS connection identifier specified in ``sdk_conn_id``.
+
+``sdk_key_len``:
+: The length of the initialization vector specified in ``sdk_key``.
+
+``sdk_iv_len``:
+: The length of the initialization vector specified in ``sdk_iv``.
+
+``sdk_sn_key_len``:
+: The length of the sequence number key specified in ``sdk_sn_key``.
+
+``sdk_unused``:
+: This field is ignored.
+
+``sdk_epoch``:
+: The epoch for which the keys are added.
+
+``sdk_conn_id``:
+: A pointer to the connection identifier for which the keys are added.
+  Using ``NULL`` means that no connection identifier is used.
+
+``sdk_key``:
+: A pointer to the key.
+
+``sdk_iv``:
+: A pointer to the initialization vector.
+
+``sdk_sn_key``:
+A pointer to the sequence number key.
+
+This socket option can only be used on SCTP end points in states other then
+``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+
+### Add Receive Keys (``SCTP_DTLS_ADD_RECV_KEYS``)
+
+Using this socket option allows to add a particular set of keys used for
+receiving DTLS chunks.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_keys {
+	sctp_assoc_t sdk_assoc_id;
+	uint8_t sdk_cipher_suit[2];
+	uint8_t sdk_restart;
+	uint8_t sdk_conn_id_len;
+	uint16_t sdk_key_len;
+	uint16_t sdk_iv_len;
+	uint16_t sdk_sn_key_len;
+	uint16_t sdk_unused;
+	uint64_t sdk_epoch;
+	uint8_t *sdk_conn_id;
+	uint8_t *sdk_key;
+	uint8_t *sdk_iv;
+	uint8_t *sdk_sn_key;
+};
+~~~
+
+``sdk_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``sdk_cipher_suit``:
+: The cipher suit for which the keys are used.
+
+``sdk_restart``:
+: If the value is ``0``, the regular keys are added, if a value different
+  from ``0`` is used, the restart keys are added.
+
+``sdk_conn_id_len``:
+: The length of the DTLS connection identifier specified in ``sdk_conn_id``.
+
+``sdk_key_len``:
+: The length of the initialization vector specified in ``sdk_key``.
+
+``sdk_iv_len``:
+: The length of the initialization vector specified in ``sdk_iv``.
+
+``sdk_sn_key_len``:
+: The length of the sequence number key specified in ``sdk_sn_key``.
+
+``sdk_unused``:
+: This field is ignored.
+
+``sdk_epoch``:
+: The epoch for which the keys are added.
+
+``sdk_conn_id``:
+: A pointer to the connection identifier for which the keys are added.
+  Using ``NULL`` means that no connection identifier is used.
+
+``sdk_key``:
+: A pointer to the key.
+
+``sdk_iv``:
+: A pointer to the initialization vector.
+
+``sdk_sn_key``:
+A pointer to the sequence number key.
+
+This socket option can only be used on SCTP end points in states other then
+``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+
+### Delete Receive Keys (``SCTP_DTLS_DEL_RECV_KEYS``)
+
+Using this socket option allows to remove a particular set of keys used for
+receiving DTLS chunks.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_keys_id {
+	sctp_assoc_t sdki_assoc_id;
+	uint8_t sdki_restart;
+	uint8_t sdki_conn_id_len;
+	uint16_t sdki_unused;
+	uint64_t sdki_epoch;
+	uint8_t *sdki_conn_id;
+}
+~~~
+
+``sdki_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``sdki_restart``:
+: If the value is ``0``, the regular keys are removed, if a value different
+  from ``0`` is used, the restart keys are removed.
+
+``sdki_conn_id_len``:
+: The length of the DTLS connection identifier specified in ``sdki_conn_id``.
+
+``sdki_unused``:
+: This field is ignored.
+
+``sdki_epoch``:
+: The epoch for which the keys are removed.
+
+``sdki_conn_id``:
+: A pointer to the connection identifier for which the keys are removed.
+  Using ``NULL`` means that no connection identifier is used.
+
+This socket option can only be used on SCTP end points in states other then
+``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and
+``SCTP_COOKIE_ECHOED``.
+
+### Set and Get Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
+
+Enabling this socket option on an SCTP association enforces that only
+protected SCTP packets are processed anymore. All received packets with the
+first chunk not being an INIT chunk, INIT ACK chunk, or DTLS chunk will be
+silently discarded.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_assoc_value {
+	sctp_assoc_t assoc_id;
+	uint32_t assoc_value;
+};
+~~~
+
+``assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``assoc_value``:
+  The value `0` represents that the option is off, any other value represents
+  that the option is on.
+
+This socket option is off by default on any SCTP end point.
+Once protection has been enforced by enabling this socket option on an
+SCTP end point, it cannot be disabled again.
+Whether protection has been enforced on an SCTP end point can be queried
+in any state other than ``SCTP_CLOSED``.
+Protection can be enforced in any state other than ``SCTP_CLOSED``,
+``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+
+### Get Statistic Counters (``SCTP_DTLS_STATS``)
+
+This socket options allows to get various statistic counters for a
+specific SCTP association.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_dtls_stats {
+	sctp_assoc_t sds_assoc_id;
+	uint32_t sds_dropped_unprotected;
+	/* There will be added more fields before the WGLC. */
+	/* There might be additional platform specific counters. */
+};
+~~~
+
+``sds_assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
+
+``sds_dropped_unprotected``:
+: The number of of unprotected packets received for this SCTP association after
+  protection was enforced.
 
 # Implementation Considerations
 
