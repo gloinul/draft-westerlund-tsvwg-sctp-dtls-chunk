@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T01:04:32.788685+00:00",
+  "timestamp": "2025-10-19T01:12:00.361768+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -754,7 +754,7 @@
       "id": "I_kwDOKszxDc6_AjDq",
       "title": "Don't use embedded error cause codes",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/40",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -763,8 +763,8 @@
       "labels": [],
       "body": "Right now, the protocol uses a single error cause code, which embeds more specific error causes. I think we should just use a couple or error causes without embedding them, because\n- there is no shortage of error causes\n- this improves consistency with other extensions\n- this fits better in the normal error handing, in particular with the existing API.\n\nAffected sections include section 7.2 and 12.1.\n\nIf we agree on this, I can make the corresponding changes.",
       "createdAt": "2025-07-05T08:44:10Z",
-      "updatedAt": "2025-07-07T09:40:15Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T20:32:40Z",
+      "closedAt": "2025-10-16T20:32:40Z",
       "comments": [
         {
           "author": "gloinul",
@@ -780,7 +780,7 @@
       "id": "I_kwDOKszxDc6_HWeR",
       "title": "Specify chunk flags registry for DTLS chunk",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/41",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -790,8 +790,8 @@
       "labels": [],
       "body": "Affected Section: 11.3",
       "createdAt": "2025-07-06T10:26:13Z",
-      "updatedAt": "2025-09-19T13:47:27Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-17T10:45:34Z",
+      "closedAt": "2025-10-17T10:45:34Z",
       "comments": [
         {
           "author": "teiclap",
@@ -807,7 +807,7 @@
       "id": "I_kwDOKszxDc6_HXFh",
       "title": "Mandatory Protected Association Parameter Missing",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/42",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -817,8 +817,8 @@
       "labels": [],
       "body": "I think we can't use the 'Missing Mandatory Parameter' error cause. The parameter is not mandatory but optional to negotiate the extension we are specifying. It is used for missing cookies.",
       "createdAt": "2025-07-06T10:29:27Z",
-      "updatedAt": "2025-09-19T08:10:52Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T20:32:41Z",
+      "closedAt": "2025-10-16T20:32:41Z",
       "comments": [
         {
           "author": "teiclap",
@@ -917,7 +917,7 @@
       "id": "I_kwDOKszxDc6_Hk9T",
       "title": "Critical Error from DTLS",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/44",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -926,8 +926,8 @@
       "labels": [],
       "body": "I have no idea what this means. It also seems to be an API issue, since it is about the local endpoint.\nEither remove or clarify.",
       "createdAt": "2025-07-06T11:43:50Z",
-      "updatedAt": "2025-09-19T08:22:51Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T20:32:41Z",
+      "closedAt": "2025-10-16T20:32:41Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1050,7 +1050,7 @@
       "id": "I_kwDOKszxDc6_Q7uZ",
       "title": "Reference to key management",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/56",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1060,8 +1060,8 @@
       "labels": [],
       "body": "Once the key management document, which is planned to become a WG document, has been submitted, add reference to it. We need to discuss how to deal with references to the Ericsson document.",
       "createdAt": "2025-07-07T12:44:04Z",
-      "updatedAt": "2025-09-19T08:30:03Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T21:13:29Z",
+      "closedAt": "2025-10-16T21:13:29Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1136,15 +1136,15 @@
       "id": "I_kwDOKszxDc7KktCy",
       "title": "Moving to traffic secret in API or define sn_key in API. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/64",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "lxin",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "According to https://www.rfc-editor.org/rfc/rfc9147.html#section-4.2.3, it requires 'sn_key' to generate 'Mask' to mask the sequence number for record number encryption. Maybe it should just be included in \"wirte key and iv\", and set it by SCTP_DTLS_SET_SEND_KEYS.",
       "createdAt": "2025-09-09T13:58:03Z",
-      "updatedAt": "2025-10-14T09:02:34Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-17T06:24:52Z",
+      "closedAt": "2025-10-17T06:24:52Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1222,6 +1222,62 @@
           "updatedAt": "2025-09-22T09:40:33Z"
         }
       ]
+    },
+    {
+      "number": 72,
+      "id": "I_kwDOKszxDc7SGj2B",
+      "title": "ICMP Considerations not needed",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/72",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The handling of ICMP packets where the first chunk is a DTLS chunk is not special. So we don't need any considerations for this.",
+      "createdAt": "2025-10-17T07:53:21Z",
+      "updatedAt": "2025-10-17T10:33:38Z",
+      "closedAt": "2025-10-17T10:33:38Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So the issue the text are talking about is that for non-encrypted packets if one have a DATA chunk, or some other chunk in plain-text after the common header then one can do deeper verification. But the basic matching is at least possible here as the common header is available. So I think we can remove the text as proposed. ",
+          "createdAt": "2025-10-17T10:33:15Z",
+          "updatedAt": "2025-10-17T10:33:15Z"
+        }
+      ]
+    },
+    {
+      "number": 74,
+      "id": "I_kwDOKszxDc7SGm0_",
+      "title": "Length field of DTLS 1.3 Chunk Protected Association parameter is wrong.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/74",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The `Parameter Length` field does not include any padding bytes.",
+      "createdAt": "2025-10-17T07:57:37Z",
+      "updatedAt": "2025-10-17T10:34:35Z",
+      "closedAt": "2025-10-17T10:34:35Z",
+      "comments": []
+    },
+    {
+      "number": 75,
+      "id": "I_kwDOKszxDc7SGrJ7",
+      "title": "Restructure Path Selection Considerations",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/75",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is no reason why the patch selection should interfere with using the DTLS chunk. So don't even mention it.\nMove the reordering window text to DTLS Considerations, where it better fits (in my view).",
+      "createdAt": "2025-10-17T08:04:01Z",
+      "updatedAt": "2025-10-17T10:41:22Z",
+      "closedAt": "2025-10-17T10:41:22Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -2934,24 +2990,26 @@
       "id": "PR_kwDOKszxDc6mmLxr",
       "title": "New \"Policy not met\" ERROR when parameter missing",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/60",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-03T08:12:29Z",
-      "updatedAt": "2025-10-13T06:46:21Z",
+      "updatedAt": "2025-10-16T20:32:39Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue42",
       "headRefOid": "0fa1650001e68bf9bb783d2c4bf711b3bb135bce",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-16T20:32:39Z",
+      "mergedAt": "2025-10-16T20:32:39Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "a23ba287027c0278eaef46457a947c8a516d5e23"
+      },
       "comments": [
         {
           "author": "teiclap",
@@ -3002,6 +3060,19 @@
           "createdAt": "2025-10-13T06:46:21Z",
           "updatedAt": "2025-10-13T06:46:21Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Hfb1H",
+          "commit": {
+            "abbreviatedOid": "0fa1650"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I am not sure this is the right way eventually, but let us get this in. It is definitely on the way forward.",
+          "createdAt": "2025-10-16T20:32:16Z",
+          "updatedAt": "2025-10-16T20:32:16Z",
+          "comments": []
         }
       ]
     },
@@ -3017,7 +3088,7 @@
       "labels": [],
       "body": "Added a description on how to deal with plain text messages.\r\nAdded references to the INIT parameter list in the abstract API.\r\n\r\nWe may not need any State Machine to be added.",
       "createdAt": "2025-09-04T12:45:58Z",
-      "updatedAt": "2025-10-13T07:48:09Z",
+      "updatedAt": "2025-10-17T10:47:02Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
@@ -3042,6 +3113,20 @@
           "body": "Maybe we need to start from the state machine. Limited to the API.",
           "createdAt": "2025-09-05T08:46:23Z",
           "updatedAt": "2025-09-05T08:46:23Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this text is not consistent with the current terminology. There is no `Protection Operator` anymore. In this document the initial association setup will be always in plain text. Then upper layer messages will be exchanged and at some point the upper layer will set client and server keys and enforce the reception of DTLS chunks only.\r\n\r\nI think we need one specific section describing the SCTP handshake (for the initial one and the restart one). Another section should describe how to send/recv packets before and after setting the client and server keys and enforcing the reception of DTLS chunks only.\r\n\r\nI think the handling of packets is clear and we have a common understanding. I have been contemplating about the handshake for a couple of days and I think we do not have a common understand right now. I am sure we can get one, but I would like to discuss this in person at the IETF with you (or in a VC if you prefer).\r\n",
+          "createdAt": "2025-10-17T06:46:01Z",
+          "updatedAt": "2025-10-17T06:46:01Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Yes, lets discuss this, and then we can ensure aligned language. ",
+          "createdAt": "2025-10-17T10:47:02Z",
+          "updatedAt": "2025-10-17T10:47:02Z"
         }
       ],
       "reviews": [
@@ -3173,7 +3258,7 @@
       "id": "PR_kwDOKszxDc6pe2V0",
       "title": "New Chunk Flag register for issue #41",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/67",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3182,17 +3267,19 @@
       "labels": [],
       "body": "Fix for issue #41 ",
       "createdAt": "2025-09-19T10:55:12Z",
-      "updatedAt": "2025-10-15T20:10:33Z",
+      "updatedAt": "2025-10-17T10:45:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
+      "baseRefOid": "450fb22a49e916d9e250ccf6dc9dd5f299b19947",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue41",
-      "headRefOid": "d886527edacc91f7f57bde64f83b9c70ccf0b000",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1e97ff98443ae1c6e7bea45accad43b6bb145df0",
+      "closedAt": "2025-10-17T10:45:33Z",
+      "mergedAt": "2025-10-17T10:45:33Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "fbe8b15a6d2d27cd835bf7055a40d8fa6382ce11"
+      },
       "comments": [
         {
           "author": "tuexen",
@@ -3200,6 +3287,20 @@
           "body": "I think we should, instead of register a new chunk type and then register a chunk flag, register a new chunk type combined with the initial value of the corresponding chunk flags table.\r\nIf you agree, I will update the PR.",
           "createdAt": "2025-10-15T20:10:33Z",
           "updatedAt": "2025-10-15T20:10:33Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think we should, instead of register a new chunk type and then register a chunk flag, register a new chunk type combined with the initial value of the corresponding chunk flags table. If you agree, I will update the PR.\r\n\r\nThat's fine for me.",
+          "createdAt": "2025-10-16T06:05:57Z",
+          "updatedAt": "2025-10-16T06:05:57Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "> I think we should, instead of register a new chunk type and then register a chunk flag, register a new chunk type combined with the initial value of the corresponding chunk flags table. If you agree, I will update the PR.\r\n\r\nYes, fine with me.",
+          "createdAt": "2025-10-16T07:58:11Z",
+          "updatedAt": "2025-10-16T07:58:11Z"
         }
       ],
       "reviews": [
@@ -3215,6 +3316,19 @@
           "createdAt": "2025-10-13T08:34:32Z",
           "updatedAt": "2025-10-13T08:34:32Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7HovWa",
+          "commit": {
+            "abbreviatedOid": "390d227"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T10:25:41Z",
+          "updatedAt": "2025-10-17T10:25:41Z",
+          "comments": []
         }
       ]
     },
@@ -3223,26 +3337,42 @@
       "id": "PR_kwDOKszxDc6pfqpp",
       "title": "Moved references to Key Management in own section #56",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/68",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixed Issue #56 ",
       "createdAt": "2025-09-19T12:16:22Z",
-      "updatedAt": "2025-10-13T08:51:38Z",
+      "updatedAt": "2025-10-16T21:13:28Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue56",
       "headRefOid": "92c7daa8eca2e2ea655a2be0bd9e3bf496148d82",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-16T21:13:28Z",
+      "mergedAt": "2025-10-16T21:13:28Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "e59310849254502fc291915095a600d8c79bedb0"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Hfdl1",
+          "commit": {
+            "abbreviatedOid": "92c7daa"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-16T20:34:37Z",
+          "updatedAt": "2025-10-16T20:34:37Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 69,
@@ -3256,7 +3386,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-10-14T12:04:43Z",
+      "updatedAt": "2025-10-17T10:28:28Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -3288,6 +3418,20 @@
           "body": "> I think this looks okay as direction for the solution.\r\n> \r\n> Would it be better to include the selected as the first element, as that is known to be a single 16-bit value, then followed by N 16-bit values for the ordered list that was offered?\r\n\r\nYes, I think it's a good proposal",
           "createdAt": "2025-10-14T12:04:43Z",
           "updatedAt": "2025-10-14T12:04:43Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Here is how I think the socket API should deal with the extension.\r\n1. In `SCTP_COMM_UP` notification `SCTP_ASSOC_SUPPORTS_DTLS` is provided in `sac_info`.\r\n2. There will be socket options to get the local and remote PSV. There will also be a socket option to set the local PSV.\r\n\r\nLet me draft some text later today.\r\n\r\nIn the abstract API you can have the corresponding functions for [gs]et the local and remote PSV. Unfortunately, the `COMMUNICATION UP` notification specified in [RFC 9260](https://www.rfc-editor.org/rfc/rfc9260.html#section-11.2.4) does not include any information related to negotiated extensions. Maybe we can deal with this limitation by letting the getters return an error?",
+          "createdAt": "2025-10-17T07:00:55Z",
+          "updatedAt": "2025-10-17T07:00:55Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Yes, please draft some text, what is being suggest appears reasonable. ",
+          "createdAt": "2025-10-17T10:28:28Z",
+          "updatedAt": "2025-10-17T10:28:28Z"
         }
       ],
       "reviews": [
@@ -3311,24 +3455,26 @@
       "id": "PR_kwDOKszxDc6tnpy-",
       "title": "Generic API including the sequence number key when setting keying material.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/71",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Intended to resolve #64. ",
       "createdAt": "2025-10-14T09:01:45Z",
-      "updatedAt": "2025-10-14T10:52:18Z",
+      "updatedAt": "2025-10-17T06:24:51Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "254dbc338149eb96292cd7eac6eb28e25450aad3",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue64",
       "headRefOid": "807d1d31e069b99332e9f4dfa574c2fe47912add",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-17T06:24:51Z",
+      "mergedAt": "2025-10-17T06:24:51Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "b77bf73416e058e437af79df31d0f537ea3a48d3"
+      },
       "comments": [],
       "reviews": [
         {
@@ -3343,8 +3489,199 @@
           "createdAt": "2025-10-14T10:52:18Z",
           "updatedAt": "2025-10-14T10:52:18Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Hld7k",
+          "commit": {
+            "abbreviatedOid": "807d1d3"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T06:24:34Z",
+          "updatedAt": "2025-10-17T06:24:34Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 73,
+      "id": "PR_kwDOKszxDc6uP7MM",
+      "title": "Remove ICMP Considerations section",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/73",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes #72.",
+      "createdAt": "2025-10-17T07:56:04Z",
+      "updatedAt": "2025-10-17T10:33:37Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "b77bf73416e058e437af79df31d0f537ea3a48d3",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue72",
+      "headRefOid": "cbe6c8185578a476affb307e519ee7135857ff54",
+      "closedAt": "2025-10-17T10:33:37Z",
+      "mergedAt": "2025-10-17T10:33:37Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "6ee740bb9121971e5b21e6bc57e35bccfd838256"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7HmfrN",
+          "commit": {
+            "abbreviatedOid": "cbe6c81"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T07:58:55Z",
+          "updatedAt": "2025-10-17T07:58:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Ho4cf",
+          "commit": {
+            "abbreviatedOid": "cbe6c81"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T10:33:31Z",
+          "updatedAt": "2025-10-17T10:33:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "id": "PR_kwDOKszxDc6uQANY",
+      "title": "Fix Parameter Length of DTLS 1.3 Chunk Protected Association",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/76",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Don't include the length of padding.\r\nThis fixes #74.",
+      "createdAt": "2025-10-17T08:04:20Z",
+      "updatedAt": "2025-10-17T10:34:35Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "b77bf73416e058e437af79df31d0f537ea3a48d3",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue74",
+      "headRefOid": "24a95b28cdeeabab1f064f770e56a54ed8795b60",
+      "closedAt": "2025-10-17T10:34:34Z",
+      "mergedAt": "2025-10-17T10:34:34Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "9269a85c8b4d0b3d4bcac6e4ca73d61662f87ff2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Ho5PG",
+          "commit": {
+            "abbreviatedOid": "24a95b2"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T10:34:18Z",
+          "updatedAt": "2025-10-17T10:34:18Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 77,
+      "id": "PR_kwDOKszxDc6uQCRS",
+      "title": "Simplify text related to multihoming",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/77",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes #75.",
+      "createdAt": "2025-10-17T08:07:28Z",
+      "updatedAt": "2025-10-17T10:41:21Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "9269a85c8b4d0b3d4bcac6e4ca73d61662f87ff2",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue75",
+      "headRefOid": "011ab889efd5379290adb04cefb419d85aac96dd",
+      "closedAt": "2025-10-17T10:41:21Z",
+      "mergedAt": "2025-10-17T10:41:21Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "450fb22a49e916d9e250ccf6dc9dd5f299b19947"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7HmpWX",
+          "commit": {
+            "abbreviatedOid": "59a01a0"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T08:10:29Z",
+          "updatedAt": "2025-10-17T08:10:29Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Ho6hD",
+          "commit": {
+            "abbreviatedOid": "59a01a0"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T10:35:25Z",
+          "updatedAt": "2025-10-17T10:35:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 78,
+      "id": "PR_kwDOKszxDc6ueSIL",
+      "title": "Initial version of the API",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/78",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is still missing the configuration of the replay window and dealing with AEAD limits.",
+      "createdAt": "2025-10-18T22:37:56Z",
+      "updatedAt": "2025-10-18T22:38:09Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "fbe8b15a6d2d27cd835bf7055a40d8fa6382ce11",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue63-socketapi",
+      "headRefOid": "3a42952f04b1810ef453edf6db05e7c4ff7dd7d6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
