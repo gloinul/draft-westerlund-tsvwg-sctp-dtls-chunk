@@ -1607,6 +1607,7 @@ The following structure is used as the ``option_value``:
 struct sctp_dtls_stats {
 	sctp_assoc_t sds_assoc_id;
 	uint32_t sds_dropped_unprotected;
+	uint32_t sds_aead_failures;
 	/* There will be added more fields before the WGLC. */
 	/* There might be additional platform specific counters. */
 };
@@ -1621,6 +1622,9 @@ struct sctp_dtls_stats {
 ``sds_dropped_unprotected``:
 : The number of of unprotected packets received for this SCTP endpoint after
   protection was enforced.
+
+``sds_aead_failures``:
+: The number of of AEAD failures when processing received DTLS chunks.
 
 ### Get or Set the Replay Protection Window Size (``SCTP_DTLS_REPLAY_WINDOW``)
 
