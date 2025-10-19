@@ -1677,8 +1677,7 @@ Table of Contents
       error to use SCTP_{CURRENT|ALL}_ASSOC.
 
    assoc_value: The maximum number of DTLS chunks in the replay
-   protection window .  A value of 0 indicates that the replay
-   protection is disabled.
+   protection window.
 
 11.  Implementation Considerations
 
