@@ -1253,6 +1253,11 @@ Table of Contents
    in [RFC6458] would require some extension of the socket API.  Please
    note that this section is informational only.
 
+   Please also note, that the API described in this section can change
+   in a non-backwards compatible way during the evolution of this
+   document due to changed functionality or gained experience during the
+   implementation.
+
    A socket API implementation based on [RFC6458] is extended by
    supporting several new IPPROTO_SCTP-level socket options and a new
    flag for recvmsg().
