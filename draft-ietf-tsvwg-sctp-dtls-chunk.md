@@ -1663,8 +1663,7 @@ struct sctp_assoc_value {
   It is an error to use ``SCTP_{CURRENT|ALL}_ASSOC``.
 
 ``assoc_value``:
-  The maximum number of DTLS chunks in the replay protection window .
-  A value of ``0`` indicates that the replay protection is disabled.
+  The maximum number of DTLS chunks in the replay protection window.
 
 # Implementation Considerations
 
