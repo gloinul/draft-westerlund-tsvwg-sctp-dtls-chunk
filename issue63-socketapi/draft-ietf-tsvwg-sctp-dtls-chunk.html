@@ -3856,6 +3856,7 @@ specific SCTP endpoint.<a href="#section-10.4.7-1" class="pilcrow">¶</a></p>
 struct sctp_dtls_stats {
         sctp_assoc_t sds_assoc_id;
         uint32_t sds_dropped_unprotected;
+        uint32_t sds_aead_failures;
         /* There will be added more fields before the WGLC. */
         /* There might be additional platform specific counters. */
 };
@@ -3876,6 +3877,12 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
             <dd style="margin-left: 1.5em" id="section-10.4.7-4.4">
               <p id="section-10.4.7-4.4.1">The number of of unprotected packets received for this SCTP endpoint after
 protection was enforced.<a href="#section-10.4.7-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.7-4.5">
+<code>sds_aead_failures</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.6">
+              <p id="section-10.4.7-4.6.1">The number of of AEAD failures when processing received DTLS chunks.<a href="#section-10.4.7-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
