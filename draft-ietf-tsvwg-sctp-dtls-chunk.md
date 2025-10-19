@@ -1269,7 +1269,8 @@ sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
 and the arguments are
 ``cipher_suits``:
 : An array where the supported cypher suits are stored. A cypher suit is
-  represented by two ``uint8_t`` using the IANA assigned values.
+  represented by two ``uint8_t`` using the IANA assigned values in the
+  TLS cipher suit registry {{TLS-CIPHER-SUITS}}.
 
 ``n``:
 The number of cipher suits which can be stored in ``cipher_suits``.
@@ -1448,6 +1449,9 @@ A pointer to the sequence number key.
 
 This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+If the socket options is successful, all affected DTLS chunks sent will use the
+specified keys until the keys are changed again by another call of this
+socket option.
 
 ### Add Receive Keys (``SCTP_DTLS_ADD_RECV_KEYS``)
 
@@ -1568,10 +1572,10 @@ This socket option can only be used on SCTP endpoints in states other then
 
 ### Set or Get Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
 
-Enabling this socket option on an SCTP endpoint enforces that only
-protected SCTP packets are processed anymore. All received packets with the
-first chunk not being an INIT chunk, INIT ACK chunk, or DTLS chunk will be
-silently discarded.
+Enabling this socket option on an SCTP endpoint enforces that received
+SCTP packets are only processed, if they are protected.
+All received packets with the first chunk not being an INIT chunk, INIT ACK
+chunk, or DTLS chunk will be silently discarded.
 
 The following structure is used as the ``option_value``:
 
@@ -1612,6 +1616,8 @@ struct sctp_dtls_stats {
 	sctp_assoc_t sds_assoc_id;
 	uint32_t sds_dropped_unprotected;
 	uint32_t sds_aead_failures;
+	uint32_t sds_recv_protected;
+	uint32_t sds_sent_protected;
 	/* There will be added more fields before the WGLC. */
 	/* There might be additional platform specific counters. */
 };
@@ -1624,11 +1630,17 @@ struct sctp_dtls_stats {
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
 ``sds_dropped_unprotected``:
-: The number of of unprotected packets received for this SCTP endpoint after
+: The number of unprotected packets received for this SCTP endpoint after
   protection was enforced.
 
 ``sds_aead_failures``:
-: The number of of AEAD failures when processing received DTLS chunks.
+: The number of AEAD failures when processing received DTLS chunks.
+
+``sds_recv_protected``:
+: The number of DTLS chunks successfully processed.
+
+``sds_sent_protected``:
+: The number of DTLS chunks sent.
 
 ### Get or Set the Replay Protection Window Size (``SCTP_DTLS_REPLAY_WINDOW``)
 
@@ -1651,7 +1663,7 @@ struct sctp_assoc_value {
   It is an error to use ``SCTP_{CURRENT|ALL}_ASSOC``.
 
 ``assoc_value``:
-  The size of the replay protection window.
+  The maximum number of DTLS chunks in the replay protection window .
   A value of ``0`` indicates that the replay protection is disabled.
 
 # Implementation Considerations
