@@ -1288,6 +1288,7 @@ options defined by this section.
 | ``SCTP_DTLS_ADD_RECV_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
 | ``SCTP_DTLS_DEL_RECV_KEYS``          | ``struct sctp_dtls_keys_id`` | X   |     |
 | ``SCTP_DTLS_ENFORCE_PROTECTION``     | ``struct sctp_assoc_value``  | X   | X   |
+| ``SCTP_DTLS_REPLAY_WINDOW``          | ``struct sctp_assoc_value``  | X   | X   |
 | ``SCTP_DTLS_STATS``                  | ``struct sctp_dtls_stats``   |     | X   |
 {: #socket-options-table title="Socket Options" cols="l l l l"}
 
@@ -1295,7 +1296,8 @@ options defined by this section.
 
 * ``SCTP_DTLS_LOCAL_PMIDS``,
 * ``SCTP_DTLS_REMOTE_PMIDS``,
-* ``SCTP_DTLS_ENFORCE_PROTECTION``, and
+* ``SCTP_DTLS_ENFORCE_PROTECTION``,
+* ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_STATS``.
 
 ### Get or Set the Local Protection Method Identifiers (``SCTP_DTLS_LOCAL_PMIDS``)
@@ -1330,12 +1332,12 @@ struct sctp_dtls_pmids {
   in the sequence they were contained in the DTLS 1.3 Chunk Protected
   Association parameter and in host byte order.
 
-This socket option can be used with setsockopt() for SCTP end points in the
+This socket option can be used with setsockopt() for SCTP endpoints in the
 ``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
 identifiers to be sent.
-When used with ``getsockopt()`` on an SCTP end point in the ``SCTP_LISTEN``
+When used with ``getsockopt()`` on an SCTP endpoint in the ``SCTP_LISTEN``
 state, the protection method identifiers which will be sent can be retrieved.
- If the SCTP end point is in a state other that ``SCTP_CLOSED`` or
+ If the SCTP endpoint is in a state other that ``SCTP_CLOSED`` or
 ``SCTP_LISTEN``, the protection method identifiers which have been sent can
 be retrieved.
 
@@ -1368,7 +1370,7 @@ struct sctp_dtls_pmids {
   were contained in the DTLS 1.3 Chunk Protected Association parameter and in
   host byte order.
 
-This socket option will fail on any SCTP association in state ``SCTP_CLOSED``,
+This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
 ### Set Send Keys (``SCTP_DTLS_SET_SEND_KEYS``)
@@ -1440,7 +1442,7 @@ struct sctp_dtls_keys {
 ``sdk_sn_key``:
 A pointer to the sequence number key.
 
-This socket option can only be used on SCTP end points in states other then
+This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
 ### Add Receive Keys (``SCTP_DTLS_ADD_RECV_KEYS``)
@@ -1512,7 +1514,7 @@ struct sctp_dtls_keys {
 ``sdk_sn_key``:
 A pointer to the sequence number key.
 
-This socket option can only be used on SCTP end points in states other then
+This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
 ### Delete Receive Keys (``SCTP_DTLS_DEL_RECV_KEYS``)
@@ -1556,13 +1558,13 @@ struct sctp_dtls_keys_id {
 : A pointer to the connection identifier for which the keys are removed.
   Using ``NULL`` means that no connection identifier is used.
 
-This socket option can only be used on SCTP end points in states other then
+This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and
 ``SCTP_COOKIE_ECHOED``.
 
-### Set and Get Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
+### Set or Get Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
 
-Enabling this socket option on an SCTP association enforces that only
+Enabling this socket option on an SCTP endpoint enforces that only
 protected SCTP packets are processed anymore. All received packets with the
 first chunk not being an INIT chunk, INIT ACK chunk, or DTLS chunk will be
 silently discarded.
@@ -1586,10 +1588,10 @@ struct sctp_assoc_value {
   The value `0` represents that the option is off, any other value represents
   that the option is on.
 
-This socket option is off by default on any SCTP end point.
+This socket option is off by default on any SCTP endpoint.
 Once protection has been enforced by enabling this socket option on an
-SCTP end point, it cannot be disabled again.
-Whether protection has been enforced on an SCTP end point can be queried
+SCTP endpoint, it cannot be disabled again.
+Whether protection has been enforced on an SCTP endpoint can be queried
 in any state other than ``SCTP_CLOSED``.
 Protection can be enforced in any state other than ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
@@ -1597,7 +1599,7 @@ Protection can be enforced in any state other than ``SCTP_CLOSED``,
 ### Get Statistic Counters (``SCTP_DTLS_STATS``)
 
 This socket options allows to get various statistic counters for a
-specific SCTP association.
+specific SCTP endpoint.
 
 The following structure is used as the ``option_value``:
 
@@ -1617,8 +1619,32 @@ struct sctp_dtls_stats {
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
 ``sds_dropped_unprotected``:
-: The number of of unprotected packets received for this SCTP association after
+: The number of of unprotected packets received for this SCTP endpoint after
   protection was enforced.
+
+### Get or Set the Replay Protection Window Size (``SCTP_DTLS_REPLAY_WINDOW``)
+
+This socket option can be used to configure the replay protection for SCTP
+endpoints.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_assoc_value {
+	sctp_assoc_t assoc_id;
+	uint32_t assoc_value;
+};
+~~~
+
+``assoc_id``:
+: This parameter is ignored for one-to-one style sockets.
+  For one-to-many style sockets, this parameter indicates upon which
+  SCTP association the caller is performing the action.
+  It is an error to use ``SCTP_{CURRENT|ALL}_ASSOC``.
+
+``assoc_value``:
+  The size of the replay protection window.
+  A value of ``0`` indicates that the replay protection is disabled.
 
 # Implementation Considerations
 
