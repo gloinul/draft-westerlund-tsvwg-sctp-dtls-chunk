@@ -1131,12 +1131,12 @@ Parameters:
 Reply: Acknowledgement
 
 
-## Get q
+## Get AEAD Encryption Invocations
 
-Get q, the number of protected messages (AEAD encryption invocations) for
+Get the number of AEAD encryption invocations (protected messages) for
 a given epoch.
 
-Request : Get q
+Request : Get AEAD Encryption Invocations
 
 Parameters :
 
@@ -1148,16 +1148,15 @@ Parameters :
 
 * DTLS Epoch
 
-Reply: q
+Reply: AEAD Encryption Invocations
 
 Parameters : non-negative integer
 
-## Get v
+## Get AEAD Decryption Invocations
 
-Get v, the number of attacker forgery attempts
-(failed AEAD decryption invocations) for a given epoch.
+Get the number of AEAD decryption invocations for a given epoch.
 
-Request : Get v
+Request : Get AEAD Decryption Invocations
 
 Parameters :
 
@@ -1169,10 +1168,29 @@ Parameters :
 
 * DTLS Epoch
 
-Reply: v
+Reply: AEAD Decryption Invocations
 
 Parameters : non-negative integer
 
+## Get Failed AEAD Decryption Invocations
+
+Get the number of failed AEAD decryption invocations for a given epoch.
+
+Request : Get Failed AEAD Decryption Invocations
+
+Parameters :
+
+* SCTP Association
+
+* Restart indication
+
+* DTLS CID
+
+* DTLS Epoch
+
+Reply: Failed AEAD Decryption Invocations
+
+Parameters : non-negative integer
 
 ## Configure Replay Protection
 
