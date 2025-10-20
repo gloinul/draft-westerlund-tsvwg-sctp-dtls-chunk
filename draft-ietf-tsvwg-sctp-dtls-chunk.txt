@@ -113,9 +113,10 @@ Table of Contents
      9.5.  Destroy Server Write Keying Material
      9.6.  Set Key to Use
      9.7.  Require Protected SCTP Packets
-     9.8.  Get q
-     9.9.  Get v
-     9.10. Configure Replay Protection
+     9.8.  Get AEAD Encryption Invocations
+     9.9.  Get AEAD Decryption Invocations
+     9.10. Get Failed AEAD Decryption Invocations
+     9.11. Configure Replay Protection
    10. Socket API Considerations
      10.1.  SCTP_ASSOC_CHANGE Notification
      10.2.  A New Flag for recvmsg() (MSG_PROTECTED)
@@ -1170,12 +1171,12 @@ Table of Contents
 
    Reply: Acknowledgement
 
-9.8.  Get q
+9.8.  Get AEAD Encryption Invocations
 
-   Get q, the number of protected messages (AEAD encryption invocations)
+   Get the number of AEAD encryption invocations (protected messages)
    for a given epoch.
 
-   Request : Get q
+   Request : Get AEAD Encryption Invocations
 
    Parameters :
 
@@ -1187,16 +1188,15 @@ Table of Contents
 
    *  DTLS Epoch
 
-   Reply: q
+   Reply: AEAD Encryption Invocations
 
    Parameters : non-negative integer
 
-9.9.  Get v
+9.9.  Get AEAD Decryption Invocations
 
-   Get v, the number of attacker forgery attempts (failed AEAD
-   decryption invocations) for a given epoch.
+   Get the number of AEAD decryption invocations for a given epoch.
 
-   Request : Get v
+   Request : Get AEAD Decryption Invocations
 
    Parameters :
 
@@ -1208,11 +1208,32 @@ Table of Contents
 
    *  DTLS Epoch
 
-   Reply: v
+   Reply: AEAD Decryption Invocations
 
    Parameters : non-negative integer
 
-9.10.  Configure Replay Protection
+9.10.  Get Failed AEAD Decryption Invocations
+
+   Get the number of failed AEAD decryption invocations for a given
+   epoch.
+
+   Request : Get Failed AEAD Decryption Invocations
+
+   Parameters :
+
+   *  SCTP Association
+
+   *  Restart indication
+
+   *  DTLS CID
+
+   *  DTLS Epoch
+
+   Reply: Failed AEAD Decryption Invocations
+
+   Parameters : non-negative integer
+
+9.11.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path

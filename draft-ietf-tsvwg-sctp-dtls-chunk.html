@@ -1307,13 +1307,16 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-require-protected-sctp-pack" class="internal xref">Require Protected SCTP Packets</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.8">
-                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-get-q" class="internal xref">Get q</a></p>
+                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-get-aead-encryption-invocat" class="internal xref">Get AEAD Encryption Invocations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.9">
-                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-get-v" class="internal xref">Get v</a></p>
+                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-get-aead-decryption-invocat" class="internal xref">Get AEAD Decryption Invocations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.10">
-                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
+                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-get-failed-aead-decryption-" class="internal xref">Get Failed AEAD Decryption Invocations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.11">
+                <p id="section-toc.1-1.9.2.11.1"><a href="#section-9.11" class="auto internal xref">9.11</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
 </li>
             </ul>
 </li>
@@ -3098,14 +3101,14 @@ SCTP packets must be protected in a DTLS Chunk going forward.<a href="#section-9
 <p id="section-9.7-4">Reply: Acknowledgement<a href="#section-9.7-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-q">
+<div id="get-aead-encryption-invocations">
 <section id="section-9.8">
-        <h3 id="name-get-q">
-<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-get-q" class="section-name selfRef">Get q</a>
+        <h3 id="name-get-aead-encryption-invocat">
+<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-get-aead-encryption-invocat" class="section-name selfRef">Get AEAD Encryption Invocations</a>
         </h3>
-<p id="section-9.8-1">Get q, the number of protected messages (AEAD encryption invocations) for
+<p id="section-9.8-1">Get the number of AEAD encryption invocations (protected messages) for
 a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
-<p id="section-9.8-2">Request : Get q<a href="#section-9.8-2" class="pilcrow">¶</a></p>
+<p id="section-9.8-2">Request : Get AEAD Encryption Invocations<a href="#section-9.8-2" class="pilcrow">¶</a></p>
 <p id="section-9.8-3">Parameters :<a href="#section-9.8-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.8-4.1">
@@ -3121,18 +3124,17 @@ a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
             <p id="section-9.8-4.4.1">DTLS Epoch<a href="#section-9.8-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.8-5">Reply: q<a href="#section-9.8-5" class="pilcrow">¶</a></p>
+<p id="section-9.8-5">Reply: AEAD Encryption Invocations<a href="#section-9.8-5" class="pilcrow">¶</a></p>
 <p id="section-9.8-6">Parameters : non-negative integer<a href="#section-9.8-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-v">
+<div id="get-aead-decryption-invocations">
 <section id="section-9.9">
-        <h3 id="name-get-v">
-<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-get-v" class="section-name selfRef">Get v</a>
+        <h3 id="name-get-aead-decryption-invocat">
+<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-get-aead-decryption-invocat" class="section-name selfRef">Get AEAD Decryption Invocations</a>
         </h3>
-<p id="section-9.9-1">Get v, the number of attacker forgery attempts
-(failed AEAD decryption invocations) for a given epoch.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
-<p id="section-9.9-2">Request : Get v<a href="#section-9.9-2" class="pilcrow">¶</a></p>
+<p id="section-9.9-1">Get the number of AEAD decryption invocations for a given epoch.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
+<p id="section-9.9-2">Request : Get AEAD Decryption Invocations<a href="#section-9.9-2" class="pilcrow">¶</a></p>
 <p id="section-9.9-3">Parameters :<a href="#section-9.9-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.9-4.1">
@@ -3148,40 +3150,66 @@ a given epoch.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
             <p id="section-9.9-4.4.1">DTLS Epoch<a href="#section-9.9-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.9-5">Reply: v<a href="#section-9.9-5" class="pilcrow">¶</a></p>
+<p id="section-9.9-5">Reply: AEAD Decryption Invocations<a href="#section-9.9-5" class="pilcrow">¶</a></p>
 <p id="section-9.9-6">Parameters : non-negative integer<a href="#section-9.9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="configure-replay-protection">
+<div id="get-failed-aead-decryption-invocations">
 <section id="section-9.10">
-        <h3 id="name-configure-replay-protection">
-<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        <h3 id="name-get-failed-aead-decryption-">
+<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-get-failed-aead-decryption-" class="section-name selfRef">Get Failed AEAD Decryption Invocations</a>
         </h3>
-<p id="section-9.10-1">The DTLS replay protection in this usage is expected to be fairly
+<p id="section-9.10-1">Get the number of failed AEAD decryption invocations for a given epoch.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
+<p id="section-9.10-2">Request : Get Failed AEAD Decryption Invocations<a href="#section-9.10-2" class="pilcrow">¶</a></p>
+<p id="section-9.10-3">Parameters :<a href="#section-9.10-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.10-4.1">
+            <p id="section-9.10-4.1.1">SCTP Association<a href="#section-9.10-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.2">
+            <p id="section-9.10-4.2.1">Restart indication<a href="#section-9.10-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.3">
+            <p id="section-9.10-4.3.1">DTLS CID<a href="#section-9.10-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.10-4.4">
+            <p id="section-9.10-4.4.1">DTLS Epoch<a href="#section-9.10-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.10-5">Reply: Failed AEAD Decryption Invocations<a href="#section-9.10-5" class="pilcrow">¶</a></p>
+<p id="section-9.10-6">Parameters : non-negative integer<a href="#section-9.10-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configure-replay-protection">
+<section id="section-9.11">
+        <h3 id="name-configure-replay-protection">
+<a href="#section-9.11" class="section-number selfRef">9.11. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        </h3>
+<p id="section-9.11-1">The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets are
 a combination of how delayed one packet may be compared to another
 times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
-more suitable value depending on the use case should be considered.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
-<p id="section-9.10-2">Note this sets this configuration to be used across any DTLS key
-context for a given SCTP Association and primary/restart usages.<a href="#section-9.10-2" class="pilcrow">¶</a></p>
-<p id="section-9.10-3">Request : Configure Replay Protection<a href="#section-9.10-3" class="pilcrow">¶</a></p>
-<p id="section-9.10-4">Parameters :<a href="#section-9.10-4" class="pilcrow">¶</a></p>
+more suitable value depending on the use case should be considered.<a href="#section-9.11-1" class="pilcrow">¶</a></p>
+<p id="section-9.11-2">Note this sets this configuration to be used across any DTLS key
+context for a given SCTP Association and primary/restart usages.<a href="#section-9.11-2" class="pilcrow">¶</a></p>
+<p id="section-9.11-3">Request : Configure Replay Protection<a href="#section-9.11-3" class="pilcrow">¶</a></p>
+<p id="section-9.11-4">Parameters :<a href="#section-9.11-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.10-5.1">
-            <p id="section-9.10-5.1.1">SCTP Association<a href="#section-9.10-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.11-5.1">
+            <p id="section-9.11-5.1.1">SCTP Association<a href="#section-9.11-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.10-5.2">
-            <p id="section-9.10-5.2.1">Restart indication<a href="#section-9.10-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.11-5.2">
+            <p id="section-9.11-5.2.1">Restart indication<a href="#section-9.11-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.10-5.3">
-            <p id="section-9.10-5.3.1">Configuration parameters<a href="#section-9.10-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.11-5.3">
+            <p id="section-9.11-5.3.1">Configuration parameters<a href="#section-9.11-5.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.10-6">Reply: Replay Protection Configured<a href="#section-9.10-6" class="pilcrow">¶</a></p>
-<p id="section-9.10-7">Parameters : true or false<a href="#section-9.10-7" class="pilcrow">¶</a></p>
+<p id="section-9.11-6">Reply: Replay Protection Configured<a href="#section-9.11-6" class="pilcrow">¶</a></p>
+<p id="section-9.11-7">Parameters : true or false<a href="#section-9.11-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
