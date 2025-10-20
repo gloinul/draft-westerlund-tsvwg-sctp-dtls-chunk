@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 20 April 2026                                          Ericsson
+Expires: 23 April 2026                                          Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         17 October 2025
+                                                         20 October 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -117,18 +117,24 @@ Table of Contents
      9.9.  Get v
      9.10. Configure Replay Protection
    10. Socket API Considerations
-     10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
-     10.2.  Get the Supported Cipher Suits
-            (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
-     10.3.  Get or Set the Local Protection Method Identifiers
-            (SCTP_DTLS_LOCAL_PMIDS)
-     10.4.  Get the Remote Protection Method Identifiers
-            (SCTP_DTLS_REMOTE_PMIDS)
-     10.5.  Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
-     10.6.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
-     10.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
-     10.8.  Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
-     10.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+     10.1.  SCTP_ASSOC_CHANGE Notification
+     10.2.  A New Flag for recvmsg() (MSG_PROTECTED)
+     10.3.  Functions
+       10.3.1.  sctp_dtls_nr_cipher_suits()
+       10.3.2.  sctp_dtls_cipher_suits()
+     10.4.  Socket Options
+       10.4.1.  Get or Set the Local Protection Method Identifiers
+               (SCTP_DTLS_LOCAL_PMIDS)
+       10.4.2.  Get the Remote Protection Method Identifiers
+               (SCTP_DTLS_REMOTE_PMIDS)
+       10.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
+       10.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+       10.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+       10.4.6.  Set or Get Protection Enforcement
+               (SCTP_DTLS_ENFORCE_PROTECTION)
+       10.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
+       10.4.8.  Get or Set the Replay Protection Window Size
+               (SCTP_DTLS_REPLAY_WINDOW)
    11. Implementation Considerations
      11.1.  Privacy Padding of SCTP Packets
    12. IANA Considerations
@@ -293,7 +299,7 @@ Table of Contents
    SCTP association.  Key Management sends and receives its own data via
    the SCTP User Level interface.  Key Management's own data are
    distinguished from any other data by means of a dedicated PPID using
-   the value 4242 (see Table 8).
+   the value 4242 (see Table 9).
 
    Once Key Management has established a DTLS 1.3 connection, it can
    derive primary and restart keys and set the Chunk Protection Operator
@@ -1247,34 +1253,431 @@ Table of Contents
    in [RFC6458] would require some extension of the socket API.  Please
    note that this section is informational only.
 
+   Please also note, that the API described in this section can change
+   in a non-backwards compatible way during the evolution of this
+   document due to changed functionality or gained experience during the
+   implementation.
+
    A socket API implementation based on [RFC6458] is extended by
    supporting several new IPPROTO_SCTP-level socket options and a new
    flag for recvmsg().
 
-10.1.  A New Flag for recvmsg() (MSG_PROTECTED)
+10.1.  SCTP_ASSOC_CHANGE Notification
+
+   When an SCTP_ASSOC_CHANGE notification (specified in Section 6.1.1 of
+   [RFC6458]) is delivered indicating a sac_state of SCTP_COMM_UP or
+   SCTP_RESTART for an SCTP association where both peers support the
+   DTLS chunk, SCTP_ASSOC_SUPPORTS_DTLS should be listed in the sac_info
+   field.
+
+10.2.  A New Flag for recvmsg() (MSG_PROTECTED)
 
    This flag is returned by recvmsg() in msg_flags for all user messages
    for which all DATA chunks where received in protected SCTP packets.
    This also means that if sctp_recvv() is used, MSG_PROTECTED is
    returned in the *flags argument.
 
-10.2.  Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)
+10.3.  Functions
 
-10.3.  Get or Set the Local Protection Method Identifiers
-       (SCTP_DTLS_LOCAL_PMIDS)
+10.3.1.  sctp_dtls_nr_cipher_suits()
 
-10.4.  Get the Remote Protection Method Identifiers
-       (SCTP_DTLS_REMOTE_PMIDS)
+   sctp_dtls_nr_cipher_suits() returns the number of cypher suits
+   supported by the SCTP implementation.
 
-10.5.  Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)
+   The function prototype is:
 
-10.6.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+   unsigned int
+   sctp_dtls_nr_cipher_suits(void);
 
-10.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+   This function can be used in combination with
+   sctp_dtls_cipher_suits().
 
-10.8.  Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)
+10.3.2.  sctp_dtls_cipher_suits()
 
-10.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+   sctp_dtls_cipher_suits() returns the cypher suits supported by the
+   SCTP implementation.
+
+   The function prototype is:
+
+   int
+   sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
+
+   and the arguments are
+
+   cipher_suits:  An array where the supported cypher suits are stored.
+      A cypher suit is represented by two uint8_t using the IANA
+      assigned values in the TLS cipher suit registry
+      [TLS-CIPHER-SUITS].
+
+   n: The number of cipher suits which can be stored in cipher_suits.
+
+   sctp_dtls_cipher_suits returns -1, if n is smaller than the number of
+   cipher suites supported by the stack.  If n is equal to or larger
+   than the number of cipher suites supported the the SCTP
+   implementation, the cipher suits are stored in cipher_suits and the
+   number of supported cipher suits is returned.
+
+10.4.  Socket Options
+
+   The following table provides an overview of the IPPROTO_SCTP-level
+   socket options defined by this section.
+
+   +==============================+========================+=====+=====+
+   | Option Name                  | Data Type              | Set | Get |
+   +==============================+========================+=====+=====+
+   | SCTP_DTLS_LOCAL_PMIDS        | struct                 | X   | X   |
+   |                              | sctp_dtls_pmids        |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_REMOTE_PMIDS       | struct                 |     | X   |
+   |                              | sctp_dtls_pmids        |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_SET_SEND_KEYS      | struct                 | X   |     |
+   |                              | sctp_dtls_keys         |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_ADD_RECV_KEYS      | struct                 | X   |     |
+   |                              | sctp_dtls_keys         |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_DEL_RECV_KEYS      | struct                 | X   |     |
+   |                              | sctp_dtls_keys_id      |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_ENFORCE_PROTECTION | struct                 | X   | X   |
+   |                              | sctp_assoc_value       |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_REPLAY_WINDOW      | struct                 | X   | X   |
+   |                              | sctp_assoc_value       |     |     |
+   +------------------------------+------------------------+-----+-----+
+   | SCTP_DTLS_STATS              | struct                 |     | X   |
+   |                              | sctp_dtls_stats        |     |     |
+   +------------------------------+------------------------+-----+-----+
+
+                          Table 3: Socket Options
+
+   sctp_opt_info() needs to be extended to support:
+
+   *  SCTP_DTLS_LOCAL_PMIDS,
+
+   *  SCTP_DTLS_REMOTE_PMIDS,
+
+   *  SCTP_DTLS_ENFORCE_PROTECTION,
+
+   *  SCTP_DTLS_REPLAY_WINDOW, and
+
+   *  SCTP_DTLS_STATS.
+
+10.4.1.  Get or Set the Local Protection Method Identifiers
+         (SCTP_DTLS_LOCAL_PMIDS)
+
+   This socket option sets the protection method identifiers which will
+   be sent to the peer during the handshake.  It can also be used to
+   retrieve the protection method identifiers which were sent during the
+   handshake.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_pmids {
+           sctp_assoc_t sds_assoc_id;
+           uint16_t sdp_nr_pmids;
+           uint16_t sdp_pmids[];
+   };
+
+   sds_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      For setsockopt(), only SCTP_FUTURE_ASSOC can be used.  For
+      getsockopt(), it is an error to use SCTP_{CURRENT|ALL}_ASSOC.
+
+   sdp_nr_pmids:  The number of entries in sdp_pmids.
+
+   sdp_pmids:  The protection method identifiers which will be or have
+      been sent to the peer in the sequence they were contained in the
+      DTLS 1.3 Chunk Protected Association parameter and in host byte
+      order.
+
+   This socket option can be used with setsockopt() for SCTP endpoints
+   in the SCTP_CLOSED or SCTP_LISTEN state to configure the protection
+   method identifiers to be sent.  When used with getsockopt() on an
+   SCTP endpoint in the SCTP_LISTEN state, the protection method
+   identifiers which will be sent can be retrieved.  If the SCTP
+   endpoint is in a state other that SCTP_CLOSED or SCTP_LISTEN, the
+   protection method identifiers which have been sent can be retrieved.
+
+10.4.2.  Get the Remote Protection Method Identifiers
+         (SCTP_DTLS_REMOTE_PMIDS)
+
+   This socket option reports the protection method identifiers reported
+   by the peer during the handshake.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_pmids {
+           sctp_assoc_t sds_assoc_id;
+           uint16_t sdp_nr_pmids;
+           uint16_t sdp_pmids[];
+   };
+
+   sds_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   sdp_nr_pmids:  The number of entries in sdp_pmids.
+
+   sdp_pmids:  The protection method identifiers reported by the peer in
+      the sequence they were contained in the DTLS 1.3 Chunk Protected
+      Association parameter and in host byte order.
+
+   This socket option will fail on any SCTP endpoint in state
+   SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
+
+10.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
+
+   Using this socket option allows to add a particular set of keys used
+   for sending DTLS chunks.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_keys {
+           sctp_assoc_t sdk_assoc_id;
+           uint8_t sdk_cipher_suit[2];
+           uint8_t sdk_restart;
+           uint8_t sdk_conn_id_len;
+           uint16_t sdk_key_len;
+           uint16_t sdk_iv_len;
+           uint16_t sdk_sn_key_len;
+           uint16_t sdk_unused;
+           uint64_t sdk_epoch;
+           uint8_t *sdk_conn_id;
+           uint8_t *sdk_key;
+           uint8_t *sdk_iv;
+           uint8_t *sdk_sn_key;
+   };
+
+   sdk_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   sdk_cipher_suit:  The cipher suit for which the keys are used.
+
+   sdk_restart:  If the value is 0, the regular keys are added, if a
+      value different from 0 is used, the restart keys are added.
+
+   sdk_conn_id_len:  The length of the DTLS connection identifier
+      specified in sdk_conn_id.
+
+   sdk_key_len:  The length of the initialization vector specified in
+      sdk_key.
+
+   sdk_iv_len:  The length of the initialization vector specified in
+      sdk_iv.
+
+   sdk_sn_key_len:  The length of the sequence number key specified in
+      sdk_sn_key.
+
+   sdk_unused:  This field is ignored.
+
+   sdk_epoch:  The epoch for which the keys are added.
+
+   sdk_conn_id:  A pointer to the connection identifier for which the
+      keys are added.  Using NULL means that no connection identifier is
+      used.
+
+   sdk_key:  A pointer to the key.
+
+   sdk_iv:  A pointer to the initialization vector.
+
+   sdk_sn_key: A pointer to the sequence number key.
+
+   This socket option can only be used on SCTP endpoints in states other
+   then SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.  If the
+   socket options is successful, all affected DTLS chunks sent will use
+   the specified keys until the keys are changed again by another call
+   of this socket option.
+
+10.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+
+   Using this socket option allows to add a particular set of keys used
+   for receiving DTLS chunks.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_keys {
+           sctp_assoc_t sdk_assoc_id;
+           uint8_t sdk_cipher_suit[2];
+           uint8_t sdk_restart;
+           uint8_t sdk_conn_id_len;
+           uint16_t sdk_key_len;
+           uint16_t sdk_iv_len;
+           uint16_t sdk_sn_key_len;
+           uint16_t sdk_unused;
+           uint64_t sdk_epoch;
+           uint8_t *sdk_conn_id;
+           uint8_t *sdk_key;
+           uint8_t *sdk_iv;
+           uint8_t *sdk_sn_key;
+   };
+
+   sdk_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   sdk_cipher_suit:  The cipher suit for which the keys are used.
+
+   sdk_restart:  If the value is 0, the regular keys are added, if a
+      value different from 0 is used, the restart keys are added.
+
+   sdk_conn_id_len:  The length of the DTLS connection identifier
+      specified in sdk_conn_id.
+
+   sdk_key_len:  The length of the initialization vector specified in
+      sdk_key.
+
+   sdk_iv_len:  The length of the initialization vector specified in
+      sdk_iv.
+
+   sdk_sn_key_len:  The length of the sequence number key specified in
+      sdk_sn_key.
+
+   sdk_unused:  This field is ignored.
+
+   sdk_epoch:  The epoch for which the keys are added.
+
+   sdk_conn_id:  A pointer to the connection identifier for which the
+      keys are added.  Using NULL means that no connection identifier is
+      used.
+
+   sdk_key:  A pointer to the key.
+
+   sdk_iv:  A pointer to the initialization vector.
+
+   sdk_sn_key: A pointer to the sequence number key.
+
+   This socket option can only be used on SCTP endpoints in states other
+   then SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
+
+10.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+
+   Using this socket option allows to remove a particular set of keys
+   used for receiving DTLS chunks.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_keys_id {
+           sctp_assoc_t sdki_assoc_id;
+           uint8_t sdki_restart;
+           uint8_t sdki_conn_id_len;
+           uint16_t sdki_unused;
+           uint64_t sdki_epoch;
+           uint8_t *sdki_conn_id;
+   }
+
+   sdki_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   sdki_restart:  If the value is 0, the regular keys are removed, if a
+      value different from 0 is used, the restart keys are removed.
+
+   sdki_conn_id_len:  The length of the DTLS connection identifier
+      specified in sdki_conn_id.
+
+   sdki_unused:  This field is ignored.
+
+   sdki_epoch:  The epoch for which the keys are removed.
+
+   sdki_conn_id:  A pointer to the connection identifier for which the
+      keys are removed.  Using NULL means that no connection identifier
+      is used.
+
+   This socket option can only be used on SCTP endpoints in states other
+   then SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
+   SCTP_COOKIE_ECHOED.
+
+10.4.6.  Set or Get Protection Enforcement
+         (SCTP_DTLS_ENFORCE_PROTECTION)
+
+   Enabling this socket option on an SCTP endpoint enforces that
+   received SCTP packets are only processed, if they are protected.  All
+   received packets with the first chunk not being an INIT chunk, INIT
+   ACK chunk, or DTLS chunk will be silently discarded.
+
+   The following structure is used as the option_value:
+
+   struct sctp_assoc_value {
+           sctp_assoc_t assoc_id;
+           uint32_t assoc_value;
+   };
+
+   assoc_id:  This parameter is ignored for one-to-one style sockets.
+      For one-to-many style sockets, this parameter indicates upon which
+      SCTP association the caller is performing the action.  It is an
+      error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   assoc_value: The value 0 represents that the option is off, any other
+   value represents that the option is on.
+
+   This socket option is off by default on any SCTP endpoint.  Once
+   protection has been enforced by enabling this socket option on an
+   SCTP endpoint, it cannot be disabled again.  Whether protection has
+   been enforced on an SCTP endpoint can be queried in any state other
+   than SCTP_CLOSED.  Protection can be enforced in any state other than
+   SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
+
+10.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
+
+   This socket options allows to get various statistic counters for a
+   specific SCTP endpoint.
+
+   The following structure is used as the option_value:
+
+   struct sctp_dtls_stats {
+           sctp_assoc_t sds_assoc_id;
+           uint32_t sds_dropped_unprotected;
+           uint32_t sds_aead_failures;
+           uint32_t sds_recv_protected;
+           uint32_t sds_sent_protected;
+           /* There will be added more fields before the WGLC. */
+           /* There might be additional platform specific counters. */
+   };
+
+   sds_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, this parameter indicates
+      upon which SCTP association the caller is performing the action.
+      It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
+
+   sds_dropped_unprotected:  The number of unprotected packets received
+      for this SCTP endpoint after protection was enforced.
+
+   sds_aead_failures:  The number of AEAD failures when processing
+      received DTLS chunks.
+
+   sds_recv_protected:  The number of DTLS chunks successfully
+      processed.
+
+   sds_sent_protected:  The number of DTLS chunks sent.
+
+10.4.8.  Get or Set the Replay Protection Window Size
+         (SCTP_DTLS_REPLAY_WINDOW)
+
+   This socket option can be used to configure the replay protection for
+   SCTP endpoints.
+
+   The following structure is used as the option_value:
+
+   struct sctp_assoc_value {
+           sctp_assoc_t assoc_id;
+           uint32_t assoc_value;
+   };
+
+   assoc_id:  This parameter is ignored for one-to-one style sockets.
+      For one-to-many style sockets, this parameter indicates upon which
+      SCTP association the caller is performing the action.  It is an
+      error to use SCTP_{CURRENT|ALL}_ASSOC.
+
+   assoc_value: The maximum number of DTLS chunks in the replay
+   protection window.
 
 11.  Implementation Considerations
 
@@ -1353,7 +1756,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-                  Table 3: Protection Solution Identifiers
+                  Table 4: Protection Solution Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
@@ -1363,7 +1766,7 @@ Table of Contents
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Types" registry, IANA is requested to add the one new entry
-   depicted below in in Table 4 with a reference to this document.  The
+   depicted below in in Table 5 with a reference to this document.  The
    registry at time of writing was available at:
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-1
@@ -1374,7 +1777,7 @@ Table of Contents
                |     TBA6 | DTLS Chunk (DTLS) | RFC-To-Be |
                +----------+-------------------+-----------+
 
-                    Table 4: New Chunk Type Registered
+                    Table 5: New Chunk Type Registered
 
    The registration table for the chunk flags of this chunk type is
    initially:
@@ -1399,13 +1802,13 @@ Table of Contents
             |             0x80 | Unassigned      |           |
             +------------------+-----------------+-----------+
 
-                        Table 5: DTLS Chunk Flags
+                        Table 6: DTLS Chunk Flags
 
 12.3.  SCTP Chunk Parameter Types
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Parameter Types" registry, IANA is requested to add the new
-   entry depicted below in in Table 6 with a reference to this document.
+   entry depicted below in in Table 7 with a reference to this document.
    The registry at time of writing was available at:
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-2
@@ -1416,13 +1819,13 @@ Table of Contents
       |     TBA8 | DTLS 1.3 Chunk Protected Association | RFC-To-Be |
       +----------+--------------------------------------+-----------+
 
-               Table 6: New Chunk Type Parameters Registered
+               Table 7: New Chunk Type Parameters Registered
 
 12.4.  SCTP Error Cause Codes
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Error Cause Codes" registry, IANA is requested to add the new entry
-   depicted below in in Table 7 with a reference to this document.  The
+   depicted below in in Table 8 with a reference to this document.  The
    registry at time of writing was available at:
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-24
@@ -1437,14 +1840,14 @@ Table of Contents
               |    TBA11 | No Common Protection | RFC-To-Be |
               +----------+----------------------+-----------+
 
-                   Table 7: Error Cause Codes Parameters
+                   Table 8: Error Cause Codes Parameters
                                  Registered
 
 12.5.  SCTP Payload Protocol Identifier
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Payload Protocol Identifiers" registry, IANA is requested to update
-   the entry depicted below in in Table 8 with a reference to this
+   the entry depicted below in in Table 9 with a reference to this
    document.  The registry at time of writing was available at:
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-25
@@ -1455,7 +1858,7 @@ Table of Contents
        |     4242 | DTLS Chunk Key-Management Messages | RFC-To-Be |
        +----------+------------------------------------+-----------+
 
-        Table 8: Protection Operator Protocol Identifier Registered
+        Table 9: Protection Operator Protocol Identifier Registered
 
 13.  Security Considerations
 

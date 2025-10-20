@@ -19,21 +19,20 @@ prevent eavesdropping and detect tampering or message forgery.
        Applications using SCTP DTLS chunk can use all transport
 features provided by SCTP and its extensions but with some limitations. 
     " name="description">
-<meta content="xml2rfc 3.30.2" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="draft-ietf-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.2
-    Python 3.12.11
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.4.0
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.5
-    setuptools 80.9.0
     wcwidth 0.2.14
 -->
 <link href="draft-ietf-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
@@ -1057,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 20 April 2026</td>
+<td class="center">Expires 23 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-17" class="published">17 October 2025</time>
+<time datetime="2025-10-20" class="published">20 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-20">20 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-23">23 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1142,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1322,31 +1321,50 @@ features provided by SCTP and its extensions but with some limitations.<a href="
             <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-socket-api-considerations" class="internal xref">Socket API Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-a-new-flag-for-recvmsg-msg_" class="internal xref">A New Flag for recvmsg() (MSG_PROTECTED)</a></p>
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-sctp_assoc_change-notificat" class="internal xref"><code>SCTP_ASSOC_CHANGE</code> Notification</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-get-the-supported-cipher-su" class="internal xref">Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-a-new-flag-for-recvmsg-msg_" class="internal xref">A New Flag for <code>recvmsg()</code> (<code>MSG_PROTECTED</code>)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
-                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-get-or-set-the-local-protec" class="internal xref">Get or Set the Local Protection Method Identifiers (SCTP_DTLS_LOCAL_PMIDS)</a></p>
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-functions" class="internal xref">Functions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3.2.1">
+                    <p id="section-toc.1-1.10.2.3.2.1.1"><a href="#section-10.3.1" class="auto internal xref">10.3.1</a>.  <a href="#name-sctp_dtls_nr_cipher_suits" class="internal xref"><code>sctp_dtls_nr_cipher_suits()</code></a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3.2.2">
+                    <p id="section-toc.1-1.10.2.3.2.2.1"><a href="#section-10.3.2" class="auto internal xref">10.3.2</a>.  <a href="#name-sctp_dtls_cipher_suits" class="internal xref"><code>sctp_dtls_cipher_suits()</code></a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
-                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-get-the-remote-protection-m" class="internal xref">Get the Remote Protection Method Identifiers (SCTP_DTLS_REMOTE_PMIDS)</a></p>
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-socket-options" class="internal xref">Socket Options</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.1">
+                    <p id="section-toc.1-1.10.2.4.2.1.1"><a href="#section-10.4.1" class="auto internal xref">10.4.1</a>.  <a href="#name-get-or-set-the-local-protec" class="internal xref">Get or Set the Local Protection Method Identifiers (<code>SCTP_DTLS_LOCAL_PMIDS</code>)</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
-                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-set-the-sender-keys-sctp_dt" class="internal xref">Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.2">
+                    <p id="section-toc.1-1.10.2.4.2.2.1"><a href="#section-10.4.2" class="auto internal xref">10.4.2</a>.  <a href="#name-get-the-remote-protection-m" class="internal xref">Get the Remote Protection Method Identifiers (<code>SCTP_DTLS_REMOTE_PMIDS</code>)</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.6">
-                <p id="section-toc.1-1.10.2.6.1"><a href="#section-10.6" class="auto internal xref">10.6</a>.  <a href="#name-add-receive-keys-sctp_dtls_" class="internal xref">Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.3">
+                    <p id="section-toc.1-1.10.2.4.2.3.1"><a href="#section-10.4.3" class="auto internal xref">10.4.3</a>.  <a href="#name-set-send-keys-sctp_dtls_set" class="internal xref">Set Send Keys (<code>SCTP_DTLS_SET_SEND_KEYS</code>)</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.7">
-                <p id="section-toc.1-1.10.2.7.1"><a href="#section-10.7" class="auto internal xref">10.7</a>.  <a href="#name-delete-receive-keys-sctp_dt" class="internal xref">Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.4">
+                    <p id="section-toc.1-1.10.2.4.2.4.1"><a href="#section-10.4.4" class="auto internal xref">10.4.4</a>.  <a href="#name-add-receive-keys-sctp_dtls_" class="internal xref">Add Receive Keys (<code>SCTP_DTLS_ADD_RECV_KEYS</code>)</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.8">
-                <p id="section-toc.1-1.10.2.8.1"><a href="#section-10.8" class="auto internal xref">10.8</a>.  <a href="#name-enforce-protection-sctp_dtl" class="internal xref">Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.5">
+                    <p id="section-toc.1-1.10.2.4.2.5.1"><a href="#section-10.4.5" class="auto internal xref">10.4.5</a>.  <a href="#name-delete-receive-keys-sctp_dt" class="internal xref">Delete Receive Keys (<code>SCTP_DTLS_DEL_RECV_KEYS</code>)</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.9">
-                <p id="section-toc.1-1.10.2.9.1"><a href="#section-10.9" class="auto internal xref">10.9</a>.  <a href="#name-get-statistic-counters-sctp" class="internal xref">Get Statistic Counters (SCTP_DTLS_STATS)</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.6">
+                    <p id="section-toc.1-1.10.2.4.2.6.1"><a href="#section-10.4.6" class="auto internal xref">10.4.6</a>.  <a href="#name-set-or-get-protection-enfor" class="internal xref">Set or Get Protection Enforcement (<code>SCTP_DTLS_ENFORCE_PROTECTION</code>)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.7">
+                    <p id="section-toc.1-1.10.2.4.2.7.1"><a href="#section-10.4.7" class="auto internal xref">10.4.7</a>.  <a href="#name-get-statistic-counters-sctp" class="internal xref">Get Statistic Counters (<code>SCTP_DTLS_STATS</code>)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4.2.8">
+                    <p id="section-toc.1-1.10.2.4.2.8.1"><a href="#section-10.4.8" class="auto internal xref">10.4.8</a>.  <a href="#name-get-or-set-the-replay-prote" class="internal xref">Get or Set the Replay Protection Window Size (<code>SCTP_DTLS_REPLAY_WINDOW</code>)</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1618,7 +1636,7 @@ function achieves these features behaving as a user of the SCTP
 association.  Key Management sends and receives its own data via the
 SCTP User Level interface.  Key Management's own data are
 distinguished from any other data by means of a dedicated PPID using
-the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">Once Key Management has established a DTLS 1.3 connection, it can
 derive primary and restart keys and set the Chunk Protection Operator
 for SCTP Packet Payload encryption/decryption via an API to create the
@@ -3181,73 +3199,747 @@ specifications published after <span>[<a href="#RFC6458" class="cite xref">RFC64
 implementations using the socket API as specified in <span>[<a href="#RFC6458" class="cite xref">RFC6458</a>]</span> would require
 some extension of the socket API.
 Please note that this section is informational only.<a href="#section-10-2" class="pilcrow">¶</a></p>
-<p id="section-10-3">A socket API implementation based on <span>[<a href="#RFC6458" class="cite xref">RFC6458</a>]</span> is extended by supporting
-several new IPPROTO_SCTP-level socket options and a new flag for recvmsg().<a href="#section-10-3" class="pilcrow">¶</a></p>
-<div id="a-new-flag-for-recvmsg-msgprotected">
+<p id="section-10-3">Please also note, that the API described in this section can change in a
+non-backwards compatible way during the evolution of this document due to
+changed functionality or gained experience during the implementation.<a href="#section-10-3" class="pilcrow">¶</a></p>
+<p id="section-10-4">A socket API implementation based on <span>[<a href="#RFC6458" class="cite xref">RFC6458</a>]</span> is extended by supporting
+several new <code>IPPROTO_SCTP</code>-level socket options and a new flag for
+<code>recvmsg()</code>.<a href="#section-10-4" class="pilcrow">¶</a></p>
+<div id="sctpassocchange-notification">
 <section id="section-10.1">
-        <h3 id="name-a-new-flag-for-recvmsg-msg_">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-a-new-flag-for-recvmsg-msg_" class="section-name selfRef">A New Flag for recvmsg() (MSG_PROTECTED)</a>
+        <h3 id="name-sctp_assoc_change-notificat">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-sctp_assoc_change-notificat" class="section-name selfRef"><code>SCTP_ASSOC_CHANGE</code> Notification</a>
         </h3>
-<p id="section-10.1-1">This flag is returned by recvmsg() in msg_flags for all user messages for
-which all DATA chunks where received in protected SCTP packets.
-This also means that if sctp_recvv() is used, MSG_PROTECTED is returned in
-the *flags argument.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.1-1">When an <code>SCTP_ASSOC_CHANGE</code> notification (specified in Section 6.1.1 of
+<span>[<a href="#RFC6458" class="cite xref">RFC6458</a>]</span>) is delivered indicating a <code>sac_state</code> of <code>SCTP_COMM_UP</code> or
+<code>SCTP_RESTART</code> for an SCTP association where both peers support the
+DTLS chunk, <code>SCTP_ASSOC_SUPPORTS_DTLS</code> should be listed in the
+<code>sac_info</code> field.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-the-supported-cipher-suits-sctpdtlssupportedciphersuits">
+<div id="a-new-flag-for-recvmsg-msgprotected">
 <section id="section-10.2">
-        <h3 id="name-get-the-supported-cipher-su">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-get-the-supported-cipher-su" class="section-name selfRef">Get the Supported Cipher Suits (SCTP_DTLS_SUPPORTED_CIPHER_SUITS)</a>
-      </h3>
+        <h3 id="name-a-new-flag-for-recvmsg-msg_">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-a-new-flag-for-recvmsg-msg_" class="section-name selfRef">A New Flag for <code>recvmsg()</code> (<code>MSG_PROTECTED</code>)</a>
+        </h3>
+<p id="section-10.2-1">This flag is returned by <code>recvmsg()</code> in <code>msg_flags</code> for all user messages
+for which all DATA chunks where received in protected SCTP packets.
+This also means that if <code>sctp_recvv()</code> is used, <code>MSG_PROTECTED</code> is returned
+in the <code>*flags</code> argument.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-or-set-the-local-protection-method-identifiers-sctpdtlslocalpmids">
+<div id="functions">
 <section id="section-10.3">
-        <h3 id="name-get-or-set-the-local-protec">
-<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-get-or-set-the-local-protec" class="section-name selfRef">Get or Set the Local Protection Method Identifiers (SCTP_DTLS_LOCAL_PMIDS)</a>
-      </h3>
+        <h3 id="name-functions">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-functions" class="section-name selfRef">Functions</a>
+        </h3>
+<div id="sctpdtlsnrciphersuits">
+<section id="section-10.3.1">
+          <h4 id="name-sctp_dtls_nr_cipher_suits">
+<a href="#section-10.3.1" class="section-number selfRef">10.3.1. </a><a href="#name-sctp_dtls_nr_cipher_suits" class="section-name selfRef"><code>sctp_dtls_nr_cipher_suits()</code></a>
+          </h4>
+<p id="section-10.3.1-1"><code>sctp_dtls_nr_cipher_suits()</code> returns the number of cypher suits supported
+by the SCTP implementation.<a href="#section-10.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.3.1-2">The function prototype is:<a href="#section-10.3.1-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.3.1-3">
+<pre>
+unsigned int
+sctp_dtls_nr_cipher_suits(void);
+</pre><a href="#section-10.3.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-10.3.1-4">This function can be used in combination with <code>sctp_dtls_cipher_suits()</code>.<a href="#section-10.3.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sctpdtlsciphersuits">
+<section id="section-10.3.2">
+          <h4 id="name-sctp_dtls_cipher_suits">
+<a href="#section-10.3.2" class="section-number selfRef">10.3.2. </a><a href="#name-sctp_dtls_cipher_suits" class="section-name selfRef"><code>sctp_dtls_cipher_suits()</code></a>
+          </h4>
+<p id="section-10.3.2-1"><code>sctp_dtls_cipher_suits()</code> returns the cypher suits supported by the
+SCTP implementation.<a href="#section-10.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-10.3.2-2">The function prototype is:<a href="#section-10.3.2-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.3.2-3">
+<pre>
+int
+sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
+</pre><a href="#section-10.3.2-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.3.2-4">
+            <dt id="section-10.3.2-4.1">and the arguments are</dt>
+            <dd style="margin-left: 1.5em" id="section-10.3.2-4.2">
+              <p id="section-10.3.2-4.2.1"></p><a href="#section-10.3.2-4.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.3.2-4.3">
+<code>cipher_suits</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.3.2-4.4">
+              <p id="section-10.3.2-4.4.1">An array where the supported cypher suits are stored. A cypher suit is
+represented by two <code>uint8_t</code> using the IANA assigned values in the
+TLS cipher suit registry <span>[<a href="#TLS-CIPHER-SUITS" class="cite xref">TLS-CIPHER-SUITS</a>]</span>.<a href="#section-10.3.2-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.3.2-5"><code>n</code>:
+The number of cipher suits which can be stored in <code>cipher_suits</code>.<a href="#section-10.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-10.3.2-6"><code>sctp_dtls_cipher_suits</code> returns <code>-1</code>, if <code>n</code> is smaller than the number
+of cipher suites supported by the stack. If <code>n</code> is equal to or larger than
+the number of cipher suites supported the the SCTP implementation, the
+cipher suits are stored in <code>cipher_suits</code> and the number of supported
+cipher suits is returned.<a href="#section-10.3.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="socket-options">
+<section id="section-10.4">
+        <h3 id="name-socket-options">
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-socket-options" class="section-name selfRef">Socket Options</a>
+        </h3>
+<p id="section-10.4-1">The following table provides an overview of the <code>IPPROTO_SCTP</code>-level socket
+options defined by this section.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+<span id="name-socket-options-2"></span><div id="socket-options-table">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-socket-options-2" class="selfRef">Socket Options</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Option Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Data Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Set</th>
+              <th class="text-left" rowspan="1" colspan="1">Get</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_LOCAL_PMIDS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_pmids</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_REMOTE_PMIDS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_pmids</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_SET_SEND_KEYS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_keys</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_ADD_RECV_KEYS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_keys</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_DEL_RECV_KEYS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_keys_id</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_ENFORCE_PROTECTION</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_assoc_value</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_REPLAY_WINDOW</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_assoc_value</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>SCTP_DTLS_STATS</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>struct sctp_dtls_stats</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-10.4-3"><code>sctp_opt_info()</code> needs to be extended to support:<a href="#section-10.4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.4-4.1">
+            <p id="section-10.4-4.1.1"><code>SCTP_DTLS_LOCAL_PMIDS</code>,<a href="#section-10.4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-4.2">
+            <p id="section-10.4-4.2.1"><code>SCTP_DTLS_REMOTE_PMIDS</code>,<a href="#section-10.4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-4.3">
+            <p id="section-10.4-4.3.1"><code>SCTP_DTLS_ENFORCE_PROTECTION</code>,<a href="#section-10.4-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-4.4">
+            <p id="section-10.4-4.4.1"><code>SCTP_DTLS_REPLAY_WINDOW</code>, and<a href="#section-10.4-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-4.5">
+            <p id="section-10.4-4.5.1"><code>SCTP_DTLS_STATS</code>.<a href="#section-10.4-4.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div id="get-or-set-the-local-protection-method-identifiers-sctpdtlslocalpmids">
+<section id="section-10.4.1">
+          <h4 id="name-get-or-set-the-local-protec">
+<a href="#section-10.4.1" class="section-number selfRef">10.4.1. </a><a href="#name-get-or-set-the-local-protec" class="section-name selfRef">Get or Set the Local Protection Method Identifiers (<code>SCTP_DTLS_LOCAL_PMIDS</code>)</a>
+          </h4>
+<p id="section-10.4.1-1">This socket option sets the protection method identifiers which will be sent
+to the peer during the handshake.
+It can also be used to retrieve the protection method identifiers which were
+sent during the handshake.<a href="#section-10.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.1-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.1-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.1-3">
+<pre>
+struct sctp_dtls_pmids {
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
+};
+</pre><a href="#section-10.4.1-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.1-4">
+            <dt id="section-10.4.1-4.1">
+<code>sds_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.1-4.2">
+              <p id="section-10.4.1-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+For <code>setsockopt()</code>, only <code>SCTP_FUTURE_ASSOC</code> can be used.
+For <code>getsockopt()</code>, it is an error to use <code>SCTP_{CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.1-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.1-4.3">
+<code>sdp_nr_pmids</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.1-4.4">
+              <p id="section-10.4.1-4.4.1">The number of entries in <code>sdp_pmids</code>.<a href="#section-10.4.1-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.1-4.5">
+<code>sdp_pmids</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.1-4.6">
+              <p id="section-10.4.1-4.6.1">The protection method identifiers which will be or have been sent to the peer
+in the sequence they were contained in the DTLS 1.3 Chunk Protected
+Association parameter and in host byte order.<a href="#section-10.4.1-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.1-5">This socket option can be used with setsockopt() for SCTP endpoints in the
+<code>SCTP_CLOSED</code> or <code>SCTP_LISTEN</code> state to configure the protection method
+identifiers to be sent.
+When used with <code>getsockopt()</code> on an SCTP endpoint in the <code>SCTP_LISTEN</code>
+state, the protection method identifiers which will be sent can be retrieved.
+ If the SCTP endpoint is in a state other that <code>SCTP_CLOSED</code> or
+<code>SCTP_LISTEN</code>, the protection method identifiers which have been sent can
+be retrieved.<a href="#section-10.4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="get-the-remote-protection-method-identifiers-sctpdtlsremotepmids">
-<section id="section-10.4">
-        <h3 id="name-get-the-remote-protection-m">
-<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-get-the-remote-protection-m" class="section-name selfRef">Get the Remote Protection Method Identifiers (SCTP_DTLS_REMOTE_PMIDS)</a>
-      </h3>
+<section id="section-10.4.2">
+          <h4 id="name-get-the-remote-protection-m">
+<a href="#section-10.4.2" class="section-number selfRef">10.4.2. </a><a href="#name-get-the-remote-protection-m" class="section-name selfRef">Get the Remote Protection Method Identifiers (<code>SCTP_DTLS_REMOTE_PMIDS</code>)</a>
+          </h4>
+<p id="section-10.4.2-1">This socket option reports the protection method identifiers reported by the
+peer during the handshake.<a href="#section-10.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.2-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.2-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.2-3">
+<pre>
+struct sctp_dtls_pmids {
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
+};
+</pre><a href="#section-10.4.2-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.2-4">
+            <dt id="section-10.4.2-4.1">
+<code>sds_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.2-4.2">
+              <p id="section-10.4.2-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.2-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.2-4.3">
+<code>sdp_nr_pmids</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.2-4.4">
+              <p id="section-10.4.2-4.4.1">The number of entries in <code>sdp_pmids</code>.<a href="#section-10.4.2-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.2-4.5">
+<code>sdp_pmids</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.2-4.6">
+              <p id="section-10.4.2-4.6.1">The protection method identifiers reported by the peer in the sequence they
+were contained in the DTLS 1.3 Chunk Protected Association parameter and in
+host byte order.<a href="#section-10.4.2-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.2-5">This socket option will fail on any SCTP endpoint in state <code>SCTP_CLOSED</code>,
+<code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-10.4.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="set-the-sender-keys-sctpdtlssetsendkeys">
-<section id="section-10.5">
-        <h3 id="name-set-the-sender-keys-sctp_dt">
-<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-set-the-sender-keys-sctp_dt" class="section-name selfRef">Set the Sender Keys (SCTP_DTLS_SET_SEND_KEYS)</a>
-      </h3>
+<div id="set-send-keys-sctpdtlssetsendkeys">
+<section id="section-10.4.3">
+          <h4 id="name-set-send-keys-sctp_dtls_set">
+<a href="#section-10.4.3" class="section-number selfRef">10.4.3. </a><a href="#name-set-send-keys-sctp_dtls_set" class="section-name selfRef">Set Send Keys (<code>SCTP_DTLS_SET_SEND_KEYS</code>)</a>
+          </h4>
+<p id="section-10.4.3-1">Using this socket option allows to add a particular set of keys used for
+sending DTLS chunks.<a href="#section-10.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.3-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.3-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.3-3">
+<pre>
+struct sctp_dtls_keys {
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
+};
+</pre><a href="#section-10.4.3-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.3-4">
+            <dt id="section-10.4.3-4.1">
+<code>sdk_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.2">
+              <p id="section-10.4.3-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.3-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.3">
+<code>sdk_cipher_suit</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.4">
+              <p id="section-10.4.3-4.4.1">The cipher suit for which the keys are used.<a href="#section-10.4.3-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.5">
+<code>sdk_restart</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.6">
+              <p id="section-10.4.3-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+from <code>0</code> is used, the restart keys are added.<a href="#section-10.4.3-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.7">
+<code>sdk_conn_id_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.8">
+              <p id="section-10.4.3-4.8.1">The length of the DTLS connection identifier specified in <code>sdk_conn_id</code>.<a href="#section-10.4.3-4.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.9">
+<code>sdk_key_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.10">
+              <p id="section-10.4.3-4.10.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.3-4.10.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.11">
+<code>sdk_iv_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.12">
+              <p id="section-10.4.3-4.12.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.3-4.12.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.13">
+<code>sdk_sn_key_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.14">
+              <p id="section-10.4.3-4.14.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.3-4.14.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.15">
+<code>sdk_unused</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.16">
+              <p id="section-10.4.3-4.16.1">This field is ignored.<a href="#section-10.4.3-4.16.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.17">
+<code>sdk_epoch</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.18">
+              <p id="section-10.4.3-4.18.1">The epoch for which the keys are added.<a href="#section-10.4.3-4.18.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.19">
+<code>sdk_conn_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.20">
+              <p id="section-10.4.3-4.20.1">A pointer to the connection identifier for which the keys are added.
+Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.3-4.20.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.21">
+<code>sdk_key</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.22">
+              <p id="section-10.4.3-4.22.1">A pointer to the key.<a href="#section-10.4.3-4.22.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.3-4.23">
+<code>sdk_iv</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.24">
+              <p id="section-10.4.3-4.24.1">A pointer to the initialization vector.<a href="#section-10.4.3-4.24.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.3-5"><code>sdk_sn_key</code>:
+A pointer to the sequence number key.<a href="#section-10.4.3-5" class="pilcrow">¶</a></p>
+<p id="section-10.4.3-6">This socket option can only be used on SCTP endpoints in states other then
+<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.
+If the socket options is successful, all affected DTLS chunks sent will use the
+specified keys until the keys are changed again by another call of this
+socket option.<a href="#section-10.4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="add-receive-keys-sctpdtlsaddrecvkeys">
-<section id="section-10.6">
-        <h3 id="name-add-receive-keys-sctp_dtls_">
-<a href="#section-10.6" class="section-number selfRef">10.6. </a><a href="#name-add-receive-keys-sctp_dtls_" class="section-name selfRef">Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)</a>
-      </h3>
+<section id="section-10.4.4">
+          <h4 id="name-add-receive-keys-sctp_dtls_">
+<a href="#section-10.4.4" class="section-number selfRef">10.4.4. </a><a href="#name-add-receive-keys-sctp_dtls_" class="section-name selfRef">Add Receive Keys (<code>SCTP_DTLS_ADD_RECV_KEYS</code>)</a>
+          </h4>
+<p id="section-10.4.4-1">Using this socket option allows to add a particular set of keys used for
+receiving DTLS chunks.<a href="#section-10.4.4-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.4-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.4-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.4-3">
+<pre>
+struct sctp_dtls_keys {
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
+};
+</pre><a href="#section-10.4.4-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.4-4">
+            <dt id="section-10.4.4-4.1">
+<code>sdk_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.2">
+              <p id="section-10.4.4-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.4-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.3">
+<code>sdk_cipher_suit</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.4">
+              <p id="section-10.4.4-4.4.1">The cipher suit for which the keys are used.<a href="#section-10.4.4-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.5">
+<code>sdk_restart</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.6">
+              <p id="section-10.4.4-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+from <code>0</code> is used, the restart keys are added.<a href="#section-10.4.4-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.7">
+<code>sdk_conn_id_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.8">
+              <p id="section-10.4.4-4.8.1">The length of the DTLS connection identifier specified in <code>sdk_conn_id</code>.<a href="#section-10.4.4-4.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.9">
+<code>sdk_key_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.10">
+              <p id="section-10.4.4-4.10.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.4-4.10.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.11">
+<code>sdk_iv_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.12">
+              <p id="section-10.4.4-4.12.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.4-4.12.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.13">
+<code>sdk_sn_key_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.14">
+              <p id="section-10.4.4-4.14.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.4-4.14.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.15">
+<code>sdk_unused</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.16">
+              <p id="section-10.4.4-4.16.1">This field is ignored.<a href="#section-10.4.4-4.16.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.17">
+<code>sdk_epoch</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.18">
+              <p id="section-10.4.4-4.18.1">The epoch for which the keys are added.<a href="#section-10.4.4-4.18.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.19">
+<code>sdk_conn_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.20">
+              <p id="section-10.4.4-4.20.1">A pointer to the connection identifier for which the keys are added.
+Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.4-4.20.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.21">
+<code>sdk_key</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.22">
+              <p id="section-10.4.4-4.22.1">A pointer to the key.<a href="#section-10.4.4-4.22.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.4-4.23">
+<code>sdk_iv</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.24">
+              <p id="section-10.4.4-4.24.1">A pointer to the initialization vector.<a href="#section-10.4.4-4.24.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.4-5"><code>sdk_sn_key</code>:
+A pointer to the sequence number key.<a href="#section-10.4.4-5" class="pilcrow">¶</a></p>
+<p id="section-10.4.4-6">This socket option can only be used on SCTP endpoints in states other then
+<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-10.4.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="delete-receive-keys-sctpdtlsdelrecvkeys">
-<section id="section-10.7">
-        <h3 id="name-delete-receive-keys-sctp_dt">
-<a href="#section-10.7" class="section-number selfRef">10.7. </a><a href="#name-delete-receive-keys-sctp_dt" class="section-name selfRef">Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)</a>
-      </h3>
+<section id="section-10.4.5">
+          <h4 id="name-delete-receive-keys-sctp_dt">
+<a href="#section-10.4.5" class="section-number selfRef">10.4.5. </a><a href="#name-delete-receive-keys-sctp_dt" class="section-name selfRef">Delete Receive Keys (<code>SCTP_DTLS_DEL_RECV_KEYS</code>)</a>
+          </h4>
+<p id="section-10.4.5-1">Using this socket option allows to remove a particular set of keys used for
+receiving DTLS chunks.<a href="#section-10.4.5-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.5-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.5-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.5-3">
+<pre>
+struct sctp_dtls_keys_id {
+        sctp_assoc_t sdki_assoc_id;
+        uint8_t sdki_restart;
+        uint8_t sdki_conn_id_len;
+        uint16_t sdki_unused;
+        uint64_t sdki_epoch;
+        uint8_t *sdki_conn_id;
+}
+</pre><a href="#section-10.4.5-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.5-4">
+            <dt id="section-10.4.5-4.1">
+<code>sdki_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.2">
+              <p id="section-10.4.5-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.5-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.5-4.3">
+<code>sdki_restart</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.4">
+              <p id="section-10.4.5-4.4.1">If the value is <code>0</code>, the regular keys are removed, if a value different
+from <code>0</code> is used, the restart keys are removed.<a href="#section-10.4.5-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.5-4.5">
+<code>sdki_conn_id_len</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.6">
+              <p id="section-10.4.5-4.6.1">The length of the DTLS connection identifier specified in <code>sdki_conn_id</code>.<a href="#section-10.4.5-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.5-4.7">
+<code>sdki_unused</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.8">
+              <p id="section-10.4.5-4.8.1">This field is ignored.<a href="#section-10.4.5-4.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.5-4.9">
+<code>sdki_epoch</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.10">
+              <p id="section-10.4.5-4.10.1">The epoch for which the keys are removed.<a href="#section-10.4.5-4.10.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.5-4.11">
+<code>sdki_conn_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.12">
+              <p id="section-10.4.5-4.12.1">A pointer to the connection identifier for which the keys are removed.
+Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.5-4.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.5-5">This socket option can only be used on SCTP endpoints in states other then
+<code>SCTP_CLOSED</code>, <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and
+<code>SCTP_COOKIE_ECHOED</code>.<a href="#section-10.4.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="enforce-protection-sctpdtlsenforceprotection">
-<section id="section-10.8">
-        <h3 id="name-enforce-protection-sctp_dtl">
-<a href="#section-10.8" class="section-number selfRef">10.8. </a><a href="#name-enforce-protection-sctp_dtl" class="section-name selfRef">Enforce Protection (SCTP_DTLS_ENFORCE_PROTECTION)</a>
-      </h3>
+<div id="set-or-get-protection-enforcement-sctpdtlsenforceprotection">
+<section id="section-10.4.6">
+          <h4 id="name-set-or-get-protection-enfor">
+<a href="#section-10.4.6" class="section-number selfRef">10.4.6. </a><a href="#name-set-or-get-protection-enfor" class="section-name selfRef">Set or Get Protection Enforcement (<code>SCTP_DTLS_ENFORCE_PROTECTION</code>)</a>
+          </h4>
+<p id="section-10.4.6-1">Enabling this socket option on an SCTP endpoint enforces that received
+SCTP packets are only processed, if they are protected.
+All received packets with the first chunk not being an INIT chunk, INIT ACK
+chunk, or DTLS chunk will be silently discarded.<a href="#section-10.4.6-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.6-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.6-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.6-3">
+<pre>
+struct sctp_assoc_value {
+        sctp_assoc_t assoc_id;
+        uint32_t assoc_value;
+};
+</pre><a href="#section-10.4.6-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.6-4">
+            <dt id="section-10.4.6-4.1">
+<code>assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.6-4.2">
+              <p id="section-10.4.6-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.6-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.6-5"><code>assoc_value</code>:
+  The value <code>0</code> represents that the option is off, any other value represents
+  that the option is on.<a href="#section-10.4.6-5" class="pilcrow">¶</a></p>
+<p id="section-10.4.6-6">This socket option is off by default on any SCTP endpoint.
+Once protection has been enforced by enabling this socket option on an
+SCTP endpoint, it cannot be disabled again.
+Whether protection has been enforced on an SCTP endpoint can be queried
+in any state other than <code>SCTP_CLOSED</code>.
+Protection can be enforced in any state other than <code>SCTP_CLOSED</code>,
+<code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-10.4.6-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="get-statistic-counters-sctpdtlsstats">
-<section id="section-10.9">
-        <h3 id="name-get-statistic-counters-sctp">
-<a href="#section-10.9" class="section-number selfRef">10.9. </a><a href="#name-get-statistic-counters-sctp" class="section-name selfRef">Get Statistic Counters (SCTP_DTLS_STATS)</a>
-      </h3>
+<section id="section-10.4.7">
+          <h4 id="name-get-statistic-counters-sctp">
+<a href="#section-10.4.7" class="section-number selfRef">10.4.7. </a><a href="#name-get-statistic-counters-sctp" class="section-name selfRef">Get Statistic Counters (<code>SCTP_DTLS_STATS</code>)</a>
+          </h4>
+<p id="section-10.4.7-1">This socket options allows to get various statistic counters for a
+specific SCTP endpoint.<a href="#section-10.4.7-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.7-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.7-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.7-3">
+<pre>
+struct sctp_dtls_stats {
+        sctp_assoc_t sds_assoc_id;
+        uint32_t sds_dropped_unprotected;
+        uint32_t sds_aead_failures;
+        uint32_t sds_recv_protected;
+        uint32_t sds_sent_protected;
+        /* There will be added more fields before the WGLC. */
+        /* There might be additional platform specific counters. */
+};
+</pre><a href="#section-10.4.7-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.7-4">
+            <dt id="section-10.4.7-4.1">
+<code>sds_assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.2">
+              <p id="section-10.4.7-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.7-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.7-4.3">
+<code>sds_dropped_unprotected</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.4">
+              <p id="section-10.4.7-4.4.1">The number of unprotected packets received for this SCTP endpoint after
+protection was enforced.<a href="#section-10.4.7-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.7-4.5">
+<code>sds_aead_failures</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.6">
+              <p id="section-10.4.7-4.6.1">The number of AEAD failures when processing received DTLS chunks.<a href="#section-10.4.7-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.7-4.7">
+<code>sds_recv_protected</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.8">
+              <p id="section-10.4.7-4.8.1">The number of DTLS chunks successfully processed.<a href="#section-10.4.7-4.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-10.4.7-4.9">
+<code>sds_sent_protected</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.7-4.10">
+              <p id="section-10.4.7-4.10.1">The number of DTLS chunks sent.<a href="#section-10.4.7-4.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="get-or-set-the-replay-protection-window-size-sctpdtlsreplaywindow">
+<section id="section-10.4.8">
+          <h4 id="name-get-or-set-the-replay-prote">
+<a href="#section-10.4.8" class="section-number selfRef">10.4.8. </a><a href="#name-get-or-set-the-replay-prote" class="section-name selfRef">Get or Set the Replay Protection Window Size (<code>SCTP_DTLS_REPLAY_WINDOW</code>)</a>
+          </h4>
+<p id="section-10.4.8-1">This socket option can be used to configure the replay protection for SCTP
+endpoints.<a href="#section-10.4.8-1" class="pilcrow">¶</a></p>
+<p id="section-10.4.8-2">The following structure is used as the <code>option_value</code>:<a href="#section-10.4.8-2" class="pilcrow">¶</a></p>
+<div class="lang-c sourcecode" id="section-10.4.8-3">
+<pre>
+struct sctp_assoc_value {
+        sctp_assoc_t assoc_id;
+        uint32_t assoc_value;
+};
+</pre><a href="#section-10.4.8-3" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-10.4.8-4">
+            <dt id="section-10.4.8-4.1">
+<code>assoc_id</code>:</dt>
+            <dd style="margin-left: 1.5em" id="section-10.4.8-4.2">
+              <p id="section-10.4.8-4.2.1">This parameter is ignored for one-to-one style sockets.
+For one-to-many style sockets, this parameter indicates upon which
+SCTP association the caller is performing the action.
+It is an error to use <code>SCTP_{CURRENT|ALL}_ASSOC</code>.<a href="#section-10.4.8-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-10.4.8-5"><code>assoc_value</code>:
+  The maximum number of DTLS chunks in the replay protection window.<a href="#section-10.4.8-5" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -3327,9 +4019,9 @@ through a parameter exchange during the SCTP handshake are potential
 to be included here.<a href="#section-12.1-2" class="pilcrow">¶</a></p>
 <p id="section-12.1-3">Each entry will be assigned a 16-bit unsigned integer value from the suitable range.<a href="#section-12.1-3" class="pilcrow">¶</a></p>
 <span id="name-protection-solution-identif"></span><div id="iana-psi">
-<table class="center" id="table-3">
+<table class="center" id="table-4">
           <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#table-4" class="selfRef">Table 4</a>:
 <a href="#name-protection-solution-identif" class="selfRef">Protection Solution Identifiers</a>
           </caption>
 <thead>
@@ -3373,13 +4065,13 @@ as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  
         </h3>
 <p id="section-12.2-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Types" registry, IANA is requested to add the one new entry
-depicted below in in <a href="#iana-chunk-types" class="auto internal xref">Table 4</a> with a reference to this
+depicted below in in <a href="#iana-chunk-types" class="auto internal xref">Table 5</a> with a reference to this
 document. The registry at time of writing was available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1<a href="#section-12.2-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-type-registered"></span><div id="iana-chunk-types">
-<table class="center" id="table-4">
+<table class="center" id="table-5">
           <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#table-5" class="selfRef">Table 5</a>:
 <a href="#name-new-chunk-type-registered" class="selfRef">New Chunk Type Registered</a>
           </caption>
 <thead>
@@ -3401,9 +4093,9 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 <p id="section-12.2-3">The registration table for the chunk flags of this chunk
 type is initially:<a href="#section-12.2-3" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-flags"></span><div id="iana-chunk-flags">
-<table class="center" id="table-5">
+<table class="center" id="table-6">
           <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#table-6" class="selfRef">Table 6</a>:
 <a href="#name-dtls-chunk-flags" class="selfRef">DTLS Chunk Flags</a>
           </caption>
 <thead>
@@ -3466,14 +4158,14 @@ type is initially:<a href="#section-12.2-3" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-12.3-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Chunk Parameter Types" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 6</a> with a
+entry depicted below in in <a href="#iana-chunk-parameter-types" class="auto internal xref">Table 7</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2<a href="#section-12.3-1" class="pilcrow">¶</a></p>
 <span id="name-new-chunk-type-parameters-r"></span><div id="iana-chunk-parameter-types">
-<table class="center" id="table-6">
+<table class="center" id="table-7">
           <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#table-7" class="selfRef">Table 7</a>:
 <a href="#name-new-chunk-type-parameters-r" class="selfRef">New Chunk Type Parameters Registered</a>
           </caption>
 <thead>
@@ -3501,14 +4193,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
         </h3>
 <p id="section-12.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
-entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 7</a> with a
+entry depicted below in in <a href="#iana-error-cause-codes" class="auto internal xref">Table 8</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24<a href="#section-12.4-1" class="pilcrow">¶</a></p>
 <span id="name-error-cause-codes-parameter"></span><div id="iana-error-cause-codes">
-<table class="center" id="table-7">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-error-cause-codes-parameter" class="selfRef">Error Cause Codes Parameters Registered</a>
           </caption>
 <thead>
@@ -3546,14 +4238,14 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
         </h3>
 <p id="section-12.5-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
-entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 8</a> with a
+entry depicted below in in <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a> with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25<a href="#section-12.5-1" class="pilcrow">¶</a></p>
 <span id="name-protection-operator-protoco"></span><div id="iana-payload-protection-id">
-<table class="center" id="table-8">
+<table class="center" id="table-9">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#table-9" class="selfRef">Table 9</a>:
 <a href="#name-protection-operator-protoco" class="selfRef">Protection Operator Protocol Identifier Registered</a>
           </caption>
 <thead>
