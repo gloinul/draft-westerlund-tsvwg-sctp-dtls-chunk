@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-19T01:12:00.361768+00:00",
+  "timestamp": "2025-10-21T01:06:20.702755+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1277,6 +1277,102 @@
       "createdAt": "2025-10-17T08:04:01Z",
       "updatedAt": "2025-10-17T10:41:22Z",
       "closedAt": "2025-10-17T10:41:22Z",
+      "comments": []
+    },
+    {
+      "number": 79,
+      "id": "I_kwDOKszxDc7SZZYA",
+      "title": "Should require protected packets be direcitonal in the API?",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/79",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "(D)TLS based key-managements specifications will result in that some endpoint have the keys in one direction and not the other. Thus, should we expand the API to enable setting REQUIRE protected packets per direction, or are we fine to have it on global level so that one will have to wait until one have keys in both direction in place? ",
+      "createdAt": "2025-10-19T09:25:45Z",
+      "updatedAt": "2025-10-19T09:38:51Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Realize that this just may need clarifications. Because I think there are not immediately obvious interactions in the API that likely should be spelled out.\n\nSo setting Require Protected Packets is affecting the receiver direction only. While setting a write key and set it to be used, the endpoint's outgoing packet will hence be protected. ",
+          "createdAt": "2025-10-19T09:38:51Z",
+          "updatedAt": "2025-10-19T09:38:51Z"
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "id": "I_kwDOKszxDc7SZepL",
+      "title": "get Q (Protection Invocations) for incoming packets",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/80",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "emanjon"
+      ],
+      "labels": [],
+      "body": "The current API defines get Q which counts the number of invocations of the cipher suit for a given epoch being sent by the endpoint. So the question, are there a point of counting the same value for incoming? This value will clearly just be an estimate of the senders side, as it will never be larger, but likely lower due to packet loss (assuming replay protection).\n\n",
+      "createdAt": "2025-10-19T09:41:40Z",
+      "updatedAt": "2025-10-20T09:28:15Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I think it would make sense to have APIs to retrieve:\n\n1. the number of AEAD encryption invocations\n2. the number of AEAD decryption invocations\n3. the number of failed AEAD decryption invocations\n\nFYI, we recently looked into how RFC 8446 and OpenSSL handles rekeying:\n \n\"While RFC 8446 specifies that implementations SHOULD perform a key update before reaching 2^24.5 full-size records equaling 2^34.5 blocks, the key update mechanism is much weaker than the mechanism required in the SSH profile, and does not protect against key leakage. Furthermore RFC 8446, and to our understanding OpenSSL, does not mandate rekeying before reaching 2^64 records equaling up to 7^24 blocks, or theoretically even more in the case of very large TLS records [24]. In OpenSSL, compliance to any rekeying limit is left entirely to the application, which is poor security design. We recommend that the CNSA profile mandate that TLS 1.3 implementations enforce a 2^59 block limit [21\u201323]. A compliant implementation should be required to automatically trigger a key update or terminate the connection before the limit is reached, placing the enforcement burden on the protocol implementation, not the application developer. Frequent rekeying with ephemeral asymmetric key exchange, similar to the requirements for SSH and IPsec, and which can be achieved with resumption, should be recommended.\"\n\nhttps://emanjon.github.io/CNSA-comments/2025%20-%20Comments%20on%20CNSA%202.0%20drafts.pdf\n\nMy understanding is that OpenSSL does not even have an \"get Q\" interface. The application has to count the number of bytes it inputs to TLS.\n\n\n\n\n \n\n\n\n",
+          "createdAt": "2025-10-20T08:53:28Z",
+          "updatedAt": "2025-10-20T08:53:28Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I planned to make a PR but accidently commited to main instead. Review the commit instead\nhttps://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/commit/a0e5147c6eea4ac595eb744c9af3532e1852eadc\n\nInstead of inventing a new letter, I just revomed the letters.\n\nI also removed \"the number of attacker forgery attempts\", which is not correct, as corrupted or delayed messages are also counted.\n\n",
+          "createdAt": "2025-10-20T09:04:27Z",
+          "updatedAt": "2025-10-20T09:04:27Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I reviewed your commit, I think it looks reasonable and the argumentation above also. So I am fine with this change. ",
+          "createdAt": "2025-10-20T09:28:15Z",
+          "updatedAt": "2025-10-20T09:28:15Z"
+        }
+      ]
+    },
+    {
+      "number": 81,
+      "id": "I_kwDOKszxDc7Snj1R",
+      "title": "Clarify information needed to be included in key derivation of key-mangement from the protection solution indictor vector",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/81",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently the DTLS 1.3 Chunk Protected Association Parameter includes first all offered, and on the response the supported with the selected. For downgrade protection only the offered really needs to be included to prevent downgrade in the peers choice mechanism. Manipulating the response parameter will result in non-compatible key-managements. Despite this the draft appear to indicate that both should be included. ",
+      "createdAt": "2025-10-20T19:05:49Z",
+      "updatedAt": "2025-10-20T19:05:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 82,
+      "id": "I_kwDOKszxDc7SnuQF",
+      "title": "Abstract API need to clarify direction for client vs Server.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/82",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "As the API exists in one endpoint it is not clear from an API point of view what is client and server. I think the API needs to talk about sending and receive keys. And the key-management will have to map its client and server role to the right direction in each endpoint. ",
+      "createdAt": "2025-10-20T19:19:23Z",
+      "updatedAt": "2025-10-20T19:19:23Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -3662,24 +3758,291 @@
       "id": "PR_kwDOKszxDc6ueSIL",
       "title": "Initial version of the API",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/78",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "This is still missing the configuration of the replay window and dealing with AEAD limits.",
+      "body": "This is still missing the handling of AEAD limits.",
       "createdAt": "2025-10-18T22:37:56Z",
-      "updatedAt": "2025-10-18T22:38:09Z",
+      "updatedAt": "2025-10-20T07:42:25Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "fbe8b15a6d2d27cd835bf7055a40d8fa6382ce11",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue63-socketapi",
-      "headRefOid": "3a42952f04b1810ef453edf6db05e7c4ff7dd7d6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "764bf8489de4d6ce314b4a66178e2da72598f4d4",
+      "closedAt": "2025-10-20T07:42:25Z",
+      "mergedAt": "2025-10-20T07:42:25Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "7f513302b303e95929a83232082dd11d1f6a8dfc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7H7xqM",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-10-19T09:13:40Z",
+          "updatedAt": "2025-10-19T09:35:25Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "Should reference the relevant IANA table. ",
+              "createdAt": "2025-10-19T09:13:40Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            },
+            {
+              "originalPosition": 363,
+              "body": "Shouldn't protection enforcement be per direction? I can see that it is possible to wait to set it until one have the keys in place in both directions, however I do wonder if it introduces issues with key-management that might intended to set it one direction and expects to be able to rely on the SCTP stack to only give protected packets in that direction. Realize this might be an issue in the abstract API. So lets land this and I file a seperate issue for it.",
+              "createdAt": "2025-10-19T09:23:00Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            },
+            {
+              "originalPosition": 363,
+              "body": "See issue #79 ",
+              "createdAt": "2025-10-19T09:26:09Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            },
+            {
+              "originalPosition": 409,
+              "body": "So AEAD failures are for received packets. But, the abstract API defines \"Get Q\" which is counting number of invocations for sent packets. So these are directional. ",
+              "createdAt": "2025-10-19T09:31:49Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            },
+            {
+              "originalPosition": 448,
+              "body": "Maybe clarify that this value is in packets.",
+              "createdAt": "2025-10-19T09:32:39Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            },
+            {
+              "originalPosition": 449,
+              "body": "Based on my discussions with @emanjon making it possible to disable replay protection might be quite bad for the security properties of the association, at least as long as one are using for example AES-GCM as cipher. It might be less of a problem for other ciphers that doesn't have weakness to authentication replay. So I think this option needs to be have a security consideration discussion if included. ",
+              "createdAt": "2025-10-19T09:35:13Z",
+              "updatedAt": "2025-10-19T09:35:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H8Y8w",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T12:06:59Z",
+          "updatedAt": "2025-10-19T12:07:00Z",
+          "comments": [
+            {
+              "originalPosition": 363,
+              "body": "In my mind model, protection enforcement is only in the receive direction. I made the text clearer. In the send direction, this is controller by setting a key for sending. Once it a key is set, it is used.",
+              "createdAt": "2025-10-19T12:06:59Z",
+              "updatedAt": "2025-10-19T12:07:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H8Y9a",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T12:07:09Z",
+          "updatedAt": "2025-10-19T12:07:09Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "OK, fixed.",
+              "createdAt": "2025-10-19T12:07:09Z",
+              "updatedAt": "2025-10-19T12:07:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H8dya",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T12:57:47Z",
+          "updatedAt": "2025-10-19T12:57:48Z",
+          "comments": [
+            {
+              "originalPosition": 449,
+              "body": "I don't think this is an API issue. As far as I remember, replay protection is an optional feature of DTLS, or am I missing something.\r\nSo we should have some text in a DTLS considerations section.",
+              "createdAt": "2025-10-19T12:57:47Z",
+              "updatedAt": "2025-10-19T12:57:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H8eQZ",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T13:03:20Z",
+          "updatedAt": "2025-10-19T13:03:20Z",
+          "comments": [
+            {
+              "originalPosition": 448,
+              "body": "Done.",
+              "createdAt": "2025-10-19T13:03:20Z",
+              "updatedAt": "2025-10-19T13:03:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H8eX7",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T13:04:39Z",
+          "updatedAt": "2025-10-19T13:04:39Z",
+          "comments": [
+            {
+              "originalPosition": 409,
+              "body": "I have not made up my mind how to handle AEAD limits. These are some counters I find interested. Will add some more... Maybe I will change the type to `uint64_t`.",
+              "createdAt": "2025-10-19T13:04:39Z",
+              "updatedAt": "2025-10-19T13:04:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H87sl",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-19T19:19:27Z",
+          "updatedAt": "2025-10-19T19:19:27Z",
+          "comments": [
+            {
+              "originalPosition": 449,
+              "body": "Had a discussion with @hannestschofenig : they plan to make replay protection mandatory in the DTLS 1.3bis. So assume in this document that it is there. We need to have a discussion about the size in the DTLS considerations.\r\nI removed the sentence that you can disable the replay protection.",
+              "createdAt": "2025-10-19T19:19:27Z",
+              "updatedAt": "2025-10-19T19:19:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H_aPg",
+          "commit": {
+            "abbreviatedOid": "764bf84"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-20T07:28:58Z",
+          "updatedAt": "2025-10-20T07:28:58Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H_gZz",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-20T07:40:26Z",
+          "updatedAt": "2025-10-20T07:40:26Z",
+          "comments": [
+            {
+              "originalPosition": 409,
+              "body": "So I did add an issue for this question #80 so we will not forget it. ",
+              "createdAt": "2025-10-20T07:40:26Z",
+              "updatedAt": "2025-10-20T07:40:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H_hLD",
+          "commit": {
+            "abbreviatedOid": "a125ded"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-20T07:41:47Z",
+          "updatedAt": "2025-10-20T07:41:48Z",
+          "comments": [
+            {
+              "originalPosition": 363,
+              "body": "Yes, I think this is correct. As I wrote in the issue I think it is primarily a question of being clear how this works in the different directions. ",
+              "createdAt": "2025-10-20T07:41:47Z",
+              "updatedAt": "2025-10-20T07:41:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7H_hYR",
+          "commit": {
+            "abbreviatedOid": "764bf84"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-20T07:42:10Z",
+          "updatedAt": "2025-10-20T07:42:10Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 83,
+      "id": "PR_kwDOKszxDc6uslyj",
+      "title": "Various editorials to align text.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/83",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-20T19:29:35Z",
+      "updatedAt": "2025-10-20T19:30:16Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "a0e5147c6eea4ac595eb744c9af3532e1852eadc",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "edits-124",
+      "headRefOid": "6f42d92c44b0e10827109b00f74b11b4c41caed2",
+      "closedAt": "2025-10-20T19:30:16Z",
+      "mergedAt": "2025-10-20T19:30:16Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "09659fe5c511b3e56abe932ae997323cc17c00da"
+      },
       "comments": [],
       "reviews": []
     }
