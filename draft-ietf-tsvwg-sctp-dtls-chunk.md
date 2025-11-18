@@ -356,19 +356,11 @@ in {{RFC9260}}.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
-When using Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
-association using DTLS Chunk the ASCONF chunk is protected, thus it
-needs to be unprotected first, furthermore it MAY come from an unknown
-IP Address.  In order to properly address the ASCONF chunk to the
-relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag shall be used. If the combination
-of those parameters is not unique the implementor MAY choose to send
-the DTLS Chunk to all Associations that fit with the parameters in
-order to find the right one. The association will attempt
-de-protection operations on the DTLS chunk, and if that is successful
-the ASCONF chunk can be processed. Note that trial decoding should
-have a limit in number of tried contexts to prevent denial of service
-attacks on the endpoint.
+Support for Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
+association using DTLS Chunk is limited to the case where ASCONF
+is sent from an IP address already known.
+SCTP packets coming from unknown IP addresses will be silently
+discarded.
 
 The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
