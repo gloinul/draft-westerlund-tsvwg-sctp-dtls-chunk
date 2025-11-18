@@ -820,8 +820,13 @@ and installing them.
 
 An initiator of an SCTP association may want to offer multiple
 different key-management solutions for DTLS Chunk or in combination
-with other security solutions in addition to DTLS 1.3 chunks for the
-SCTP association. This can be done but need to consider the downgrade
+with other protection solutions in addition to DTLS 1.3 chunks for the
+SCTP association.
+Multiple protection solutions offered in the INIT chunk will be
+ordered based on the priority, where the most preferred will be
+in the first position and the least preferred in the last.
+The INIT-ACK chunk will only contain the chosen protection solution.
+This can be done but need to consider the downgrade
 attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
@@ -838,11 +843,10 @@ DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
 However, here the DTLS 1.3 Chunk Protected Association Parameter can
 indicate both preference and which of the solutions that are preferred.
 
-The responder selects one or possibly more of compatible security
-solutions that can be used simultaneously and include them in the
+The responder selects one security solutions and include it in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
-prevention the endpoints can know that down-grade did not happen.
+prevention the endpoints know that down-grade did not happen.
 
 
 ## Termination of a Protected Association {#termination-procedure}
@@ -1851,7 +1855,27 @@ Instead of periodic polling, a callback can be used.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-As long as the Key-management include the ordered list of protection
+Downgrade attacks may attempt to force the protection solution
+by altering the containt of INIT chunk, for instance by removing
+all offered solutions but the one desired. This is possible
+if the attacker acts as man-in-the-middle because INIT and INIT-ACK
+chunks are plain text.
+
+Preventing the downgrade attacks is implemented by using at the initiator
+the list of offered protection solution sent in the INIT chunk plus
+the selected solution received in the INIT-ACK chunk from the responder
+for deriving the keys from the handshaked secrets obtained during
+DTLS initial handshake.
+At the responder, the list of offered protection solutions received in
+the INIT chunk plus the selected protection solution that is sent
+in the INIT-ACK chunk will be used for deriving the keys from the handshaked
+secrets obtained during DTLS initial handshake.
+
+If the attacker suceeds in changing the protection solutions in either
+INIT, NINT-ACK or both chunks, the peers will not be able deriving the
+same keys and the Association will not be possible to proceed.
+
+Thus, as long as the Key-management include the ordered list of protection
 solutions indicators present in the parameter part of the INIT chunk
 for the SCTP Association in its key-derivation the association will be
 protected from down-grade.
