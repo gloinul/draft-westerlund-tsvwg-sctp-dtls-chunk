@@ -618,11 +618,11 @@ the upper bits of the chunk type.
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.
 
-Being the DTLS Record header of variable length, in order to keep
-the DTLS record payload 32-bit aligned, a variable number of
-padding bytes with value fixed to zero SHALL be added in the DTLS
-chunk payload before the DTLS Record header, in number 0 to 3.
-The number of these padding bytes is indicated in the DTLS Chunk
+As the full DTLS record with the sequence number, etc is likely not
+a 4-byte aligned, a variable number of pre-padding bytes with value
+fixed to zero SHALL be added in the DTLS chunk payload before the
+DTLS Record header, in number 0 to 3.
+The number of these pre-padding bytes is indicated in the DTLS Chunk
 header using the P bits.
 
 ~~~~~~~~~~~ aasvg
@@ -631,13 +631,13 @@ header using the P bits.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Type = 0x4x   | reserved| P |R|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|           Padding             |                               |
+|        Pre-Padding            |                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
 |                                                               |
 |                            Payload                            |
 |                                                               |
 |                               +-------------------------------+
-|                               |           Padding             |
+|                               |       Post-Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
@@ -653,9 +653,9 @@ R: 1 bit (boolean)
 
 P: 2 bit (0-3)
 
-: Payload Padding indicator. It indicates how many bytes
-are inserted for padding before the DTLS record. This allows the encrypted
-data to be 32 bit aligned.
+: Payload Pre-Padding indicator. It indicates how many bytes
+are inserted for padding before the DTLSCiphertext.
+This allows the encrypted data to be 32 bit aligned.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
@@ -663,7 +663,7 @@ Chunk Length: 16 bits (unsigned integer)
 Payload: variable length
 : This holds the DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
 
-Padding: 0, 8, 16, or 24 bits
+Post-Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
   MUST pad the chunk with all zero bytes to make the chunk 32-bit
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
