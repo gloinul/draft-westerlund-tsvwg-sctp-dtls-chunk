@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-02T01:10:55.542575+00:00",
+  "timestamp": "2025-11-20T01:06:15.737119+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -603,7 +603,7 @@
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-09-24T08:35:41Z",
+      "updatedAt": "2025-11-18T08:59:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -626,6 +626,13 @@
           "body": "ASCONF from new address when encapsulated brings the Verification Tag, this can be used for properly addressing the right Association. There's a chance that VTag is not unique, this can be solved either by sending the packet to one of the matching Associations in a sequential mode when the ASCONF for that VTag is received next, or to broadcast the message.\nThe lower part of SCTP doesn't know that the message is ASCONF until it's successfully decrypted and on the other hand broadcasting the message to all the matching Association my open a little chance for Denial Of Service.\nAs a packet not being decrypted will not generate any side effect, I would make as follows:\n1. A packet that has a known VTag but unknown Source Address will be delivered to one of the Association with matching VTag and a sequence will be kept by SCTP to send the retransmission to the next and so on.\n2. If decrypting of the packet resuts in ASCONF, the rfc5061 is followed.\n3. We write in this draft that SCTP-AUTH is not followed. ",
           "createdAt": "2025-09-04T08:26:40Z",
           "updatedAt": "2025-09-04T08:26:40Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Do we agree on limiting ASCONF to be used over existing path as proposed at IETF-124? \nFrom the slides :\n**Will limit ASCONF to make before break:\n\u25cfSend additional Interface address over existing path**",
+          "createdAt": "2025-11-18T08:55:52Z",
+          "updatedAt": "2025-11-18T08:59:08Z"
         }
       ]
     },
@@ -1018,11 +1025,13 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "teiclap"
+      ],
       "labels": [],
       "body": "DTLS can negotiate less than full size DTLS records. Is that needed? And if needed we need API surface for it. \n\nTo be discussed not needed to handled for IETF 123 submission. ",
       "createdAt": "2025-07-07T08:53:27Z",
-      "updatedAt": "2025-07-19T14:31:57Z",
+      "updatedAt": "2025-11-18T12:13:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1324,7 +1333,7 @@
       "labels": [],
       "body": "The current API defines get Q which counts the number of invocations of the cipher suit for a given epoch being sent by the endpoint. So the question, are there a point of counting the same value for incoming? This value will clearly just be an estimate of the senders side, as it will never be larger, but likely lower due to packet loss (assuming replay protection).\n\n",
       "createdAt": "2025-10-19T09:41:40Z",
-      "updatedAt": "2025-11-01T20:37:31Z",
+      "updatedAt": "2025-11-19T13:14:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -1354,6 +1363,13 @@
           "body": "The text for abstract API could be improved a bit. On the reception side the unit is DTLS records, i.e. SCTP packets that fails and succeeds decryption and integrity verification. \n",
           "createdAt": "2025-11-01T20:37:30Z",
           "updatedAt": "2025-11-01T20:37:30Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can we close this issue, as the implementation is already in the main track?",
+          "createdAt": "2025-11-19T13:14:30Z",
+          "updatedAt": "2025-11-19T13:14:30Z"
         }
       ]
     },
@@ -4059,6 +4075,157 @@
       "mergeCommit": {
         "oid": "09659fe5c511b3e56abe932ae997323cc17c00da"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 84,
+      "id": "PR_kwDOKszxDc60DuMn",
+      "title": "DTLS record payload 32-bit aligned",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/84",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-11-18T09:42:17Z",
+      "updatedAt": "2025-11-18T13:30:31Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue45",
+      "headRefOid": "083b75780f69678a133f19c5bf4a8990acc7aad6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7PSzUz",
+          "commit": {
+            "abbreviatedOid": "bf9a411"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-11-18T13:15:12Z",
+          "updatedAt": "2025-11-18T13:18:22Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Instead of DTLS record, I think using DTLSCiphertext as discussed below. ",
+              "createdAt": "2025-11-18T13:15:12Z",
+              "updatedAt": "2025-11-18T13:18:22Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "The text as currently written is not equally applicable to both padding fields. I would recommend calling the two padding fields different things and have separate text. ",
+              "createdAt": "2025-11-18T13:16:36Z",
+              "updatedAt": "2025-11-18T13:18:22Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "I think this text needs to clarify that the goal is to have the location of the plain text, and thus after encryption the cipher text to start on a 32-bit boundary. This as the full DTLS record with the sequence number, etc is likely not a 4-byte aligned. ",
+              "createdAt": "2025-11-18T13:18:15Z",
+              "updatedAt": "2025-11-18T13:18:22Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 85,
+      "id": "PR_kwDOKszxDc60DvS8",
+      "title": "Changed ASCONF support according to IETF-124 discussion",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/85",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-11-18T09:43:30Z",
+      "updatedAt": "2025-11-18T13:19:08Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue28",
+      "headRefOid": "9be4b802fd1ba3914e8f5090511939fd0c8e1f22",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7PS5Vh",
+          "commit": {
+            "abbreviatedOid": "9be4b80"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-18T13:19:08Z",
+          "updatedAt": "2025-11-18T13:19:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 86,
+      "id": "PR_kwDOKszxDc60GV4k",
+      "title": "Fixed issue #50 for DTLS Record size",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/86",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-11-18T12:24:25Z",
+      "updatedAt": "2025-11-18T12:24:25Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue50",
+      "headRefOid": "263819938d558d90567ec714f779d0f87a0da6c9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 87,
+      "id": "PR_kwDOKszxDc60ImbS",
+      "title": "Implemented improvements due to issue #81",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/87",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\u25cfDetails of the initial negotiation procedures was unclear\r\n\u2013 Also to clarify what information goes into down-grade protection\r\n\u25cfDTLS 1.3 Chunk Protected Association\r\n\u2013 Negotiates the usage of the defined DTLS Chunk and keymanagement\r\nmethod, i.e. the Protection Solution Identifiers\r\n\u2013 Initiator sends full list of support methods in priority order\r\n\u2013 Responder sends parameter with only selected method\r\n\u25cfDown grade Protection\r\n\u2013 Include in key-derivation: Offer list + Selected answer",
+      "createdAt": "2025-11-18T14:52:28Z",
+      "updatedAt": "2025-11-18T14:52:28Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue81",
+      "headRefOid": "410812ef856d3a0b684a92784332391c772b1203",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
