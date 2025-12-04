@@ -332,8 +332,11 @@ Table of Contents
    paths in multihomed Associations, thus it needs to be large enough to
    accommodate latency differences.
 
-   DTLS Record Limit negotiation [RFC8449] is not supported, the
-   supported record size is 2^14 bytes.
+   Endpoints implementing DTLS Chunk MUST support DTLS records
+   containing up to 2^14 (16384) bytes of plain text.  Limiting the of
+   size DTLS record as defined by [RFC8449] could be negotiated by a
+   (D)TLS based key-management, however the DTLS Chunk APIs does not
+   provide any support for limiting the record size.
 
 3.3.  Considerations about SCTP Protection Solutions
 
