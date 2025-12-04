@@ -820,9 +820,14 @@ and installing them.
 
 An initiator of an SCTP association may want to offer multiple
 different key-management solutions for DTLS Chunk or in combination
-with other security solutions in addition to DTLS 1.3 chunks for the
-SCTP association. This can be done but need to consider the downgrade
-attack risks (see {{Downgrade-Attacks}}).
+with other protection solutions in addition to DTLS 1.3 chunks for the
+SCTP association.
+Multiple protection solutions offered in the INIT chunk will be
+ordered based on the priority, where the most preferred will be
+in the first position and the least preferred in the last.
+The INIT-ACK chunk will only contain the chosen protection solution.
+Offers with multiple key-management or protections solutions need to
+consider the downgrade attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
@@ -838,12 +843,10 @@ DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
 However, here the DTLS 1.3 Chunk Protected Association Parameter can
 indicate both preference and which of the solutions that are preferred.
 
-The responder selects one or possibly more of compatible security
-solutions that can be used simultaneously and include them in the
+The responder selects one security solutions and includes it in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
-prevention the endpoints can know that down-grade did not happen.
-
+prevention the endpoints know that down-grade did not happen.
 
 ## Termination of a Protected Association {#termination-procedure}
 
@@ -1332,9 +1335,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1371,9 +1374,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1403,19 +1406,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1478,19 +1481,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1550,12 +1553,12 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys_id {
-	sctp_assoc_t sdki_assoc_id;
-	uint8_t sdki_restart;
-	uint8_t sdki_conn_id_len;
-	uint16_t sdki_unused;
-	uint64_t sdki_epoch;
-	uint8_t *sdki_conn_id;
+   sctp_assoc_t sdki_assoc_id;
+   uint8_t sdki_restart;
+   uint8_t sdki_conn_id_len;
+   uint16_t sdki_unused;
+   uint64_t sdki_epoch;
+   uint8_t *sdki_conn_id;
 }
 ~~~
 
@@ -1597,8 +1600,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1629,13 +1632,13 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_stats {
-	sctp_assoc_t sds_assoc_id;
-	uint32_t sds_dropped_unprotected;
-	uint32_t sds_aead_failures;
-	uint32_t sds_recv_protected;
-	uint32_t sds_sent_protected;
-	/* There will be added more fields before the WGLC. */
-	/* There might be additional platform specific counters. */
+   sctp_assoc_t sds_assoc_id;
+   uint32_t sds_dropped_unprotected;
+   uint32_t sds_aead_failures;
+   uint32_t sds_recv_protected;
+   uint32_t sds_sent_protected;
+   /* There will be added more fields before the WGLC. */
+   /* There might be additional platform specific counters. */
 };
 ~~~
 
@@ -1667,8 +1670,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1851,7 +1854,27 @@ Instead of periodic polling, a callback can be used.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-As long as the Key-management include the ordered list of protection
+Downgrade attacks may attempt to force the protection solution
+by altering the containt of INIT chunk, for instance by removing
+all offered solutions but the one desired. This is possible
+if the attacker is an on-path attacker that can modify packet
+because INIT and INIT-ACK chunks are plain text.
+
+Preventing the downgrade attacks is implemented by using at the initiator
+the list of offered protection solution sent in the INIT chunk plus
+the selected solution received in the INIT-ACK chunk from the responder
+for deriving the keys from the handshaked secrets obtained during
+DTLS initial handshake.
+At the responder, the list of offered protection solutions received in
+the INIT chunk plus the selected protection solution that is sent
+in the INIT-ACK chunk will be used for deriving the keys from the handshaked
+secrets obtained during DTLS initial handshake.
+
+If the attacker suceeds in changing the protection solutions in either
+INIT, NINT-ACK or both chunks, the peers will not be able deriving the
+same keys and the Association will not be possible to proceed.
+
+Thus, as long as the Key-management include the ordered list of protection
 solutions indicators present in the parameter part of the INIT chunk
 for the SCTP Association in its key-derivation the association will be
 protected from down-grade.
