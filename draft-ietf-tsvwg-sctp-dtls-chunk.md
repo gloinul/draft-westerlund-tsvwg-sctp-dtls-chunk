@@ -843,7 +843,7 @@ DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
 However, here the DTLS 1.3 Chunk Protected Association Parameter can
 indicate both preference and which of the solutions that are preferred.
 
-The responder selects one security solutions and include it in the
+The responder selects one security solutions and includes it in the
 response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints know that down-grade did not happen.
@@ -1862,7 +1862,7 @@ if the attacker acts as man-in-the-middle because INIT and INIT-ACK
 chunks are plain text.
 
 Preventing the downgrade attacks is implemented by using at the initiator
-the list of offered protection solution sent in the INIT chunk plus
+the list of offered protection solutions sent in the INIT chunk plus
 the selected solution received in the INIT-ACK chunk from the responder
 for deriving the keys from the handshaked secrets obtained during
 DTLS initial handshake.
