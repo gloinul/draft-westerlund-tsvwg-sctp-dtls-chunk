@@ -1857,8 +1857,8 @@ Instead of periodic polling, a callback can be used.
 Downgrade attacks may attempt to force the protection solution
 by altering the containt of INIT chunk, for instance by removing
 all offered solutions but the one desired. This is possible
-if the attacker acts as man-in-the-middle because INIT and INIT-ACK
-chunks are plain text.
+if the attacker is an on-path attacker that can modify packet 
+because INIT and INIT-ACK chunks are plain text.
 
 Preventing the downgrade attacks is implemented by using at the initiator
 the list of offered protection solution sent in the INIT chunk plus
