@@ -868,8 +868,9 @@ Table of Contents
    INIT chunk will be ordered based on the priority, where the most
    preferred will be in the first position and the least preferred in
    the last.  The INIT-ACK chunk will only contain the chosen protection
-   solution.  This can be done but need to consider the downgrade attack
-   risks (see Section 13.3).
+   solution.  Offers with multiple key-management or protections
+   solutions need to consider the downgrade attack risks (see
+   Section 13.3).
 
    The initiator MAY include in its INIT additional security solutions
    that are compatible to offer in parallel with DTLS 1.3 Chunks.  This
@@ -1588,12 +1589,12 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_keys_id {
-           sctp_assoc_t sdki_assoc_id;
-           uint8_t sdki_restart;
-           uint8_t sdki_conn_id_len;
-           uint16_t sdki_unused;
-           uint64_t sdki_epoch;
-           uint8_t *sdki_conn_id;
+      sctp_assoc_t sdki_assoc_id;
+      uint8_t sdki_restart;
+      uint8_t sdki_conn_id_len;
+      uint16_t sdki_unused;
+      uint64_t sdki_epoch;
+      uint8_t *sdki_conn_id;
    }
 
    sdki_assoc_id:  This parameter is ignored for one-to-one style
@@ -1630,8 +1631,8 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_assoc_value {
-           sctp_assoc_t assoc_id;
-           uint32_t assoc_value;
+      sctp_assoc_t assoc_id;
+      uint32_t assoc_value;
    };
 
    assoc_id:  This parameter is ignored for one-to-one style sockets.
@@ -1657,13 +1658,13 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_stats {
-           sctp_assoc_t sds_assoc_id;
-           uint32_t sds_dropped_unprotected;
-           uint32_t sds_aead_failures;
-           uint32_t sds_recv_protected;
-           uint32_t sds_sent_protected;
-           /* There will be added more fields before the WGLC. */
-           /* There might be additional platform specific counters. */
+      sctp_assoc_t sds_assoc_id;
+      uint32_t sds_dropped_unprotected;
+      uint32_t sds_aead_failures;
+      uint32_t sds_recv_protected;
+      uint32_t sds_sent_protected;
+      /* There will be added more fields before the WGLC. */
+      /* There might be additional platform specific counters. */
    };
 
    sds_assoc_id:  This parameter is ignored for one-to-one style
@@ -1691,8 +1692,8 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_assoc_value {
-           sctp_assoc_t assoc_id;
-           uint32_t assoc_value;
+      sctp_assoc_t assoc_id;
+      uint32_t assoc_value;
    };
 
    assoc_id:  This parameter is ignored for one-to-one style sockets.
@@ -1915,8 +1916,8 @@ Table of Contents
    Downgrade attacks may attempt to force the protection solution by
    altering the containt of INIT chunk, for instance by removing all
    offered solutions but the one desired.  This is possible if the
-   attacker acts as man-in-the-middle because INIT and INIT-ACK chunks
-   are plain text.
+   attacker is an on-path attacker that can modify packet because INIT
+   and INIT-ACK chunks are plain text.
 
    Preventing the downgrade attacks is implemented by using at the
    initiator the list of offered protection solution sent in the INIT
