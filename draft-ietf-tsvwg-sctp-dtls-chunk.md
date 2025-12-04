@@ -356,12 +356,6 @@ in {{RFC9260}}.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
-Support for Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
-association using DTLS Chunk is limited to the case where ASCONF
-is sent from an IP address already known.
-SCTP packets coming from unknown IP addresses will be silently
-discarded.
-
 The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
 SCTP associations using DTLS Chunk this results in the use of
