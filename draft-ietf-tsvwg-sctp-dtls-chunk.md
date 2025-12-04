@@ -848,7 +848,6 @@ response (INIT-ACK). If DTLS 1.3 chunks was selected and the
 Key-Management method follows the recommendation for down-grade
 prevention the endpoints know that down-grade did not happen.
 
-
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
@@ -1862,7 +1861,7 @@ if the attacker acts as man-in-the-middle because INIT and INIT-ACK
 chunks are plain text.
 
 Preventing the downgrade attacks is implemented by using at the initiator
-the list of offered protection solutions sent in the INIT chunk plus
+the list of offered protection solution sent in the INIT chunk plus
 the selected solution received in the INIT-ACK chunk from the responder
 for deriving the keys from the handshaked secrets obtained during
 DTLS initial handshake.
