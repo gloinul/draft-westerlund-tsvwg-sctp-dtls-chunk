@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 23 April 2026                                          Ericsson
+Expires: 7 June 2026                                            Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         20 October 2025
+                                                         4 December 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 7 June 2026.
 
 Copyright Notice
 
@@ -863,9 +863,14 @@ Table of Contents
 
    An initiator of an SCTP association may want to offer multiple
    different key-management solutions for DTLS Chunk or in combination
-   with other security solutions in addition to DTLS 1.3 chunks for the
-   SCTP association.  This can be done but need to consider the
-   downgrade attack risks (see Section 13.3).
+   with other protection solutions in addition to DTLS 1.3 chunks for
+   the SCTP association.  Multiple protection solutions offered in the
+   INIT chunk will be ordered based on the priority, where the most
+   preferred will be in the first position and the least preferred in
+   the last.  The INIT-ACK chunk will only contain the chosen protection
+   solution.  Offers with multiple key-management or protections
+   solutions need to consider the downgrade attack risks (see
+   Section 13.3).
 
    The initiator MAY include in its INIT additional security solutions
    that are compatible to offer in parallel with DTLS 1.3 Chunks.  This
@@ -882,11 +887,10 @@ Table of Contents
    Protected Association Parameter can indicate both preference and
    which of the solutions that are preferred.
 
-   The responder selects one or possibly more of compatible security
-   solutions that can be used simultaneously and include them in the
+   The responder selects one security solutions and includes it in the
    response (INIT-ACK).  If DTLS 1.3 chunks was selected and the Key-
    Management method follows the recommendation for down-grade
-   prevention the endpoints can know that down-grade did not happen.
+   prevention the endpoints know that down-grade did not happen.
 
 7.2.  Termination of a Protected Association
 
@@ -1585,12 +1589,12 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_keys_id {
-           sctp_assoc_t sdki_assoc_id;
-           uint8_t sdki_restart;
-           uint8_t sdki_conn_id_len;
-           uint16_t sdki_unused;
-           uint64_t sdki_epoch;
-           uint8_t *sdki_conn_id;
+      sctp_assoc_t sdki_assoc_id;
+      uint8_t sdki_restart;
+      uint8_t sdki_conn_id_len;
+      uint16_t sdki_unused;
+      uint64_t sdki_epoch;
+      uint8_t *sdki_conn_id;
    }
 
    sdki_assoc_id:  This parameter is ignored for one-to-one style
@@ -1627,8 +1631,8 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_assoc_value {
-           sctp_assoc_t assoc_id;
-           uint32_t assoc_value;
+      sctp_assoc_t assoc_id;
+      uint32_t assoc_value;
    };
 
    assoc_id:  This parameter is ignored for one-to-one style sockets.
@@ -1654,13 +1658,13 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_stats {
-           sctp_assoc_t sds_assoc_id;
-           uint32_t sds_dropped_unprotected;
-           uint32_t sds_aead_failures;
-           uint32_t sds_recv_protected;
-           uint32_t sds_sent_protected;
-           /* There will be added more fields before the WGLC. */
-           /* There might be additional platform specific counters. */
+      sctp_assoc_t sds_assoc_id;
+      uint32_t sds_dropped_unprotected;
+      uint32_t sds_aead_failures;
+      uint32_t sds_recv_protected;
+      uint32_t sds_sent_protected;
+      /* There will be added more fields before the WGLC. */
+      /* There might be additional platform specific counters. */
    };
 
    sds_assoc_id:  This parameter is ignored for one-to-one style
@@ -1688,8 +1692,8 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_assoc_value {
-           sctp_assoc_t assoc_id;
-           uint32_t assoc_value;
+      sctp_assoc_t assoc_id;
+      uint32_t assoc_value;
    };
 
    assoc_id:  This parameter is ignored for one-to-one style sockets.
@@ -1909,10 +1913,31 @@ Table of Contents
 
 13.3.  Downgrade Attacks
 
-   As long as the Key-management include the ordered list of protection
-   solutions indicators present in the parameter part of the INIT chunk
-   for the SCTP Association in its key-derivation the association will
-   be protected from down-grade.
+   Downgrade attacks may attempt to force the protection solution by
+   altering the containt of INIT chunk, for instance by removing all
+   offered solutions but the one desired.  This is possible if the
+   attacker is an on-path attacker that can modify packet because INIT
+   and INIT-ACK chunks are plain text.
+
+   Preventing the downgrade attacks is implemented by using at the
+   initiator the list of offered protection solution sent in the INIT
+   chunk plus the selected solution received in the INIT-ACK chunk from
+   the responder for deriving the keys from the handshaked secrets
+   obtained during DTLS initial handshake.  At the responder, the list
+   of offered protection solutions received in the INIT chunk plus the
+   selected protection solution that is sent in the INIT-ACK chunk will
+   be used for deriving the keys from the handshaked secrets obtained
+   during DTLS initial handshake.
+
+   If the attacker suceeds in changing the protection solutions in
+   either INIT, NINT-ACK or both chunks, the peers will not be able
+   deriving the same keys and the Association will not be possible to
+   proceed.
+
+   Thus, as long as the Key-management include the ordered list of
+   protection solutions indicators present in the parameter part of the
+   INIT chunk for the SCTP Association in its key-derivation the
+   association will be protected from down-grade.
 
    In case any key-management do not include the parameter content in
    its key-derivation down-grade might be possible if that key-
