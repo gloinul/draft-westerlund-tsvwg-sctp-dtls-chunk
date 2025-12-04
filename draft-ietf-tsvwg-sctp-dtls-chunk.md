@@ -826,7 +826,7 @@ Multiple protection solutions offered in the INIT chunk will be
 ordered based on the priority, where the most preferred will be
 in the first position and the least preferred in the last.
 The INIT-ACK chunk will only contain the chosen protection solution.
-Offers with multiple key-management or protections solutions need to 
+Offers with multiple key-management or protections solutions need to
 consider the downgrade attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
@@ -1335,9 +1335,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1374,9 +1374,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1406,19 +1406,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1481,19 +1481,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1553,12 +1553,12 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys_id {
-	sctp_assoc_t sdki_assoc_id;
-	uint8_t sdki_restart;
-	uint8_t sdki_conn_id_len;
-	uint16_t sdki_unused;
-	uint64_t sdki_epoch;
-	uint8_t *sdki_conn_id;
+   sctp_assoc_t sdki_assoc_id;
+   uint8_t sdki_restart;
+   uint8_t sdki_conn_id_len;
+   uint16_t sdki_unused;
+   uint64_t sdki_epoch;
+   uint8_t *sdki_conn_id;
 }
 ~~~
 
@@ -1600,8 +1600,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1632,13 +1632,13 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_stats {
-	sctp_assoc_t sds_assoc_id;
-	uint32_t sds_dropped_unprotected;
-	uint32_t sds_aead_failures;
-	uint32_t sds_recv_protected;
-	uint32_t sds_sent_protected;
-	/* There will be added more fields before the WGLC. */
-	/* There might be additional platform specific counters. */
+   sctp_assoc_t sds_assoc_id;
+   uint32_t sds_dropped_unprotected;
+   uint32_t sds_aead_failures;
+   uint32_t sds_recv_protected;
+   uint32_t sds_sent_protected;
+   /* There will be added more fields before the WGLC. */
+   /* There might be additional platform specific counters. */
 };
 ~~~
 
@@ -1670,8 +1670,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1857,7 +1857,7 @@ Instead of periodic polling, a callback can be used.
 Downgrade attacks may attempt to force the protection solution
 by altering the containt of INIT chunk, for instance by removing
 all offered solutions but the one desired. This is possible
-if the attacker is an on-path attacker that can modify packet 
+if the attacker is an on-path attacker that can modify packet
 because INIT and INIT-ACK chunks are plain text.
 
 Preventing the downgrade attacks is implemented by using at the initiator
