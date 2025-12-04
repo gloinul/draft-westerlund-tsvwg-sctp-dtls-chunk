@@ -2160,21 +2160,32 @@ accomplished (as described in <span>[<a href="#RFC9260" class="cite xref">RFC926
 the upper bits of the chunk type.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1-6">As the full DTLS record with the header and sequence number, etc the
+start of the cipher text is likely not 32-bit aligned making in-place
+encryption/decryption impossible in some plattforms. Therefore, a
+variable number (0-3) of pre-padding bytes with value fixed to zero SHALL
+be added in the DTLS chunk payload before the DTLS Record header
+(DTLS Chunk Payload), to ensure the Encrypted Record part of the
+DTLSCiphertext <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> will start on a 32-bit boundary in relation
+to the start of the DTLS Chunk. The number of these pre-padding bytes
+is indicated in the DTLS Chunk header using the P bits.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-structure"></span><div id="sctp-DTLS-chunk-newchunk-crypt-struct">
 <figure id="figure-4">
-          <div id="section-5.1-6.1">
-            <div class="alignCenter art-svg artwork" id="section-5.1-6.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 8,64 L 8,192" fill="none" stroke="black"></path>
+          <div id="section-5.1-7.1">
+            <div class="alignCenter art-svg artwork" id="section-5.1-7.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="528" viewBox="0 0 528 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,64 L 8,224" fill="none" stroke="black"></path>
                 <path d="M 136,64 L 136,96" fill="none" stroke="black"></path>
+                <path d="M 216,64 L 216,96" fill="none" stroke="black"></path>
                 <path d="M 248,64 L 248,96" fill="none" stroke="black"></path>
-                <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
-                <path d="M 264,160 L 264,192" fill="none" stroke="black"></path>
-                <path d="M 520,64 L 520,192" fill="none" stroke="black"></path>
+                <path d="M 264,64 L 264,128" fill="none" stroke="black"></path>
+                <path d="M 264,192 L 264,224" fill="none" stroke="black"></path>
+                <path d="M 520,64 L 520,224" fill="none" stroke="black"></path>
                 <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                 <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                <path d="M 264,160 L 520,160" fill="none" stroke="black"></path>
-                <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
+                <path d="M 8,128 L 264,128" fill="none" stroke="black"></path>
+                <path d="M 264,192 L 520,192" fill="none" stroke="black"></path>
+                <path d="M 8,224 L 520,224" fill="none" stroke="black"></path>
                 <g class="text">
                   <text x="16" y="36">0</text>
                   <text x="176" y="36">1</text>
@@ -2216,48 +2227,63 @@ payload of a plain text SCTP packet without the SCTP common header.<a href="#sec
                   <text x="64" y="84">=</text>
                   <text x="92" y="84">0x4x</text>
                   <text x="180" y="84">reserved</text>
+                  <text x="232" y="84">P</text>
                   <text x="256" y="84">R</text>
                   <text x="360" y="84">Chunk</text>
                   <text x="412" y="84">Length</text>
-                  <text x="264" y="132">Payload</text>
-                  <text x="384" y="180">Padding</text>
+                  <text x="120" y="116">Pre-Padding</text>
+                  <text x="264" y="164">Payload</text>
+                  <text x="372" y="212">Post-Padding</text>
                 </g>
-              </svg><a href="#section-5.1-6.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-5.1-7.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-dtls-chunk-structure" class="selfRef">DTLS Chunk Structure</a>
           </figcaption></figure>
 </div>
-<span class="break"></span><dl class="dlParallel" id="section-5.1-7">
-          <dt id="section-5.1-7.1">reserved: 7 bits</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-7.2">
-            <p id="section-5.1-7.2.1">Reserved bits for future use. Sender MUST set these bits to 0 and
-MUST be ignored on reception.<a href="#section-5.1-7.2.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-5.1-8">
+          <dt id="section-5.1-8.1">reserved: 7 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.2">
+            <p id="section-5.1-8.2.1">Reserved bits for future use. Sender MUST set these bits to 0 and
+MUST be ignored on reception.<a href="#section-5.1-8.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-7.3">R: 1 bit (boolean)</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-7.4">
-            <p id="section-5.1-7.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
-with by a Restart DTLS Key context.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-8.3">R: 1 bit (boolean)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.4">
+            <p id="section-5.1-8.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
+with by a Restart DTLS Key context.<a href="#section-5.1-8.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-7.5">Chunk Length: 16 bits (unsigned integer)</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-7.6">
-            <p id="section-5.1-7.6.1">This value holds the length of the Payload in bytes plus 4.<a href="#section-5.1-7.6.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-8.5">P: 2 bit (unsigned integer 0-3)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.6">
+            <p id="section-5.1-8.6.1">Payload Pre-Padding indicator. It indicates how many bytes
+are inserted for padding before the DTLSCiphertext.
+This allows the encrypted data to be 32 bit aligned.<a href="#section-5.1-8.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-7.7">Payload: variable length</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-7.8">
-            <p id="section-5.1-7.8.1">This holds the DTLSCiphertext as specified in DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-5.1-7.8.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-8.7">Chunk Length: 16 bits (unsigned integer)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.8">
+            <p id="section-5.1-8.8.1">This value holds the length of the Payload in bytes plus 4.<a href="#section-5.1-8.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-7.9">Padding: 0, 8, 16, or 24 bits</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-7.10">
-            <p id="section-5.1-7.10.1">If the length of the Payload is not a multiple of 4 bytes, the sender
+<dt id="section-5.1-8.9">Pre-Padding: 0, 8, 16, or 24 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.10">
+            <p id="section-5.1-8.10.1">Based on the Payload Pre-Padding Indicator the indicated number of
+8-bit bytes of zero values are included.<a href="#section-5.1-8.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-8.11">Payload: variable length</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.12">
+            <p id="section-5.1-8.12.1">This holds the DTLSCiphertext as specified in DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-5.1-8.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-8.13">Post-Padding: 0, 8, 16, or 24 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-8.14">
+            <p id="section-5.1-8.14.1">If the length of the Payload is not a multiple of 4 bytes, the sender
 MUST pad the chunk with all zero bytes to make the chunk 32-bit
 aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
-be ignored by the receiver.<a href="#section-5.1-7.10.1" class="pilcrow">¶</a></p>
+be ignored by the receiver.<a href="#section-5.1-8.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
