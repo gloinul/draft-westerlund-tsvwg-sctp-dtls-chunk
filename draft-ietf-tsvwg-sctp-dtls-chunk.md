@@ -78,6 +78,7 @@ normative:
   RFC5061:
   RFC6083:
   RFC8126:
+  RFC8449:
   RFC9147:
   RFC9260:
 
@@ -133,6 +134,7 @@ features provided by SCTP and its extensions but with some limitations.
 
    DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
    other versions are explicitly not part of this document.
+
 
 # Conventions
 
@@ -278,6 +280,12 @@ The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
+
+Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
+2<sup>14</sup> (16384) bytes of plain text. Limiting the of size DTLS record
+as defined by {{RFC8449}} could be negotiated by a (D)TLS based key-management,
+however the DTLS Chunk APIs does not provide any support for limiting the
+record size.
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
