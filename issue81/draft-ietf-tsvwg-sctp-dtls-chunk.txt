@@ -1919,7 +1919,7 @@ Table of Contents
    are plain text.
 
    Preventing the downgrade attacks is implemented by using at the
-   initiator the list of offered protection solutions sent in the INIT
+   initiator the list of offered protection solution sent in the INIT
    chunk plus the selected solution received in the INIT-ACK chunk from
    the responder for deriving the keys from the handshaked secrets
    obtained during DTLS initial handshake.  At the responder, the list
