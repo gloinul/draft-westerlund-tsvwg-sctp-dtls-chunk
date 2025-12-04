@@ -282,7 +282,7 @@ paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
 
 DTLS Record Limit negotiation {{RFC8449}} is not supported,
-the supported record size is 16384 bytes.
+the supported record size is 2<sup>14</sup> bytes.
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
