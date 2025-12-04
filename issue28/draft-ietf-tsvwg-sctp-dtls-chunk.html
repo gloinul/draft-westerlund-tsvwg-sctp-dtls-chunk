@@ -1757,12 +1757,15 @@ in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#sec
         <h3 id="name-dynamic-address-reconfigura">
 <a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-dynamic-address-reconfigura" class="section-name selfRef">Dynamic Address Reconfiguration Considerations</a>
         </h3>
-<p id="section-3.7-1">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
+<p id="section-3.7-1">Support for Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
+association using DTLS Chunk is limited to the case where ASCONF
+is sent from an IP address already known.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<p id="section-3.7-2">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>.  For
 SCTP associations using DTLS Chunk this results in the use of
 redundant mechanism for Authentication with both SCTP-AUTH and the
 DTLS Chunk. We recommend to amend <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> for including DTLS
-Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-restart">
