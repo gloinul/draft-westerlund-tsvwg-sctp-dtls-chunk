@@ -281,10 +281,10 @@ account that heartbeat (HB) chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
 
-Endpoints implementing DTLS Chunk MUST support DTLS records containing up to 
+Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
 2<sup>14</sup> (16384) bytes of plain text. Limiting the of size DTLS record
-as defined by {{RFC8449}} could be negotiated by a (D)TLS based key-management, 
-however the DTLS Chunk APIs does not provide any support for limiting the 
+as defined by {{RFC8449}} could be negotiated by a (D)TLS based key-management,
+however the DTLS Chunk APIs does not provide any support for limiting the
 record size.
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
