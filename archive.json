@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-20T01:06:15.737119+00:00",
+  "timestamp": "2025-12-04T01:10:03.981800+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -4149,7 +4149,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2025-11-18T13:19:08Z",
+      "updatedAt": "2025-12-03T20:45:21Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
@@ -4174,6 +4174,26 @@
           "createdAt": "2025-11-18T13:19:08Z",
           "updatedAt": "2025-11-18T13:19:08Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S0DUT",
+          "commit": {
+            "abbreviatedOid": "9be4b80"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-03T20:45:21Z",
+          "updatedAt": "2025-12-03T20:45:21Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I would suggest to remove this sentence. If an endpoint can't find the corresponding association, an ABORT is sent.",
+              "createdAt": "2025-12-03T20:45:21Z",
+              "updatedAt": "2025-12-03T20:45:21Z"
+            }
+          ]
         }
       ]
     },
@@ -4189,7 +4209,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T12:24:25Z",
-      "updatedAt": "2025-11-18T12:24:25Z",
+      "updatedAt": "2025-12-03T20:35:01Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
@@ -4201,7 +4221,28 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Sz7wz",
+          "commit": {
+            "abbreviatedOid": "2638199"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-03T20:35:01Z",
+          "updatedAt": "2025-12-03T20:35:01Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Maybe using `2<sup>14</sup>` make it clearer?",
+              "createdAt": "2025-12-03T20:35:01Z",
+              "updatedAt": "2025-12-03T20:35:02Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 87,
@@ -4215,7 +4256,7 @@
       "labels": [],
       "body": "\u25cfDetails of the initial negotiation procedures was unclear\r\n\u2013 Also to clarify what information goes into down-grade protection\r\n\u25cfDTLS 1.3 Chunk Protected Association\r\n\u2013 Negotiates the usage of the defined DTLS Chunk and keymanagement\r\nmethod, i.e. the Protection Solution Identifiers\r\n\u2013 Initiator sends full list of support methods in priority order\r\n\u2013 Responder sends parameter with only selected method\r\n\u25cfDown grade Protection\r\n\u2013 Include in key-derivation: Offer list + Selected answer",
       "createdAt": "2025-11-18T14:52:28Z",
-      "updatedAt": "2025-11-18T14:52:28Z",
+      "updatedAt": "2025-12-03T20:28:07Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
@@ -4227,7 +4268,48 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Sz02s",
+          "commit": {
+            "abbreviatedOid": "410812e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-03T20:27:21Z",
+          "updatedAt": "2025-12-03T20:27:22Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "includes it",
+              "createdAt": "2025-12-03T20:27:21Z",
+              "updatedAt": "2025-12-03T20:27:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Sz1o9",
+          "commit": {
+            "abbreviatedOid": "410812e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-03T20:28:06Z",
+          "updatedAt": "2025-12-03T20:28:07Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "solutions",
+              "createdAt": "2025-12-03T20:28:07Z",
+              "updatedAt": "2025-12-03T20:28:07Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
