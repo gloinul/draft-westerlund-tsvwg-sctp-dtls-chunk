@@ -826,8 +826,8 @@ Multiple protection solutions offered in the INIT chunk will be
 ordered based on the priority, where the most preferred will be
 in the first position and the least preferred in the last.
 The INIT-ACK chunk will only contain the chosen protection solution.
-This can be done but need to consider the downgrade
-attack risks (see {{Downgrade-Attacks}}).
+Offers with multiple key-management or protections solutions need to 
+consider the downgrade attack risks (see {{Downgrade-Attacks}}).
 
 The initiator MAY include in its INIT additional security solutions
 that are compatible to offer in parallel with DTLS 1.3 Chunks. This
