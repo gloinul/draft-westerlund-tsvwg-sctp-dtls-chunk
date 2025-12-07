@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-04T01:10:03.981800+00:00",
+  "timestamp": "2025-12-07T01:16:56.813585+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -603,7 +603,7 @@
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-11-18T08:59:08Z",
+      "updatedAt": "2025-12-04T10:05:06Z",
       "closedAt": null,
       "comments": [
         {
@@ -633,6 +633,13 @@
           "body": "Do we agree on limiting ASCONF to be used over existing path as proposed at IETF-124? \nFrom the slides :\n**Will limit ASCONF to make before break:\n\u25cfSend additional Interface address over existing path**",
           "createdAt": "2025-11-18T08:55:52Z",
           "updatedAt": "2025-11-18T08:59:08Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The PR now addresses the make before break. But we should fix the second part of this section too, that states:\n\n`The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are\nrequired to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For\nSCTP associations using DTLS Chunk this results in the use of\nredundant mechanism for Authentication with both SCTP-AUTH and the\nDTLS Chunk. We recommend to amend {{RFC5061}} for including DTLS\nChunks as Authentication mechanism for ASCONF chunks.`\n\n@tuexen I don't remember what we said about SCTP-AUTH, where we adding to this document \"Updates RFC5061\" to say that if one support ASCONF and DTLS Chunk, one will use DTLS Chunk for the source authentication? ",
+          "createdAt": "2025-12-04T10:05:06Z",
+          "updatedAt": "2025-12-04T10:05:06Z"
         }
       ]
     },
@@ -955,7 +962,7 @@
       "id": "I_kwDOKszxDc6_JRYr",
       "title": "Consider 32-bit alignment of DTLS chunk",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -964,8 +971,8 @@
       "labels": [],
       "body": "if the decryption is done in place.",
       "createdAt": "2025-07-06T18:46:00Z",
-      "updatedAt": "2025-07-07T09:38:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-04T11:15:34Z",
+      "closedAt": "2025-12-04T11:15:34Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1378,15 +1385,15 @@
       "id": "I_kwDOKszxDc7Snj1R",
       "title": "Clarify information needed to be included in key derivation of key-mangement from the protection solution indictor vector",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/81",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Currently the DTLS 1.3 Chunk Protected Association Parameter includes first all offered, and on the response the supported with the selected. For downgrade protection only the offered really needs to be included to prevent downgrade in the peers choice mechanism. Manipulating the response parameter will result in non-compatible key-managements. Despite this the draft appear to indicate that both should be included. ",
       "createdAt": "2025-10-20T19:05:49Z",
-      "updatedAt": "2025-10-20T19:05:49Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-04T09:54:21Z",
+      "closedAt": "2025-12-04T09:54:21Z",
       "comments": []
     },
     {
@@ -3514,7 +3521,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-10-17T10:28:28Z",
+      "updatedAt": "2025-12-04T10:35:34Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -3574,6 +3581,32 @@
           "body": "I think this looks okay as direction for the solution.\r\n\r\nWould it be better to include the selected as the first element, as that is known to be a single 16-bit value, then followed by N 16-bit values for the ordered list that was offered?",
           "createdAt": "2025-10-13T09:06:33Z",
           "updatedAt": "2025-10-13T09:06:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S9IC2",
+          "commit": {
+            "abbreviatedOid": "6f43b14"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-04T10:32:21Z",
+          "updatedAt": "2025-12-04T10:32:21Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S9MS1",
+          "commit": {
+            "abbreviatedOid": "6f43b14"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Use Protection operator. This do needs updated. Waiting for @tuexen proposal. ",
+          "createdAt": "2025-12-04T10:35:34Z",
+          "updatedAt": "2025-12-04T10:35:34Z",
           "comments": []
         }
       ]
@@ -4083,24 +4116,26 @@
       "id": "PR_kwDOKszxDc60DuMn",
       "title": "DTLS record payload 32-bit aligned",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/84",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:42:17Z",
-      "updatedAt": "2025-11-18T13:30:31Z",
+      "updatedAt": "2025-12-04T11:15:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue45",
-      "headRefOid": "083b75780f69678a133f19c5bf4a8990acc7aad6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "41161c6740df0daea1fcb9bb6e5afa528bba1a65",
+      "closedAt": "2025-12-04T11:15:33Z",
+      "mergedAt": "2025-12-04T11:15:32Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "46866985221c7376ce33598c6614ef3f6fd04e4e"
+      },
       "comments": [],
       "reviews": [
         {
@@ -4134,6 +4169,19 @@
               "updatedAt": "2025-11-18T13:18:22Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S9BHG",
+          "commit": {
+            "abbreviatedOid": "634ccf8"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Ok, with made changes I think this can work. ",
+          "createdAt": "2025-12-04T10:26:53Z",
+          "updatedAt": "2025-12-04T10:26:53Z",
+          "comments": []
         }
       ]
     },
@@ -4149,18 +4197,33 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2025-12-03T20:45:21Z",
+      "updatedAt": "2025-12-05T10:09:10Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue28",
-      "headRefOid": "9be4b802fd1ba3914e8f5090511939fd0c8e1f22",
+      "headRefOid": "da7298e274ef85fbeb123c613fbde2fc1fd1d1af",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Made a change to retain the make before break support that exist. But, this only addresses half the issue, we need to do something about the SCTP-AUTH aspect. So lets agree on direction there and add this to this PR also. ",
+          "createdAt": "2025-12-04T10:06:10Z",
+          "updatedAt": "2025-12-04T10:06:10Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The proposal at IETF-124 meeting slides: https://datatracker.ietf.org/meeting/124/materials/slides-124-tsvwg-dtls-chunk-00\r\nWas to rely on DTLS chunk for authentication. So we need to add the Updates of RFC 5061 text. ",
+          "createdAt": "2025-12-05T10:09:10Z",
+          "updatedAt": "2025-12-05T10:09:10Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc7PS5Vh",
@@ -4194,6 +4257,26 @@
               "updatedAt": "2025-12-03T20:45:21Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S7hCA",
+          "commit": {
+            "abbreviatedOid": "9be4b80"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-04T08:58:49Z",
+          "updatedAt": "2025-12-04T08:58:49Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "That's fine with me. I just removed the whole sentence.",
+              "createdAt": "2025-12-04T08:58:49Z",
+              "updatedAt": "2025-12-04T08:58:49Z"
+            }
+          ]
         }
       ]
     },
@@ -4209,18 +4292,26 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T12:24:25Z",
-      "updatedAt": "2025-12-03T20:35:01Z",
+      "updatedAt": "2025-12-04T11:09:43Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue50",
-      "headRefOid": "263819938d558d90567ec714f779d0f87a0da6c9",
+      "headRefOid": "3f6e96e70511ba48f3e70bc816cdaa975a3abcc8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@teiclap @tuexen I have updated the text with a futher refined version of my comment suggestion. Please review.",
+          "createdAt": "2025-12-04T10:12:55Z",
+          "updatedAt": "2025-12-04T10:12:55Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc7Sz7wz",
@@ -4241,6 +4332,59 @@
               "updatedAt": "2025-12-03T20:35:02Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S8Y67",
+          "commit": {
+            "abbreviatedOid": "a924793"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-04T09:54:26Z",
+          "updatedAt": "2025-12-04T09:54:26Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "I think this needs to be reformulated. I think what we want to say here are:\nEndpoints implementing DTLS Chunk MUST support DTLS records containing up to 2<sup>14</sup> (16384) bytes of plain text. Limiting the of size DTLS record {{RFC8449}} could be negotiated by the key-management, however the DTLS Chunk APIs does not provide any support for limiting the record size.",
+              "createdAt": "2025-12-04T09:54:26Z",
+              "updatedAt": "2025-12-04T09:54:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S8d70",
+          "commit": {
+            "abbreviatedOid": "a924793"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-04T09:58:55Z",
+          "updatedAt": "2025-12-04T09:58:55Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Yes, it's a better and more complete formulation.",
+              "createdAt": "2025-12-04T09:58:55Z",
+              "updatedAt": "2025-12-04T09:58:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S9Nkw",
+          "commit": {
+            "abbreviatedOid": "23f3b4d"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-04T10:36:35Z",
+          "updatedAt": "2025-12-04T10:36:35Z",
+          "comments": []
         }
       ]
     },
@@ -4249,24 +4393,26 @@
       "id": "PR_kwDOKszxDc60ImbS",
       "title": "Implemented improvements due to issue #81",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/87",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "\u25cfDetails of the initial negotiation procedures was unclear\r\n\u2013 Also to clarify what information goes into down-grade protection\r\n\u25cfDTLS 1.3 Chunk Protected Association\r\n\u2013 Negotiates the usage of the defined DTLS Chunk and keymanagement\r\nmethod, i.e. the Protection Solution Identifiers\r\n\u2013 Initiator sends full list of support methods in priority order\r\n\u2013 Responder sends parameter with only selected method\r\n\u25cfDown grade Protection\r\n\u2013 Include in key-derivation: Offer list + Selected answer",
       "createdAt": "2025-11-18T14:52:28Z",
-      "updatedAt": "2025-12-03T20:28:07Z",
+      "updatedAt": "2025-12-04T09:54:20Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue81",
-      "headRefOid": "410812ef856d3a0b684a92784332391c772b1203",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "44f26ad33670eecf120fffd1d385b79f966ebc74",
+      "closedAt": "2025-12-04T09:54:20Z",
+      "mergedAt": "2025-12-04T09:54:20Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "2ab645a55b3ca98ebcfc3a188709648c7675abbe"
+      },
       "comments": [],
       "reviews": [
         {
@@ -4308,6 +4454,59 @@
               "updatedAt": "2025-12-03T20:28:07Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S7IVp",
+          "commit": {
+            "abbreviatedOid": "410812e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-04T08:31:59Z",
+          "updatedAt": "2025-12-04T08:31:59Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Done!",
+              "createdAt": "2025-12-04T08:31:59Z",
+              "updatedAt": "2025-12-04T08:32:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S7IxS",
+          "commit": {
+            "abbreviatedOid": "410812e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-04T08:32:30Z",
+          "updatedAt": "2025-12-04T08:32:31Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Done as well. Thanks",
+              "createdAt": "2025-12-04T08:32:31Z",
+              "updatedAt": "2025-12-04T08:32:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7S8LSz",
+          "commit": {
+            "abbreviatedOid": "419352a"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Done two changes but I think this can be merged now. ",
+          "createdAt": "2025-12-04T09:41:23Z",
+          "updatedAt": "2025-12-04T09:41:23Z",
+          "comments": []
         }
       ]
     }
