@@ -4,9 +4,9 @@
 
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
-Intended status: Standards Track                              C. Porfiri
-Expires: 11 June 2026                                           Ericsson
-                                                                M. Tüxen
+Updates: {"RFC5061" => nil} (if approved)                     C. Porfiri
+Intended status: Standards Track                                Ericsson
+Expires: 11 June 2026                                           M. Tüxen
                                          Münster Univ. of Appl. Sciences
                                                          8 December 2025
 
@@ -85,6 +85,9 @@ Table of Contents
      3.5.  PMTU Considerations
      3.6.  Congestion Control Considerations
      3.7.  Dynamic Address Reconfiguration Considerations
+       3.7.1.  Normative
+       3.7.2.  Limitations
+       3.7.3.  Change
      3.8.  SCTP Restart Considerations
        3.8.1.  Protected SCTP Restart
        3.8.2.  Compatibility with Legacy SCTP Restart
@@ -410,18 +413,28 @@ Table of Contents
 
 3.7.  Dynamic Address Reconfiguration Considerations
 
-   Support for Dynamic Address Reconfiguration [RFC5061] in an SCTP
-   association using DTLS Chunk is limited to the case where ASCONF is
-   sent from an IP address already known.
+   [RFC5061] specifies the support for Dynamic Address Reconfiguration
+   in SCTP.  DTLS Chunks has limited support for Dynamic Address
+   Reconfiguration and requires updates in [RFC5061].
 
-   The section 4.1.1 of [RFC5061] specifies that ASCONF message are
-   required to be sent authenticated with SCTP-AUTH [RFC4895].  For SCTP
+3.7.1.  Normative
+
+   Section 4.1.1 of [RFC5061] specifies that ASCONF message are required
+   to be sent authenticated with SCTP-AUTH [RFC4895].  For SCTP
    associations using DTLS Chunk this results in the use of redundant
    mechanism for Authentication with both SCTP-AUTH and the DTLS Chunk.
-   We recommend to amend [RFC5061] for including DTLS Chunks as
-   Authentication mechanism for ASCONF chunks.
 
-   When DTLS Chunk are being negotiated, SCTP-AUTH SHALL NOT be used.
+3.7.2.  Limitations
+
+   Support for Dynamic Address Reconfiguration [RFC5061] in an SCTP
+   association using DTLS Chunk is limited to the case where the packet
+   containing the ASCONF chunk is sent from an IP address already known.
+
+3.7.3.  Change
+
+   Because SCTP-AUTH and DTLS chunks provide alternative authentication
+   mechanisms, SCTP-AUTH MUST NOT be used once DTLS chunks have been
+   successfully negotiated.
 
 3.8.  SCTP Restart Considerations
 
