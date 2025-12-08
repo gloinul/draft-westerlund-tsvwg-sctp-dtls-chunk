@@ -88,12 +88,14 @@ normative:
 
 --- abstract
 
-This document describes a method for adding Cryptographic protection
-to the Stream Control Transmission Protocol (SCTP). The SCTP DTLS
-chunk defined in this document is intended to enable communications
-privacy for applications that use SCTP as their transport protocol and
-allows applications to communicate in a way that is designed to
-prevent eavesdropping and detect tampering or message forgery.
+This document describes a method for adding DTLS Authentication
+and Cryptographic protection to the Stream Control Transmission
+Protocol (SCTP).
+The SCTP DTLS chunk defined in this document is intended to enable
+communications privacy for applications that use SCTP as their
+transport protocol and allows applications to communicate in a
+way that is designed to prevent eavesdropping and detect tampering
+or message forgery.
 
 Applications using SCTP DTLS chunk can use all transport
 features provided by SCTP and its extensions but with some limitations.
@@ -110,9 +112,9 @@ features provided by SCTP and its extensions but with some limitations.
    to enable endpoint authentication, key-establishment, and key
    updates.
 
-   The DTLS chunk is designed to enable mutual
-   authentication of endpoints, data confidentiality, data origin
-   authentication, data integrity protection, and data replay
+   The DTLS chunk is designed to enable mutual DTLS based
+   authentication of endpoints, data confidentiality, DTLS based
+   data origin authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
    established. It is dependent on a key management function that is
    defined separately to achieve all these capabilities. The
@@ -362,6 +364,8 @@ SCTP associations using DTLS Chunk this results in the use of
 redundant mechanism for Authentication with both SCTP-AUTH and the
 DTLS Chunk. We recommend to amend {{RFC5061}} for including DTLS
 Chunks as Authentication mechanism for ASCONF chunks.
+
+When DTLS Chunk are being negotiated, SCTP-AUTH SHALL NOT be used.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
