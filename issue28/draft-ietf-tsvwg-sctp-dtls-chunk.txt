@@ -432,9 +432,9 @@ Table of Contents
 
 3.7.3.  Change
 
-   Because SCTP-AUTH and DTLS chunks provide alternative authentication
-   mechanisms, SCTP-AUTH MUST NOT be used once DTLS chunks have been
-   successfully negotiated.
+   Because SCTP-AUTH and DTLS chunks provide non-compatible
+   authentication mechanisms, SCTP-AUTH MUST NOT be used once DTLS
+   chunks have been successfully negotiated.
 
 3.8.  SCTP Restart Considerations
 
