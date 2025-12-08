@@ -86,6 +86,9 @@ normative:
     title: "TLS Cipher Suites"
     date: November 2023
 
+updates:
+  RFC5061:
+
 --- abstract
 
 This document describes a method for adding DTLS Authentication
@@ -358,18 +361,29 @@ in {{RFC9260}}.
 
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
+{{RFC5061}} specifies the support for Dynamic Address Reconfiguration
+in SCTP. DTLS Chunks has limited support for Dynamic Address
+Reconfiguration and requires updates in {{RFC5061}}.
+
+### Normative
+
+Section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
+required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
+SCTP associations using DTLS Chunk this results in the use of
+redundant mechanism for Authentication with both SCTP-AUTH and the
+DTLS Chunk.
+
+### Limitations
+
 Support for Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
 association using DTLS Chunk is limited to the case where ASCONF
 is sent from an IP address already known.
 
-The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are
-required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
-SCTP associations using DTLS Chunk this results in the use of
-redundant mechanism for Authentication with both SCTP-AUTH and the
-DTLS Chunk. We recommend to amend {{RFC5061}} for including DTLS
-Chunks as Authentication mechanism for ASCONF chunks.
+### Change
 
-When DTLS Chunk are being negotiated, SCTP-AUTH SHALL NOT be used.
+Because SCTP-AUTH and DTLS chunks provide alternative authentication
+mechanisms, SCTP-AUTH MUST NOT be used once DTLS chunks have been
+successfully negotiated.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
