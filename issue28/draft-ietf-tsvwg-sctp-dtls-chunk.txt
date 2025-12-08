@@ -18,14 +18,18 @@ Abstract
 
    This document describes a method for adding DTLS Authentication and
    Cryptographic protection to the Stream Control Transmission Protocol
-   (SCTP).  The SCTP DTLS chunk defined in this document is intended to
-   enable communications privacy for applications that use SCTP as their
+   (SCTP).
+
+   The SCTP DTLS chunk defined in this document is intended to enable
+   communications privacy for applications that use SCTP as their
    transport protocol and allows applications to communicate in a way
    that is designed to prevent eavesdropping and detect tampering or
    message forgery.
 
    Applications using SCTP DTLS chunk can use all transport features
-   provided by SCTP and its extensions but with some limitations.
+   provided by SCTP and its extensions but with some limitations, and in
+   the case of Dynamic Address Reconfiguration RFC 5061 requires
+   updates.
 
 About This Document
 
@@ -85,9 +89,8 @@ Table of Contents
      3.5.  PMTU Considerations
      3.6.  Congestion Control Considerations
      3.7.  Dynamic Address Reconfiguration Considerations
-       3.7.1.  Normative
-       3.7.2.  Limitations
-       3.7.3.  Change
+       3.7.1.  Limitations
+       3.7.2.  Change
      3.8.  SCTP Restart Considerations
        3.8.1.  Protected SCTP Restart
        3.8.2.  Compatibility with Legacy SCTP Restart
@@ -180,13 +183,13 @@ Table of Contents
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions.  However, there can be some
    limitations or additional requirements for them to function such as
-   those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see Section 3.7 and Section 3.8.  Due to its level
-   of integration as discussed in next section it will provide its
-   security functions on all content of the SCTP packet, and will thus
-   not impact the potential to utilize any SCTP functionalities or
-   extensions that are possible to use between two SCTP peers with full
-   security and SCTP association state.
+   those noted for SCTP restart Section 3.8 and an actual update of the
+   specification of Dynamic Address Reconfiguration [RFC5061], see
+   Section 3.7.  Due to DTLS chunk's level of integration as discussed
+   in next section it will provide its security functions on all content
+   of the SCTP packet, and will thus not impact the potential to utilize
+   any SCTP functionalities or extensions that are possible to use
+   between two SCTP peers with full security and SCTP association state.
 
    DTLS is considered version 1.3 as specified in [RFC9147] whereas
    other versions are explicitly not part of this document.
@@ -415,26 +418,24 @@ Table of Contents
 
    [RFC5061] specifies the support for Dynamic Address Reconfiguration
    in SCTP.  DTLS Chunks has limited support for Dynamic Address
-   Reconfiguration and requires updates in [RFC5061].
+   Reconfiguration and requires an update of [RFC5061].  Section 4.1.1
+   of [RFC5061] specifies that ASCONF message are required to be sent
+   authenticated with SCTP-AUTH [RFC4895].  For SCTP associations using
+   DTLS Chunk this would result in the use of redundant and non-
+   compatible mechanisms for Authentication with both SCTP-AUTH and the
+   DTLS Chunk.
 
-3.7.1.  Normative
-
-   Section 4.1.1 of [RFC5061] specifies that ASCONF message are required
-   to be sent authenticated with SCTP-AUTH [RFC4895].  For SCTP
-   associations using DTLS Chunk this results in the use of redundant
-   mechanism for Authentication with both SCTP-AUTH and the DTLS Chunk.
-
-3.7.2.  Limitations
+3.7.1.  Limitations
 
    Support for Dynamic Address Reconfiguration [RFC5061] in an SCTP
    association using DTLS Chunk is limited to the case where the packet
    containing the ASCONF chunk is sent from an IP address already known.
 
-3.7.3.  Change
+3.7.2.  Change
 
    Because SCTP-AUTH and DTLS chunks provide non-compatible
-   authentication mechanisms, SCTP-AUTH MUST NOT be used once DTLS
-   chunks have been successfully negotiated.
+   authentication mechanisms, SCTP-AUTH [RFC4895] MUST NOT be used once
+   DTLS chunks have been successfully negotiated.
 
 3.8.  SCTP Restart Considerations
 
