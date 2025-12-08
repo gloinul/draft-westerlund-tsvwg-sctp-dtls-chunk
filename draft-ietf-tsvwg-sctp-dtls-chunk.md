@@ -381,7 +381,7 @@ containing the ASCONF chunk is sent from an IP address already known.
 
 ### Change
 
-Because SCTP-AUTH and DTLS chunks provide alternative authentication
+Because SCTP-AUTH and DTLS chunks provide non-compatible authentication
 mechanisms, SCTP-AUTH MUST NOT be used once DTLS chunks have been
 successfully negotiated.
 
