@@ -376,8 +376,8 @@ DTLS Chunk.
 ### Limitations
 
 Support for Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
-association using DTLS Chunk is limited to the case where ASCONF
-is sent from an IP address already known.
+association using DTLS Chunk is limited to the case where the packet 
+containing the ASCONF chunk is sent from an IP address already known.
 
 ### Change
 
