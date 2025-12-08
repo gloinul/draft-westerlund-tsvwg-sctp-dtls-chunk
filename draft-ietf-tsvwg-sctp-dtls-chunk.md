@@ -131,8 +131,8 @@ updates.
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions. However, there can be some
    limitations or additional requirements for them to function such as
-   those noted for SCTP restart {{sec-restart}} and an actual update 
-   of the specification of Dynamic Address Reconfiguration {{rfc5061}}, 
+   those noted for SCTP restart {{sec-restart}} and an actual update
+   of the specification of Dynamic Address Reconfiguration {{RFC5061}},
    see {{sec-asconf}}. Due to DTLS chunk's
    level of integration as discussed in next section it will provide
    its security functions on all content of the SCTP packet, and will
@@ -367,11 +367,11 @@ in {{RFC9260}}.
 
 {{RFC5061}} specifies the support for Dynamic Address Reconfiguration
 in SCTP. DTLS Chunks has limited support for Dynamic Address
-Reconfiguration and requires an update of {{RFC5061}}. Section 4.1.1 
+Reconfiguration and requires an update of {{RFC5061}}. Section 4.1.1
 of {{RFC5061}} specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
 SCTP associations using DTLS Chunk this would result in the use of
-redundant and non-compatible mechanisms for Authentication with 
+redundant and non-compatible mechanisms for Authentication with
 both SCTP-AUTH and the DTLS Chunk.
 
 ### Limitations
