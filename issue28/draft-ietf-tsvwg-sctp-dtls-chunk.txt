@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 7 June 2026                                            Ericsson
+Expires: 11 June 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         4 December 2025
+                                                         8 December 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -16,12 +16,13 @@ Expires: 7 June 2026                                            Ericsson
 
 Abstract
 
-   This document describes a method for adding Cryptographic protection
-   to the Stream Control Transmission Protocol (SCTP).  The SCTP DTLS
-   chunk defined in this document is intended to enable communications
-   privacy for applications that use SCTP as their transport protocol
-   and allows applications to communicate in a way that is designed to
-   prevent eavesdropping and detect tampering or message forgery.
+   This document describes a method for adding DTLS Authentication and
+   Cryptographic protection to the Stream Control Transmission Protocol
+   (SCTP).  The SCTP DTLS chunk defined in this document is intended to
+   enable communications privacy for applications that use SCTP as their
+   transport protocol and allows applications to communicate in a way
+   that is designed to prevent eavesdropping and detect tampering or
+   message forgery.
 
    Applications using SCTP DTLS chunk can use all transport features
    provided by SCTP and its extensions but with some limitations.
@@ -56,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2026.
+   This Internet-Draft will expire on 11 June 2026.
 
 Copyright Notice
 
@@ -164,14 +165,14 @@ Table of Contents
    usage, how it interacts with the SCTP association establishment to
    enable endpoint authentication, key-establishment, and key updates.
 
-   The DTLS chunk is designed to enable mutual authentication of
-   endpoints, data confidentiality, data origin authentication, data
-   integrity protection, and data replay protection for SCTP packets
-   after the SCTP association has been established.  It is dependent on
-   a key management function that is defined separately to achieve all
-   these capabilities.  The key management function uses an API to
-   provision the SCTP association's DTLS chunk protection with key-
-   material to enable and rekey the protection operations.
+   The DTLS chunk is designed to enable mutual DTLS based authentication
+   of endpoints, data confidentiality, DTLS based data origin
+   authentication, data integrity protection, and data replay protection
+   for SCTP packets after the SCTP association has been established.  It
+   is dependent on a key management function that is defined separately
+   to achieve all these capabilities.  The key management function uses
+   an API to provision the SCTP association's DTLS chunk protection with
+   key-material to enable and rekey the protection operations.
 
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions.  However, there can be some
@@ -419,6 +420,8 @@ Table of Contents
    mechanism for Authentication with both SCTP-AUTH and the DTLS Chunk.
    We recommend to amend [RFC5061] for including DTLS Chunks as
    Authentication mechanism for ASCONF chunks.
+
+   When DTLS Chunk are being negotiated, SCTP-AUTH SHALL NOT be used.
 
 3.8.  SCTP Restart Considerations
 
