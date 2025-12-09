@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 7 June 2026                                            Ericsson
+Expires: 12 June 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         4 December 2025
+                                                         9 December 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2026.
+   This Internet-Draft will expire on 12 June 2026.
 
 Copyright Notice
 
@@ -331,6 +331,9 @@ Table of Contents
    account that heartbeat (HB) chunks are sent concurrently over all
    paths in multihomed Associations, thus it needs to be large enough to
    accommodate latency differences.
+
+   Endpoints implementing DTLS Chunk MUST support DTLS records
+   containing up to 2^14 (16384) bytes of plain text.
 
 3.3.  Considerations about SCTP Protection Solutions
 
