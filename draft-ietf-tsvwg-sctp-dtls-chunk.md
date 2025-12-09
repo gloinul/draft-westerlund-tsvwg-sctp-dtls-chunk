@@ -134,6 +134,7 @@ features provided by SCTP and its extensions but with some limitations.
    DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
    other versions are explicitly not part of this document.
 
+
 # Conventions
 
 {::boilerplate bcp14}
@@ -278,6 +279,9 @@ The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
+
+Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
+2<sup>14</sup> (16384) bytes of plain text.
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
