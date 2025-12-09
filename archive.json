@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-07T01:16:56.813585+00:00",
+  "timestamp": "2025-12-09T01:09:52.201375+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -603,7 +603,7 @@
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-12-04T10:05:06Z",
+      "updatedAt": "2025-12-08T16:41:14Z",
       "closedAt": null,
       "comments": [
         {
@@ -640,6 +640,20 @@
           "body": "The PR now addresses the make before break. But we should fix the second part of this section too, that states:\n\n`The section 4.1.1 of {{RFC5061}} specifies that ASCONF message are\nrequired to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For\nSCTP associations using DTLS Chunk this results in the use of\nredundant mechanism for Authentication with both SCTP-AUTH and the\nDTLS Chunk. We recommend to amend {{RFC5061}} for including DTLS\nChunks as Authentication mechanism for ASCONF chunks.`\n\n@tuexen I don't remember what we said about SCTP-AUTH, where we adding to this document \"Updates RFC5061\" to say that if one support ASCONF and DTLS Chunk, one will use DTLS Chunk for the source authentication? ",
           "createdAt": "2025-12-04T10:05:06Z",
           "updatedAt": "2025-12-04T10:05:06Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So what was said in the presentation was that we will use DTLS chunk for source authentication.\n",
+          "createdAt": "2025-12-08T12:58:58Z",
+          "updatedAt": "2025-12-08T12:58:58Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, the ASCONF chunk can be in the DTLS chunk and that protection is good enough.",
+          "createdAt": "2025-12-08T16:41:14Z",
+          "updatedAt": "2025-12-08T16:41:14Z"
         }
       ]
     },
@@ -4197,13 +4211,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2025-12-05T10:09:10Z",
+      "updatedAt": "2025-12-08T14:15:12Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue28",
-      "headRefOid": "da7298e274ef85fbeb123c613fbde2fc1fd1d1af",
+      "headRefOid": "a75e763febcc17d04685544998055f6d29f0cb9a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4277,6 +4291,26 @@
               "updatedAt": "2025-12-04T08:58:49Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Tji7c",
+          "commit": {
+            "abbreviatedOid": "da7298e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-07T14:13:02Z",
+          "updatedAt": "2025-12-07T14:13:02Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": ".. where the packet containing the ASCONF chunk...",
+              "createdAt": "2025-12-07T14:13:02Z",
+              "updatedAt": "2025-12-07T14:13:03Z"
+            }
+          ]
         }
       ]
     },
@@ -4292,7 +4326,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T12:24:25Z",
-      "updatedAt": "2025-12-04T11:09:43Z",
+      "updatedAt": "2025-12-08T16:40:04Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
@@ -4385,6 +4419,79 @@
           "createdAt": "2025-12-04T10:36:35Z",
           "updatedAt": "2025-12-04T10:36:35Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7TjPRN",
+          "commit": {
+            "abbreviatedOid": "3f6e96e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-07T11:25:35Z",
+          "updatedAt": "2025-12-07T11:25:35Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7TkaHh",
+          "commit": {
+            "abbreviatedOid": "3f6e96e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-07T19:47:42Z",
+          "updatedAt": "2025-12-07T19:47:42Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Isn't the first sentence all we need?",
+              "createdAt": "2025-12-07T19:47:42Z",
+              "updatedAt": "2025-12-07T19:47:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7Ttadv",
+          "commit": {
+            "abbreviatedOid": "3f6e96e"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-08T12:45:18Z",
+          "updatedAt": "2025-12-08T12:45:18Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Yes, from a specification perspective yes. But I think it is worth indicating that we have considered DTLS reduced size records, but do not provide any explicit support for it. ",
+              "createdAt": "2025-12-08T12:45:18Z",
+              "updatedAt": "2025-12-08T12:45:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7TxoCU",
+          "commit": {
+            "abbreviatedOid": "3f6e96e"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-08T16:40:04Z",
+          "updatedAt": "2025-12-08T16:40:04Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "But the reason you provide is the API and the API is not normative... In my view we should restrict the text to what is needed to provide an interoperable implementation.",
+              "createdAt": "2025-12-08T16:40:04Z",
+              "updatedAt": "2025-12-08T16:40:04Z"
+            }
+          ]
         }
       ]
     },
