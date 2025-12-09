@@ -78,7 +78,6 @@ normative:
   RFC5061:
   RFC6083:
   RFC8126:
-  RFC8449:
   RFC9147:
   RFC9260:
 
@@ -282,10 +281,7 @@ paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
 
 Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
-2<sup>14</sup> (16384) bytes of plain text. Limiting the of size DTLS record
-as defined by {{RFC8449}} could be negotiated by a (D)TLS based key-management,
-however the DTLS Chunk APIs does not provide any support for limiting the
-record size.
+2<sup>14</sup> (16384) bytes of plain text. 
 
 ## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
 
