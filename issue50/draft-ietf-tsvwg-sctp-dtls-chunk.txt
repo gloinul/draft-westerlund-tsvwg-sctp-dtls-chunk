@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 7 June 2026                                            Ericsson
+Expires: 12 June 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         4 December 2025
+                                                         9 December 2025
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2026.
+   This Internet-Draft will expire on 12 June 2026.
 
 Copyright Notice
 
@@ -333,10 +333,7 @@ Table of Contents
    accommodate latency differences.
 
    Endpoints implementing DTLS Chunk MUST support DTLS records
-   containing up to 2^14 (16384) bytes of plain text.  Limiting the of
-   size DTLS record as defined by [RFC8449] could be negotiated by a
-   (D)TLS based key-management, however the DTLS Chunk APIs does not
-   provide any support for limiting the record size.
+   containing up to 2^14 (16384) bytes of plain text.
 
 3.3.  Considerations about SCTP Protection Solutions
 
@@ -1979,10 +1976,6 @@ Table of Contents
               Writing an IANA Considerations Section in RFCs", BCP 26,
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
               <https://www.rfc-editor.org/info/rfc8126>.
-
-   [RFC8449]  Thomson, M., "Record Size Limit Extension for TLS",
-              RFC 8449, DOI 10.17487/RFC8449, August 2018,
-              <https://www.rfc-editor.org/info/rfc8449>.
 
    [RFC9147]  Rescorla, E., Tschofenig, H., and N. Modadugu, "The
               Datagram Transport Layer Security (DTLS) Protocol Version
