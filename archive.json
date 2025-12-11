@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-09T01:09:52.201375+00:00",
+  "timestamp": "2025-12-11T01:12:41.995611+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1043,7 +1043,7 @@
       "id": "I_kwDOKszxDc6_N_UP",
       "title": "Do we need to have API functions for DTLS record size limitation handling?",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/50",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1052,8 +1052,8 @@
       "labels": [],
       "body": "DTLS can negotiate less than full size DTLS records. Is that needed? And if needed we need API surface for it. \n\nTo be discussed not needed to handled for IETF 123 submission. ",
       "createdAt": "2025-07-07T08:53:27Z",
-      "updatedAt": "2025-11-18T12:13:26Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-09T10:01:31Z",
+      "closedAt": "2025-12-09T10:01:31Z",
       "comments": [
         {
           "author": "gloinul",
@@ -4319,24 +4319,26 @@
       "id": "PR_kwDOKszxDc60GV4k",
       "title": "Fixed issue #50 for DTLS Record size",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/86",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T12:24:25Z",
-      "updatedAt": "2025-12-08T16:40:04Z",
+      "updatedAt": "2025-12-09T12:06:10Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue50",
-      "headRefOid": "3f6e96e70511ba48f3e70bc816cdaa975a3abcc8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "35b338126ba3634555334ad11fad04dcfdf0758f",
+      "closedAt": "2025-12-09T10:01:30Z",
+      "mergedAt": "2025-12-09T10:01:30Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f"
+      },
       "comments": [
         {
           "author": "gloinul",
