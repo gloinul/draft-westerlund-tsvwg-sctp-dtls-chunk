@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-11T01:12:41.995611+00:00",
+  "timestamp": "2025-12-16T01:13:12.056473+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1425,6 +1425,66 @@
       "body": "As the API exists in one endpoint it is not clear from an API point of view what is client and server. I think the API needs to talk about sending and receive keys. And the key-management will have to map its client and server role to the right direction in each endpoint. ",
       "createdAt": "2025-10-20T19:19:23Z",
       "updatedAt": "2025-11-01T20:38:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 88,
+      "id": "I_kwDOKszxDc7eRRkB",
+      "title": "DTLS Chunk naming principles",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/88",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "In the meeting 2025-12-12 it was decided to unify the naming of the parameters and options as\n\"DTLS Management Parameter\" and \"DTLS Management Methods\" ",
+      "createdAt": "2025-12-15T07:09:38Z",
+      "updatedAt": "2025-12-15T19:23:49Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marceloleitner",
+          "authorAssociation": "NONE",
+          "body": "Just adding a note here that this is also defining the IDs for DTLS Chunk and DTLS Management Parameter Parameter.\n(nothing against it, just highlighting)",
+          "createdAt": "2025-12-15T19:23:49Z",
+          "updatedAt": "2025-12-15T19:23:49Z"
+        }
+      ]
+    },
+    {
+      "number": 89,
+      "id": "I_kwDOKszxDc7eRSd-",
+      "title": "Provide a more clear description of the Payload",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/89",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-15T07:10:44Z",
+      "updatedAt": "2025-12-15T07:10:44Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 90,
+      "id": "I_kwDOKszxDc7eRTRW",
+      "title": "Replace SHALL with MUST and fix the option size",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/90",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-15T07:11:38Z",
+      "updatedAt": "2025-12-15T07:11:42Z",
       "closedAt": null,
       "comments": []
     }
@@ -4618,6 +4678,72 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 91,
+      "id": "PR_kwDOKszxDc642koy",
+      "title": "Fixed issue #90",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/91",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-15T07:17:07Z",
+      "updatedAt": "2025-12-15T08:20:46Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue90",
+      "headRefOid": "590016dde862f5a7bdb958bfccff35b0589e35fd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7VNFlN",
+          "commit": {
+            "abbreviatedOid": "590016d"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-15T08:20:46Z",
+          "updatedAt": "2025-12-15T08:20:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 92,
+      "id": "PR_kwDOKszxDc646Dl7",
+      "title": "Fixed the terminology according to issue #88",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/92",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Also inserted the chosen values for Parameters and chunk",
+      "createdAt": "2025-12-15T12:08:10Z",
+      "updatedAt": "2025-12-15T12:08:37Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue88",
+      "headRefOid": "3820c8bbc59f1288c828f8f2a66998777adb6fd7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
