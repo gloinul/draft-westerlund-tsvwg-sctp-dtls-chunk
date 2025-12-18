@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-16T01:13:12.056473+00:00",
+  "timestamp": "2025-12-18T01:09:06.602602+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1442,7 +1442,7 @@
       "labels": [],
       "body": "In the meeting 2025-12-12 it was decided to unify the naming of the parameters and options as\n\"DTLS Management Parameter\" and \"DTLS Management Methods\" ",
       "createdAt": "2025-12-15T07:09:38Z",
-      "updatedAt": "2025-12-15T19:23:49Z",
+      "updatedAt": "2025-12-16T06:33:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -1451,6 +1451,13 @@
           "body": "Just adding a note here that this is also defining the IDs for DTLS Chunk and DTLS Management Parameter Parameter.\n(nothing against it, just highlighting)",
           "createdAt": "2025-12-15T19:23:49Z",
           "updatedAt": "2025-12-15T19:23:49Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Just adding a note here that this is also defining the IDs for DTLS Chunk and DTLS Management Parameter Parameter. (nothing against it, just highlighting)\n\nCorrect.",
+          "createdAt": "2025-12-16T06:33:51Z",
+          "updatedAt": "2025-12-16T06:33:51Z"
         }
       ]
     },
@@ -4738,6 +4745,32 @@
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue88",
       "headRefOid": "3820c8bbc59f1288c828f8f2a66998777adb6fd7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOKszxDc65JDZ3",
+      "title": "Fixed issue #89",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/93",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Described ho DTLS record fits in DTLS Chunk payload",
+      "createdAt": "2025-12-16T12:25:48Z",
+      "updatedAt": "2025-12-16T12:25:48Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue89",
+      "headRefOid": "20d2f478080a2dd9fe20c58d098d9a5ecb2b92e3",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
