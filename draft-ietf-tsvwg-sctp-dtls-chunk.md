@@ -683,7 +683,7 @@ Post-Padding: 0, 8, 16, or 24 bits
 ## Payload formatting in DTLS Chunk
 
 
-From section 4 of {{RFC9147}}, the DTLS record header has variable lenght,
+From section 4 of {{RFC9147}}, the DTLS record header has variable length,
 here reported in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
@@ -724,8 +724,10 @@ in {{DTLSCiphertext-header-struct}}.
 
 DTLS Chunk requires encrypted_record to be 32 bit aligned as specified in {{DTLS-chunk}}.
 It's RECOMMENDED not to use the C bit, so that the size of the header of the DTLSCiphertext
-can be easily computed by reading the first octet.
-Examples of preferred DTLSCiphertext are shown in{{DTLSCiphertext-recommended}}.
+can be easily computed by reading the first octet. The Length field is redundant
+with the DTLS chunk's length field and multiple DTLS records SHALL NOT be part of the 
+DTLS Chunk's payload field. 
+Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
 
