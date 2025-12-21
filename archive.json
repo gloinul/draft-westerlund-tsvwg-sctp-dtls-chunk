@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-18T01:09:06.602602+00:00",
+  "timestamp": "2025-12-21T01:17:10.383405+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1492,6 +1492,22 @@
       "body": "",
       "createdAt": "2025-12-15T07:11:38Z",
       "updatedAt": "2025-12-15T07:11:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 94,
+      "id": "I_kwDOKszxDc7fYCJ7",
+      "title": "The DTLS Connection ID length limitation",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/94",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "We need to add text somewhere to make it clear that if one configures keying material and using the connection ID then on SCTP association basis must be consistent with the connection ID field length. For a given SCTP association all sets of keying material MUST use the same field length for the DTLS record connection ID.",
+      "createdAt": "2025-12-19T13:54:32Z",
+      "updatedAt": "2025-12-19T13:54:32Z",
       "closedAt": null,
       "comments": []
     }
@@ -4738,7 +4754,7 @@
       "labels": [],
       "body": "Also inserted the chosen values for Parameters and chunk",
       "createdAt": "2025-12-15T12:08:10Z",
-      "updatedAt": "2025-12-15T12:08:37Z",
+      "updatedAt": "2025-12-19T13:41:58Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
@@ -4750,7 +4766,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7Wf0Kt",
+          "commit": {
+            "abbreviatedOid": "3820c8b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-19T13:41:58Z",
+          "updatedAt": "2025-12-19T13:41:58Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 93,
@@ -4764,13 +4794,13 @@
       "labels": [],
       "body": "Described ho DTLS record fits in DTLS Chunk payload",
       "createdAt": "2025-12-16T12:25:48Z",
-      "updatedAt": "2025-12-16T12:25:48Z",
+      "updatedAt": "2025-12-19T13:50:23Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue89",
-      "headRefOid": "20d2f478080a2dd9fe20c58d098d9a5ecb2b92e3",
+      "headRefOid": "18ca4fe77b6cc2cd60dcecb480b61277e839db3a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
