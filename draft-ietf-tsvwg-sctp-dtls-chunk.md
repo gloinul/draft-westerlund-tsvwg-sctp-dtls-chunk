@@ -722,12 +722,15 @@ in {{DTLSCiphertext-header-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-header-struct title="DTLSCiphertext header" artwork-align="center"}
 
-DTLS Chunk requires encrypted_record to be 32 bit aligned as specified in {{DTLS-chunk}}.
-It's RECOMMENDED not to use the C bit, so that the size of the header of the DTLSCiphertext
-can be easily computed by reading the first octet. The Length field is redundant
-with the DTLS chunk's length field and multiple DTLS records SHALL NOT be part of the
-DTLS Chunk's payload field.
-Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
+DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
+in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
+be easily computed by reading the first octet if the Connection ID is
+not present. If the Connection ID is part of the record the field's
+length is part of the securit context related information. The Length
+field is redundant with the DTLS chunk's length field and can be
+avoided to be used, and multiple DTLS records SHALL NOT be part of the
+DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
+shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
 
@@ -754,9 +757,12 @@ Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
 
-The size of the DTLSCiphertext header, when C is zero, using the first octet B is computed as follows:
+In case of the Connection ID field being present its length needs to
+be retrived from the security context, we assume it known here in
+CID_size variable. Thus, the size of the DTLSCiphertext header, using
+the first octet B is computed as follows:
 
-: size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2) & 0x3
+: size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
 
 In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
 as follows:
