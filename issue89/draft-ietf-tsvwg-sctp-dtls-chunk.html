@@ -2412,12 +2412,15 @@ in <a href="#DTLSCiphertext-header-struct" class="auto internal xref">Figure 6</
 <a href="#name-dtlsciphertext-header" class="selfRef">DTLSCiphertext header</a>
           </figcaption></figure>
 </div>
-<p id="section-5.2-5">DTLS Chunk requires encrypted_record to be 32 bit aligned as specified in <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>.
-It's RECOMMENDED not to use the C bit, so that the size of the header of the DTLSCiphertext
-can be easily computed by reading the first octet. The Length field is redundant
-with the DTLS chunk's length field and multiple DTLS records SHALL NOT be part of the
-DTLS Chunk's payload field.
-Examples of preferred DTLSCiphertext are shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 7</a>.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
+in <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>.  The size of the header of the DTLSCiphertext can
+be easily computed by reading the first octet if the Connection ID is
+not present. If the Connection ID is part of the record the field's
+length is part of the securit context related information. The Length
+field is redundant with the DTLS chunk's length field and can be
+avoided to be used, and multiple DTLS records SHALL NOT be part of the
+DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
+shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 7</a>.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <span id="name-dtlsciphertext-recommended-"></span><div id="DTLSCiphertext-recommended">
 <figure id="figure-7">
           <div id="section-5.2-6.1">
@@ -2520,19 +2523,34 @@ Examples of preferred DTLSCiphertext are shown in <a href="#DTLSCiphertext-recom
           </figcaption></figure>
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-5.2-7">
-          <dt id="section-5.2-7.1">The size of the DTLSCiphertext header, when C is zero, using the first octet B is computed as follows:</dt>
+          <dt id="section-5.2-7.1">In case of the Connection ID field being present its length needs to</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-7.2">
-            <p id="section-5.2-7.2.1">size = (1 + (B &amp; 0x08) ? 1 : 2 + (B &amp; 0x04) ? 0 : 2) &amp; 0x3<a href="#section-5.2-7.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-7.2.1"></p><a href="#section-5.2-7.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-7.3">In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed</dt>
+<dt id="section-5.2-7.3">be retrived from the security context, we assume it known here in</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-7.4">
             <p id="section-5.2-7.4.1"></p><a href="#section-5.2-7.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-7.5">as follows:</dt>
+<dt id="section-5.2-7.5">CID_size variable. Thus, the size of the DTLSCiphertext header, using</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-7.6">
-            <p id="section-5.2-7.6.1">P = (4 - size) &amp; 0x03<a href="#section-5.2-7.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-7.6.1"></p><a href="#section-5.2-7.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-7.7">the first octet B is computed as follows:</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-7.8">
+            <p id="section-5.2-7.8.1">size = (1 + (B &amp; 0x08) ? 1 : 2 + (B &amp; 0x04) ? 0 : 2 + (B &amp; 0x10) ? 0 : CID_size) &amp; 0x3<a href="#section-5.2-7.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-7.9">In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-7.10">
+            <p id="section-5.2-7.10.1"></p><a href="#section-5.2-7.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-7.11">as follows:</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-7.12">
+            <p id="section-5.2-7.12.1">P = (4 - size) &amp; 0x03<a href="#section-5.2-7.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
