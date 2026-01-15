@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 12 June 2026                                           Ericsson
+Expires: 19 July 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         9 December 2025
+                                                         15 January 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,11 +56,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2026.
+   This Internet-Draft will expire on 19 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -91,6 +91,7 @@ Table of Contents
      4.1.  DTLS 1.3 Chunk Protected Association
    5.  New Chunk Type
      5.1.  DTLS Chunk (DTLS)
+     5.2.  Payload formatting in DTLS Chunk
    6.  Error Handling
      6.1.  DTLS 1.3 Chunk Protected Association Parameter Missing
      6.2.  Error in DTLS Chunk
@@ -728,6 +729,89 @@ Table of Contents
       zero bytes to make the chunk 32-bit aligned.  The Padding MUST NOT
       be longer than 3 bytes and it MUST be ignored by the receiver.
 
+5.2.  Payload formatting in DTLS Chunk
+
+   From section 4 of [RFC9147], the DTLS record header has variable
+   length, here reported in Figure 5.
+
+                     struct {
+                         opaque unified_hdr[variable];
+                         opaque encrypted_record[length];
+                     } DTLSCiphertext;
+
+                       Figure 5: DTLS DTLSCiphertext
+
+   As shown above, DTLSCiphertext record is built up with the
+   unified_hdr and the encrypted_record, where unified_hdr has variable
+   format as defined in the first byte.  The format of unified_hdr is
+   depicted in Figure 6.
+
+             0 1 2 3 4 5 6 7
+             +-+-+-+-+-+-+-+-+
+             |0|0|1|C|S|L|E E|
+             +-+-+-+-+-+-+-+-+
+             | Connection ID |   Legend:
+             | (if any,      |
+             /  length as    /   C   - Connection ID (CID) present
+             |  negotiated)  |   S   - Sequence number length
+             +-+-+-+-+-+-+-+-+   L   - Length present
+             |  8 or 16 bit  |   E   - Epoch
+             |Sequence Number|
+             +-+-+-+-+-+-+-+-+
+             | 16 bit Length |
+             | (if present)  |
+             +-+-+-+-+-+-+-+-+
+
+                      Figure 6: DTLSCiphertext header
+
+   DTLS Chunk requires encrypted_record to be 32 bit aligned as
+   specified in Section 5.1.  The size of the header of the
+   DTLSCiphertext can be easily computed by reading the first octet if
+   the Connection ID is not present.  If the Connection ID is part of
+   the record the field's length is part of the securit context related
+   information.  The Length field is redundant with the DTLS chunk's
+   length field and can be avoided to be used, and multiple DTLS records
+   SHALL NOT be part of the DTLS Chunk's payload field.  Examples of
+   preferred DTLSCiphertext are shown in Figure 7.
+
+                   0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
+                  +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+                  |0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
+                  +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+                  |    16 bit     |     |8 bit Seq. No. |
+                  |Sequence Number|     +-+-+-+-+-+-+-+-+
+                  +-+-+-+-+-+-+-+-+     |               |
+                  |   16 bit      |     |   Encrypted   |
+                  |   Length      |     /   Record      /
+                  +-+-+-+-+-+-+-+-+     |               |
+                  |               |     +-+-+-+-+-+-+-+-+
+                  |  Encrypted    |
+                  /  Record       /       DTLSCiphertext
+                  |               |         Structure
+                  +-+-+-+-+-+-+-+-+         (minimal)
+
+                    DTLSCiphertext
+                      Structure
+                    (recommended)
+
+               Figure 7: DTLSCiphertext recommended structure
+
+   In case of the Connection ID field being present its length needs
+   to
+
+   be retrived from the security context, we assume it known here in
+
+   CID_size variable.  Thus, the size of the DTLSCiphertext header,
+   using
+
+   the first octet B is computed as follows:  size = (1 + (B & 0x08) ? 1
+      : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+
+   In order the encrypted_record to be 32 bit aligned, P bit in the
+   DTLS Chunk header are computed
+
+   as follows:  P = (4 - size) & 0x03
+
 6.  Error Handling
 
    This specification introduces a new set of error causes that are to
@@ -760,12 +844,12 @@ Table of Contents
      |    Missing Param Type #N-1    |     Missing Param Type #N     |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-          Figure 5: ERROR Missing Protected Association Parameter
+          Figure 8: ERROR Missing Protected Association Parameter
 
    Note: Cause Length in bytes is equal to following with the number of
    missing parameters as N: 8 + N * 2 according to [RFC9260], section
    3.3.10.2.  Also the Protection Association ID may be present in any
-   of the N missing params, no order implied by the example in Figure 5.
+   of the N missing params, no order implied by the example in Figure 8.
 
 6.2.  Error in DTLS Chunk
 
@@ -790,7 +874,7 @@ Table of Contents
      |        Extra Cause #N-1       |         Extra Cause #N        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 6: Error in DTLS Chunk Cause Format
+                 Figure 9: Error in DTLS Chunk Cause Format
 
    Cause Code: 16 bits (unsigned integer)
       The SCTP Error Chunk Cause Code indicating "Error in Protection"
@@ -961,9 +1045,9 @@ Table of Contents
      |                           Chunk #n                            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 7: Unprotected SCTP Packet
+                     Figure 10: Unprotected SCTP Packet
 
-   The diagram shown in Figure 7 describes the structure of an
+   The diagram shown in Figure 10 describes the structure of an
    unprotected SCTP packet as described in [RFC9260].
 
       0                   1                   2                   3
@@ -974,9 +1058,9 @@ Table of Contents
      |                          DTLS Chunk                           |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 8: Protected SCTP Packets
+                     Figure 11: Protected SCTP Packets
 
-   The diagram shown in Figure 8 describes the structure of a protected
+   The diagram shown in Figure 11 describes the structure of a protected
    SCTP packet being sent.  Such packets are built with the SCTP common
    header.  Only one DTLS chunk can be sent in a SCTP packet.
 
