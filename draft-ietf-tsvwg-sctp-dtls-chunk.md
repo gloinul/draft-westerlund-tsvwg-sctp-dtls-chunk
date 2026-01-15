@@ -680,6 +680,94 @@ Post-Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
+## Payload formatting in DTLS Chunk
+
+
+From section 4 of {{RFC9147}}, the DTLS record header has variable length,
+here reported in {{DTLSCiphertext-record-struct}}.
+
+~~~~~~~~~~~ aasvg
+
+    struct {
+        opaque unified_hdr[variable];
+        opaque encrypted_record[length];
+    } DTLSCiphertext;
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
+
+As shown above, DTLSCiphertext record is built up with the unified_hdr
+and the encrypted_record, where unified_hdr has variable format
+as defined in the first byte. The format of unified_hdr is depicted
+in {{DTLSCiphertext-header-struct}}.
+
+~~~~~~~~~~~ aasvg
+
+    0 1 2 3 4 5 6 7
+    +-+-+-+-+-+-+-+-+
+    |0|0|1|C|S|L|E E|
+    +-+-+-+-+-+-+-+-+
+    | Connection ID |   Legend:
+    | (if any,      |
+    /  length as    /   C   - Connection ID (CID) present
+    |  negotiated)  |   S   - Sequence number length
+    +-+-+-+-+-+-+-+-+   L   - Length present
+    |  8 or 16 bit  |   E   - Epoch
+    |Sequence Number|
+    +-+-+-+-+-+-+-+-+
+    | 16 bit Length |
+    | (if present)  |
+    +-+-+-+-+-+-+-+-+
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-header-struct title="DTLSCiphertext header" artwork-align="center"}
+
+DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
+in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
+be easily computed by reading the first octet if the Connection ID is
+not present. If the Connection ID is part of the record the field's
+length is part of the securit context related information. The Length
+field is redundant with the DTLS chunk's length field and can be
+avoided to be used, and multiple DTLS records SHALL NOT be part of the
+DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
+shown in {{DTLSCiphertext-recommended}}.
+
+~~~~~~~~~~~ aasvg
+
+ 0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+|0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
++-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+|    16 bit     |     |8 bit Seq. No. |
+|Sequence Number|     +-+-+-+-+-+-+-+-+
++-+-+-+-+-+-+-+-+     |               |
+|   16 bit      |     |   Encrypted   |
+|   Length      |     /   Record      /
++-+-+-+-+-+-+-+-+     |               |
+|               |     +-+-+-+-+-+-+-+-+
+|  Encrypted    |
+/  Record       /       DTLSCiphertext
+|               |         Structure
++-+-+-+-+-+-+-+-+         (minimal)
+
+  DTLSCiphertext
+    Structure
+  (recommended)
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
+
+In case of the Connection ID field being present its length needs to
+be retrived from the security context, we assume it known here in
+CID_size variable. Thus, the size of the DTLSCiphertext header, using
+the first octet B is computed as follows:
+
+: size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+
+In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
+as follows:
+
+: P = (4 - size) & 0x03
 
 # Error Handling {#error_handling}
 
