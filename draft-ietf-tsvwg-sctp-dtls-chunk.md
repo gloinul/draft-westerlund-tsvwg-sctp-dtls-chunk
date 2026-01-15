@@ -365,7 +365,7 @@ association using DTLS Chunk the ASCONF chunk is protected, thus it
 needs to be unprotected first, furthermore it MAY come from an unknown
 IP Address.  In order to properly address the ASCONF chunk to the
 relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag MUST be used. If the combination
+Source, Destination ports and VTag is used. If the combination
 of those parameters is not unique the implementor MAY choose to send
 the DTLS Chunk to all Associations that fit with the parameters in
 order to find the right one. The association will attempt
@@ -412,12 +412,12 @@ In protected SCTP Restart, INIT and INIT-ACK chunks are sent
 strictly according to  {{RFC9260}}, but COOCKIE-ECHO and COOKIE-ACK chunks
 are encrypted using DTLS Chunks and Restart DTLS Key contexts.
 
-In order to support protected SCTP Restart, the SCTP Endpoints MUST allocate
-and maintain dedicated Restart DTLS Key contexts, SCTP packets
-protected by these contexts will be identified in the DTLS chunk with
-the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP Endpoints
-needs to ensure that Restart DTLS key contexts is preserved for
-supporting the protected SCTP Restart use case.
+In order to support protected SCTP Restart, the SCTP Endpoints needs
+to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
+packets protected by these contexts will be identified in the DTLS
+chunk with the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP
+Endpoints needs to ensure that Restart DTLS key contexts is preserved
+for supporting the protected SCTP Restart use case.
 
 In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs access to a DTLS Key context for
@@ -807,7 +807,7 @@ an ABORT chunk MUST NOT be sent.
 ## Establishment of a Protected Association {#establishment-procedure}
 
 An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
-chunk protected association MUST send to the remote peer an INIT
+chunk protected association sends to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
 (see {{protectedassoc-parameter}}) indicating supported and preferred
 key-management solutions (see
@@ -826,7 +826,7 @@ Chunk Protected Association parameter to indicate it is willing
 to create a session without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
-only protected associations MUST consider an INIT chunk not containing
+only protected associations considers an INIT chunk not containing
 the DTLS 1.3 Chunk Protected Association parameter or another
 Protection Solution accepted by own security policy solution as an error,
 thus it will reply with an ABORT chunk according to what specified in
