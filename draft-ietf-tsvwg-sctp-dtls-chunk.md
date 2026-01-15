@@ -268,7 +268,11 @@ Connection ID (if used), and the DTLS epoch.
 
 Support of DTLS Connection ID in the DTLS Record layer used in the
 DTLS Chunk is OPTIONAL, and negotiated using the key-management
-function.
+function. If the DTLS Connection ID is used, all DTLS Key context for
+a particular SCTP association MUST use the same length of the
+Connection ID field. Otherwise the DTLS Key context could be erronouse
+identified.
+
 
 The first established DTLS key context for any SCTP association and DTLS
 connection ID (if used) MUST use epoch=3. This ensures that the
