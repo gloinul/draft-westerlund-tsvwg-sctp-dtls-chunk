@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 19 June 2026                                           Ericsson
+Expires: 19 July 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        16 December 2025
+                                                         15 January 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,11 +56,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 June 2026.
+   This Internet-Draft will expire on 19 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -732,7 +732,7 @@ Table of Contents
 5.2.  Payload formatting in DTLS Chunk
 
    From section 4 of [RFC9147], the DTLS record header has variable
-   lenght, here reported in Figure 5.
+   length, here reported in Figure 5.
 
                      struct {
                          opaque unified_hdr[variable];
@@ -767,8 +767,10 @@ Table of Contents
    DTLS Chunk requires encrypted_record to be 32 bit aligned as
    specified in Section 5.1.  It's RECOMMENDED not to use the C bit, so
    that the size of the header of the DTLSCiphertext can be easily
-   computed by reading the first octet.  Examples of preferred
-   DTLSCiphertext are shown inFigure 7.
+   computed by reading the first octet.  The Length field is redundant
+   with the DTLS chunk's length field and multiple DTLS records SHALL
+   NOT be part of the DTLS Chunk's payload field.  Examples of preferred
+   DTLSCiphertext are shown in Figure 7.
 
                    0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
                   +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
