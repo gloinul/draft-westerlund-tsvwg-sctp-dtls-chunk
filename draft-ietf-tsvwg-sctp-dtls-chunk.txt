@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                              C. Porfiri
-Expires: 19 July 2026                                           Ericsson
+Expires: 20 July 2026                                           Ericsson
                                                                 M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                         15 January 2026
+                                                         16 January 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 July 2026.
+   This Internet-Draft will expire on 20 July 2026.
 
 Copyright Notice
 
@@ -796,21 +796,18 @@ Table of Contents
 
                Figure 7: DTLSCiphertext recommended structure
 
-   In case of the Connection ID field being present its length needs
-   to
-
+   In case of the Connection ID field being present its length needs to
    be retrived from the security context, we assume it known here in
+   CID_size variable.  Thus the size of the DTLSCiphertext header, using
+   the first octet B, is computed as follows:
 
-   CID_size variable.  Thus, the size of the DTLSCiphertext header,
-   using
+   size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0
+   : CID_size) & 0x3
 
-   the first octet B is computed as follows:  size = (1 + (B & 0x08) ? 1
-      : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+   In order the encrypted_record to be 32 bit aligned, P bit in the DTLS
+   Chunk header are computed as follows:
 
-   In order the encrypted_record to be 32 bit aligned, P bit in the
-   DTLS Chunk header are computed
-
-   as follows:  P = (4 - size) & 0x03
+   P = (4 - size) & 0x03
 
 6.  Error Handling
 
