@@ -759,15 +759,15 @@ shown in {{DTLSCiphertext-recommended}}.
 
 In case of the Connection ID field being present its length needs to
 be retrived from the security context, we assume it known here in
-CID_size variable. Thus, the size of the DTLSCiphertext header, using
-the first octet B is computed as follows:
+CID_size variable. Thus the size of the DTLSCiphertext header, using
+the first octet B, is computed as follows:
 
-: size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
 
 In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
 as follows:
 
-: P = (4 - size) & 0x03
+P = (4 - size) & 0x03
 
 # Error Handling {#error_handling}
 
