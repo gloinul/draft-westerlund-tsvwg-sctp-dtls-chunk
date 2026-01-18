@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-21T01:17:10.383405+00:00",
+  "timestamp": "2026-01-18T01:20:31.953744+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1466,15 +1466,15 @@
       "id": "I_kwDOKszxDc7eRSd-",
       "title": "Provide a more clear description of the Payload",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/89",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-12-15T07:10:44Z",
-      "updatedAt": "2025-12-15T07:10:44Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-15T15:28:13Z",
+      "closedAt": "2026-01-15T15:28:13Z",
       "comments": []
     },
     {
@@ -1482,7 +1482,7 @@
       "id": "I_kwDOKszxDc7eRTRW",
       "title": "Replace SHALL with MUST and fix the option size",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/90",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1491,8 +1491,8 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-12-15T07:11:38Z",
-      "updatedAt": "2025-12-15T07:11:42Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-15T15:31:33Z",
+      "closedAt": "2026-01-15T15:31:33Z",
       "comments": []
     },
     {
@@ -3614,11 +3614,13 @@
       "state": "OPEN",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2025-12-04T10:35:34Z",
+      "updatedAt": "2026-01-15T14:43:45Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -4294,7 +4296,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2025-12-08T14:15:12Z",
+      "updatedAt": "2026-01-15T14:43:00Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
@@ -4394,6 +4396,19 @@
               "updatedAt": "2025-12-07T14:13:03Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7ab0aQ",
+          "commit": {
+            "abbreviatedOid": "a75e763"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-15T09:40:30Z",
+          "updatedAt": "2026-01-15T09:40:30Z",
+          "comments": []
         }
       ]
     },
@@ -4707,25 +4722,42 @@
       "id": "PR_kwDOKszxDc642koy",
       "title": "Fixed issue #90",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/91",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-12-15T07:17:07Z",
-      "updatedAt": "2025-12-15T08:20:46Z",
+      "updatedAt": "2026-01-15T15:31:35Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue90",
-      "headRefOid": "590016dde862f5a7bdb958bfccff35b0589e35fd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "8eaebe8fa041701ee812a5e420ba18edad9fd618",
+      "closedAt": "2026-01-15T15:31:31Z",
+      "mergedAt": "2026-01-15T15:31:31Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "1c758be3a8aeee08c069fa43c055d41f9d4ee72f"
+      },
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "All this comes from explicit request at the latest meeting to remove all the \"shall\" and replace them with \"MUST\"",
+          "createdAt": "2026-01-15T09:37:58Z",
+          "updatedAt": "2026-01-15T09:37:58Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "> All this comes from explicit request at the latest meeting to remove all the \"shall\" and replace them with \"MUST\"\r\n\r\nBut SHALL and shall are not the same with [RFC 8174](https://datatracker.ietf.org/doc/rfc8174/). Thus, replacing SHALL with MUST is fine, doing shall to -> MUST needs more consideration. ",
+          "createdAt": "2026-01-15T10:06:38Z",
+          "updatedAt": "2026-01-15T10:06:38Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc7VNFlN",
@@ -4739,6 +4771,57 @@
           "createdAt": "2025-12-15T08:20:46Z",
           "updatedAt": "2025-12-15T08:20:46Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7abrpF",
+          "commit": {
+            "abbreviatedOid": "590016d"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2026-01-15T09:30:53Z",
+          "updatedAt": "2026-01-15T09:35:22Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "I think this not need to be normative language. We could easily change the \"shall be\" to \"is\".",
+              "createdAt": "2026-01-15T09:30:53Z",
+              "updatedAt": "2026-01-15T09:35:22Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "This actually changes the normative support level of SCTP restart. Are we requiring support of restart? I thought we would only ensure that we have working support, and it would be up to for example using specifications, like 3GPP to actually normatively require support? ",
+              "createdAt": "2026-01-15T09:32:28Z",
+              "updatedAt": "2026-01-15T09:35:22Z"
+            },
+            {
+              "originalPosition": 106,
+              "body": "another case where a descriptive text has been changed to normative. I think \"will\" would work well in this case rather than MUST. ",
+              "createdAt": "2026-01-15T09:34:09Z",
+              "updatedAt": "2026-01-15T09:35:22Z"
+            },
+            {
+              "originalPosition": 123,
+              "body": "Another case of change from descriptive to normative. ",
+              "createdAt": "2026-01-15T09:35:13Z",
+              "updatedAt": "2026-01-15T09:35:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7ahYa7",
+          "commit": {
+            "abbreviatedOid": "8eaebe8"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "I have now addressed the lower case shall cases. ",
+          "createdAt": "2026-01-15T15:27:24Z",
+          "updatedAt": "2026-01-15T15:27:24Z",
+          "comments": []
         }
       ]
     },
@@ -4750,11 +4833,13 @@
       "state": "OPEN",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "Also inserted the chosen values for Parameters and chunk",
       "createdAt": "2025-12-15T12:08:10Z",
-      "updatedAt": "2025-12-19T13:41:58Z",
+      "updatedAt": "2026-01-15T14:42:15Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
@@ -4779,6 +4864,19 @@
           "createdAt": "2025-12-19T13:41:58Z",
           "updatedAt": "2025-12-19T13:41:58Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7abpla",
+          "commit": {
+            "abbreviatedOid": "3820c8b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "I think these changes works. I am somewhat hesitant to submit a draft until the early allocations have been completed by IANA. A potential way forward is to remove the value assignment in this, and put that in a seperate PR. \n\nAlso I think we should add notes in the IANA sections for the DTLS Chunk, chunk flags and parameter that these have received early allocation to make it clear the values are officially assigned. ",
+          "createdAt": "2026-01-15T09:28:35Z",
+          "updatedAt": "2026-01-15T09:28:35Z",
+          "comments": []
         }
       ]
     },
@@ -4787,26 +4885,220 @@
       "id": "PR_kwDOKszxDc65JDZ3",
       "title": "Fixed issue #89",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/93",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Described ho DTLS record fits in DTLS Chunk payload",
       "createdAt": "2025-12-16T12:25:48Z",
-      "updatedAt": "2025-12-19T13:50:23Z",
+      "updatedAt": "2026-01-15T15:28:20Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue89",
-      "headRefOid": "18ca4fe77b6cc2cd60dcecb480b61277e839db3a",
+      "headRefOid": "397e3b6707010186d79ccfbcf70378404c2ac64b",
+      "closedAt": "2026-01-15T15:28:12Z",
+      "mergedAt": "2026-01-15T15:28:12Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "bce489190f133e294c8a9b8cc18e93655ff726e1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7abaYl",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Reading this with fresh eyes I think some improvements should be done. ",
+          "createdAt": "2026-01-15T09:15:12Z",
+          "updatedAt": "2026-01-15T09:20:49Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "I think it is to strong wording to recommend not using the Connection ID (C bit). We support it so we need to be more neutral. It clearly is more easy to calculate the header size if it is not used. ",
+              "createdAt": "2026-01-15T09:15:12Z",
+              "updatedAt": "2026-01-15T09:20:49Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": "I wonder if it would be better to reference the relevant section in the specification where we define that multiple DTLS records are not used, rather than repeat the normative language. ",
+              "createdAt": "2026-01-15T09:16:36Z",
+              "updatedAt": "2026-01-15T09:20:49Z"
+            },
+            {
+              "originalPosition": 47,
+              "body": "I think what needs to be added here, is that if the connection ID is used, then the length of it needs to be retrived from the key context. ",
+              "createdAt": "2026-01-15T09:18:11Z",
+              "updatedAt": "2026-01-15T09:20:50Z"
+            },
+            {
+              "originalPosition": 85,
+              "body": "If we are going to have the calculation here then we should include if C bit is set. Also I think the calculation of P needs to be generalize to enable for cases where size is larger than 4.",
+              "createdAt": "2026-01-15T09:20:18Z",
+              "updatedAt": "2026-01-15T09:20:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7abwIO",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-15T09:36:01Z",
+          "updatedAt": "2026-01-15T09:36:01Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Recommending not to use C makes the computation much easier and quicker. Also we have no reason to use C-Id as we have other ways for recognizing the connection. I'd like to get rid of C-Id.",
+              "createdAt": "2026-01-15T09:36:01Z",
+              "updatedAt": "2026-01-15T09:36:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7abwaV",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-15T09:36:21Z",
+          "updatedAt": "2026-01-15T09:36:21Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "As size is bit-handed with 0x3 it's never greater than 3.",
+              "createdAt": "2026-01-15T09:36:21Z",
+              "updatedAt": "2026-01-15T09:36:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7ab5FH",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-15T09:44:55Z",
+          "updatedAt": "2026-01-15T09:44:55Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "I think this is unclear as (4-size) could become a signed integer result (minus something) and thus erroneous. If you change this to \"4-(size & 0x03)\" then I am convinced that it will work. ",
+              "createdAt": "2026-01-15T09:44:55Z",
+              "updatedAt": "2026-01-15T09:44:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7acB8Q",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-15T09:54:02Z",
+          "updatedAt": "2026-01-15T09:54:02Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "I meant the calculation of \"size\" as\r\nsize = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2) & 0x3\r\nis always <= 3",
+              "createdAt": "2026-01-15T09:54:02Z",
+              "updatedAt": "2026-01-15T09:54:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7ahPY_",
+          "commit": {
+            "abbreviatedOid": "00a4ad5"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-15T15:19:30Z",
+          "updatedAt": "2026-01-15T15:19:30Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "I fail to find this somewhere else. So lets leave it as it is for now.",
+              "createdAt": "2026-01-15T15:19:30Z",
+              "updatedAt": "2026-01-15T15:19:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7ahQDr",
+          "commit": {
+            "abbreviatedOid": "397e3b6"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "I have now fixed the issues I identified.",
+          "createdAt": "2026-01-15T15:20:08Z",
+          "updatedAt": "2026-01-15T15:20:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 95,
+      "id": "PR_kwDOKszxDc69aY_A",
+      "title": "Require equal CID length per SCTP Assocation",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/95",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This addreses #94 ",
+      "createdAt": "2026-01-15T15:43:57Z",
+      "updatedAt": "2026-01-15T15:48:43Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "1c758be3a8aeee08c069fa43c055d41f9d4ee72f",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cid-same-length",
+      "headRefOid": "3281d07df11339a415dc5cca476289606c1524b5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7ahvWF",
+          "commit": {
+            "abbreviatedOid": "3281d07"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "It sounds reasonable \nI agree on it",
+          "createdAt": "2026-01-15T15:46:13Z",
+          "updatedAt": "2026-01-15T15:46:13Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
