@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-18T01:20:31.953744+00:00",
+  "timestamp": "2026-01-22T01:16:53.981903+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1345,7 +1345,7 @@
       "id": "I_kwDOKszxDc7SZepL",
       "title": "get Q (Protection Invocations) for incoming packets",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/80",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1354,8 +1354,8 @@
       "labels": [],
       "body": "The current API defines get Q which counts the number of invocations of the cipher suit for a given epoch being sent by the endpoint. So the question, are there a point of counting the same value for incoming? This value will clearly just be an estimate of the senders side, as it will never be larger, but likely lower due to packet loss (assuming replay protection).\n\n",
       "createdAt": "2025-10-19T09:41:40Z",
-      "updatedAt": "2025-11-19T13:14:30Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-21T10:25:38Z",
+      "closedAt": "2026-01-21T10:25:38Z",
       "comments": [
         {
           "author": "emanjon",
@@ -1391,6 +1391,13 @@
           "body": "Can we close this issue, as the implementation is already in the main track?",
           "createdAt": "2025-11-19T13:14:30Z",
           "updatedAt": "2025-11-19T13:14:30Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "As the text are in the draft for this issue I am closing it now. ",
+          "createdAt": "2026-01-21T10:25:38Z",
+          "updatedAt": "2026-01-21T10:25:38Z"
         }
       ]
     },
