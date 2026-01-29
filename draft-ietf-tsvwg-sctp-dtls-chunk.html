@@ -33,7 +33,7 @@ features provided by SCTP and its extensions but with some limitations.
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.32.5
-    wcwidth 0.2.14
+    wcwidth 0.3.0
 -->
 <link href="draft-ietf-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -574,6 +574,7 @@ aside, blockquote {
 }
 blockquote {
   margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
 }
 cite {
   display: block;
@@ -644,7 +645,7 @@ a.pilcrow {
   }
 }
 @media not print {
-  :hover > a.pilcrow {
+  :hover > a.pilcrow, a.pilcrow:focus {
     opacity: 1;
   }
   a.pilcrow[href]:hover {
@@ -1056,7 +1057,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 20 July 2026</td>
+<td class="center">Expires 2 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1070,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-16" class="published">16 January 2026</time>
+<time datetime="2026-01-29" class="published">29 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-07-20">20 July 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-02">2 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1143,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1187,7 +1188,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-dtls-considerations" class="internal xref">DTLS Considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-considerations-about-sctp-p" class="internal xref">Considerations about SCTP Protection Solutions</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-considerations-about-sctp-d" class="internal xref">Considerations about SCTP DTLS Management Methods</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
                 <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-sctp-dtls-chunk-buffering-a" class="internal xref">SCTP DTLS Chunk Buffering and Flow Control</a></p>
@@ -1218,7 +1219,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-new-parameter-type" class="internal xref">New Parameter Type</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-dtls-13-chunk-protected-ass" class="internal xref">DTLS 1.3 Chunk Protected Association</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-dtls-management-parameter" class="internal xref">DTLS Management Parameter</a></p>
 </li>
             </ul>
 </li>
@@ -1237,13 +1238,13 @@ features provided by SCTP and its extensions but with some limitations.<a href="
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-error-handling" class="internal xref">Error Handling</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-dtls-13-chunk-protected-asso" class="internal xref">DTLS 1.3 Chunk Protected Association Parameter Missing</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-dtls-chunk-protected-associ" class="internal xref">DTLS Chunk Protected Association Parameter Missing</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-error-in-dtls-chunk" class="internal xref">Error in DTLS Chunk</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
-                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-no-common-protection-soluti" class="internal xref">No Common Protection Solution</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-no-common-dtls-management-m" class="internal xref">No Common DTLS Management Method</a></p>
 </li>
                 </ul>
 </li>
@@ -1270,7 +1271,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-termination-of-a-protected-" class="internal xref">Termination of a Protected Association</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-considerations-on-key-manag" class="internal xref">Considerations on Key Management</a></p>
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-considerations-on-dtls-mana" class="internal xref">Considerations on DTLS Management Method</a></p>
 </li>
             </ul>
 </li>
@@ -1386,7 +1387,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
             <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-sctp-protection-solution-id" class="internal xref">SCTP Protection Solution Identifiers</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-dtls-management-method-iden" class="internal xref">DTLS Management Method Identifiers</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
                 <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-sctp-chunk-type" class="internal xref">SCTP Chunk Type</a></p>
@@ -1455,9 +1456,9 @@ features provided by SCTP and its extensions but with some limitations.<a href="
    authentication of endpoints, data confidentiality, data origin
    authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
-   established. It is dependent on a key management function that is
+   established. It is dependent on a DTLS Management Method that is
    defined separately to achieve all these capabilities. The
-   key management function uses an API to provision the SCTP
+   DTLS Management Method uses an API to provision the SCTP
    association's DTLS chunk protection with key-material to enable and
    rekey the protection operations.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Applications using SCTP DTLS chunk can use most transport features
@@ -1506,7 +1507,7 @@ the protected SCTP chunks for further processing.
 <a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a> is an example
 illustrating the DTLS chunk processing in regard
 to SCTP and the Upper Layer Protocol (ULP) using
-DTLS 1.3 for key management. Here the Key Management function
+DTLS 1.3 as DTLS Management Method. Here the DTLS Management Method
 contains validation, i.e. using certificates, handshaking,
 updating policies etc.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-layering-in-rega"></span><div id="sctp-DTLS-chunk-layering">
@@ -1598,17 +1599,17 @@ the association and no information is sent unprotected except the
 initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the INIT and INIT-ACK
 chunks during an SCTP Restart procedure.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">The support of the DTLS chunk and the key-management method to use is
+<p id="section-3.1-5">The support of the DTLS chunk and the DTLS Management Method to use is
 negotiated by the peers at the setup of the SCTP association using a
-new parameter. Key management and application traffic is multiplexed
-using the PPID. The dedicated PPID 4242 is defined for use by key
-management for DTLS chunk. The key management function uses an API to
+new parameter. DTLS Management and application traffic is multiplexed
+using the PPID. The dedicated PPID 4242 is defined for use by DTLS Management Method
+for DTLS chunk. The DTLS Management Method uses an API to
 key the Chunk protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
 well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defined in separate documents,
-(see <a href="#sctp-protection-solutions" class="auto internal xref">Section 3.3</a>). To prevent
-downgrade attacks of the key-management negotiation the key-management
+(see <a href="#dtls-management-method" class="auto internal xref">Section 3.3</a>). To prevent
+downgrade attacks of the key-management negotiation the DTLS Management Method
 should implement specific procedures when deriving keys.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">When the endpoint authentication and key establishment has been
 completed, the association is considered to be secured and the ULP is
@@ -1625,11 +1626,11 @@ protection will be used to suppress duplicated DTLS chunks.<a href="#section-3.1
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-dtls-considerations" class="section-name selfRef">DTLS Considerations</a>
         </h3>
 <p id="section-3.2-1">The DTLS Chunk architecture splits DTLS 1.3 as shown in
-<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where the Key Management functionality
+<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where the DTLS Management Method
 is done at DTLS 1.3 block level, acting as a parallel User Level Protocol
 and a Chunk Protection Operator functionality inside the SCTP
 Protocol Stack.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">Key Management is the set of data and procedures that take care of key
+<p id="section-3.2-2">DTLS Management Method is the set of data and procedures that take care of key
 distribution, verification, and update, DTLS connection setup, update and
 maintenance.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">Chunk Protection Operator functionality is the set of data and procedures
@@ -1637,13 +1638,13 @@ taking care of User Data encryption into DTLS Record and DTLS record
 decryption into User Data.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">DTLS 1.3 operations requires to directly handshake messages with the
 remote peer for connection setup and other features, this kind of
-handshake is part of the Key Management functionality.  Key Management
-function achieves these features behaving as a user of the SCTP
-association.  Key Management sends and receives its own data via the
-SCTP User Level interface.  Key Management's own data are
+handshake is part of the DTLS Management Method.  DTLS Management Method
+achieves these features behaving as a user of the SCTP
+association.  DTLS Management Method sends and receives its own data via the
+SCTP User Level interface.  DTLS Management Method's own data are
 distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 9</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">Once Key Management has established a DTLS 1.3 connection, it can
+<p id="section-3.2-5">Once DTLS Management Method has established a DTLS 1.3 connection, it can
 derive primary and restart keys and set the Chunk Protection Operator
 for SCTP Packet Payload encryption/decryption via an API to create the
 necessary DTLS key contexts. Both a DTLS Key context for normal use
@@ -1658,12 +1659,11 @@ context is associated with a four-value tuple identifying the context,
 consisting of SCTP Association, the restart indicator, the DTLS
 Connection ID (if used), and the DTLS epoch.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 <p id="section-3.2-7">Support of DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk is OPTIONAL, and negotiated using the key-management
-function.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+DTLS Chunk is OPTIONAL, and negotiated using the DTLS Management Method.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
 <p id="section-3.2-8">The first established DTLS key context for any SCTP association and DTLS
 connection ID (if used) MUST use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
-a DTLS key-management connection.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+a DTLS Management Method´s connection.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
 <p id="section-3.2-9">The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
@@ -1672,10 +1672,10 @@ accommodate latency differences.<a href="#section-3.2-9" class="pilcrow">¶</a><
 2<sup>14</sup> (16384) bytes of plain text.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sctp-protection-solutions">
+<div id="dtls-management-method">
 <section id="section-3.3">
-        <h3 id="name-considerations-about-sctp-p">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-considerations-about-sctp-p" class="section-name selfRef">Considerations about SCTP Protection Solutions</a>
+        <h3 id="name-considerations-about-sctp-d">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-considerations-about-sctp-d" class="section-name selfRef">Considerations about SCTP DTLS Management Methods</a>
         </h3>
 <p id="section-3.3-1">This document specifies the mechanisms for SCTP to be protected with
 DTLS, it doesn't specify how the Key Management works, being limited
@@ -1683,15 +1683,14 @@ on what the Key Management MUST provide for achieving the protection.
 Even though DTLS1.3 is indicated as protocol for providing Key
 Contexts, different implementations can achieve that and different
 mechanisms may be used for features such as mutual authentication,
-rekeying etc.  The DTLS Chunk solution may use a number of Key
+rekeying etc.  The DTLS Management Method may use a number of Key
 Management mechanisms depending on what is being implemented and
-available and/or according to the local policies.  Key Management
-methods are called here Protection Solutions, they are defined in
+available and/or according to the local policies.
+DTLS Management Methods are defined in
 their own specific documents, and needs to be registered in the IANA
-Registry "SCTP Protection Solutions" to get their own unique identifier.
-This document constitutes a requirement towards any SCTP
-Protection Solution.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">Currently there are two in-band DTLS key management solutions defined,
+Registry "SCTP DTLS Management Methods" to get their own unique identifier.
+This document constitutes a requirement towards any DTLS Management Method.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">Currently there are two in-band DTLS Management Methods defined,
 they have different properties. See
 <span>[<a href="#I-D.ietf-tsvwg-dtls-chunk-key-management" class="cite xref">I-D.ietf-tsvwg-dtls-chunk-key-management</a>]</span> and
 <span>[<a href="#I-D.westerlund-tsvwg-sctp-DTLS-handshake" class="cite xref">I-D.westerlund-tsvwg-sctp-DTLS-handshake</a>]</span>.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
@@ -1967,9 +1966,9 @@ the old one.<a href="#section-3.8.2-3" class="pilcrow">¶</a></p>
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-new-parameter-type" class="section-name selfRef">New Parameter Type</a>
       </h2>
 <p id="section-4-1">This section defines the new parameter type that will be used to
-negotiate the use of the DTLS 1.3 chunk during association setup, its
-keying method and indicate preference in relation to different keying
-and other security solutions. <a href="#sctp-DTLS-chunk-init-parameter" class="auto internal xref">Table 1</a>
+negotiate the use of the DTLS chunk during association setup, its
+DTLS Management Method and indicate preference in relation to different
+DTLS Management Methods. <a href="#sctp-DTLS-chunk-init-parameter" class="auto internal xref">Table 1</a>
 illustrates the new parameter type.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <span id="name-new-init-init-ack-parameter"></span><div id="sctp-DTLS-chunk-init-parameter">
 <table class="center" id="table-1">
@@ -1985,8 +1984,8 @@ illustrates the new parameter type.<a href="#section-4-1" class="pilcrow">¶</a>
         </thead>
         <tbody>
           <tr>
-            <td class="text-right" rowspan="1" colspan="1">0x80xx</td>
-            <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk Protected Association</td>
+            <td class="text-right" rowspan="1" colspan="1">0x8006</td>
+            <td class="text-left" rowspan="1" colspan="1">DTLS Management Parameter</td>
           </tr>
         </tbody>
       </table>
@@ -1997,14 +1996,13 @@ This is accomplished (as described in <span>[<a href="#RFC9260" class="cite xref
 the use of the upper bits of the parameter type.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <div id="protectedassoc-parameter">
 <section id="section-4.1">
-        <h3 id="name-dtls-13-chunk-protected-ass">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-dtls-13-chunk-protected-ass" class="section-name selfRef">DTLS 1.3 Chunk Protected Association</a>
+        <h3 id="name-dtls-management-parameter">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-dtls-management-parameter" class="section-name selfRef">DTLS Management Parameter</a>
         </h3>
 <p id="section-4.1-1">This parameter is used to the request and acknowledge of support of
-DTLS 1.3 Chunk during INIT/INIT-ACK handshake and indicate preference
-for keying and the preference order between multiple security
-solutions (if supported).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<span id="name-protected-association-param"></span><div id="sctp-DTLS-chunk-init-options">
+DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
+order among DTLS Management Methods (if supported).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<span id="name-dtls-management-parameter-2"></span><div id="sctp-DTLS-chunk-init-options">
 <figure id="figure-3">
           <div id="section-4.1-2.1">
             <div class="alignCenter art-svg artwork" id="section-4.1-2.1.1">
@@ -2060,64 +2058,66 @@ solutions (if supported).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
                   <text x="80" y="84">Parameter</text>
                   <text x="140" y="84">Type</text>
                   <text x="168" y="84">=</text>
-                  <text x="204" y="84">0x80XX</text>
+                  <text x="204" y="84">0x8006</text>
                   <text x="360" y="84">Parameter</text>
                   <text x="428" y="84">Length</text>
-                  <text x="68" y="116">Protection</text>
-                  <text x="148" y="116">Solution</text>
-                  <text x="196" y="116">#1</text>
-                  <text x="324" y="116">Protection</text>
-                  <text x="404" y="116">Solution</text>
-                  <text x="452" y="116">#2</text>
+                  <text x="44" y="116">DTLS</text>
+                  <text x="108" y="116">Management</text>
+                  <text x="180" y="116">Method</text>
+                  <text x="220" y="116">#1</text>
+                  <text x="300" y="116">DTLS</text>
+                  <text x="364" y="116">Management</text>
+                  <text x="436" y="116">Method</text>
+                  <text x="476" y="116">#2</text>
                   <text x="8" y="148">:</text>
-                  <text x="60" y="148">Protection</text>
-                  <text x="144" y="148">Solutions</text>
+                  <text x="36" y="148">DTLS</text>
+                  <text x="100" y="148">Management</text>
+                  <text x="176" y="148">Methods</text>
                   <text x="520" y="148">:</text>
-                  <text x="60" y="180">Protection</text>
-                  <text x="140" y="180">Solution</text>
-                  <text x="188" y="180">#N</text>
+                  <text x="36" y="180">DTLS</text>
+                  <text x="100" y="180">Management</text>
+                  <text x="172" y="180">Method</text>
+                  <text x="212" y="180">#N</text>
                   <text x="304" y="180">Padding</text>
                 </g>
               </svg><a href="#section-4.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-protected-association-param" class="selfRef">Protected Association Parameter</a>
+<a href="#name-dtls-management-parameter-2" class="selfRef">DTLS Management Parameter</a>
           </figcaption></figure>
 </div>
 <span class="break"></span><dl class="dlNewline" id="section-4.1-3">
           <dt id="section-4.1-3.1">Parameter Type: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.2">
-            <p id="section-4.1-3.2.1">This value MUST be set to 0x80XX.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-3.2.1">This value MUST be set to 0x8006.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-4.1-3.3">Parameter Length: 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.4">
             <p id="section-4.1-3.4.1">This value holds the length of the parameter, which will be the
-number of Protection Solution fields (N) times two plus 4.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
+number of DTLS Management Method fields (N) times two plus 4.<a href="#section-4.1-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.1-3.5">Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:</dt>
+<dt id="section-4.1-3.5">DTLS Management Method fields: one or more 16-bit DTLS Management Method Identifiers:</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.6">
-            <p id="section-4.1-3.6.1">Each Protection Solution Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.1</a>)
-is a 16-bit unsigned integer value indicting a Protection
-Solution. Protection solutions include both DTLS Chunk based, where
-a solution combines the DTLS chunk with a key-management solution,
-or non DTLS Chunk based security solution. The Protection Solutions
+            <p id="section-4.1-3.6.1">Each DTLS Management Method Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 12.1</a>)
+is a 16-bit unsigned integer value indicating a DTLS Management Method.
+DTLS Management Methods include both DTLS Chunk based, where
+a solution combines the DTLS chunk with a DTLS Management Method,
+or non DTLS Chunk based DTLS Management Method. The DTLS Management Methods
 are listed in descending order of preference, i.e. the first listed
 in the parameter is the most preferred and the last the least
 preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
-endpoint includes all of the offered solutions which it supports and
+endpoint includes all of the offered DTLS Management Methods which it supports and
 lists the selected one first. Including its decreasing preference on
-the additional Protection Solutions.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
+the additional DTLS Management Methods.<a href="#section-4.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-4.1-4">Padding: If the number of included Protection solutions is odd the
+<p id="section-4.1-4">Padding: If the number of included DTLS Management Methods is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1-5">RFC-Editor Note: Please replace 0x08XX with the actual parameter type
-value assigned by IANA and then remove this note.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2149,23 +2149,21 @@ transport the DTLS 1.3 record containing protected SCTP payload.
           </thead>
           <tbody>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">0x4X</td>
+              <td class="text-right" rowspan="1" colspan="1">0x41</td>
               <td class="text-left" rowspan="1" colspan="1">DTLS Chunk (DTLS)</td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="section-5.1-3">RFC-Editor Note: Please replace 0x4x with the actual chunk type value
-assigned by IANA and then remove this note.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">It should be noted that the DTLS chunk format requires the receiver
+<p id="section-5.1-3">It should be noted that the DTLS chunk format requires the receiver
 stop processing this SCTP packet, discard the unrecognized chunk and
 all further chunks, and report the unrecognized chunk in an ERROR
 chunk using the 'Unrecognized Chunk Type' error cause.  This is
 accomplished (as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> Section 3.2.) by the use of
-the upper bits of the chunk type.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">The DTLS chunk is used to hold the DTLS 1.3 record with the protected
-payload of a plain text SCTP packet without the SCTP common header.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1-6">As the full DTLS record with the header and sequence number, etc the
+the upper bits of the chunk type.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">The DTLS chunk is used to hold the DTLS 1.3 record with the protected
+payload of a plain text SCTP packet without the SCTP common header.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">As the full DTLS record with the header and sequence number, etc the
 start of the cipher text is likely not 32-bit aligned making in-place
 encryption/decryption impossible in some plattforms. Therefore, a
 variable number (0-3) of pre-padding bytes with value fixed to zero MUST
@@ -2173,11 +2171,11 @@ be added in the DTLS chunk payload before the DTLS Record header
 (DTLS Chunk Payload), to ensure the Encrypted Record part of the
 DTLSCiphertext <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> will start on a 32-bit boundary in relation
 to the start of the DTLS Chunk. The number of these pre-padding bytes
-is indicated in the DTLS Chunk header using the P bits.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+is indicated in the DTLS Chunk header using the P bits.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <span id="name-dtls-chunk-structure"></span><div id="sctp-DTLS-chunk-newchunk-crypt-struct">
 <figure id="figure-4">
-          <div id="section-5.1-7.1">
-            <div class="alignCenter art-svg artwork" id="section-5.1-7.1.1">
+          <div id="section-5.1-6.1">
+            <div class="alignCenter art-svg artwork" id="section-5.1-6.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="528" viewBox="0 0 528 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,64 L 8,224" fill="none" stroke="black"></path>
                 <path d="M 136,64 L 136,96" fill="none" stroke="black"></path>
@@ -2230,7 +2228,7 @@ is indicated in the DTLS Chunk header using the P bits.<a href="#section-5.1-6" 
                   <text x="512" y="52">1</text>
                   <text x="36" y="84">Type</text>
                   <text x="64" y="84">=</text>
-                  <text x="92" y="84">0x4x</text>
+                  <text x="92" y="84">0x41</text>
                   <text x="180" y="84">reserved</text>
                   <text x="232" y="84">P</text>
                   <text x="256" y="84">R</text>
@@ -2240,55 +2238,55 @@ is indicated in the DTLS Chunk header using the P bits.<a href="#section-5.1-6" 
                   <text x="264" y="164">Payload</text>
                   <text x="372" y="212">Post-Padding</text>
                 </g>
-              </svg><a href="#section-5.1-7.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-5.1-6.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-dtls-chunk-structure" class="selfRef">DTLS Chunk Structure</a>
           </figcaption></figure>
 </div>
-<span class="break"></span><dl class="dlParallel" id="section-5.1-8">
-          <dt id="section-5.1-8.1">reserved: 5 bits</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.2">
-            <p id="section-5.1-8.2.1">Reserved bits for future use. Sender MUST set these bits to 0 and
-MUST be ignored on reception.<a href="#section-5.1-8.2.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-5.1-7">
+          <dt id="section-5.1-7.1">reserved: 5 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.2">
+            <p id="section-5.1-7.2.1">Reserved bits for future use. Sender MUST set these bits to 0 and
+MUST be ignored on reception.<a href="#section-5.1-7.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.3">R: 1 bit (boolean)</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.4">
-            <p id="section-5.1-8.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
-with by a Restart DTLS Key context.<a href="#section-5.1-8.4.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-7.3">R: 1 bit (boolean)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.4">
+            <p id="section-5.1-7.4.1">Restart indicator. If this bit is set this DTLS chunk is protected
+with by a Restart DTLS Key context.<a href="#section-5.1-7.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.5">P: 2 bit (unsigned integer 0-3)</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.6">
-            <p id="section-5.1-8.6.1">Payload Pre-Padding indicator. It indicates how many bytes
+<dt id="section-5.1-7.5">P: 2 bit (unsigned integer 0-3)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.6">
+            <p id="section-5.1-7.6.1">Payload Pre-Padding indicator. It indicates how many bytes
 are inserted for padding before the DTLSCiphertext.
-This allows the encrypted data to be 32 bit aligned.<a href="#section-5.1-8.6.1" class="pilcrow">¶</a></p>
+This allows the encrypted data to be 32 bit aligned.<a href="#section-5.1-7.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.7">Chunk Length: 16 bits (unsigned integer)</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.8">
-            <p id="section-5.1-8.8.1">This value holds the length of the Payload in bytes plus 4.<a href="#section-5.1-8.8.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-7.7">Chunk Length: 16 bits (unsigned integer)</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.8">
+            <p id="section-5.1-7.8.1">This value holds the length of the Payload in bytes plus 4.<a href="#section-5.1-7.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.9">Pre-Padding: 0, 8, 16, or 24 bits</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.10">
-            <p id="section-5.1-8.10.1">Based on the Payload Pre-Padding Indicator the indicated number of
-8-bit bytes of zero values are included.<a href="#section-5.1-8.10.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-7.9">Pre-Padding: 0, 8, 16, or 24 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.10">
+            <p id="section-5.1-7.10.1">Based on the Payload Pre-Padding Indicator the indicated number of
+8-bit bytes of zero values are included.<a href="#section-5.1-7.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.11">Payload: variable length</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.12">
-            <p id="section-5.1-8.12.1">This holds the DTLSCiphertext as specified in DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-5.1-8.12.1" class="pilcrow">¶</a></p>
+<dt id="section-5.1-7.11">Payload: variable length</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.12">
+            <p id="section-5.1-7.12.1">This holds the DTLSCiphertext as specified in DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-5.1-7.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.1-8.13">Post-Padding: 0, 8, 16, or 24 bits</dt>
-          <dd style="margin-left: 1.5em" id="section-5.1-8.14">
-            <p id="section-5.1-8.14.1">If the length of the Payload is not a multiple of 4 bytes, the sender
+<dt id="section-5.1-7.13">Post-Padding: 0, 8, 16, or 24 bits</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-7.14">
+            <p id="section-5.1-7.14.1">If the length of the Payload is not a multiple of 4 bytes, the sender
 MUST pad the chunk with all zero bytes to make the chunk 32-bit
 aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
-be ignored by the receiver.<a href="#section-5.1-8.14.1" class="pilcrow">¶</a></p>
+be ignored by the receiver.<a href="#section-5.1-7.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -2541,21 +2539,21 @@ as follows:<a href="#section-5.2-9" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-6-1">This specification introduces a new set of error causes that are to be
 used when SCTP endpoint detects a faulty condition. The special case is
-when the error is detected by the DTLS 1.3 Protection that may provide
+when the error is detected by the DTLS Management Method that may provide
 additional information.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="enoprotected">
 <section id="section-6.1">
-        <h3 id="name-dtls-13-chunk-protected-asso">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-dtls-13-chunk-protected-asso" class="section-name selfRef">DTLS 1.3 Chunk Protected Association Parameter Missing</a>
+        <h3 id="name-dtls-chunk-protected-associ">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-dtls-chunk-protected-associ" class="section-name selfRef">DTLS Chunk Protected Association Parameter Missing</a>
         </h3>
 <p id="section-6.1-1">When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the DTLS 1.3 Chunk Protected Association or other protection
-solutions towards an SCTP endpoint that only accepts protected
+contain the DTLS Management Parameter or a supported DTLS Management Method
+towards an SCTP endpoint that only accepts protected
 associations, SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>
 including the error cause 'Policy Not Met' (TBA10)
-(see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.4</a> and the DTLS 1.3 chunk protected association
-parameter identifier <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> in the missing
+(see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.4</a> and the DTLS Management Method
+identifiers <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a> in the missing
 param Information field.
 It may also include additional parameters representing other
 supported protection mechanisms that are acceptable per endpoint
@@ -2623,11 +2621,9 @@ security policy.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
                   <text x="316" y="116">params</text>
                   <text x="352" y="116">=</text>
                   <text x="368" y="116">N</text>
-                  <text x="44" y="148">DTLS</text>
-                  <text x="80" y="148">1.3</text>
-                  <text x="120" y="148">Chunk</text>
-                  <text x="184" y="148">Protected</text>
-                  <text x="240" y="148">Asc</text>
+                  <text x="60" y="148">DTLS</text>
+                  <text x="124" y="148">Management</text>
+                  <text x="208" y="148">Parameter</text>
                   <text x="336" y="148">Missing</text>
                   <text x="392" y="148">Param</text>
                   <text x="436" y="148">Type</text>
@@ -2768,10 +2764,10 @@ defined, additional causes can be registered with IANA following the
 rules in <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.4</a>.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
 <div id="enocommonpsi">
 <section id="section-6.2.1">
-          <h4 id="name-no-common-protection-soluti">
-<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-no-common-protection-soluti" class="section-name selfRef">No Common Protection Solution</a>
+          <h4 id="name-no-common-dtls-management-m">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-no-common-dtls-management-m" class="section-name selfRef">No Common DTLS Management Method</a>
           </h4>
-<p id="section-6.2.1-1">If the responder to do not support any of the protection solutions
+<p id="section-6.2.1-1">If the responder to do not support any of the DTLS Management Methods
 offered by the association initiator in the Protection Soluiton
 Parameters <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a> SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>,
@@ -2830,29 +2826,28 @@ chunk containing the DTLS 1.3 Chunk Protected Association parameter
 key-management solutions (see
 <a href="#sctp-DTLS-chunk-init-options" class="auto internal xref">Figure 3</a>).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">An SCTP Endpoint acting as responder, when receiving an INIT chunk
-with DTLS 1.3 Chunk Protected Association parameter, will reply with
-INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-containing the selected protection solution out of the set of supported
-ones. In case there are no common set of supported solutions that are
+with DTLS Management Parameter, will reply with
+INIT-ACK with its own DTLS Management Parameter
+containing the selected DTLS Management Method out of the set of supported
+ones. In case there are no common set of supported DTLS Management Methods that are
 accepted by the responder, and the endpoints policy require secured
 association it MUST reply with an ABORT chunk, include the error
 cause "No Common Protection" (TBA11) (see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 12.4</a>).
-Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
-Chunk Protected Association parameter to indicate it is willing
-to create a session without security.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+Otherwise, the responder MAY send an INIT-ACK without the DTLS Management Parameter
+to indicate it is willing to create a session without security.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations considers an INIT chunk not containing
 the DTLS 1.3 Chunk Protected Association parameter or another
 Protection Solution accepted by own security policy solution as an error,
 thus it will reply with an ABORT chunk according to what specified in
-<a href="#enoprotected" class="auto internal xref">Section 6.1</a> indicating that for this endpoint mandatory DTLS 1.3
-Chunk Protected Association parameter is missing.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<a href="#enoprotected" class="auto internal xref">Section 6.1</a> indicating that for this endpoint mandatory DTLS Management
+Parameter is missing.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">When initiator and responder have agreed on a DTLS Chunk protected
-association and the key-management method by means of handshaking
+association and the DTLS Management Method by means of handshaking
 INIT/INIT-ACK the SCTP association establishment continues until it
 has reached the ESTABLISHED state.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <p id="section-7.1-5">When the SCTP session has been established follow the process defined
-by the selected key-management solution for establishing DTLS Key Contexts
+by the selected DTLS Management Method for establishing DTLS Key Contexts
 and installing them.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <div id="offering-multiple-security-solutions">
 <section id="section-7.1.1">
@@ -2860,31 +2855,31 @@ and installing them.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <a href="#section-7.1.1" class="section-number selfRef">7.1.1. </a><a href="#name-offering-multiple-security-" class="section-name selfRef">Offering Multiple Security Solutions</a>
           </h4>
 <p id="section-7.1.1-1">An initiator of an SCTP association may want to offer multiple
-different key-management solutions for DTLS Chunk or in combination
-with other protection solutions in addition to DTLS 1.3 chunks for the
+different DTLS Management Method for DTLS Chunk or in combination
+with other DTLS Management Methods in addition to DTLS 1.3 chunks for the
 SCTP association.
-Multiple protection solutions offered in the INIT chunk will be
+Multiple DTLS Management Methods offered in the INIT chunk will be
 ordered based on the priority, where the most preferred will be
 in the first position and the least preferred in the last.
-The INIT-ACK chunk will only contain the chosen protection solution.
-Offers with multiple key-management or protections solutions need to
+The INIT-ACK chunk will only contain the chosen DTLS Management Method.
+Offers with multiple DTLS Management Methods need to
 consider the downgrade attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Section 13.3</a>).<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1.1-2">The initiator MAY include in its INIT additional security solutions
-that are compatible to offer in parallel with DTLS 1.3 Chunks. This
+<p id="section-7.1.1-2">The initiator MAY include in its INIT additional DTLS Management Methods
+that are compatible to offer in parallel with DTLS Chunks. This
 may include SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span>. This will result
 in that a number of different SCTP parameters may be included that are
 not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most appropriate. For example an offer of DTLS
-1.3 Chunks and SCTP-AUTH, could be interpreted as three different
-solutions with different properties, namely DTLS 1.3 Chunks,
+Chunks and SCTP-AUTH, could be interpreted as three different
+solutions with different properties, namely DTLS Chunks,
 DTLS/SCTP <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span>, and SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span> only.
-However, here the DTLS 1.3 Chunk Protected Association Parameter can
+However, here the DTLS Management Parameter can
 indicate both preference and which of the solutions that are preferred.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1.1-3">The responder selects one security solutions and includes it in the
-response (INIT-ACK). If DTLS 1.3 chunks was selected and the
-Key-Management method follows the recommendation for down-grade
+response (INIT-ACK). If DTLS chunks was selected and the
+DTLS Management Method follows the recommendation for down-grade
 prevention the endpoints know that down-grade did not happen.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2898,25 +2893,25 @@ prevention the endpoints know that down-grade did not happen.<a href="#section-7
 <p id="section-7.2-1">Besides the procedures for terminating an association explained in
 <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating an
 association when having an internal error or by detecting a security
-violation. Note that the closure of any key-management connection doesn't
+violation. Note that the closure of any DTLS Management Method doesn't
 compromise the capability of sending and receiving protected
 SHUTDOWN-COMPLETE chunks as that capability only relies on the
-Key Context and not on the key-management connection from where it has
+Key Context and not on the DTLS Management Method from where it has
 been derived.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-management-considerations">
 <section id="section-7.3">
-        <h3 id="name-considerations-on-key-manag">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-considerations-on-key-manag" class="section-name selfRef">Considerations on Key Management</a>
+        <h3 id="name-considerations-on-dtls-mana">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-considerations-on-dtls-mana" class="section-name selfRef">Considerations on DTLS Management Method</a>
         </h3>
 <p id="section-7.3-1">It is up to the upper layer to manage the keys for the DTLS chunk.
-The meaning of key-management is described in <a href="#sctp-protection-solutions" class="auto internal xref">Section 3.3</a>.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">The key-management SHOULD use a dedicated PPID to ensure that the
-key-management related user messages are handled by the appropriate layer.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">When performing key-management, the keys for receiving SHOULD be installed
+The meaning of DTLS Management Method is described in <a href="#dtls-management-method" class="auto internal xref">Section 3.3</a>.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">The DTLS Management Method SHOULD use a dedicated PPID to ensure that the
+DTLS Management Method related user messages are handled by the appropriate layer.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">When performing DTLS Management, the keys for receiving SHOULD be installed
 before the corresponding send keys at the peer. For mitigating downgrade
-attacks the key derivation MUST include the protection solution Identifiers
+attacks the key derivation MUST include the DTLS Management Method Identifiers
 that were sent and received.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 <p id="section-7.3-4">The communication is only protected after both sides have configured the keys
 for sending and both sides have enforced the protection.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
@@ -2930,7 +2925,7 @@ for sending and both sides have enforced the protection.<a href="#section-7.3-4"
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-dtls-chunk-handling" class="section-name selfRef">DTLS Chunk Handling</a>
       </h2>
 <p id="section-8-1">The DTLS chunk MUST NOT be bundled with any other chunk.
-In particular, it MUST be the first chunk.<a href="#section-8-1" class="pilcrow">¶</a></p>
+In particular, it MUST be the first and only chunk.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <span id="name-unprotected-sctp-packet"></span><div id="sctp-DTLS-encrypt-chunk-states-1">
 <figure id="figure-10">
         <div id="section-8-2.1">
@@ -3104,7 +3099,7 @@ defined in the corresponding specifications.<a href="#section-8.2-4" class="pilc
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-abstract-api" class="section-name selfRef">Abstract API</a>
       </h2>
 <p id="section-9-1">This section describes an abstract API that is needed between a
-key-managment function and the DTLS 1.3 chunk. This is an
+DTLS Management Method and the DTLS Chunk. This is an
 example API and there are alternative implementations.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">This API enables the cryptographical protection operations by setting
 client/server write keys, sequence number keys, and IVs for primary and
@@ -3119,7 +3114,7 @@ The sequence number key is used to encrypt the sequence number
         <h3 id="name-cipher-suit-capabilities">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-cipher-suit-capabilities" class="section-name selfRef">Cipher Suit Capabilities</a>
         </h3>
-<p id="section-9.1-1">The key-management function needs to know which cipher suits defined
+<p id="section-9.1-1">The DTLS Management Method needs to know which cipher suits defined
 for usage with DTLS 1.3 that are supported by the DTLS chunk and its
 protection operations block. All TLS cipher suit that are defined are
 listed in the TLS cipher suit registry <span>[<a href="#TLS-CIPHER-SUITS" class="cite xref">TLS-CIPHER-SUITS</a>]</span> at IANA
@@ -3162,7 +3157,7 @@ corresponding key materials.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-5.3">
             <p id="section-9.2-5.3.1">DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-the key-management its field length and value are include. The field length
+the DTLS Management Method its field length and value are include. The field length
 can be set to zero (0) to indicate that CID is not used.<a href="#section-9.2-5.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-5.4">
@@ -3233,7 +3228,7 @@ corresponding key materials.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.3-5.3">
             <p id="section-9.3-5.3.1">DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-the key-management its field length and value are include. The field length
+the DTLS Management Method its field length and value are include. The field length
 can be set to zero (0) to indicate that CID is not used.<a href="#section-9.3-5.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.3-5.4">
@@ -4302,24 +4297,24 @@ Parameters group:<a href="#section-12-1" class="pilcrow">¶</a></p>
 Identifier.<a href="#section-12-3" class="pilcrow">¶</a></p>
 <div id="IANA-Protection-Solution-ID">
 <section id="section-12.1">
-        <h3 id="name-sctp-protection-solution-id">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-sctp-protection-solution-id" class="section-name selfRef">SCTP Protection Solution Identifiers</a>
+        <h3 id="name-dtls-management-method-iden">
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-dtls-management-method-iden" class="section-name selfRef">DTLS Management Method Identifiers</a>
         </h3>
-<p id="section-12.1-1">IANA is requested to create a new registry called "SCTP Protection
-Solutions". This registry is part of the of the Stream
+<p id="section-12.1-1">IANA is requested to create a new registry called "DTLS Management Method".
+This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<p id="section-12.1-2">The purpose of this registry is to assign Protection Solution
-Identifier for any security solution that is either the DTLS
-Chunk combined with a key-management method, offered as an alternative
-to DTLS chunk. Any security solution that is offered
+<p id="section-12.1-2">The purpose of this registry is to assign DTLS Management Method
+Identifier for any DTLS Management Method that is either the DTLS
+Chunk combined with a DTLS Management Method, offered as an alternative
+to DTLS chunk. Any DTLS Management Method that is offered
 through a parameter exchange during the SCTP handshake are potential
 to be included here.<a href="#section-12.1-2" class="pilcrow">¶</a></p>
 <p id="section-12.1-3">Each entry will be assigned a 16-bit unsigned integer value from the suitable range.<a href="#section-12.1-3" class="pilcrow">¶</a></p>
-<span id="name-protection-solution-identif"></span><div id="iana-psi">
+<span id="name-dtls-management-method-ident"></span><div id="iana-psi">
 <table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-protection-solution-identif" class="selfRef">Protection Solution Identifiers</a>
+<a href="#name-dtls-management-method-ident" class="selfRef">DTLS Management Method Identifiers</a>
           </caption>
 <thead>
             <tr>
@@ -4332,7 +4327,7 @@ to be included here.<a href="#section-12.1-2" class="pilcrow">¶</a></p>
           <tbody>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk with Pre-</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS Chunk with Pre-</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-TBD</td>
               <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
             </tr>
@@ -4380,7 +4375,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
           </thead>
           <tbody>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">TBA6</td>
+              <td class="text-right" rowspan="1" colspan="1">0x41</td>
               <td class="text-left" rowspan="1" colspan="1">DTLS Chunk (DTLS)</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
@@ -4474,8 +4469,8 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
           </thead>
           <tbody>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">TBA8</td>
-              <td class="text-left" rowspan="1" colspan="1">DTLS 1.3 Chunk Protected Association</td>
+              <td class="text-right" rowspan="1" colspan="1">0x8006</td>
+              <td class="text-left" rowspan="1" colspan="1">DTLS Management Parameter</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
@@ -4594,7 +4589,7 @@ therefore have limited effect.<a href="#section-13.1-1" class="pilcrow">¶</a></
 <p id="section-13.2-1">Section 4.5.3 of <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> defines limits on the number of records
 q that can be protected using the same key as well as limits on the
 number of received packets v that fail authentication with each key.
-To adhere to these limits the key management function can
+To adhere to these limits the DTLS Management Method can
 periodically poll the DTLS protection operation function to see
 when a limit have been reached or is closed to being reached.
 Instead of periodic polling, a callback can be used.<a href="#section-13.2-1" class="pilcrow">¶</a></p>
@@ -4605,29 +4600,29 @@ Instead of periodic polling, a callback can be used.<a href="#section-13.2-1" cl
         <h3 id="name-downgrade-attacks">
 <a href="#section-13.3" class="section-number selfRef">13.3. </a><a href="#name-downgrade-attacks" class="section-name selfRef">Downgrade Attacks</a>
         </h3>
-<p id="section-13.3-1">Downgrade attacks may attempt to force the protection solution
+<p id="section-13.3-1">Downgrade attacks may attempt to force the DTLS Management Method
 by altering the containt of INIT chunk, for instance by removing
-all offered solutions but the one desired. This is possible
+all offered DTLS Management Methods but the one desired. This is possible
 if the attacker is an on-path attacker that can modify packet
 because INIT and INIT-ACK chunks are plain text.<a href="#section-13.3-1" class="pilcrow">¶</a></p>
 <p id="section-13.3-2">Preventing the downgrade attacks is implemented by using at the initiator
-the list of offered protection solution sent in the INIT chunk plus
-the selected solution received in the INIT-ACK chunk from the responder
+the list of offered DTLS Management Method sent in the INIT chunk plus
+the selected DTLS Management Method received in the INIT-ACK chunk from the responder
 for deriving the keys from the handshaked secrets obtained during
 DTLS initial handshake.
-At the responder, the list of offered protection solutions received in
-the INIT chunk plus the selected protection solution that is sent
+At the responder, the list of offered DTLS Management Methods received in
+the INIT chunk plus the selected DTLS Management Method that is sent
 in the INIT-ACK chunk will be used for deriving the keys from the handshaked
 secrets obtained during DTLS initial handshake.<a href="#section-13.3-2" class="pilcrow">¶</a></p>
-<p id="section-13.3-3">If the attacker suceeds in changing the protection solutions in either
+<p id="section-13.3-3">If the attacker suceeds in changing the DTLS Management Methods in either
 INIT, NINT-ACK or both chunks, the peers will not be able deriving the
 same keys and the Association will not be possible to proceed.<a href="#section-13.3-3" class="pilcrow">¶</a></p>
-<p id="section-13.3-4">Thus, as long as the Key-management include the ordered list of protection
+<p id="section-13.3-4">Thus, as long as the DTLS Management Method includes the ordered list of protection
 solutions indicators present in the parameter part of the INIT chunk
 for the SCTP Association in its key-derivation the association will be
 protected from down-grade.<a href="#section-13.3-4" class="pilcrow">¶</a></p>
-<p id="section-13.3-5">In case any key-management do not include the parameter content in
-its key-derivation down-grade might be possible if that key-management
+<p id="section-13.3-5">In case any DTLS Management Method do not include the parameter content in
+its key-derivation down-grade might be possible if that DTLS Management Method
 method is selected. It is up to endpoint policies to determine
 which protection it deems necessary against down-grade attacks.<a href="#section-13.3-5" class="pilcrow">¶</a></p>
 </section>
