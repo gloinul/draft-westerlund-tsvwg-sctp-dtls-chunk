@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-22T01:16:53.981903+00:00",
+  "timestamp": "2026-01-29T01:26:11.135027+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -3627,7 +3627,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2026-01-15T14:43:45Z",
+      "updatedAt": "2026-01-28T20:49:22Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -3673,6 +3673,13 @@
           "body": "Yes, please draft some text, what is being suggest appears reasonable. ",
           "createdAt": "2025-10-17T10:28:28Z",
           "updatedAt": "2025-10-17T10:28:28Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think the socket API is OK (modulo renaming), do you want me to draft some text for the abstract API?",
+          "createdAt": "2026-01-28T20:49:22Z",
+          "updatedAt": "2026-01-28T20:49:22Z"
         }
       ],
       "reviews": [
@@ -4846,7 +4853,7 @@
       "labels": [],
       "body": "Also inserted the chosen values for Parameters and chunk",
       "createdAt": "2025-12-15T12:08:10Z",
-      "updatedAt": "2026-01-15T14:42:15Z",
+      "updatedAt": "2026-01-28T20:39:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
@@ -4857,7 +4864,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think we used `DTLS Key Management Method` (not `DTLS Management Method`) and `DTLS Key Management` Parameter, which contains `DTLS Key Management Identifier`s.",
+          "createdAt": "2026-01-28T20:38:49Z",
+          "updatedAt": "2026-01-28T20:39:33Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc7Wf0Kt",
