@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-29T01:26:11.135027+00:00",
+  "timestamp": "2026-02-01T01:49:31.251201+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1440,7 +1440,7 @@
       "id": "I_kwDOKszxDc7eRRkB",
       "title": "DTLS Chunk naming principles",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/88",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1449,8 +1449,8 @@
       "labels": [],
       "body": "In the meeting 2025-12-12 it was decided to unify the naming of the parameters and options as\n\"DTLS Management Parameter\" and \"DTLS Management Methods\" ",
       "createdAt": "2025-12-15T07:09:38Z",
-      "updatedAt": "2025-12-16T06:33:51Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-29T11:58:40Z",
+      "closedAt": "2026-01-29T11:58:40Z",
       "comments": [
         {
           "author": "marceloleitner",
@@ -1507,14 +1507,58 @@
       "id": "I_kwDOKszxDc7fYCJ7",
       "title": "The DTLS Connection ID length limitation",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/94",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "We need to add text somewhere to make it clear that if one configures keying material and using the connection ID then on SCTP association basis must be consistent with the connection ID field length. For a given SCTP association all sets of keying material MUST use the same field length for the DTLS record connection ID.",
       "createdAt": "2025-12-19T13:54:32Z",
-      "updatedAt": "2025-12-19T13:54:32Z",
+      "updatedAt": "2026-01-29T14:13:12Z",
+      "closedAt": "2026-01-29T14:13:12Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Not relevant due to #96 ",
+          "createdAt": "2026-01-29T14:13:12Z",
+          "updatedAt": "2026-01-29T14:13:12Z"
+        }
+      ]
+    },
+    {
+      "number": 96,
+      "id": "I_kwDOKszxDc7muYbx",
+      "title": "Remove DTLS Connection ID",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/96",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "The design team meeting on the 29th of January discussed this and finds no motivation to maintain the DTLS connection ID. As the DTLS chunk already are scoped by the SCTP association, and the epoch handles key changes this is a redundant mechanism. \n",
+      "createdAt": "2026-01-29T14:12:45Z",
+      "updatedAt": "2026-01-29T14:14:04Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 97,
+      "id": "I_kwDOKszxDc7muu4A",
+      "title": "Clean up error causes",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/97",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "Need to extend error causes to give coverage and handle protocol violations. ",
+      "createdAt": "2026-01-29T14:32:47Z",
+      "updatedAt": "2026-01-29T14:32:47Z",
       "closedAt": null,
       "comments": []
     }
@@ -3622,12 +3666,13 @@
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "tuexen"
+        "gloinul",
+        "teiclap"
       ],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2026-01-28T20:49:22Z",
+      "updatedAt": "2026-01-29T14:18:31Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
@@ -3680,6 +3725,13 @@
           "body": "I think the socket API is OK (modulo renaming), do you want me to draft some text for the abstract API?",
           "createdAt": "2026-01-28T20:49:22Z",
           "updatedAt": "2026-01-28T20:49:22Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Stale PR write new to general aspects for abstract API. ",
+          "createdAt": "2026-01-29T14:18:21Z",
+          "updatedAt": "2026-01-29T14:18:21Z"
         }
       ],
       "reviews": [
@@ -4844,7 +4896,7 @@
       "id": "PR_kwDOKszxDc646Dl7",
       "title": "Fixed the terminology according to issue #88",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/92",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -4853,17 +4905,19 @@
       "labels": [],
       "body": "Also inserted the chosen values for Parameters and chunk",
       "createdAt": "2025-12-15T12:08:10Z",
-      "updatedAt": "2026-01-28T20:39:33Z",
+      "updatedAt": "2026-01-29T11:58:39Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "0cf42d40bee4d9ed1e5bcd0611c86fb6b868c75f",
+      "baseRefOid": "4a88e5e56ed47d6fa99bc0f3f9482ee4a1285f4f",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue88",
-      "headRefOid": "3820c8bbc59f1288c828f8f2a66998777adb6fd7",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "133c5fca20d397c81928565537e042c8f795a850",
+      "closedAt": "2026-01-29T11:58:39Z",
+      "mergedAt": "2026-01-29T11:58:39Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "221db330e82265cf3c50c29ccde7baeed1467174"
+      },
       "comments": [
         {
           "author": "tuexen",
@@ -4871,6 +4925,13 @@
           "body": "I think we used `DTLS Key Management Method` (not `DTLS Management Method`) and `DTLS Key Management` Parameter, which contains `DTLS Key Management Identifier`s.",
           "createdAt": "2026-01-28T20:38:49Z",
           "updatedAt": "2026-01-28T20:39:33Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I suggest to get this in and I will fix it up and also change the socket API stuff for consistency.",
+          "createdAt": "2026-01-29T08:56:42Z",
+          "updatedAt": "2026-01-29T08:56:42Z"
         }
       ],
       "reviews": [
@@ -4898,6 +4959,19 @@
           "body": "I think these changes works. I am somewhat hesitant to submit a draft until the early allocations have been completed by IANA. A potential way forward is to remove the value assignment in this, and put that in a seperate PR. \n\nAlso I think we should add notes in the IANA sections for the DTLS Chunk, chunk flags and parameter that these have received early allocation to make it clear the values are officially assigned. ",
           "createdAt": "2026-01-15T09:28:35Z",
           "updatedAt": "2026-01-15T09:28:35Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7d0OKR",
+          "commit": {
+            "abbreviatedOid": "3820c8b"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Get this in and I will change `DTLS Management Method` to `DTLS Key Management Method`.",
+          "createdAt": "2026-01-29T08:58:40Z",
+          "updatedAt": "2026-01-29T08:58:40Z",
           "comments": []
         }
       ]
