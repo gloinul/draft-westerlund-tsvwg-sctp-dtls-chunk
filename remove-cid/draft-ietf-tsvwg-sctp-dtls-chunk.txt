@@ -1475,12 +1475,12 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_pmids {
-           sctp_assoc_t sds_assoc_id;
+           sctp_assoc_t sdp_assoc_id;
            uint16_t sdp_nr_pmids;
            uint16_t sdp_pmids[];
    };
 
-   sds_assoc_id:  This parameter is ignored for one-to-one style
+   sdp_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       For setsockopt(), only SCTP_FUTURE_ASSOC can be used.  For
@@ -1510,12 +1510,12 @@ Table of Contents
    The following structure is used as the option_value:
 
    struct sctp_dtls_pmids {
-           sctp_assoc_t sds_assoc_id;
+           sctp_assoc_t sdp_assoc_id;
            uint16_t sdp_nr_pmids;
            uint16_t sdp_pmids[];
    };
 
-   sds_assoc_id:  This parameter is ignored for one-to-one style
+   sdp_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
