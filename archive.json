@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-01T01:49:31.251201+00:00",
+  "timestamp": "2026-02-15T01:46:42.608794+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -3367,11 +3367,13 @@
       "state": "OPEN",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "Added a description on how to deal with plain text messages.\r\nAdded references to the INIT parameter list in the abstract API.\r\n\r\nWe may not need any State Machine to be added.",
       "createdAt": "2025-09-04T12:45:58Z",
-      "updatedAt": "2025-10-17T10:47:02Z",
+      "updatedAt": "2026-02-12T14:45:12Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
@@ -5161,25 +5163,33 @@
       "id": "PR_kwDOKszxDc69aY_A",
       "title": "Require equal CID length per SCTP Assocation",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/95",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This addreses #94 ",
       "createdAt": "2026-01-15T15:43:57Z",
-      "updatedAt": "2026-01-15T15:48:43Z",
+      "updatedAt": "2026-02-12T14:37:08Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "1c758be3a8aeee08c069fa43c055d41f9d4ee72f",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "cid-same-length",
       "headRefOid": "3281d07df11339a415dc5cca476289606c1524b5",
-      "closedAt": null,
+      "closedAt": "2026-02-12T14:37:07Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This have been overtaken by the event that we have decided to remove DTLS connection. ",
+          "createdAt": "2026-02-12T14:37:07Z",
+          "updatedAt": "2026-02-12T14:37:07Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc7ahvWF",
@@ -5192,6 +5202,86 @@
           "body": "It sounds reasonable \nI agree on it",
           "createdAt": "2026-01-15T15:46:13Z",
           "updatedAt": "2026-01-15T15:46:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 98,
+      "id": "PR_kwDOKszxDc7DO2Sb",
+      "title": "Use DTLS Key Management Parameter consistently",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/98",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "While there, do some minor cleanups.",
+      "createdAt": "2026-02-12T10:09:51Z",
+      "updatedAt": "2026-02-13T07:23:28Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup",
+      "headRefOid": "92fe465158718ba8d32b89eeb6a4568ac028068e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7iOnKy",
+          "commit": {
+            "abbreviatedOid": "92fe465"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-13T07:23:28Z",
+          "updatedAt": "2026-02-13T07:23:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 99,
+      "id": "PR_kwDOKszxDc7DPNMI",
+      "title": "Remove CID",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/99",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Is the removal of text in Section 3.8.1 correct?\r\nThe formula computing the length of the padding looked wrong.\r\n\r\nLet us discuss this in the VC.",
+      "createdAt": "2026-02-12T10:34:39Z",
+      "updatedAt": "2026-02-13T07:22:38Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "remove-cid",
+      "headRefOid": "a784c2dcd95bf94fbf80f12f7f87118108be916f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7iOmnu",
+          "commit": {
+            "abbreviatedOid": "a784c2d"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-13T07:22:38Z",
+          "updatedAt": "2026-02-13T07:22:38Z",
           "comments": []
         }
       ]
