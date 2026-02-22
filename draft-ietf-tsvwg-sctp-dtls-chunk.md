@@ -311,25 +311,6 @@ they have different properties. See
 {{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
-## Congestion Control Considerations {#congestion}
-
-The SCTP mechanism for handling congestion control does depend on
-successful data transfer for enlarging or reducing the congestion
-window CWND (see {{RFC9260}} Section 7.2).
-
-It may happen that Chunk Protection Operator discards packets due to replay
-protection, or integrity errors depending on network induced bit
-errors or malicious modifications. As those packets do not represent
-what the peer sent, it is acceptable to ignore them, although in-situ
-modification on the path of a packet resulting in discarding due to
-integrity failure will leave a gap, but has to be accepted as part of
-the path behavior.
-
-The Chunk Protection Operator will not interfere with the SCTP congestion
-control mechanism, this basically means that from SCTP perspective
-the congestion control is exactly the same as how specified
-in {{RFC9260}}.
-
 ## Dynamic Address Reconfiguration Considerations  {#sec-asconf}
 
 {{RFC5061}} specifies the support for Dynamic Address Reconfiguration
