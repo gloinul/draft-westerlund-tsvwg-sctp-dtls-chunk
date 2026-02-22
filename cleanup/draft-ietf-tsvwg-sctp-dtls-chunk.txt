@@ -4,11 +4,11 @@
 
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
-Intended status: Standards Track                              C. Porfiri
-Expires: 16 August 2026                                         Ericsson
-                                                                M. Tüxen
+Updates: {"RFC5061" => nil} (if approved)                     C. Porfiri
+Intended status: Standards Track                                Ericsson
+Expires: 26 August 2026                                         M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        12 February 2026
+                                                        22 February 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -16,15 +16,20 @@ Expires: 16 August 2026                                         Ericsson
 
 Abstract
 
-   This document describes a method for adding Cryptographic protection
-   to the Stream Control Transmission Protocol (SCTP).  The SCTP DTLS
-   chunk defined in this document is intended to enable communications
-   privacy for applications that use SCTP as their transport protocol
-   and allows applications to communicate in a way that is designed to
-   prevent eavesdropping and detect tampering or message forgery.
+   This document describes a method for adding DTLS Authentication and
+   Cryptographic protection to the Stream Control Transmission Protocol
+   (SCTP).
+
+   The SCTP DTLS chunk defined in this document is intended to enable
+   communications privacy for applications that use SCTP as their
+   transport protocol and allows applications to communicate in a way
+   that is designed to prevent eavesdropping and detect tampering or
+   message forgery.
 
    Applications using SCTP DTLS chunk can use all transport features
-   provided by SCTP and its extensions but with some limitations.
+   provided by SCTP and its extensions but with some limitations, and in
+   the case of Dynamic Address Reconfiguration RFC 5061 requires
+   updates.
 
 About This Document
 
@@ -56,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 August 2026.
+   This Internet-Draft will expire on 26 August 2026.
 
 Copyright Notice
 
@@ -84,6 +89,8 @@ Table of Contents
      3.5.  PMTU Considerations
      3.6.  Congestion Control Considerations
      3.7.  Dynamic Address Reconfiguration Considerations
+       3.7.1.  Limitations
+       3.7.2.  Change
      3.8.  SCTP Restart Considerations
        3.8.1.  Protected SCTP Restart
        3.8.2.  Compatibility with Legacy SCTP Restart
@@ -165,25 +172,26 @@ Table of Contents
    usage, how it interacts with the SCTP association establishment to
    enable endpoint authentication, key-establishment, and key updates.
 
-   The DTLS chunk is designed to enable mutual authentication of
-   endpoints, data confidentiality, data origin authentication, data
-   integrity protection, and data replay protection for SCTP packets
-   after the SCTP association has been established.  It is dependent on
-   a DTLS Key Management Method that is defined separately to achieve
-   all these capabilities.  The DTLS Key Management Method uses an API
-   to provision the SCTP association's DTLS chunk protection with key-
-   material to enable and rekey the protection operations.
+   The DTLS chunk is designed to enable mutual DTLS based authentication
+   of endpoints, data confidentiality, DTLS based data origin
+   authentication, data integrity protection, and data replay protection
+   for SCTP packets after the SCTP association has been established.  It
+   is dependent on a DTLS Key Management Method that is defined
+   separately to achieve all these capabilities.  The DTLS Key
+   Management Method uses an API to provision the SCTP association's
+   DTLS chunk protection with key-material to enable and rekey the
+   protection operations.
 
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions.  However, there can be some
    limitations or additional requirements for them to function such as
-   those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see Section 3.7 and Section 3.8.  Due to its level
-   of integration as discussed in next section it will provide its
-   security functions on all content of the SCTP packet, and will thus
-   not impact the potential to utilize any SCTP functionalities or
-   extensions that are possible to use between two SCTP peers with full
-   security and SCTP association state.
+   those noted for SCTP restart Section 3.8 and an actual update of the
+   specification of Dynamic Address Reconfiguration [RFC5061], see
+   Section 3.7.  Due to DTLS chunk's level of integration as discussed
+   in next section it will provide its security functions on all content
+   of the SCTP packet, and will thus not impact the potential to utilize
+   any SCTP functionalities or extensions that are possible to use
+   between two SCTP peers with full security and SCTP association state.
 
    DTLS is considered version 1.3 as specified in [RFC9147] whereas
    other versions are explicitly not part of this document.
@@ -316,18 +324,17 @@ Table of Contents
    data that needs to be provided to the Chunk Protection Operator for
    DTLS encryption and decryption.  DTLS Key context includes Keys and
    IV for sending and receiving, replay window, last used sequence
-   number.  Each DTLS key context is associated with a four-value tuple
+   number.  Each DTLS key context is associated with a three-value tuple
    identifying the context, consisting of SCTP Association, the restart
-   indicator, the DTLS Connection ID (if used), and the DTLS epoch.
+   indicator, and the DTLS epoch.
 
-   Support of DTLS Connection ID in the DTLS Record layer used in the
-   DTLS Chunk is OPTIONAL, and negotiated using the DTLS Key Management
-   Method.
+   The DTLS Connection ID in the DTLS Record layer used in the DTLS
+   Chunk MUST NOT be used.
 
-   The first established DTLS key context for any SCTP association and
-   DTLS connection ID (if used) MUST use epoch=3.  This ensures that the
-   epoch of the DTLS key context will normally match the epoch of a DTLS
-   Key Management Method´s connection.
+   The first established DTLS key context for any SCTP association MUST
+   use epoch=3.  This ensures that the epoch of the DTLS key context
+   will normally match the epoch of a DTLS Management Method´s
+   connection.
 
    The Replay window for the DTLS Sequence Number will need to take into
    account that heartbeat (HB) chunks are sent concurrently over all
@@ -414,26 +421,26 @@ Table of Contents
 
 3.7.  Dynamic Address Reconfiguration Considerations
 
-   When using Dynamic Address Reconfiguration [RFC5061] in an SCTP
-   association using DTLS Chunk the ASCONF chunk is protected, thus it
-   needs to be unprotected first, furthermore it MAY come from an
-   unknown IP Address.  In order to properly address the ASCONF chunk to
-   the relevant Association for being unprotected, Destination Address,
-   Source, Destination ports and VTag is used.  If the combination of
-   those parameters is not unique the implementor MAY choose to send the
-   DTLS Chunk to all Associations that fit with the parameters in order
-   to find the right one.  The association will attempt de-protection
-   operations on the DTLS chunk, and if that is successful the ASCONF
-   chunk can be processed.  Note that trial decoding should have a limit
-   in number of tried contexts to prevent denial of service attacks on
-   the endpoint.
+   [RFC5061] specifies the support for Dynamic Address Reconfiguration
+   in SCTP.  DTLS Chunks has limited support for Dynamic Address
+   Reconfiguration and requires an update of [RFC5061].  Section 4.1.1
+   of [RFC5061] specifies that ASCONF message are required to be sent
+   authenticated with SCTP-AUTH [RFC4895].  For SCTP associations using
+   DTLS Chunk this would result in the use of redundant and non-
+   compatible mechanisms for Authentication with both SCTP-AUTH and the
+   DTLS Chunk.
 
-   The section 4.1.1 of [RFC5061] specifies that ASCONF message are
-   required to be sent authenticated with SCTP-AUTH [RFC4895].  For SCTP
-   associations using DTLS Chunk this results in the use of redundant
-   mechanism for Authentication with both SCTP-AUTH and the DTLS Chunk.
-   We recommend to amend [RFC5061] for including DTLS Chunks as
-   Authentication mechanism for ASCONF chunks.
+3.7.1.  Limitations
+
+   Support for Dynamic Address Reconfiguration [RFC5061] in an SCTP
+   association using DTLS Chunk is limited to the case where the packet
+   containing the ASCONF chunk is sent from an IP address already known.
+
+3.7.2.  Change
+
+   Because SCTP-AUTH and DTLS chunks provide non-compatible
+   authentication mechanisms, SCTP-AUTH [RFC4895] MUST NOT be used once
+   DTLS chunks have been successfully negotiated.
 
 3.8.  SCTP Restart Considerations
 
@@ -482,16 +489,15 @@ Table of Contents
 
    An SCTP endpoint wanting to be able to initiate a protected SCTP
    restart needs to store securely and persistently the restart Keys,
-   DTLS connection ID (if used) and related DTLS epoch, indexed so that
-   when performing a restart with the peer node it had a protected SCTP
-   association which can identify the right restart Key and DTLS epoch
-   and initialize the restart DTLS Key Context for when restarting the
-   SCTP association.  The keys, DTLS connection ID, and epoch needs to
-   be stored secure and persistently so that they survive the events
-   that are causing protected SCTP Restart procedure to be used, for
-   instance a crash of the SCTP stack.  The security considerations for
-   persistent secure storage of keying materials is further discussed in
-   Section 13.4.
+   and related DTLS epoch, indexed so that when performing a restart
+   with the peer node it had a protected SCTP association which can
+   identify the right restart Key and DTLS epoch and initialize the
+   restart DTLS Key Context for when restarting the SCTP association.
+   The keys and epoch needs to be stored secure and persistently so that
+   they survive the events that are causing protected SCTP Restart
+   procedure to be used, for instance a crash of the SCTP stack.  The
+   security considerations for persistent secure storage of keying
+   materials is further discussed in Section 13.4.
 
    The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case; INIT, INIT-ACK MUST be sent
@@ -544,14 +550,11 @@ Table of Contents
    in the endpoints being unable to restart the SCTP association.
 
    After restart the next primary DTLS key context MUST use epoch=3,
-   i.e. the epoch value is reset.  Note that if the restart epoch used
-   also was 3 when not using any DTLS connection ID, then the
-   installation of the new restart DTLS key context needs to be done
-   with some care to avoid dropping valid packets.  After having derived
-   new primary DTLS Key Context the endpoint installs the primary DTLS
-   Key Context first, and start using it.  The new restart DTLS Key
-   Context is only installed after any old in-flight restart packets
-   will have been received.
+   i.e. the epoch value is reset.  After having derived new primary DTLS
+   Key Context the endpoint installs the primary DTLS Key Context first,
+   and start using it.  The new restart DTLS Key Context is only
+   installed after any old in-flight restart packets will have been
+   received.
 
 3.8.2.  Compatibility with Legacy SCTP Restart
 
@@ -756,13 +759,11 @@ Table of Contents
 
    DTLS Chunk requires encrypted_record to be 32 bit aligned as
    specified in Section 5.1.  The size of the header of the
-   DTLSCiphertext can be easily computed by reading the first octet if
-   the Connection ID is not present.  If the Connection ID is part of
-   the record the field's length is part of the securit context related
-   information.  The Length field is redundant with the DTLS chunk's
-   length field and can be avoided to be used, and multiple DTLS records
-   SHALL NOT be part of the DTLS Chunk's payload field.  Examples of
-   preferred DTLSCiphertext are shown in Figure 7.
+   DTLSCiphertext can be easily computed by reading the first octet.
+   The Length field is redundant with the DTLS chunk's length field and
+   can be avoided to be used, and multiple DTLS records SHALL NOT be
+   part of the DTLS Chunk's payload field.  Examples of preferred
+   DTLSCiphertext are shown in Figure 7.
 
                    0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
                   +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
@@ -786,18 +787,15 @@ Table of Contents
 
                Figure 7: DTLSCiphertext recommended structure
 
-   In case of the Connection ID field being present its length needs to
-   be retrived from the security context, we assume it known here in
-   CID_size variable.  Thus the size of the DTLSCiphertext header, using
-   the first octet B, is computed as follows:
+   Thus the size of the DTLSCiphertext header, using the first octet B,
+   is computed as follows:
 
-   size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0
-   : CID_size) & 0x3
+   size = 1 + (B & 0x08) ? 2 : 1 + (B & 0x04) ? 2 : 0
 
    In order the encrypted_record to be 32 bit aligned, P bit in the DTLS
    Chunk header are computed as follows:
 
-   P = (4 - size) & 0x03
+   P = (4 - (size & 0x03)) & 0x03
 
 6.  Error Handling
 
@@ -1133,11 +1131,6 @@ Table of Contents
    *  Restart indication:  A bit indicating whether the Key is for
          restart purposes
 
-   *  DTLS Connection ID: : If DTLS connection ID (CID) has been
-      negotiated by the DTLS Key Management Method its field length and
-      value are include.  The field length can be set to zero (0) to
-      indicate that CID is not used.
-
    *  DTLS Epoch:  The DTLS epoch these keys are valid for.  Note that
          Epoch lower than 3 are not expected as they are used during
          DTLS handshake.
@@ -1172,11 +1165,6 @@ Table of Contents
 
    *  Restart indication:  A bit indicating whether the Key is for
          restart purposes
-
-   *  DTLS Connection ID: : If DTLS connection ID (CID) has been
-      negotiated by the DTLS Key Management Method its field length and
-      value are include.  The field length can be set to zero (0) to
-      indicate that CID is not used.
 
    *  DTLS Epoch:  The DTLS epoch these keys are valid for.  Note that
          Epoch lower than 3 are note expected as they are used during
@@ -1500,7 +1488,7 @@ Table of Contents
            uint16_t sdp_kmids[];
    };
 
-   sds_assoc_id:  This parameter is ignored for one-to-one style
+   sdp_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       For setsockopt(), only SCTP_FUTURE_ASSOC can be used.  For
@@ -1535,7 +1523,7 @@ Table of Contents
            uint16_t sdp_kmids[];
    };
 
-   sds_assoc_id:  This parameter is ignored for one-to-one style
+   sdp_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
@@ -1560,13 +1548,11 @@ Table of Contents
            sctp_assoc_t sdk_assoc_id;
            uint8_t sdk_cipher_suit[2];
            uint8_t sdk_restart;
-           uint8_t sdk_conn_id_len;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
            uint16_t sdk_sn_key_len;
-           uint16_t sdk_unused;
+           uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
            uint64_t sdk_epoch;
-           uint8_t *sdk_conn_id;
            uint8_t *sdk_key;
            uint8_t *sdk_iv;
            uint8_t *sdk_sn_key;
@@ -1582,9 +1568,6 @@ Table of Contents
    sdk_restart:  If the value is 0, the regular keys are added, if a
       value different from 0 is used, the restart keys are added.
 
-   sdk_conn_id_len:  The length of the DTLS connection identifier
-      specified in sdk_conn_id.
-
    sdk_key_len:  The length of the initialization vector specified in
       sdk_key.
 
@@ -1597,10 +1580,6 @@ Table of Contents
    sdk_unused:  This field is ignored.
 
    sdk_epoch:  The epoch for which the keys are added.
-
-   sdk_conn_id:  A pointer to the connection identifier for which the
-      keys are added.  Using NULL means that no connection identifier is
-      used.
 
    sdk_key:  A pointer to the key.
 
@@ -1625,13 +1604,11 @@ Table of Contents
            sctp_assoc_t sdk_assoc_id;
            uint8_t sdk_cipher_suit[2];
            uint8_t sdk_restart;
-           uint8_t sdk_conn_id_len;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
            uint16_t sdk_sn_key_len;
-           uint16_t sdk_unused;
+           uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
            uint64_t sdk_epoch;
-           uint8_t *sdk_conn_id;
            uint8_t *sdk_key;
            uint8_t *sdk_iv;
            uint8_t *sdk_sn_key;
@@ -1647,9 +1624,6 @@ Table of Contents
    sdk_restart:  If the value is 0, the regular keys are added, if a
       value different from 0 is used, the restart keys are added.
 
-   sdk_conn_id_len:  The length of the DTLS connection identifier
-      specified in sdk_conn_id.
-
    sdk_key_len:  The length of the initialization vector specified in
       sdk_key.
 
@@ -1662,10 +1636,6 @@ Table of Contents
    sdk_unused:  This field is ignored.
 
    sdk_epoch:  The epoch for which the keys are added.
-
-   sdk_conn_id:  A pointer to the connection identifier for which the
-      keys are added.  Using NULL means that no connection identifier is
-      used.
 
    sdk_key:  A pointer to the key.
 
@@ -1685,11 +1655,8 @@ Table of Contents
 
    struct sctp_dtls_keys_id {
       sctp_assoc_t sdki_assoc_id;
-      uint8_t sdki_restart;
-      uint8_t sdki_conn_id_len;
-      uint16_t sdki_unused;
+      uint32_t sdki_restart;
       uint64_t sdki_epoch;
-      uint8_t *sdki_conn_id;
    }
 
    sdki_assoc_id:  This parameter is ignored for one-to-one style
@@ -1700,16 +1667,7 @@ Table of Contents
    sdki_restart:  If the value is 0, the regular keys are removed, if a
       value different from 0 is used, the restart keys are removed.
 
-   sdki_conn_id_len:  The length of the DTLS connection identifier
-      specified in sdki_conn_id.
-
-   sdki_unused:  This field is ignored.
-
    sdki_epoch:  The epoch for which the keys are removed.
-
-   sdki_conn_id:  A pointer to the connection identifier for which the
-      keys are removed.  Using NULL means that no connection identifier
-      is used.
 
    This socket option can only be used on SCTP endpoints in states other
    then SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
@@ -1993,8 +1951,8 @@ Table of Contents
    user data and much of the SCTP control signaling.  The SCTP
    association is identifiable based on the 5-tuple where the
    destination IP and port are fixed for each direction.  Advanced
-   privacy features such as changing DTLS Connection ID and sequence
-   number encryption might therefore have limited effect.
+   privacy features such as sequence number encryption might therefore
+   have limited effect.
 
 13.2.  AEAD Limit Considerations
 
