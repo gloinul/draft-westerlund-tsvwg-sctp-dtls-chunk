@@ -271,16 +271,14 @@ Key and IV, produced by the key-management, and all relevant data that
 needs to be provided to the Chunk Protection Operator for DTLS encryption
 and decryption.  DTLS Key context includes Keys and IV for sending and
 receiving, replay window, last used sequence number. Each DTLS key
-context is associated with a four-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, the DTLS
-Connection ID (if used), and the DTLS epoch.
+context is associated with a three-value tuple identifying the context,
+consisting of SCTP Association, the restart indicator, and the DTLS epoch.
 
-Support of DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk is OPTIONAL, and negotiated using the DTLS Management Method.
+The DTLS Connection ID in the DTLS Record layer used in the
+DTLS Chunk MUST NOT be used.
 
-The first established DTLS key context for any SCTP association and DTLS
-connection ID (if used) MUST use epoch=3. This ensures that the
-epoch of the DTLS key context will normally match the epoch of
+The first established DTLS key context for any SCTP association MUST use epoch=3.
+This ensures that the epoch of the DTLS key context will normally match the epoch of
 a DTLS Management Method´s connection.
 
 The Replay window for the DTLS Sequence Number will need to take into
@@ -435,12 +433,12 @@ NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
 An SCTP endpoint wanting to be able to initiate a protected SCTP
-restart needs to store securely and persistently the restart Keys, DTLS
-connection ID (if used) and related DTLS epoch, indexed so that when
+restart needs to store securely and persistently the restart Keys,
+and related DTLS epoch, indexed so that when
 performing a restart with the peer node it had a protected SCTP
 association which can identify the right restart Key and DTLS epoch and
 initialize the restart DTLS Key Context for when restarting the SCTP
-association. The keys, DTLS connection ID, and epoch needs to be stored
+association. The keys and epoch needs to be stored
 secure and persistently so that they survive the events that are
 causing protected SCTP Restart procedure to be used, for instance a
 crash of the SCTP stack. The security considerations for persistent
@@ -503,10 +501,7 @@ for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.
 
 After restart the next primary DTLS key context MUST use epoch=3,
-i.e. the epoch value is reset. Note that if the restart epoch used
-also was 3 when not using any DTLS connection ID, then the
-installation of the new restart DTLS key context needs to be done with
-some care to avoid dropping valid packets. After having derived new
+i.e. the epoch value is reset. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.
@@ -724,9 +719,7 @@ in {{DTLSCiphertext-header-struct}}.
 
 DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
 in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
-be easily computed by reading the first octet if the Connection ID is
-not present. If the Connection ID is part of the record the field's
-length is part of the securit context related information. The Length
+be easily computed by reading the first octet. The Length
 field is redundant with the DTLS chunk's length field and can be
 avoided to be used, and multiple DTLS records SHALL NOT be part of the
 DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
@@ -757,17 +750,14 @@ shown in {{DTLSCiphertext-recommended}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
 
-In case of the Connection ID field being present its length needs to
-be retrived from the security context, we assume it known here in
-CID_size variable. Thus the size of the DTLSCiphertext header, using
-the first octet B, is computed as follows:
+Thus the size of the DTLSCiphertext header, using the first octet B, is computed as follows:
 
-size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+size = 1 + (B & 0x08) ? 2 : 1 + (B & 0x04) ? 2 : 0
 
 In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
 as follows:
 
-P = (4 - size) & 0x03
+P = (4 - (size & 0x03)) & 0x03
 
 # Error Handling {#error_handling}
 
@@ -1107,10 +1097,6 @@ Parameters :
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
-* DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-  the DTLS Management Method its field length and value are include. The field length
-  can be set to zero (0) to indicate that CID is not used.
-
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are not expected as they are used during DTLS handshake.
@@ -1146,10 +1132,6 @@ Parameters :
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
-
-* DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-  the DTLS Management Method its field length and value are include. The field length
-  can be set to zero (0) to indicate that CID is not used.
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
@@ -1445,13 +1427,13 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
+        sctp_assoc_t sdp_assoc_id;
         uint16_t sdp_nr_pmids;
         uint16_t sdp_pmids[];
 };
 ~~~
 
-``sds_assoc_id``:
+``sdp_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
@@ -1484,13 +1466,13 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
+        sctp_assoc_t sdp_assoc_id;
         uint16_t sdp_nr_pmids;
         uint16_t sdp_pmids[];
 };
 ~~~
 
-``sds_assoc_id``:
+``sdp_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
@@ -1519,13 +1501,11 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
-        uint8_t sdk_conn_id_len;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint16_t sdk_unused;
+        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
         uint64_t sdk_epoch;
-        uint8_t *sdk_conn_id;
         uint8_t *sdk_key;
         uint8_t *sdk_iv;
         uint8_t *sdk_sn_key;
@@ -1545,9 +1525,6 @@ struct sctp_dtls_keys {
 : If the value is ``0``, the regular keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
-``sdk_conn_id_len``:
-: The length of the DTLS connection identifier specified in ``sdk_conn_id``.
-
 ``sdk_key_len``:
 : The length of the initialization vector specified in ``sdk_key``.
 
@@ -1562,10 +1539,6 @@ struct sctp_dtls_keys {
 
 ``sdk_epoch``:
 : The epoch for which the keys are added.
-
-``sdk_conn_id``:
-: A pointer to the connection identifier for which the keys are added.
-  Using ``NULL`` means that no connection identifier is used.
 
 ``sdk_key``:
 : A pointer to the key.
@@ -1594,13 +1567,11 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
-        uint8_t sdk_conn_id_len;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint16_t sdk_unused;
+        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
         uint64_t sdk_epoch;
-        uint8_t *sdk_conn_id;
         uint8_t *sdk_key;
         uint8_t *sdk_iv;
         uint8_t *sdk_sn_key;
@@ -1620,9 +1591,6 @@ struct sctp_dtls_keys {
 : If the value is ``0``, the regular keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
-``sdk_conn_id_len``:
-: The length of the DTLS connection identifier specified in ``sdk_conn_id``.
-
 ``sdk_key_len``:
 : The length of the initialization vector specified in ``sdk_key``.
 
@@ -1637,10 +1605,6 @@ struct sctp_dtls_keys {
 
 ``sdk_epoch``:
 : The epoch for which the keys are added.
-
-``sdk_conn_id``:
-: A pointer to the connection identifier for which the keys are added.
-  Using ``NULL`` means that no connection identifier is used.
 
 ``sdk_key``:
 : A pointer to the key.
@@ -1664,11 +1628,8 @@ The following structure is used as the ``option_value``:
 ~~~ c
 struct sctp_dtls_keys_id {
    sctp_assoc_t sdki_assoc_id;
-   uint8_t sdki_restart;
-   uint8_t sdki_conn_id_len;
-   uint16_t sdki_unused;
+   uint32_t sdki_restart;
    uint64_t sdki_epoch;
-   uint8_t *sdki_conn_id;
 }
 ~~~
 
@@ -1682,18 +1643,8 @@ struct sctp_dtls_keys_id {
 : If the value is ``0``, the regular keys are removed, if a value different
   from ``0`` is used, the restart keys are removed.
 
-``sdki_conn_id_len``:
-: The length of the DTLS connection identifier specified in ``sdki_conn_id``.
-
-``sdki_unused``:
-: This field is ignored.
-
 ``sdki_epoch``:
 : The epoch for which the keys are removed.
-
-``sdki_conn_id``:
-: A pointer to the connection identifier for which the keys are removed.
-  Using ``NULL`` means that no connection identifier is used.
 
 This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and
@@ -1949,7 +1900,7 @@ Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
 port are fixed for each direction. Advanced privacy features such
-as changing DTLS Connection ID and sequence number encryption might
+as sequence number encryption might
 therefore have limited effect.
 
 ## AEAD Limit Considerations
