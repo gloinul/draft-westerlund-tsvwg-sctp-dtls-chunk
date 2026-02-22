@@ -148,9 +148,7 @@ updates.
 
 {::boilerplate bcp14}
 
-# Overview
-
-## Protocol Overview {#protocol-overview}
+# Protocol Overview {#protocol-overview}
 
 The DTLS chunk can be used for secure and confidential transfer of
 SCTP packets. This is implemented inside the SCTP protocol.
@@ -234,6 +232,7 @@ A DTLS chunk will never be retransmitted, retransmission is implemented
 by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
 protection will be used to suppress duplicated DTLS chunks.
 
+# Protocol Considerations
 
 ## DTLS Considerations {#DTLS-engines}
 
