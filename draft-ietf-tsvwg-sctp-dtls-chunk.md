@@ -311,22 +311,6 @@ they have different properties. See
 {{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
-## SCTP DTLS Chunk Buffering and Flow Control {#buffering}
-
-DTLS 1.3 operations and SCTP are asynchronous, meaning that the
-Chunk Protection Operator may deliver the decrypted SCTP Payload to the SCTP
-endpoint without respecting the reception order.  It's up to SCTP
-endpoint to reorder the chunks in the reception buffer and to take
-care of the flow control according to what specified in
-{{RFC9260}}. From SCTP perspective the DTLS chunk processing is part
-of the transport network.
-
-Even though the above allows the implementors to adopt a
-multithreading design of the Chunk Protection Operators, the actual
-implementation should consider that out-of-order handling of SCTP
-chunks is not desired and may cause false congestion signals and
-trigger retransmissions.
-
 ## PMTU Considerations {#pmtu}
 
 The addition of the DTLS chunk to SCTP reduces the room for payload,
