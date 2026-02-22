@@ -799,51 +799,7 @@ missing parameters as N: 8 + N * 2 according to {{RFC9260}}, section
 the N missing params, no order implied by the example in
 {{sctp-DTLS-init-chunk-missing-protected}}.
 
-## Error in DTLS Chunk  {#eprotect}
-
-A new Error Type is defined for the DTLS Chunk, it's used for any
-error related to the DTLS chunk's protection mechanism described in
-this document and has a structure that allows detailed information to
-be added as extra causes.
-
-This specification describes some of the causes whilst the key
-establishment specification MAY add further causes.
-
-When detecting an error, SCTP will send an ABORT chunk containing
-the relevant Error Type and Causes.
-
-~~~~~~~~~~~ aasvg
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Cause Code = TBA9         |         Cause Length          |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|         Extra Cause #1        |         Extra Cause #2        |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Extra Cause #N-1       |         Extra Cause #N        |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~~~~~~~~
-{: #sctp-eprotect-error-structure title="Error in DTLS Chunk Cause Format" artwork-align="center"}
-
-{: vspace="0"}
-Cause Code: 16 bits (unsigned integer)
-: The SCTP Error Chunk Cause Code indicating "Error in Protection" is TBA9.
-
-Cause Length: 16 bits (unsigned integer)
-: Is for N extra Causes equal to  4 + N * 2
-
-Extra Cause: 16 bits (unsigned integer)
-: Each Extra Cause indicate an additional piece of information as part
-  of the error. There MAY be zero to as many as can fit in the extra
-  cause field in the ERROR Chunk (A maximum of 32764).
-
-Editor's Note: Please replace TBA9 above with what is assigned by IANA.
-
-Below a number of defined Error Causes (Extra Cause above) are
-defined, additional causes can be registered with IANA following the
-rules in {{IANA-Extra-Cause}}.
-
-### No Common DTLS Key Management Method {#enocommonpsi}
+## No Common DTLS Key Management Method {#enocommonpsi}
 
 If the responder to do not support any of the DTLS Management Methods
 offered by the association initiator in the Protection Soluiton
@@ -1856,13 +1812,12 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
-entry depicted below in in {{iana-error-cause-codes}} with a
+entries depicted below in in {{iana-error-cause-codes}} with a
 reference to this document. The registry at time of writing was
 available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24
 
 | ID Value | Error Cause Codes | Reference |
-| TBA9 | DTLS Chunk Error | RFC-To-Be |
 | TBA10 | Policy Not Met | RFC-To-Be |
 | TBA11 | No Common Protection | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
