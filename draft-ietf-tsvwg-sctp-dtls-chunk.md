@@ -122,9 +122,9 @@ updates.
    authentication of endpoints, data confidentiality, DTLS based
    data origin authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
-   established. It is dependent on a key management function that is
+   established. It is dependent on a DTLS Management Method that is
    defined separately to achieve all these capabilities. The
-   key management function uses an API to provision the SCTP
+   DTLS Management Method uses an API to provision the SCTP
    association's DTLS chunk protection with key-material to enable and
    rekey the protection operations.
 
@@ -142,6 +142,7 @@ updates.
 
    DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
    other versions are explicitly not part of this document.
+
 
 # Conventions
 
@@ -161,7 +162,7 @@ the protected SCTP chunks for further processing.
 {{sctp-DTLS-chunk-layering}} is an example
 illustrating the DTLS chunk processing in regard
 to SCTP and the Upper Layer Protocol (ULP) using
-DTLS 1.3 for key management. Here the Key Management function
+DTLS 1.3 as DTLS Management Method. Here the DTLS Management Method
 contains validation, i.e. using certificates, handshaking,
 updating policies etc.
 
@@ -210,17 +211,17 @@ initial SCTP handshake, any initial key-management traffic, the SCTP
 common header, the SCTP DTLS chunk header, and the INIT and INIT-ACK
 chunks during an SCTP Restart procedure.
 
-The support of the DTLS chunk and the key-management method to use is
+The support of the DTLS chunk and the DTLS Management Method to use is
 negotiated by the peers at the setup of the SCTP association using a
-new parameter. Key management and application traffic is multiplexed
-using the PPID. The dedicated PPID 4242 is defined for use by key
-management for DTLS chunk. The key management function uses an API to
+new parameter. DTLS Management and application traffic is multiplexed
+using the PPID. The dedicated PPID 4242 is defined for use by DTLS Management Method
+for DTLS chunk. The DTLS Management Method uses an API to
 key the Chunk protection operation function. Usage of the DTLS 1.3
 handshake for initial mutual authentication and key establishment as
 well as periodic re-authentication and rekeying with Diffe-Hellman of
 the DTLS chunk protection is defined in separate documents,
-(see {{sctp-protection-solutions}}). To prevent
-downgrade attacks of the key-management negotiation the key-management
+(see {{dtls-management-method}}). To prevent
+downgrade attacks of the key-management negotiation the DTLS Management Method
 should implement specific procedures when deriving keys.
 
 When the endpoint authentication and key establishment has been
@@ -236,12 +237,12 @@ protection will be used to suppress duplicated DTLS chunks.
 ## DTLS Considerations {#DTLS-engines}
 
 The DTLS Chunk architecture splits DTLS 1.3 as shown in
-{{sctp-DTLS-chunk-layering}}, where the Key Management functionality
+{{sctp-DTLS-chunk-layering}}, where the DTLS Management Method
 is done at DTLS 1.3 block level, acting as a parallel User Level Protocol
 and a Chunk Protection Operator functionality inside the SCTP
 Protocol Stack.
 
-Key Management is the set of data and procedures that take care of key
+DTLS Management Method is the set of data and procedures that take care of key
 distribution, verification, and update, DTLS connection setup, update and
 maintenance.
 
@@ -251,14 +252,14 @@ decryption into User Data.
 
 DTLS 1.3 operations requires to directly handshake messages with the
 remote peer for connection setup and other features, this kind of
-handshake is part of the Key Management functionality.  Key Management
-function achieves these features behaving as a user of the SCTP
-association.  Key Management sends and receives its own data via the
-SCTP User Level interface.  Key Management's own data are
+handshake is part of the DTLS Management Method.  DTLS Management Method
+achieves these features behaving as a user of the SCTP
+association.  DTLS Management Method sends and receives its own data via the
+SCTP User Level interface.  DTLS Management Method's own data are
 distinguished from any other data by means of a dedicated PPID using
 the value 4242 (see {{iana-payload-protection-id}}).
 
-Once Key Management has established a DTLS 1.3 connection, it can
+Once DTLS Management Method has established a DTLS 1.3 connection, it can
 derive primary and restart keys and set the Chunk Protection Operator
 for SCTP Packet Payload encryption/decryption via an API to create the
 necessary DTLS key contexts. Both a DTLS Key context for normal use
@@ -275,37 +276,38 @@ consisting of SCTP Association, the restart indicator, the DTLS
 Connection ID (if used), and the DTLS epoch.
 
 Support of DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk is OPTIONAL, and negotiated using the key-management
-function.
+DTLS Chunk is OPTIONAL, and negotiated using the DTLS Management Method.
 
 The first established DTLS key context for any SCTP association and DTLS
-connection ID (if used) SHALL use epoch=3. This ensures that the
+connection ID (if used) MUST use epoch=3. This ensures that the
 epoch of the DTLS key context will normally match the epoch of
-a DTLS key-management connection.
+a DTLS Management Method´s connection.
 
 The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
 
-## Considerations about SCTP Protection Solutions {#sctp-protection-solutions}
+Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
+2<sup>14</sup> (16384) bytes of plain text.
+
+## Considerations about SCTP DTLS Management Methods {#dtls-management-method}
 
 This document specifies the mechanisms for SCTP to be protected with
 DTLS, it doesn't specify how the Key Management works, being limited
-on what the Key Management SHALL provide for achieving the protection.
+on what the Key Management MUST provide for achieving the protection.
 Even though DTLS1.3 is indicated as protocol for providing Key
 Contexts, different implementations can achieve that and different
 mechanisms may be used for features such as mutual authentication,
-rekeying etc.  The DTLS Chunk solution may use a number of Key
+rekeying etc.  The DTLS Management Method may use a number of Key
 Management mechanisms depending on what is being implemented and
-available and/or according to the local policies.  Key Management
-methods are called here Protection Solutions, they are defined in
+available and/or according to the local policies.
+DTLS Management Methods are defined in
 their own specific documents, and needs to be registered in the IANA
-Registry "SCTP Protection Solutions" to get their own unique identifier.
-This document constitutes a requirement towards any SCTP
-Protection Solution.
+Registry "SCTP DTLS Management Methods" to get their own unique identifier.
+This document constitutes a requirement towards any DTLS Management Method.
 
-Currently there are two in-band DTLS key management solutions defined,
+Currently there are two in-band DTLS Management Methods defined,
 they have different properties. See
 {{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
@@ -417,18 +419,18 @@ In protected SCTP Restart, INIT and INIT-ACK chunks are sent
 strictly according to  {{RFC9260}}, but COOCKIE-ECHO and COOKIE-ACK chunks
 are encrypted using DTLS Chunks and Restart DTLS Key contexts.
 
-In order to support protected SCTP Restart, the SCTP Endpoints shall allocate
-and maintain dedicated Restart DTLS Key contexts, SCTP packets
-protected by these contexts will be identified in the DTLS chunk with
-the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP Endpoints
-needs to ensure that Restart DTLS key contexts is preserved for
-supporting the protected SCTP Restart use case.
+In order to support protected SCTP Restart, the SCTP Endpoints needs
+to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
+packets protected by these contexts will be identified in the DTLS
+chunk with the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP
+Endpoints needs to ensure that Restart DTLS key contexts is preserved
+for supporting the protected SCTP Restart use case.
 
 In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs access to a DTLS Key context for
 this SCTP association that needs to be kept in a well-known state so
 that both SCTP Endpoints are aware of the DTLS sequence numbers and
-replay window, i.e. initialized but never used. An SCTP Endpoint SHALL
+replay window, i.e. initialized but never used. An SCTP Endpoint MUST
 NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
@@ -446,9 +448,9 @@ secure storage of keying materials is further discussed in
 {{sec-considertation-storage}}.
 
 The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
-exactly as in legacy SCTP Restart case; INIT, INIT-ACK SHALL be
+exactly as in legacy SCTP Restart case; INIT, INIT-ACK MUST be
 sent plain as in the legacy, whereas COOCKIE-ECHO, COOKIE-ACK
-Chunks SHALL be sent as DTLS chunk protected using the restart DTLS key context.
+Chunks MUST be sent as DTLS chunk protected using the restart DTLS key context.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
@@ -491,7 +493,7 @@ DTLS chunk ensures that the peer requesting the restart has been
 previously validated and the SCTP state machine after having reached
 ESTABLISHED state moves automatically to PROTECTED state.
 
-A restarted SCTP Association SHALL continue to use the Restart DTLS Key Context,
+A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
 for User Traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
@@ -500,7 +502,7 @@ restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.
 
-After restart the next primary DTLS key context SHALL use epoch=3,
+After restart the next primary DTLS key context MUST use epoch=3,
 i.e. the epoch value is reset. Note that if the restart epoch used
 also was 3 when not using any DTLS connection ID, then the
 installation of the new restart DTLS key context needs to be done with
@@ -538,13 +540,13 @@ the old one.
 # New Parameter Type {#new-parameter-type}
 
 This section defines the new parameter type that will be used to
-negotiate the use of the DTLS 1.3 chunk during association setup, its
-keying method and indicate preference in relation to different keying
-and other security solutions. {{sctp-DTLS-chunk-init-parameter}}
+negotiate the use of the DTLS chunk during association setup, its
+DTLS Management Method and indicate preference in relation to different
+DTLS Management Methods. {{sctp-DTLS-chunk-init-parameter}}
 illustrates the new parameter type.
 
 | Parameter Type | Parameter Name |
-| 0x80xx | DTLS 1.3 Chunk Protected Association |
+| 0x8006 | DTLS Management Parameter |
 {: #sctp-DTLS-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
 
 Note that the parameter format requires the receiver to ignore the
@@ -552,55 +554,51 @@ parameter and continue processing if the parameter is not understood.
 This is accomplished (as described in {{RFC9260}}, Section 3.2.1.)  by
 the use of the upper bits of the parameter type.
 
-## DTLS 1.3 Chunk Protected Association {#protectedassoc-parameter}
+## DTLS Management Parameter {#protectedassoc-parameter}
 
 This parameter is used to the request and acknowledge of support of
-DTLS 1.3 Chunk during INIT/INIT-ACK handshake and indicate preference
-for keying and the preference order between multiple security
-solutions (if supported).
+DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
+order among DTLS Management Methods (if supported).
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Parameter Type = 0x80XX    |       Parameter Length        |
+|    Parameter Type = 0x8006    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Protection Solution #1       |  Protection Solution #2       |
+|  DTLS Management Method #1    |  DTLS Management Method #2    |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-: Protection Solutions                                          :
+: DTLS Management Methods                                       :
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Protection Solution #N        | Padding                       |
+| DTLS Management Method #N     | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-init-options title="Protected Association Parameter" artwork-align="center"}
+{: #sctp-DTLS-chunk-init-options title="DTLS Management Parameter" artwork-align="center"}
 
 {: vspace="0"}
 Parameter Type: 16 bits (unsigned integer)
-: This value MUST be set to 0x80XX.
+: This value MUST be set to 0x8006.
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be the
-  number of Protection Solution fields (N) times two plus 4.
+  number of DTLS Management Method fields (N) times two plus 4.
 
-Protection Solution fields: one or more 16-bit SCTP Protection Solution Identifiers:
-: Each Protection Solution Identifier ({{IANA-Protection-Solution-ID}})
-  is a 16-bit unsigned integer value indicting a Protection
-  Solution. Protection solutions include both DTLS Chunk based, where
-  a solution combines the DTLS chunk with a key-management solution,
-  or non DTLS Chunk based security solution. The Protection Solutions
+DTLS Management Method fields: one or more 16-bit DTLS Management Method Identifiers:
+: Each DTLS Management Method Identifier ({{IANA-Protection-Solution-ID}})
+  is a 16-bit unsigned integer value indicating a DTLS Management Method.
+  DTLS Management Methods include both DTLS Chunk based, where
+  a solution combines the DTLS chunk with a DTLS Management Method,
+  or non DTLS Chunk based DTLS Management Method. The DTLS Management Methods
   are listed in descending order of preference, i.e. the first listed
   in the parameter is the most preferred and the last the least
   preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
-  endpoint includes all of the offered solutions which it supports and
+  endpoint includes all of the offered DTLS Management Methods which it supports and
   lists the selected one first. Including its decreasing preference on
-  the additional Protection Solutions.
+  the additional DTLS Management Methods.
 
-Padding: If the number of included Protection solutions is odd the
+Padding: If the number of included DTLS Management Methods is odd the
 parameter MUST be padded with two zero (0) bytes of padding to make
 the parameter 32-bit aligned.
-
-RFC-Editor Note: Please replace 0x08XX with the actual parameter type
-value assigned by IANA and then remove this note.
 
 # New Chunk Type {#new-chunk-type}
 
@@ -611,11 +609,8 @@ transport the DTLS 1.3 record containing protected SCTP payload.
 {{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
 
 | Chunk Type | Chunk Name |
-| 0x4X | DTLS Chunk (DTLS) |
+| 0x41 | DTLS Chunk (DTLS) |
 {: #sctp-DTLS-chunk-newchunk-crypt title="DTLS Chunk Type" cols="r l"}
-
-RFC-Editor Note: Please replace 0x4x with the actual chunk type value
-assigned by IANA and then remove this note.
 
 It should be noted that the DTLS chunk format requires the receiver
 stop processing this SCTP packet, discard the unrecognized chunk and
@@ -627,22 +622,34 @@ the upper bits of the chunk type.
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.
 
+As the full DTLS record with the header and sequence number, etc the
+start of the cipher text is likely not 32-bit aligned making in-place
+encryption/decryption impossible in some plattforms. Therefore, a
+variable number (0-3) of pre-padding bytes with value fixed to zero MUST
+be added in the DTLS chunk payload before the DTLS Record header
+(DTLS Chunk Payload), to ensure the Encrypted Record part of the
+DTLSCiphertext {{RFC9147}} will start on a 32-bit boundary in relation
+to the start of the DTLS Chunk. The number of these pre-padding bytes
+is indicated in the DTLS Chunk header using the P bits.
+
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Type = 0x4x   | reserved    |R|         Chunk Length          |
+| Type = 0x41   | reserved| P |R|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Pre-Padding            |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
 |                                                               |
 |                            Payload                            |
 |                                                               |
 |                               +-------------------------------+
-|                               |           Padding             |
+|                               |       Post-Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
 
-reserved: 7 bits
+reserved: 5 bits
 : Reserved bits for future use. Sender MUST set these bits to 0 and
   MUST be ignored on reception.
 
@@ -651,36 +658,134 @@ R: 1 bit (boolean)
 : Restart indicator. If this bit is set this DTLS chunk is protected
   with by a Restart DTLS Key context.
 
+P: 2 bit (unsigned integer 0-3)
+
+: Payload Pre-Padding indicator. It indicates how many bytes
+are inserted for padding before the DTLSCiphertext.
+This allows the encrypted data to be 32 bit aligned.
+
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4.
+
+Pre-Padding: 0, 8, 16, or 24 bits
+: Based on the Payload Pre-Padding Indicator the indicated number of
+8-bit bytes of zero values are included.
 
 Payload: variable length
 : This holds the DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
 
-Padding: 0, 8, 16, or 24 bits
+Post-Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
   MUST pad the chunk with all zero bytes to make the chunk 32-bit
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
+## Payload formatting in DTLS Chunk
+
+
+From section 4 of {{RFC9147}}, the DTLS record header has variable length,
+here reported in {{DTLSCiphertext-record-struct}}.
+
+~~~~~~~~~~~ aasvg
+
+    struct {
+        opaque unified_hdr[variable];
+        opaque encrypted_record[length];
+    } DTLSCiphertext;
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
+
+As shown above, DTLSCiphertext record is built up with the unified_hdr
+and the encrypted_record, where unified_hdr has variable format
+as defined in the first byte. The format of unified_hdr is depicted
+in {{DTLSCiphertext-header-struct}}.
+
+~~~~~~~~~~~ aasvg
+
+    0 1 2 3 4 5 6 7
+    +-+-+-+-+-+-+-+-+
+    |0|0|1|C|S|L|E E|
+    +-+-+-+-+-+-+-+-+
+    | Connection ID |   Legend:
+    | (if any,      |
+    /  length as    /   C   - Connection ID (CID) present
+    |  negotiated)  |   S   - Sequence number length
+    +-+-+-+-+-+-+-+-+   L   - Length present
+    |  8 or 16 bit  |   E   - Epoch
+    |Sequence Number|
+    +-+-+-+-+-+-+-+-+
+    | 16 bit Length |
+    | (if present)  |
+    +-+-+-+-+-+-+-+-+
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-header-struct title="DTLSCiphertext header" artwork-align="center"}
+
+DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
+in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
+be easily computed by reading the first octet if the Connection ID is
+not present. If the Connection ID is part of the record the field's
+length is part of the securit context related information. The Length
+field is redundant with the DTLS chunk's length field and can be
+avoided to be used, and multiple DTLS records SHALL NOT be part of the
+DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
+shown in {{DTLSCiphertext-recommended}}.
+
+~~~~~~~~~~~ aasvg
+
+ 0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+|0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
++-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
+|    16 bit     |     |8 bit Seq. No. |
+|Sequence Number|     +-+-+-+-+-+-+-+-+
++-+-+-+-+-+-+-+-+     |               |
+|   16 bit      |     |   Encrypted   |
+|   Length      |     /   Record      /
++-+-+-+-+-+-+-+-+     |               |
+|               |     +-+-+-+-+-+-+-+-+
+|  Encrypted    |
+/  Record       /       DTLSCiphertext
+|               |         Structure
++-+-+-+-+-+-+-+-+         (minimal)
+
+  DTLSCiphertext
+    Structure
+  (recommended)
+
+~~~~~~~~~~~
+{: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
+
+In case of the Connection ID field being present its length needs to
+be retrived from the security context, we assume it known here in
+CID_size variable. Thus the size of the DTLSCiphertext header, using
+the first octet B, is computed as follows:
+
+size = (1 + (B & 0x08) ? 1 : 2 + (B & 0x04) ? 0 : 2 + (B & 0x10) ? 0 : CID_size) & 0x3
+
+In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
+as follows:
+
+P = (4 - size) & 0x03
 
 # Error Handling {#error_handling}
 
 This specification introduces a new set of error causes that are to be
 used when SCTP endpoint detects a faulty condition. The special case is
-when the error is detected by the DTLS 1.3 Protection that may provide
+when the error is detected by the DTLS Management Method that may provide
 additional information.
 
-## DTLS 1.3 Chunk Protected Association Parameter Missing {#enoprotected}
+## DTLS Chunk Protected Association Parameter Missing {#enoprotected}
 
 When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the DTLS 1.3 Chunk Protected Association or other protection
-solutions towards an SCTP endpoint that only accepts protected
+contain the DTLS Management Parameter or a supported DTLS Management Method
+towards an SCTP endpoint that only accepts protected
 associations, SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}
 including the error cause 'Policy Not Met' (TBA10)
-(see {{IANA-Extra-Cause}} and the DTLS 1.3 chunk protected association
-parameter identifier {{protectedassoc-parameter}} in the missing
+(see {{IANA-Extra-Cause}} and the DTLS Management Method
+identifiers {{protectedassoc-parameter}} in the missing
 param Information field.
 It may also include additional parameters representing other
 supported protection mechanisms that are acceptable per endpoint
@@ -694,7 +799,7 @@ security policy.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                 Number of missing params = N                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  DTLS 1.3 Chunk Protected Asc |     Missing Param Type #2     |
+|    DTLS Management Parameter  |     Missing Param Type #2     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Missing Param Type #N-1    |     Missing Param Type #N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -751,9 +856,9 @@ Below a number of defined Error Causes (Extra Cause above) are
 defined, additional causes can be registered with IANA following the
 rules in {{IANA-Extra-Cause}}.
 
-### No Common Protection Solution {#enocommonpsi}
+### No Common DTLS Management Method {#enocommonpsi}
 
-If the responder to do not support any of the protection solutions
+If the responder to do not support any of the DTLS Management Methods
 offered by the association initiator in the Protection Soluiton
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
@@ -783,109 +888,110 @@ as a temporary problem in the transport and will be handled
 with retransmissions and SACKS according to {{RFC9260}}.
 
 When the Chunk Protection Operator will experience a non-critical error,
-an ABORT chunk SHALL NOT be sent.
+an ABORT chunk MUST NOT be sent.
 
 # Procedures {#procedures}
 
 ## Establishment of a Protected Association {#establishment-procedure}
 
 An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
-chunk protected association shall send to the remote peer an INIT
+chunk protected association sends to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
 (see {{protectedassoc-parameter}}) indicating supported and preferred
 key-management solutions (see
 {{sctp-DTLS-chunk-init-options}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
-with DTLS 1.3 Chunk Protected Association parameter, will reply with
-INIT-ACK with its own DTLS 1.3 Chunk Protected Association parameter
-containing the selected protection solution out of the set of supported
-ones. In case there are no common set of supported solutions that are
+with DTLS Management Parameter, will reply with
+INIT-ACK with its own DTLS Management Parameter
+containing the selected DTLS Management Method out of the set of supported
+ones. In case there are no common set of supported DTLS Management Methods that are
 accepted by the responder, and the endpoints policy require secured
-association it SHALL reply with an ABORT chunk, include the error
+association it MUST reply with an ABORT chunk, include the error
 cause "No Common Protection" (TBA11) (see {{IANA-Extra-Cause}}).
-Otherwise, the responder MAY send an INIT-ACK without the DTLS 1.3
-Chunk Protected Association parameter to indicate it is willing
-to create a session without security.
+Otherwise, the responder MAY send an INIT-ACK without the DTLS Management Parameter
+to indicate it is willing to create a session without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
-only protected associations shall consider an INIT chunk not containing
+only protected associations considers an INIT chunk not containing
 the DTLS 1.3 Chunk Protected Association parameter or another
 Protection Solution accepted by own security policy solution as an error,
 thus it will reply with an ABORT chunk according to what specified in
-{{enoprotected}} indicating that for this endpoint mandatory DTLS 1.3
-Chunk Protected Association parameter is missing.
+{{enoprotected}} indicating that for this endpoint mandatory DTLS Management
+Parameter is missing.
 
 When initiator and responder have agreed on a DTLS Chunk protected
-association and the key-management method by means of handshaking
+association and the DTLS Management Method by means of handshaking
 INIT/INIT-ACK the SCTP association establishment continues until it
 has reached the ESTABLISHED state.
 
 When the SCTP session has been established follow the process defined
-by the selected key-management solution for establishing DTLS Key Contexts
+by the selected DTLS Management Method for establishing DTLS Key Contexts
 and installing them.
 
 ### Offering Multiple Security Solutions
 
 An initiator of an SCTP association may want to offer multiple
-different key-management solutions for DTLS Chunk or in combination
-with other security solutions in addition to DTLS 1.3 chunks for the
-SCTP association. This can be done but need to consider the downgrade
-attack risks (see {{Downgrade-Attacks}}).
+different DTLS Management Method for DTLS Chunk or in combination
+with other DTLS Management Methods in addition to DTLS 1.3 chunks for the
+SCTP association.
+Multiple DTLS Management Methods offered in the INIT chunk will be
+ordered based on the priority, where the most preferred will be
+in the first position and the least preferred in the last.
+The INIT-ACK chunk will only contain the chosen DTLS Management Method.
+Offers with multiple DTLS Management Methods need to
+consider the downgrade attack risks (see {{Downgrade-Attacks}}).
 
-The initiator MAY include in its INIT additional security solutions
-that are compatible to offer in parallel with DTLS 1.3 Chunks. This
+The initiator MAY include in its INIT additional DTLS Management Methods
+that are compatible to offer in parallel with DTLS Chunks. This
 may include SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}}. This will result
 in that a number of different SCTP parameters may be included that are
 not possible to use simultaneously. Instead the responder needs to parse
 these parameters to figure out which sets of solutions that are
 offered that the implementation support, and apply its security
 policies to select the most appropriate. For example an offer of DTLS
-1.3 Chunks and SCTP-AUTH, could be interpreted as three different
-solutions with different properties, namely DTLS 1.3 Chunks,
+Chunks and SCTP-AUTH, could be interpreted as three different
+solutions with different properties, namely DTLS Chunks,
 DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
-However, here the DTLS 1.3 Chunk Protected Association Parameter can
+However, here the DTLS Management Parameter can
 indicate both preference and which of the solutions that are preferred.
 
-The responder selects one or possibly more of compatible security
-solutions that can be used simultaneously and include them in the
-response (INIT-ACK). If DTLS 1.3 chunks was selected and the
-Key-Management method follows the recommendation for down-grade
-prevention the endpoints can know that down-grade did not happen.
-
+The responder selects one security solutions and includes it in the
+response (INIT-ACK). If DTLS chunks was selected and the
+DTLS Management Method follows the recommendation for down-grade
+prevention the endpoints know that down-grade did not happen.
 
 ## Termination of a Protected Association {#termination-procedure}
 
 Besides the procedures for terminating an association explained in
-{{RFC9260}}, DTLS 1.3 chunk SHALL ask the SCTP endpoint for terminating an
+{{RFC9260}}, DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating an
 association when having an internal error or by detecting a security
-violation. Note that the closure of any key-management connection doesn't
+violation. Note that the closure of any DTLS Management Method doesn't
 compromise the capability of sending and receiving protected
 SHUTDOWN-COMPLETE chunks as that capability only relies on the
-Key Context and not on the key-management connection from where it has
+Key Context and not on the DTLS Management Method from where it has
 been derived.
 
-## Considerations on Key Management {#key-management-considerations}
+## Considerations on DTLS Management Method {#key-management-considerations}
 
 It is up to the upper layer to manage the keys for the DTLS chunk.
-The meaning of key-management is described in {{sctp-protection-solutions}}.
+The meaning of DTLS Management Method is described in {{dtls-management-method}}.
 
-The key-management SHOULD use a dedicated PPID to ensure that the
-key-management related user messages are handled by the appropriate layer.
+The DTLS Management Method SHOULD use a dedicated PPID to ensure that the
+DTLS Management Method related user messages are handled by the appropriate layer.
 
-When performing key-management, the keys for receiving SHOULD be installed
+When performing DTLS Management, the keys for receiving SHOULD be installed
 before the corresponding send keys at the peer. For mitigating downgrade
-attacks the key derivation MUST include the protection solution Identifiers
+attacks the key derivation MUST include the DTLS Management Method Identifiers
 that were sent and received.
 
 The communication is only protected after both sides have configured the keys
 for sending and both sides have enforced the protection.
 
-
 # DTLS Chunk Handling {#dtls-chunk-handling}
 
 The DTLS chunk MUST NOT be bundled with any other chunk.
-In particular, it MUST be the first chunk.
+In particular, it MUST be the first and only chunk.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -955,7 +1061,7 @@ defined in the corresponding specifications.
 # Abstract API  {#abstract-api}
 
 This section describes an abstract API that is needed between a
-key-managment function and the DTLS 1.3 chunk. This is an
+DTLS Management Method and the DTLS Chunk. This is an
 example API and there are alternative implementations.
 
 This API enables the cryptographical protection operations by setting
@@ -969,7 +1075,7 @@ The sequence number key is used to encrypt the sequence number
 
 ## Cipher Suit Capabilities
 
-The key-management function needs to know which cipher suits defined
+The DTLS Management Method needs to know which cipher suits defined
 for usage with DTLS 1.3 that are supported by the DTLS chunk and its
 protection operations block. All TLS cipher suit that are defined are
 listed in the TLS cipher suit registry {{TLS-CIPHER-SUITS}} at IANA
@@ -1002,7 +1108,7 @@ Parameters :
 : A bit indicating whether the Key is for restart purposes
 
 * DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-  the key-management its field length and value are include. The field length
+  the DTLS Management Method its field length and value are include. The field length
   can be set to zero (0) to indicate that CID is not used.
 
 * DTLS Epoch:
@@ -1042,7 +1148,7 @@ Parameters :
 : A bit indicating whether the Key is for restart purposes
 
 * DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-  the key-management its field length and value are include. The field length
+  the DTLS Management Method its field length and value are include. The field length
   can be set to zero (0) to indicate that CID is not used.
 
 * DTLS Epoch:
@@ -1221,13 +1327,11 @@ Parameters :
 
 * Restart indication
 
-
 * Configuration parameters
 
 Reply: Replay Protection Configured
 
 Parameters : true or false
-
 
 # Socket API Considerations {#socket-api}
 
@@ -1341,9 +1445,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1380,9 +1484,9 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_pmids {
-	sctp_assoc_t sds_assoc_id;
-	uint16_t sdp_nr_pmids;
-	uint16_t sdp_pmids[];
+        sctp_assoc_t sds_assoc_id;
+        uint16_t sdp_nr_pmids;
+        uint16_t sdp_pmids[];
 };
 ~~~
 
@@ -1412,19 +1516,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1487,19 +1591,19 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys {
-	sctp_assoc_t sdk_assoc_id;
-	uint8_t sdk_cipher_suit[2];
-	uint8_t sdk_restart;
-	uint8_t sdk_conn_id_len;
-	uint16_t sdk_key_len;
-	uint16_t sdk_iv_len;
-	uint16_t sdk_sn_key_len;
-	uint16_t sdk_unused;
-	uint64_t sdk_epoch;
-	uint8_t *sdk_conn_id;
-	uint8_t *sdk_key;
-	uint8_t *sdk_iv;
-	uint8_t *sdk_sn_key;
+        sctp_assoc_t sdk_assoc_id;
+        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_restart;
+        uint8_t sdk_conn_id_len;
+        uint16_t sdk_key_len;
+        uint16_t sdk_iv_len;
+        uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
+        uint64_t sdk_epoch;
+        uint8_t *sdk_conn_id;
+        uint8_t *sdk_key;
+        uint8_t *sdk_iv;
+        uint8_t *sdk_sn_key;
 };
 ~~~
 
@@ -1559,12 +1663,12 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_keys_id {
-	sctp_assoc_t sdki_assoc_id;
-	uint8_t sdki_restart;
-	uint8_t sdki_conn_id_len;
-	uint16_t sdki_unused;
-	uint64_t sdki_epoch;
-	uint8_t *sdki_conn_id;
+   sctp_assoc_t sdki_assoc_id;
+   uint8_t sdki_restart;
+   uint8_t sdki_conn_id_len;
+   uint16_t sdki_unused;
+   uint64_t sdki_epoch;
+   uint8_t *sdki_conn_id;
 }
 ~~~
 
@@ -1606,8 +1710,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1638,13 +1742,13 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_dtls_stats {
-	sctp_assoc_t sds_assoc_id;
-	uint32_t sds_dropped_unprotected;
-	uint32_t sds_aead_failures;
-	uint32_t sds_recv_protected;
-	uint32_t sds_sent_protected;
-	/* There will be added more fields before the WGLC. */
-	/* There might be additional platform specific counters. */
+   sctp_assoc_t sds_assoc_id;
+   uint32_t sds_dropped_unprotected;
+   uint32_t sds_aead_failures;
+   uint32_t sds_recv_protected;
+   uint32_t sds_sent_protected;
+   /* There will be added more fields before the WGLC. */
+   /* There might be additional platform specific counters. */
 };
 ~~~
 
@@ -1676,8 +1780,8 @@ The following structure is used as the ``option_value``:
 
 ~~~ c
 struct sctp_assoc_value {
-	sctp_assoc_t assoc_id;
-	uint32_t assoc_value;
+   sctp_assoc_t assoc_id;
+   uint32_t assoc_value;
 };
 ~~~
 
@@ -1738,26 +1842,26 @@ Parameters group:
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
 
-## SCTP Protection Solution Identifiers {#IANA-Protection-Solution-ID}
+## DTLS Management Method Identifiers {#IANA-Protection-Solution-ID}
 
-IANA is requested to create a new registry called "SCTP Protection
-Solutions". This registry is part of the of the Stream
+IANA is requested to create a new registry called "DTLS Management Method".
+This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
-The purpose of this registry is to assign Protection Solution
-Identifier for any security solution that is either the DTLS
-Chunk combined with a key-management method, offered as an alternative
-to DTLS chunk. Any security solution that is offered
+The purpose of this registry is to assign DTLS Management Method
+Identifier for any DTLS Management Method that is either the DTLS
+Chunk combined with a DTLS Management Method, offered as an alternative
+to DTLS chunk. Any DTLS Management Method that is offered
 through a parameter exchange during the SCTP handshake are potential
 to be included here.
 
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
 | Identifier | Solution Name | Reference | Contact |
-| 0 | DTLS 1.3 Chunk with Pre- | RFC-TBD | Draft Authors |
+| 0 | DTLS Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
-{: #iana-psi title="Protection Solution Identifiers" cols="r l l l"}
+{: #iana-psi title="DTLS Management Method Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
 as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
@@ -1771,7 +1875,7 @@ document. The registry at time of writing was available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1
 
 | ID Value | Chunk Type | Reference |
-| TBA6 | DTLS Chunk (DTLS) | RFC-To-Be |
+| 0x41 | DTLS Chunk (DTLS) | RFC-To-Be |
 {: #iana-chunk-types title="New Chunk Type Registered" cols="r l l"}
 
 The registration table for the chunk flags of this chunk
@@ -1798,7 +1902,7 @@ available at:
 https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2
 
 | ID Value | Chunk Parameter Type | Reference |
-| TBA8 | DTLS 1.3 Chunk Protected Association | RFC-To-Be |
+| 0x8006 | DTLS Management Parameter | RFC-To-Be |
 {: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
 
 
@@ -1853,20 +1957,40 @@ therefore have limited effect.
 Section 4.5.3 of {{RFC9147}} defines limits on the number of records
 q that can be protected using the same key as well as limits on the
 number of received packets v that fail authentication with each key.
-To adhere to these limits the key management function can
+To adhere to these limits the DTLS Management Method can
 periodically poll the DTLS protection operation function to see
 when a limit have been reached or is closed to being reached.
 Instead of periodic polling, a callback can be used.
 
 ## Downgrade Attacks {#Downgrade-Attacks}
 
-As long as the Key-management include the ordered list of protection
+Downgrade attacks may attempt to force the DTLS Management Method
+by altering the containt of INIT chunk, for instance by removing
+all offered DTLS Management Methods but the one desired. This is possible
+if the attacker is an on-path attacker that can modify packet
+because INIT and INIT-ACK chunks are plain text.
+
+Preventing the downgrade attacks is implemented by using at the initiator
+the list of offered DTLS Management Method sent in the INIT chunk plus
+the selected DTLS Management Method received in the INIT-ACK chunk from the responder
+for deriving the keys from the handshaked secrets obtained during
+DTLS initial handshake.
+At the responder, the list of offered DTLS Management Methods received in
+the INIT chunk plus the selected DTLS Management Method that is sent
+in the INIT-ACK chunk will be used for deriving the keys from the handshaked
+secrets obtained during DTLS initial handshake.
+
+If the attacker suceeds in changing the DTLS Management Methods in either
+INIT, NINT-ACK or both chunks, the peers will not be able deriving the
+same keys and the Association will not be possible to proceed.
+
+Thus, as long as the DTLS Management Method includes the ordered list of protection
 solutions indicators present in the parameter part of the INIT chunk
 for the SCTP Association in its key-derivation the association will be
 protected from down-grade.
 
-In case any key-management do not include the parameter content in
-its key-derivation down-grade might be possible if that key-management
+In case any DTLS Management Method do not include the parameter content in
+its key-derivation down-grade might be possible if that DTLS Management Method
 method is selected. It is up to endpoint policies to determine
 which protection it deems necessary against down-grade attacks.
 
