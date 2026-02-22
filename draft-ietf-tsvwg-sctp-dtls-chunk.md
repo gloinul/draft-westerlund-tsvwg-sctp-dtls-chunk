@@ -311,24 +311,6 @@ they have different properties. See
 {{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
 {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
 
-## PMTU Considerations {#pmtu}
-
-The addition of the DTLS chunk to SCTP reduces the room for payload,
-due to the size of the DTLS chunk header, padding, and the AEAD
-authentication tag.  Thus, the SCTP layer creating the plain text
-payload needs to know about the overhead to adjust its target payload
-size appropriately.
-
-A path MTU discovery function in SCTP will need to know the actual
-sent and received size of packets for the SCTP packets. This to
-correctly handle PMTUD probe packets.
-
-From SCTP perspective, if there is a maximum size of plain text data
-that can be protected by the Chunk Protection Operator that must be
-communicated to SCTP. As such a limit will limit the PMTU for SCTP to
-the maximum plain text plus DTLS chunk and algorithm overhead plus
-the SCTP common header.
-
 ## Congestion Control Considerations {#congestion}
 
 The SCTP mechanism for handling congestion control does depend on
