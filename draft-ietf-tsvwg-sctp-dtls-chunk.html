@@ -1676,14 +1676,12 @@ Key and IV, produced by the key-management, and all relevant data that
 needs to be provided to the Chunk Protection Operator for DTLS encryption
 and decryption.  DTLS Key context includes Keys and IV for sending and
 receiving, replay window, last used sequence number. Each DTLS key
-context is associated with a four-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, the DTLS
-Connection ID (if used), and the DTLS epoch.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.2-7">Support of DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk is OPTIONAL, and negotiated using the DTLS Management Method.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
-<p id="section-3.2-8">The first established DTLS key context for any SCTP association and DTLS
-connection ID (if used) MUST use epoch=3. This ensures that the
-epoch of the DTLS key context will normally match the epoch of
+context is associated with a three-value tuple identifying the context,
+consisting of SCTP Association, the restart indicator, and the DTLS epoch.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2-7">The DTLS Connection ID in the DTLS Record layer used in the
+DTLS Chunk MUST NOT be used.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">The first established DTLS key context for any SCTP association MUST use epoch=3.
+This ensures that the epoch of the DTLS key context will normally match the epoch of
 a DTLS Management Method´s connection.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
 <p id="section-3.2-9">The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
@@ -1856,12 +1854,12 @@ replay window, i.e. initialized but never used. An SCTP Endpoint MUST
 NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.<a href="#section-3.8.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.8.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
-restart needs to store securely and persistently the restart Keys, DTLS
-connection ID (if used) and related DTLS epoch, indexed so that when
+restart needs to store securely and persistently the restart Keys,
+and related DTLS epoch, indexed so that when
 performing a restart with the peer node it had a protected SCTP
 association which can identify the right restart Key and DTLS epoch and
 initialize the restart DTLS Key Context for when restarting the SCTP
-association. The keys, DTLS connection ID, and epoch needs to be stored
+association. The keys and epoch needs to be stored
 secure and persistently so that they survive the events that are
 causing protected SCTP Restart procedure to be used, for instance a
 crash of the SCTP stack. The security considerations for persistent
@@ -1949,10 +1947,7 @@ restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.<a href="#section-3.8.1-11" class="pilcrow">¶</a></p>
 <p id="section-3.8.1-12">After restart the next primary DTLS key context MUST use epoch=3,
-i.e. the epoch value is reset. Note that if the restart epoch used
-also was 3 when not using any DTLS connection ID, then the
-installation of the new restart DTLS key context needs to be done with
-some care to avoid dropping valid packets. After having derived new
+i.e. the epoch value is reset. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.<a href="#section-3.8.1-12" class="pilcrow">¶</a></p>
@@ -2442,9 +2437,7 @@ in <a href="#DTLSCiphertext-header-struct" class="auto internal xref">Figure 6</
 </div>
 <p id="section-5.2-5">DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
 in <a href="#DTLS-chunk" class="auto internal xref">Section 5.1</a>.  The size of the header of the DTLSCiphertext can
-be easily computed by reading the first octet if the Connection ID is
-not present. If the Connection ID is part of the record the field's
-length is part of the securit context related information. The Length
+be easily computed by reading the first octet. The Length
 field is redundant with the DTLS chunk's length field and can be
 avoided to be used, and multiple DTLS records SHALL NOT be part of the
 DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
@@ -2550,14 +2543,11 @@ shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure
 <a href="#name-dtlsciphertext-recommended-" class="selfRef">DTLSCiphertext recommended structure</a>
           </figcaption></figure>
 </div>
-<p id="section-5.2-7">In case of the Connection ID field being present its length needs to
-be retrived from the security context, we assume it known here in
-CID_size variable. Thus the size of the DTLSCiphertext header, using
-the first octet B, is computed as follows:<a href="#section-5.2-7" class="pilcrow">¶</a></p>
-<p id="section-5.2-8">size = (1 + (B &amp; 0x08) ? 1 : 2 + (B &amp; 0x04) ? 0 : 2 + (B &amp; 0x10) ? 0 : CID_size) &amp; 0x3<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">Thus the size of the DTLSCiphertext header, using the first octet B, is computed as follows:<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8">size = 1 + (B &amp; 0x08) ? 2 : 1 + (B &amp; 0x04) ? 2 : 0<a href="#section-5.2-8" class="pilcrow">¶</a></p>
 <p id="section-5.2-9">In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
 as follows:<a href="#section-5.2-9" class="pilcrow">¶</a></p>
-<p id="section-5.2-10">P = (4 - size) &amp; 0x03<a href="#section-5.2-10" class="pilcrow">¶</a></p>
+<p id="section-5.2-10">P = (4 - (size &amp; 0x03)) &amp; 0x03<a href="#section-5.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3186,39 +3176,34 @@ corresponding key materials.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 </dl>
 </li>
           <li class="normal" id="section-9.2-5.3">
-            <p id="section-9.2-5.3.1">DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-the DTLS Management Method its field length and value are include. The field length
-can be set to zero (0) to indicate that CID is not used.<a href="#section-9.2-5.3.1" class="pilcrow">¶</a></p>
+            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.3.1">
+              <dt id="section-9.2-5.3.1.1">DTLS Epoch:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.2-5.3.1.2">
+                <p id="section-9.2-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are not expected as they are used during DTLS handshake.<a href="#section-9.2-5.3.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
 </li>
           <li class="normal" id="section-9.2-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-9.2-5.4.1">
-              <dt id="section-9.2-5.4.1.1">DTLS Epoch:</dt>
+              <dt id="section-9.2-5.4.1.1">Cipher Suit:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.4.1.2">
-                <p id="section-9.2-5.4.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
-3 are not expected as they are used during DTLS handshake.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.2-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9.2-5.4.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.2-5.5">
             <span class="break"></span><dl class="dlParallel" id="section-9.2-5.5.1">
-              <dt id="section-9.2-5.5.1.1">Cipher Suit:</dt>
+              <dt id="section-9.2-5.5.1.1">Write Key, Sequence Number Key and IV:</dt>
               <dd style="margin-left: 1.5em" id="section-9.2-5.5.1.2">
-                <p id="section-9.2-5.5.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9.2-5.5.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</li>
-          <li class="normal" id="section-9.2-5.6">
-            <span class="break"></span><dl class="dlParallel" id="section-9.2-5.6.1">
-              <dt id="section-9.2-5.6.1.1">Write Key, Sequence Number Key and IV:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.2-5.6.1.2">
-                <p id="section-9.2-5.6.1.2.1">The cipher suit specific binary object containing all necessary
+                <p id="section-9.2-5.5.1.2.1">The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
-cipher suit used.<a href="#section-9.2-5.6.1.2.1" class="pilcrow">¶</a></p>
+cipher suit used.<a href="#section-9.2-5.5.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
@@ -3257,39 +3242,34 @@ corresponding key materials.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </dl>
 </li>
           <li class="normal" id="section-9.3-5.3">
-            <p id="section-9.3-5.3.1">DTLS Connection ID: : If DTLS connection ID (CID) has been negotiated by
-the DTLS Management Method its field length and value are include. The field length
-can be set to zero (0) to indicate that CID is not used.<a href="#section-9.3-5.3.1" class="pilcrow">¶</a></p>
+            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.3.1">
+              <dt id="section-9.3-5.3.1.1">DTLS Epoch:</dt>
+              <dd style="margin-left: 1.5em" id="section-9.3-5.3.1.2">
+                <p id="section-9.3-5.3.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
+3 are note expected as they are used during DTLS handshake.<a href="#section-9.3-5.3.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
 </li>
           <li class="normal" id="section-9.3-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-9.3-5.4.1">
-              <dt id="section-9.3-5.4.1.1">DTLS Epoch:</dt>
+              <dt id="section-9.3-5.4.1.1">Cipher Suit:</dt>
               <dd style="margin-left: 1.5em" id="section-9.3-5.4.1.2">
-                <p id="section-9.3-5.4.1.2.1">The DTLS epoch these keys are valid for. Note that Epoch lower than
-3 are note expected as they are used during DTLS handshake.<a href="#section-9.3-5.4.1.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.3-5.4.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+to identify the DTLS AEAD algorithm to perform the DTLS record protection.
+The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9.3-5.4.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-9.3-5.5">
             <span class="break"></span><dl class="dlParallel" id="section-9.3-5.5.1">
-              <dt id="section-9.3-5.5.1.1">Cipher Suit:</dt>
+              <dt id="section-9.3-5.5.1.1">Write Key, Sequence Number Key and IV:</dt>
               <dd style="margin-left: 1.5em" id="section-9.3-5.5.1.2">
-                <p id="section-9.3-5.5.1.2.1">2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
-to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-The cipher suite is fixed for a (SCTP Association, Key) pair.<a href="#section-9.3-5.5.1.2.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</li>
-          <li class="normal" id="section-9.3-5.6">
-            <span class="break"></span><dl class="dlParallel" id="section-9.3-5.6.1">
-              <dt id="section-9.3-5.6.1.1">Write Key, Sequence Number Key and IV:</dt>
-              <dd style="margin-left: 1.5em" id="section-9.3-5.6.1.2">
-                <p id="section-9.3-5.6.1.2.1">The cipher suit specific binary object containing all necessary
+                <p id="section-9.3-5.5.1.2.1">The cipher suit specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
-cipher suit used.<a href="#section-9.3-5.6.1.2.1" class="pilcrow">¶</a></p>
+cipher suit used.<a href="#section-9.3-5.5.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
@@ -3748,7 +3728,7 @@ sent during the handshake.<a href="#section-10.4.1-1" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-10.4.1-3">
 <pre>
 struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
+        sctp_assoc_t sdp_assoc_id;
         uint16_t sdp_nr_pmids;
         uint16_t sdp_pmids[];
 };
@@ -3756,7 +3736,7 @@ struct sctp_dtls_pmids {
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-10.4.1-4">
             <dt id="section-10.4.1-4.1">
-<code>sds_assoc_id</code>:</dt>
+<code>sdp_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.1-4.2">
               <p id="section-10.4.1-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3801,7 +3781,7 @@ peer during the handshake.<a href="#section-10.4.2-1" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-10.4.2-3">
 <pre>
 struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
+        sctp_assoc_t sdp_assoc_id;
         uint16_t sdp_nr_pmids;
         uint16_t sdp_pmids[];
 };
@@ -3809,7 +3789,7 @@ struct sctp_dtls_pmids {
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-10.4.2-4">
             <dt id="section-10.4.2-4.1">
-<code>sds_assoc_id</code>:</dt>
+<code>sdp_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.2-4.2">
               <p id="section-10.4.2-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3850,13 +3830,11 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
-        uint8_t sdk_conn_id_len;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint16_t sdk_unused;
+        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
         uint64_t sdk_epoch;
-        uint8_t *sdk_conn_id;
         uint8_t *sdk_key;
         uint8_t *sdk_iv;
         uint8_t *sdk_sn_key;
@@ -3887,58 +3865,45 @@ from <code>0</code> is used, the restart keys are added.<a href="#section-10.4.3
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.7">
-<code>sdk_conn_id_len</code>:</dt>
+<code>sdk_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.8">
-              <p id="section-10.4.3-4.8.1">The length of the DTLS connection identifier specified in <code>sdk_conn_id</code>.<a href="#section-10.4.3-4.8.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.8.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.3-4.8.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.9">
-<code>sdk_key_len</code>:</dt>
+<code>sdk_iv_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.10">
-              <p id="section-10.4.3-4.10.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.3-4.10.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.10.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.3-4.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.11">
-<code>sdk_iv_len</code>:</dt>
+<code>sdk_sn_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.12">
-              <p id="section-10.4.3-4.12.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.3-4.12.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.12.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.3-4.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.13">
-<code>sdk_sn_key_len</code>:</dt>
+<code>sdk_unused</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.14">
-              <p id="section-10.4.3-4.14.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.3-4.14.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.14.1">This field is ignored.<a href="#section-10.4.3-4.14.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.15">
-<code>sdk_unused</code>:</dt>
+<code>sdk_epoch</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.16">
-              <p id="section-10.4.3-4.16.1">This field is ignored.<a href="#section-10.4.3-4.16.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.16.1">The epoch for which the keys are added.<a href="#section-10.4.3-4.16.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.17">
-<code>sdk_epoch</code>:</dt>
+<code>sdk_key</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.3-4.18">
-              <p id="section-10.4.3-4.18.1">The epoch for which the keys are added.<a href="#section-10.4.3-4.18.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.3-4.18.1">A pointer to the key.<a href="#section-10.4.3-4.18.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.3-4.19">
-<code>sdk_conn_id</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.3-4.20">
-              <p id="section-10.4.3-4.20.1">A pointer to the connection identifier for which the keys are added.
-Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.3-4.20.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.3-4.21">
-<code>sdk_key</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.3-4.22">
-              <p id="section-10.4.3-4.22.1">A pointer to the key.<a href="#section-10.4.3-4.22.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.3-4.23">
 <code>sdk_iv</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.3-4.24">
-              <p id="section-10.4.3-4.24.1">A pointer to the initialization vector.<a href="#section-10.4.3-4.24.1" class="pilcrow">¶</a></p>
+            <dd style="margin-left: 1.5em" id="section-10.4.3-4.20">
+              <p id="section-10.4.3-4.20.1">A pointer to the initialization vector.<a href="#section-10.4.3-4.20.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -3965,13 +3930,11 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
-        uint8_t sdk_conn_id_len;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint16_t sdk_unused;
+        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
         uint64_t sdk_epoch;
-        uint8_t *sdk_conn_id;
         uint8_t *sdk_key;
         uint8_t *sdk_iv;
         uint8_t *sdk_sn_key;
@@ -4002,58 +3965,45 @@ from <code>0</code> is used, the restart keys are added.<a href="#section-10.4.4
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.7">
-<code>sdk_conn_id_len</code>:</dt>
+<code>sdk_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.8">
-              <p id="section-10.4.4-4.8.1">The length of the DTLS connection identifier specified in <code>sdk_conn_id</code>.<a href="#section-10.4.4-4.8.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.8.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.4-4.8.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.9">
-<code>sdk_key_len</code>:</dt>
+<code>sdk_iv_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.10">
-              <p id="section-10.4.4-4.10.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-10.4.4-4.10.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.10.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.4-4.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.11">
-<code>sdk_iv_len</code>:</dt>
+<code>sdk_sn_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.12">
-              <p id="section-10.4.4-4.12.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-10.4.4-4.12.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.12.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.4-4.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.13">
-<code>sdk_sn_key_len</code>:</dt>
+<code>sdk_unused</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.14">
-              <p id="section-10.4.4-4.14.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-10.4.4-4.14.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.14.1">This field is ignored.<a href="#section-10.4.4-4.14.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.15">
-<code>sdk_unused</code>:</dt>
+<code>sdk_epoch</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.16">
-              <p id="section-10.4.4-4.16.1">This field is ignored.<a href="#section-10.4.4-4.16.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.16.1">The epoch for which the keys are added.<a href="#section-10.4.4-4.16.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.17">
-<code>sdk_epoch</code>:</dt>
+<code>sdk_key</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-10.4.4-4.18">
-              <p id="section-10.4.4-4.18.1">The epoch for which the keys are added.<a href="#section-10.4.4-4.18.1" class="pilcrow">¶</a></p>
+              <p id="section-10.4.4-4.18.1">A pointer to the key.<a href="#section-10.4.4-4.18.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.4-4.19">
-<code>sdk_conn_id</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.4-4.20">
-              <p id="section-10.4.4-4.20.1">A pointer to the connection identifier for which the keys are added.
-Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.4-4.20.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.4-4.21">
-<code>sdk_key</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.4-4.22">
-              <p id="section-10.4.4-4.22.1">A pointer to the key.<a href="#section-10.4.4-4.22.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.4-4.23">
 <code>sdk_iv</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.4-4.24">
-              <p id="section-10.4.4-4.24.1">A pointer to the initialization vector.<a href="#section-10.4.4-4.24.1" class="pilcrow">¶</a></p>
+            <dd style="margin-left: 1.5em" id="section-10.4.4-4.20">
+              <p id="section-10.4.4-4.20.1">A pointer to the initialization vector.<a href="#section-10.4.4-4.20.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -4075,11 +4025,8 @@ receiving DTLS chunks.<a href="#section-10.4.5-1" class="pilcrow">¶</a></p>
 <pre>
 struct sctp_dtls_keys_id {
    sctp_assoc_t sdki_assoc_id;
-   uint8_t sdki_restart;
-   uint8_t sdki_conn_id_len;
-   uint16_t sdki_unused;
+   uint32_t sdki_restart;
    uint64_t sdki_epoch;
-   uint8_t *sdki_conn_id;
 }
 </pre><a href="#section-10.4.5-3" class="pilcrow">¶</a>
 </div>
@@ -4101,28 +4048,9 @@ from <code>0</code> is used, the restart keys are removed.<a href="#section-10.4
 </dd>
             <dd class="break"></dd>
 <dt id="section-10.4.5-4.5">
-<code>sdki_conn_id_len</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.5-4.6">
-              <p id="section-10.4.5-4.6.1">The length of the DTLS connection identifier specified in <code>sdki_conn_id</code>.<a href="#section-10.4.5-4.6.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.5-4.7">
-<code>sdki_unused</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.5-4.8">
-              <p id="section-10.4.5-4.8.1">This field is ignored.<a href="#section-10.4.5-4.8.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.5-4.9">
 <code>sdki_epoch</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.5-4.10">
-              <p id="section-10.4.5-4.10.1">The epoch for which the keys are removed.<a href="#section-10.4.5-4.10.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-10.4.5-4.11">
-<code>sdki_conn_id</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-10.4.5-4.12">
-              <p id="section-10.4.5-4.12.1">A pointer to the connection identifier for which the keys are removed.
-Using <code>NULL</code> means that no connection identifier is used.<a href="#section-10.4.5-4.12.1" class="pilcrow">¶</a></p>
+            <dd style="margin-left: 1.5em" id="section-10.4.5-4.6">
+              <p id="section-10.4.5-4.6.1">The epoch for which the keys are removed.<a href="#section-10.4.5-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -4607,7 +4535,7 @@ used as the Chunk Protection Operator applies.<a href="#section-13-1" class="pil
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
 port are fixed for each direction. Advanced privacy features such
-as changing DTLS Connection ID and sequence number encryption might
+as sequence number encryption might
 therefore have limited effect.<a href="#section-13.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
