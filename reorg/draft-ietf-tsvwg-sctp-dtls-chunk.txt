@@ -88,75 +88,76 @@ Table of Contents
      4.3.  Dynamic Address Reconfiguration Considerations
        4.3.1.  Limitations
        4.3.2.  Change
-   5.  New Parameter Type
-     5.1.  DTLS Key Management Parameter
-   6.  New Chunk Type
-     6.1.  DTLS Chunk (DTLS)
-     6.2.  Payload formatting in DTLS Chunk
-   7.  New Error Causes
-     7.1.  Policy Not Met
-     7.2.  No Common DTLS Key Management Method
-   8.  Procedures
-     8.1.  Establishment of a Protected Association
-       8.1.1.  Offering Multiple Security Solutions
-     8.2.  DTLS Chunk Handling
-       8.2.1.  Sending of DTLS Chunks
-       8.2.2.  Receiving of DTLS Chunks
-       8.2.3.  Critical Error from DTLS
-       8.2.4.  Non-critical Error in the Protection
-     8.3.  Termination of a Protected Association
-     8.4.  SCTP Restart Considerations
-       8.4.1.  Protected SCTP Restart
-       8.4.2.  Compatibility with Legacy SCTP Restart
-     8.5.  Considerations on DTLS Key Management Method
-   9.  Abstract API
-     9.1.  Cipher Suit Capabilities
-     9.2.  Establish Client Write Keying Material
-     9.3.  Establish Server Write Keying Material
-     9.4.  Destroy Client Write Keying Material
-     9.5.  Destroy Server Write Keying Material
-     9.6.  Set Key to Use
-     9.7.  Require Protected SCTP Packets
-     9.8.  Get AEAD Encryption Invocations
-     9.9.  Get AEAD Decryption Invocations
-     9.10. Get Failed AEAD Decryption Invocations
-     9.11. Configure Replay Protection
-   10. Socket API Considerations
-     10.1.  SCTP_ASSOC_CHANGE Notification
-     10.2.  A New Flag for recvmsg() (MSG_PROTECTED)
-     10.3.  Functions
-       10.3.1.  sctp_dtls_nr_cipher_suits()
-       10.3.2.  sctp_dtls_cipher_suits()
-     10.4.  Socket Options
-       10.4.1.  Get or Set the Local DTLS Key Management Identifiers
+   5.  New Chunk, Parameter and Error Causes
+     5.1.  New Parameter Type
+       5.1.1.  DTLS Key Management Parameter
+     5.2.  New Chunk Type
+       5.2.1.  DTLS Chunk (DTLS)
+       5.2.2.  Payload formatting in DTLS Chunk
+     5.3.  New Error Causes
+       5.3.1.  Policy Not Met
+       5.3.2.  No Common DTLS Key Management Method
+   6.  Procedures
+     6.1.  Establishment of a Protected Association
+       6.1.1.  Offering Multiple Security Solutions
+     6.2.  DTLS Chunk Handling
+       6.2.1.  Sending of DTLS Chunks
+       6.2.2.  Receiving of DTLS Chunks
+       6.2.3.  Critical Error from DTLS
+       6.2.4.  Non-critical Error in the Protection
+     6.3.  Termination of a Protected Association
+     6.4.  SCTP Restart Considerations
+       6.4.1.  Protected SCTP Restart
+       6.4.2.  Compatibility with Legacy SCTP Restart
+     6.5.  Considerations on DTLS Key Management Method
+   7.  Abstract API
+     7.1.  Cipher Suit Capabilities
+     7.2.  Establish Client Write Keying Material
+     7.3.  Establish Server Write Keying Material
+     7.4.  Destroy Client Write Keying Material
+     7.5.  Destroy Server Write Keying Material
+     7.6.  Set Key to Use
+     7.7.  Require Protected SCTP Packets
+     7.8.  Get AEAD Encryption Invocations
+     7.9.  Get AEAD Decryption Invocations
+     7.10. Get Failed AEAD Decryption Invocations
+     7.11. Configure Replay Protection
+   8.  Socket API Considerations
+     8.1.  SCTP_ASSOC_CHANGE Notification
+     8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
+     8.3.  Functions
+       8.3.1.  sctp_dtls_nr_cipher_suits()
+       8.3.2.  sctp_dtls_cipher_suits()
+     8.4.  Socket Options
+       8.4.1.  Get or Set the Local DTLS Key Management Identifiers
                (SCTP_DTLS_LOCAL_KMIDS)
-       10.4.2.  Get the Remote DTLS Key Mangement Identifiers
+       8.4.2.  Get the Remote DTLS Key Mangement Identifiers
                (SCTP_DTLS_REMOTE_KMIDS)
-       10.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
-       10.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
-       10.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
-       10.4.6.  Set or Get Protection Enforcement
+       8.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
+       8.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+       8.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+       8.4.6.  Set or Get Protection Enforcement
                (SCTP_DTLS_ENFORCE_PROTECTION)
-       10.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
-       10.4.8.  Get or Set the Replay Protection Window Size
+       8.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
+       8.4.8.  Get or Set the Replay Protection Window Size
                (SCTP_DTLS_REPLAY_WINDOW)
-   11. Implementation Considerations
-     11.1.  Privacy Padding of SCTP Packets
-   12. IANA Considerations
-     12.1.  DTLS Key Management Method Identifiers
-     12.2.  SCTP Chunk Type
-     12.3.  SCTP Chunk Parameter Types
-     12.4.  SCTP Error Cause Codes
-     12.5.  SCTP Payload Protocol Identifier
-   13. Security Considerations
-     13.1.  Privacy Considerations
-     13.2.  AEAD Limit Considerations
-     13.3.  Downgrade Attacks
-     13.4.  Persistent Secure Storage of Restart Key Context
-   14. Acknowledgments
-   15. References
-     15.1.  Normative References
-     15.2.  Informative References
+   9.  Implementation Considerations
+     9.1.  Privacy Padding of SCTP Packets
+   10. IANA Considerations
+     10.1.  DTLS Key Management Method Identifiers
+     10.2.  SCTP Chunk Type
+     10.3.  SCTP Chunk Parameter Types
+     10.4.  SCTP Error Cause Codes
+     10.5.  SCTP Payload Protocol Identifier
+   11. Security Considerations
+     11.1.  Privacy Considerations
+     11.2.  AEAD Limit Considerations
+     11.3.  Downgrade Attacks
+     11.4.  Persistent Secure Storage of Restart Key Context
+   12. Acknowledgments
+   13. References
+     13.1.  Normative References
+     13.2.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -181,7 +182,7 @@ Table of Contents
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions.  However, there can be some
    limitations or additional requirements for them to function such as
-   those noted for SCTP restart Section 8.4 and an actual update of the
+   those noted for SCTP restart Section 6.4 and an actual update of the
    specification of Dynamic Address Reconfiguration [RFC5061], see
    Section 4.3.  Due to DTLS chunk's level of integration as discussed
    in next section it will provide its security functions on all content
@@ -385,7 +386,9 @@ Table of Contents
    authentication mechanisms, SCTP-AUTH [RFC4895] MUST NOT be used once
    DTLS chunks have been successfully negotiated.
 
-5.  New Parameter Type
+5.  New Chunk, Parameter and Error Causes
+
+5.1.  New Parameter Type
 
    This section defines the new parameter type that will be used to
    negotiate the use of the DTLS chunk during association setup, its
@@ -406,7 +409,7 @@ Table of Contents
    This is accomplished (as described in [RFC9260], Section 3.2.1.) by
    the use of the upper bits of the parameter type.
 
-5.1.  DTLS Key Management Parameter
+5.1.1.  DTLS Key Management Parameter
 
    This parameter is used to the request and acknowledge of support of
    DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
@@ -434,7 +437,7 @@ Table of Contents
       times the number of DTLS Key Management identifiers (N) plus 4.
 
    DTLS Key Management Identifier: 16 bits (unsigned integer)
-      Each DTLS Key Management Identifier (Section 12.1) is a 16-bit
+      Each DTLS Key Management Identifier (Section 10.1) is a 16-bit
       unsigned integer value indicating a DTLS Key Management Method.
       The DTLS Management Methods are listed in descending order of
       preference, i.e. the first listed in the parameter is the most
@@ -447,9 +450,9 @@ Table of Contents
       parameter MUST be padded with two bytes.  The padding MUST be set
       to 0 by the sender and MUST be ignored by the receiver.
 
-6.  New Chunk Type
+5.2.  New Chunk Type
 
-6.1.  DTLS Chunk (DTLS)
+5.2.1.  DTLS Chunk (DTLS)
 
    This section defines the new chunk type that will be used to
    transport the DTLS 1.3 record containing protected SCTP payload.
@@ -525,7 +528,7 @@ Table of Contents
       zero bytes to make the chunk 32-bit aligned.  The Padding MUST NOT
       be longer than 3 bytes and it MUST be ignored by the receiver.
 
-6.2.  Payload formatting in DTLS Chunk
+5.2.2.  Payload formatting in DTLS Chunk
 
    From section 4 of [RFC9147], the DTLS record header has variable
    length, here reported in Figure 4.
@@ -561,7 +564,7 @@ Table of Contents
                       Figure 5: DTLSCiphertext header
 
    DTLS Chunk requires encrypted_record to be 32 bit aligned as
-   specified in Section 6.1.  The size of the header of the
+   specified in Section 5.2.1.  The size of the header of the
    DTLSCiphertext can be easily computed by reading the first octet.
    The Length field is redundant with the DTLS chunk's length field and
    can be avoided to be used, and multiple DTLS records SHALL NOT be
@@ -600,36 +603,36 @@ Table of Contents
 
    P = (4 - (size & 0x03)) & 0x03
 
-7.  New Error Causes
+5.3.  New Error Causes
 
    This specification introduces a new set of error causes that are to
    be used when SCTP endpoint detects a faulty condition.
 
-7.1.  Policy Not Met
+5.3.1.  Policy Not Met
 
    When an initiator SCTP endpoint sends an INIT chunk that doesn't
    contain the DTLS Key Management Parameter or a supported DTLS Key
    Management Method towards an SCTP endpoint that only accepts
    protected associations, SCTP will send an ABORT chunk in response to
    the INIT chunk (Section 5.1 of [RFC9260] including the error cause
-   'Policy Not Met' (TBA10) (see Section 12.4
+   'Policy Not Met' (TBA10) (see Section 10.4
 
-7.2.  No Common DTLS Key Management Method
+5.3.2.  No Common DTLS Key Management Method
 
    If the responder to do not support any of the DTLS Management Methods
    offered by the association initiator in the Protection Soluiton
    Parameters Figure 2 SCTP will send an ABORT chunk in response to the
    INIT chunk (Section 5.1 of [RFC9260], including the error cause "No
-   Common DTLS Key Management" (TBA11) (see Section 12.4).
+   Common DTLS Key Management" (TBA11) (see Section 10.4).
 
-8.  Procedures
+6.  Procedures
 
-8.1.  Establishment of a Protected Association
+6.1.  Establishment of a Protected Association
 
    An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
    chunk protected association sends to the remote peer an INIT chunk
    containing the DTLS 1.3 Chunk Protected Association parameter (see
-   Section 5.1) indicating supported and preferred DTLS Key Management
+   Section 5.1.1) indicating supported and preferred DTLS Key Management
    method (see Figure 2).
 
    An SCTP Endpoint acting as responder, when receiving an INIT chunk
@@ -640,7 +643,7 @@ Table of Contents
    are accepted by the responder, and the endpoints' policy require
    secured association it MUST reply with an ABORT chunk, include the
    error cause "No DTLS Key Management Method" (TBA11) (see
-   Section 12.4).  Otherwise, the responder MAY send an INIT-ACK without
+   Section 10.4).  Otherwise, the responder MAY send an INIT-ACK without
    the DTLS Key Management Parameter to indicate that it is willing to
    create a session without security.
 
@@ -649,8 +652,8 @@ Table of Contents
    the DTLS 1.3 Chunk Protected Association parameter or another
    Protection Solution accepted by own security policy solution as an
    error, thus it will reply with an ABORT chunk according to what
-   specified in Section 7.1 indicating that for this endpoint mandatory
-   DTLS Key Management Parameter is missing.
+   specified in Section 5.3.1 indicating that for this endpoint
+   mandatory DTLS Key Management Parameter is missing.
 
    When initiator and responder have agreed on a DTLS Chunk protected
    association and the DTLS Key Management Method by means of
@@ -661,7 +664,7 @@ Table of Contents
    by the selected DTLS Key Management Method for establishing DTLS Key
    Contexts and installing them.
 
-8.1.1.  Offering Multiple Security Solutions
+6.1.1.  Offering Multiple Security Solutions
 
    An initiator of an SCTP association may want to offer multiple
    different DTLS Key Management Methods for DTLS Chunk or in
@@ -672,7 +675,7 @@ Table of Contents
    and the least preferred in the last.  The INIT-ACK chunk will only
    contain the chosen DTLS Key Management Method.  Offers with multiple
    DTLS Key Management Methods need to consider the downgrade attack
-   risks (see Section 13.3).
+   risks (see Section 11.3).
 
    The initiator MAY include in its INIT additional DTLS Key Management
    Methods that are compatible to offer in parallel with DTLS Chunks.
@@ -693,7 +696,7 @@ Table of Contents
    Management Method follows the recommendation for down-grade
    prevention the endpoints know that down-grade did not happen.
 
-8.2.  DTLS Chunk Handling
+6.2.  DTLS Chunk Handling
 
    The DTLS chunk MUST NOT be bundled with any other chunk.  In
    particular, it MUST be the first and only chunk.
@@ -729,7 +732,7 @@ Table of Contents
    SCTP packet being sent.  Such packets are built with the SCTP common
    header.  Only one DTLS chunk can be sent in a SCTP packet.
 
-8.2.1.  Sending of DTLS Chunks
+6.2.1.  Sending of DTLS Chunks
 
    When the credentials for sending DTLS chunks have been configured by
    the application, all SCTP packets are sent with a DTLS chunk.
@@ -744,7 +747,7 @@ Table of Contents
    of DTLS has to be considered to ensure that the final SCTP packet
    does not exceed the PMTU.
 
-8.2.2.  Receiving of DTLS Chunks
+6.2.2.  Receiving of DTLS Chunks
 
    When an SCTP packet containing a DTLS chunk bundled with any other
    chunk is received, the packet MUST be silently discarded.
@@ -761,7 +764,7 @@ Table of Contents
    corresponding chunks (the DTLSInnerPlaintext.content) are processed
    as defined in the corresponding specifications.
 
-8.2.3.  Critical Error from DTLS
+6.2.3.  Critical Error from DTLS
 
    The Chunk Protection Operator MAY inform local SCTP endpoint about
    errors.  When an Error in the DTLS 1.3 compromises the protection
@@ -773,7 +776,7 @@ Table of Contents
    sent and the remote peer will also experience timeout on the
    Association.
 
-8.2.4.  Non-critical Error in the Protection
+6.2.4.  Non-critical Error in the Protection
 
    A non-critical error in Chunk Protection Operator means that the
    Chunk Protection Operator is capable of recovering without the need
@@ -786,7 +789,7 @@ Table of Contents
    When the Chunk Protection Operator will experience a non-critical
    error, an ABORT chunk MUST NOT be sent.
 
-8.3.  Termination of a Protected Association
+6.3.  Termination of a Protected Association
 
    Besides the procedures for terminating an association explained in
    [RFC9260], DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating
@@ -797,7 +800,7 @@ Table of Contents
    the Key Context and not on the DTLS Key Management Method from where
    it has been derived.
 
-8.4.  SCTP Restart Considerations
+6.4.  SCTP Restart Considerations
 
    This section deals with the handling of an unexpected INIT chunk
    during an Association lifetime as described in Section 5.2 of
@@ -806,19 +809,19 @@ Table of Contents
 
    This specification doesn't support SCTP Restart as described in
    [RFC9260] because the COOCKIE-ECHO and COOKIE-ACK chunks are sent
-   encrypted (see Section 8.4.1);
+   encrypted (see Section 6.4.1);
 
    When the upper layer protocols require support of SCTP Restart, as in
    case of 3GPP NG-C protocol [ETSI-TS-38.413], the endpoint needs to
    support also initiating protected SCTP Restart procedure described in
-   Section 8.4.1.  Implementing initiating protected restart procedure
+   Section 6.4.1.  Implementing initiating protected restart procedure
    is RECOMMENDED, however not required as persistent secure storage of
    the restart DTLS Key Context is needed.
 
    The cases where one of the SCTP Endpoints only implements initiating
-   legacy SCTP Restart are described in Section 8.4.2.
+   legacy SCTP Restart are described in Section 6.4.2.
 
-8.4.1.  Protected SCTP Restart
+6.4.1.  Protected SCTP Restart
 
    The protected SCTP Restart procedure keeps the security
    characteristics of an SCTP Association using DTLS Chunk.
@@ -830,7 +833,7 @@ Table of Contents
    In order to support protected SCTP Restart, the SCTP Endpoints needs
    to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
    packets protected by these contexts will be identified in the DTLS
-   chunk with the R (Restart) bit set (see Section 6.1).  Both SCTP
+   chunk with the R (Restart) bit set (see Section 5.2.1).  Both SCTP
    Endpoints needs to ensure that Restart DTLS key contexts is preserved
    for supporting the protected SCTP Restart use case.
 
@@ -852,7 +855,7 @@ Table of Contents
    they survive the events that are causing protected SCTP Restart
    procedure to be used, for instance a crash of the SCTP stack.  The
    security considerations for persistent secure storage of keying
-   materials is further discussed in Section 13.4.
+   materials is further discussed in Section 11.4.
 
    The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case; INIT, INIT-ACK MUST be sent
@@ -911,7 +914,7 @@ Table of Contents
    installed after any old in-flight restart packets will have been
    received.
 
-8.4.2.  Compatibility with Legacy SCTP Restart
+6.4.2.  Compatibility with Legacy SCTP Restart
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
@@ -922,7 +925,7 @@ Table of Contents
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
-   chunk protected by DTLS chunk as described in Section 8.4.1, thus
+   chunk protected by DTLS chunk as described in Section 6.4.1, thus
    having the R bit (Restart Indicator) set in the DTLS Chunk (see
    Figure 3), will silently discard it.
 
@@ -937,7 +940,7 @@ Table of Contents
    the initiation of the new Association while still supervising the old
    one.
 
-8.5.  Considerations on DTLS Key Management Method
+6.5.  Considerations on DTLS Key Management Method
 
    It is up to the upper layer to manage the keys for the DTLS chunk.
    The meaning of DTLS Key Management Method is described in
@@ -955,7 +958,7 @@ Table of Contents
    The communication is only protected after both sides have configured
    the keys for sending and both sides have enforced the protection.
 
-9.  Abstract API
+7.  Abstract API
 
    This section describes an abstract API that is needed between a DTLS
    Key Management Method and the DTLS Chunk.  This is an example API and
@@ -970,7 +973,7 @@ Table of Contents
    The sequence number key is used to encrypt the sequence number
    (Section 4.2.3 of [RFC9147]).
 
-9.1.  Cipher Suit Capabilities
+7.1.  Cipher Suit Capabilities
 
    The DTLS Key Management Method needs to know which cipher suits
    defined for usage with DTLS 1.3 that are supported by the DTLS chunk
@@ -987,7 +990,7 @@ Table of Contents
 
    Parameters : list of cipher suits
 
-9.2.  Establish Client Write Keying Material
+7.2.  Establish Client Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1022,7 +1025,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.3.  Establish Server Write Keying Material
+7.3.  Establish Server Write Keying Material
 
    The DTLS Chunk can use one of out of multiple sets of cipher suit and
    corresponding key materials.
@@ -1057,7 +1060,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-9.4.  Destroy Client Write Keying Material
+7.4.  Destroy Client Write Keying Material
 
    A function to destroy the Client Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1078,7 +1081,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.5.  Destroy Server Write Keying Material
+7.5.  Destroy Server Write Keying Material
 
    A function to destroy the Server Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1099,7 +1102,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.6.  Set Key to Use
+7.6.  Set Key to Use
 
    Set which key to use to protect the future SCTP packets sent by the
    SCTP Association.
@@ -1120,7 +1123,7 @@ Table of Contents
 
    Parameters : true or false
 
-9.7.  Require Protected SCTP Packets
+7.7.  Require Protected SCTP Packets
 
    A function to configure an SCTP association to require that normal
    SCTP packets being received must be protected in a DTLS Chunk going
@@ -1132,7 +1135,7 @@ Table of Contents
 
    Reply: Acknowledgement
 
-9.8.  Get AEAD Encryption Invocations
+7.8.  Get AEAD Encryption Invocations
 
    Get the number of AEAD encryption invocations (protected messages)
    for a given epoch.
@@ -1153,7 +1156,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.9.  Get AEAD Decryption Invocations
+7.9.  Get AEAD Decryption Invocations
 
    Get the number of AEAD decryption invocations for a given epoch.
 
@@ -1173,7 +1176,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.10.  Get Failed AEAD Decryption Invocations
+7.10.  Get Failed AEAD Decryption Invocations
 
    Get the number of failed AEAD decryption invocations for a given
    epoch.
@@ -1194,7 +1197,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-9.11.  Configure Replay Protection
+7.11.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
@@ -1223,7 +1226,7 @@ Table of Contents
 
    Parameters : true or false
 
-10.  Socket API Considerations
+8.  Socket API Considerations
 
    This section describes how the socket API defined in [RFC6458] needs
    to be extended to provide a way for the application to control the
@@ -1244,7 +1247,7 @@ Table of Contents
    supporting several new IPPROTO_SCTP-level socket options and a new
    flag for recvmsg().
 
-10.1.  SCTP_ASSOC_CHANGE Notification
+8.1.  SCTP_ASSOC_CHANGE Notification
 
    When an SCTP_ASSOC_CHANGE notification (specified in Section 6.1.1 of
    [RFC6458]) is delivered indicating a sac_state of SCTP_COMM_UP or
@@ -1252,16 +1255,16 @@ Table of Contents
    DTLS chunk, SCTP_ASSOC_SUPPORTS_DTLS should be listed in the sac_info
    field.
 
-10.2.  A New Flag for recvmsg() (MSG_PROTECTED)
+8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
 
    This flag is returned by recvmsg() in msg_flags for all user messages
    for which all DATA chunks where received in protected SCTP packets.
    This also means that if sctp_recvv() is used, MSG_PROTECTED is
    returned in the *flags argument.
 
-10.3.  Functions
+8.3.  Functions
 
-10.3.1.  sctp_dtls_nr_cipher_suits()
+8.3.1.  sctp_dtls_nr_cipher_suits()
 
    sctp_dtls_nr_cipher_suits() returns the number of cypher suits
    supported by the SCTP implementation.
@@ -1274,7 +1277,7 @@ Table of Contents
    This function can be used in combination with
    sctp_dtls_cipher_suits().
 
-10.3.2.  sctp_dtls_cipher_suits()
+8.3.2.  sctp_dtls_cipher_suits()
 
    sctp_dtls_cipher_suits() returns the cypher suits supported by the
    SCTP implementation.
@@ -1299,7 +1302,7 @@ Table of Contents
    implementation, the cipher suits are stored in cipher_suits and the
    number of supported cipher suits is returned.
 
-10.4.  Socket Options
+8.4.  Socket Options
 
    The following table provides an overview of the IPPROTO_SCTP-level
    socket options defined by this section.
@@ -1346,8 +1349,8 @@ Table of Contents
 
    *  SCTP_DTLS_STATS.
 
-10.4.1.  Get or Set the Local DTLS Key Management Identifiers
-         (SCTP_DTLS_LOCAL_KMIDS)
+8.4.1.  Get or Set the Local DTLS Key Management Identifiers
+        (SCTP_DTLS_LOCAL_KMIDS)
 
    This socket option sets the DTLS Key Management identifiers which
    will be sent to the peer during the handshake.  It can also be used
@@ -1383,8 +1386,8 @@ Table of Contents
    endpoint is in a state other that SCTP_CLOSED or SCTP_LISTEN, the
    protection method identifiers which have been sent can be retrieved.
 
-10.4.2.  Get the Remote DTLS Key Mangement Identifiers
-         (SCTP_DTLS_REMOTE_KMIDS)
+8.4.2.  Get the Remote DTLS Key Mangement Identifiers
+        (SCTP_DTLS_REMOTE_KMIDS)
 
    This socket option reports the DTLS Key Mangement identifiers
    reported by the peer during the handshake.
@@ -1411,7 +1414,7 @@ Table of Contents
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-10.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
+8.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
 
    Using this socket option allows to add a particular set of keys used
    for sending DTLS chunks.
@@ -1467,7 +1470,7 @@ Table of Contents
    the specified keys until the keys are changed again by another call
    of this socket option.
 
-10.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
+8.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
 
    Using this socket option allows to add a particular set of keys used
    for receiving DTLS chunks.
@@ -1520,7 +1523,7 @@ Table of Contents
    This socket option can only be used on SCTP endpoints in states other
    then SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-10.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
+8.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
 
    Using this socket option allows to remove a particular set of keys
    used for receiving DTLS chunks.
@@ -1547,8 +1550,7 @@ Table of Contents
    then SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
    SCTP_COOKIE_ECHOED.
 
-10.4.6.  Set or Get Protection Enforcement
-         (SCTP_DTLS_ENFORCE_PROTECTION)
+8.4.6.  Set or Get Protection Enforcement (SCTP_DTLS_ENFORCE_PROTECTION)
 
    Enabling this socket option on an SCTP endpoint enforces that
    received SCTP packets are only processed, if they are protected.  All
@@ -1577,7 +1579,7 @@ Table of Contents
    than SCTP_CLOSED.  Protection can be enforced in any state other than
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-10.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
+8.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
 
    This socket options allows to get various statistic counters for a
    specific SCTP endpoint.
@@ -1610,8 +1612,8 @@ Table of Contents
 
    sds_sent_protected:  The number of DTLS chunks sent.
 
-10.4.8.  Get or Set the Replay Protection Window Size
-         (SCTP_DTLS_REPLAY_WINDOW)
+8.4.8.  Get or Set the Replay Protection Window Size
+        (SCTP_DTLS_REPLAY_WINDOW)
 
    This socket option can be used to configure the replay protection for
    SCTP endpoints.
@@ -1631,9 +1633,9 @@ Table of Contents
    assoc_value: The maximum number of DTLS chunks in the replay
    protection window.
 
-11.  Implementation Considerations
+9.  Implementation Considerations
 
-11.1.  Privacy Padding of SCTP Packets
+9.1.  Privacy Padding of SCTP Packets
 
    To reduce the potential information leakage from packet size
    variations one may select to pad the SCTP Packets to uniform packet
@@ -1659,7 +1661,7 @@ Table of Contents
    future extension or SCTP implementation that account also for the
    padding.  Use of DTLS padding hides this packet expansion from SCTP.
 
-12.  IANA Considerations
+10.  IANA Considerations
 
    This document defines two new registries in the Stream Control
    Transmission Protocol (SCTP) Parameters group that IANA maintains.
@@ -1677,7 +1679,7 @@ Table of Contents
    And finally the update of one registered SCTP Payload Protocol
    Identifier.
 
-12.1.  DTLS Key Management Method Identifiers
+10.1.  DTLS Key Management Method Identifiers
 
    IANA is requested to create a new registry called "DTLS Key
    Management Method".  This registry is part of the of the Stream
@@ -1714,7 +1716,7 @@ Table of Contents
    Specification Required policy as defined by [RFC8126].  New entries
    in the range 4096-65535 are first come, first served.
 
-12.2.  SCTP Chunk Type
+10.2.  SCTP Chunk Type
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Types" registry, IANA is requested to add the one new entry
@@ -1756,7 +1758,7 @@ Table of Contents
 
                         Table 6: DTLS Chunk Flags
 
-12.3.  SCTP Chunk Parameter Types
+10.3.  SCTP Chunk Parameter Types
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Parameter Types" registry, IANA is requested to add the new
@@ -1773,7 +1775,7 @@ Table of Contents
 
                Table 7: New Chunk Type Parameters Registered
 
-12.4.  SCTP Error Cause Codes
+10.4.  SCTP Error Cause Codes
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Error Cause Codes" registry, IANA is requested to add the new
@@ -1793,7 +1795,7 @@ Table of Contents
                    Table 8: Error Cause Codes Parameters
                                  Registered
 
-12.5.  SCTP Payload Protocol Identifier
+10.5.  SCTP Payload Protocol Identifier
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Payload Protocol Identifiers" registry, IANA is requested to update
@@ -1810,14 +1812,14 @@ Table of Contents
 
         Table 9: Protection Operator Protocol Identifier Registered
 
-13.  Security Considerations
+11.  Security Considerations
 
    All the security and privacy considerations of the security protocol
    used as the Chunk Protection Operator applies.
 
    DTLS replay protection MUST NOT be turned off.
 
-13.1.  Privacy Considerations
+11.1.  Privacy Considerations
 
    Use of the SCTP DTLS chunk provides privacy to SCTP by protecting
    user data and much of the SCTP control signaling.  The SCTP
@@ -1826,7 +1828,7 @@ Table of Contents
    privacy features such as sequence number encryption might therefore
    have limited effect.
 
-13.2.  AEAD Limit Considerations
+11.2.  AEAD Limit Considerations
 
    Section 4.5.3 of [RFC9147] defines limits on the number of records q
    that can be protected using the same key as well as limits on the
@@ -1836,7 +1838,7 @@ Table of Contents
    a limit have been reached or is closed to being reached.  Instead of
    periodic polling, a callback can be used.
 
-13.3.  Downgrade Attacks
+11.3.  Downgrade Attacks
 
    Downgrade attacks may attempt to force the DTLS Key Management Method
    by altering the containt of INIT chunk, for instance by removing all
@@ -1870,7 +1872,7 @@ Table of Contents
    policies to determine which protection it deems necessary against
    down-grade attacks.
 
-13.4.  Persistent Secure Storage of Restart Key Context
+11.4.  Persistent Secure Storage of Restart Key Context
 
    The Restart DTLS Key Context needs to be stored securely and
    persistent.  Securely as access to this security context may enable
@@ -1886,16 +1888,16 @@ Table of Contents
    persistence part might be accomplished be keeping the current restart
    DTLS Key Context with the ULP State if that is sufficiently secure.
 
-14.  Acknowledgments
+12.  Acknowledgments
 
    The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
    participation in the design team and their contributions to this
    document.  We also like to thank Amanda Baber with IANA for feedback
    on our IANA registry.
 
-15.  References
+13.  References
 
-15.1.  Normative References
+13.1.  Normative References
 
    [RFC4820]  Tuexen, M., Stewart, R., and P. Lei, "Padding Chunk and
               Parameter for the Stream Control Transmission Protocol
@@ -1947,7 +1949,7 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-15.2.  Informative References
+13.2.  Informative References
 
    [RFC6458]  Stewart, R., Tuexen, M., Poon, K., Lei, P., and V.
               Yasevich, "Sockets API Extensions for the Stream Control
