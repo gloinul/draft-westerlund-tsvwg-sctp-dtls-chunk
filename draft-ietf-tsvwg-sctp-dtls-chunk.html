@@ -10,14 +10,18 @@
 <meta content="Claudio Porfiri" name="author">
 <meta content="Michael Tüxen" name="author">
 <meta content="
-       This document describes a method for adding Cryptographic protection
-to the Stream Control Transmission Protocol (SCTP). The SCTP DTLS
-chunk defined in this document is intended to enable communications
-privacy for applications that use SCTP as their transport protocol and
-allows applications to communicate in a way that is designed to
-prevent eavesdropping and detect tampering or message forgery. 
+       This document describes a method for adding DTLS Authentication
+and Cryptographic protection to the Stream Control Transmission
+Protocol (SCTP). 
+       The SCTP DTLS chunk defined in this document is intended to enable
+communications privacy for applications that use SCTP as their
+transport protocol and allows applications to communicate in a
+way that is designed to prevent eavesdropping and detect tampering
+or message forgery. 
        Applications using SCTP DTLS chunk can use all transport
-features provided by SCTP and its extensions but with some limitations. 
+features provided by SCTP and its extensions but with some limitations,
+and in the case of Dynamic Address Reconfiguration RFC 5061 requires
+updates. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
 <meta content="draft-ietf-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
@@ -174,7 +178,7 @@ features provided by SCTP and its extensions but with some limitations.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -182,7 +186,8 @@ features provided by SCTP and its extensions but with some limitations.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 }
 
 @font-face {
@@ -1053,11 +1058,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCTP DTLS Chunk</td>
-<td class="right">January 2026</td>
+<td class="right">February 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 2 August 2026</td>
+<td class="center">Expires 26 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,14 +1073,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="workgroup">TSVWG</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-ietf-tsvwg-sctp-dtls-chunk-latest</dd>
+<dt class="label-updates">Updates:</dt>
+<dd class="updates">
+<a href='https://www.rfc-editor.org/rfc/rfc{"RFC5061"%20=&gt;%20nil}' class="eref">{"RFC5061" =&gt; nil}</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-29" class="published">29 January 2026</time>
+<time datetime="2026-02-22" class="published">22 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-02">2 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-26">26 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1100,14 +1108,18 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Stream Control Transmission Protocol (SCTP) DTLS Chunk</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes a method for adding Cryptographic protection
-to the Stream Control Transmission Protocol (SCTP). The SCTP DTLS
-chunk defined in this document is intended to enable communications
-privacy for applications that use SCTP as their transport protocol and
-allows applications to communicate in a way that is designed to
-prevent eavesdropping and detect tampering or message forgery.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">Applications using SCTP DTLS chunk can use all transport
-features provided by SCTP and its extensions but with some limitations.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a method for adding DTLS Authentication
+and Cryptographic protection to the Stream Control Transmission
+Protocol (SCTP).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The SCTP DTLS chunk defined in this document is intended to enable
+communications privacy for applications that use SCTP as their
+transport protocol and allows applications to communicate in a
+way that is designed to prevent eavesdropping and detect tampering
+or message forgery.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Applications using SCTP DTLS chunk can use all transport
+features provided by SCTP and its extensions but with some limitations,
+and in the case of Dynamic Address Reconfiguration RFC 5061 requires
+updates.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1143,7 +1155,7 @@ features provided by SCTP and its extensions but with some limitations.<a href="
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1201,6 +1213,14 @@ features provided by SCTP and its extensions but with some limitations.<a href="
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
                 <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-dynamic-address-reconfigura" class="internal xref">Dynamic Address Reconfiguration Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.1">
+                    <p id="section-toc.1-1.3.2.7.2.1.1"><a href="#section-3.7.1" class="auto internal xref">3.7.1</a>.  <a href="#name-limitations" class="internal xref">Limitations</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.2">
+                    <p id="section-toc.1-1.3.2.7.2.2.1"><a href="#section-3.7.2" class="auto internal xref">3.7.2</a>.  <a href="#name-change" class="internal xref">Change</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
                 <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="auto internal xref">3.8</a>.  <a href="#name-sctp-restart-considerations" class="internal xref">SCTP Restart Considerations</a></p>
@@ -1452,9 +1472,9 @@ features provided by SCTP and its extensions but with some limitations.<a href="
    its usage, how it interacts with the SCTP association establishment
    to enable endpoint authentication, key-establishment, and key
    updates.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The DTLS chunk is designed to enable mutual
-   authentication of endpoints, data confidentiality, data origin
-   authentication, data integrity protection, and data replay
+<p id="section-1-3">The DTLS chunk is designed to enable mutual DTLS based
+   authentication of endpoints, data confidentiality, DTLS based
+   data origin authentication, data integrity protection, and data replay
    protection for SCTP packets after the SCTP association has been
    established. It is dependent on a DTLS Management Method that is
    defined separately to achieve all these capabilities. The
@@ -1464,8 +1484,9 @@ features provided by SCTP and its extensions but with some limitations.<a href="
 <p id="section-1-4">Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions. However, there can be some
    limitations or additional requirements for them to function such as
-   those noted for SCTP restart and use of Dynamic Address
-   Reconfiguration, see <a href="#sec-asconf" class="auto internal xref">Section 3.7</a> and <a href="#sec-restart" class="auto internal xref">Section 3.8</a>. Due to its
+   those noted for SCTP restart <a href="#sec-restart" class="auto internal xref">Section 3.8</a> and an actual update
+   of the specification of Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span>,
+   see <a href="#sec-asconf" class="auto internal xref">Section 3.7</a>. Due to DTLS chunk's
    level of integration as discussed in next section it will provide
    its security functions on all content of the SCTP packet, and will
    thus not impact the potential to utilize any SCTP functionalities
@@ -1761,25 +1782,34 @@ in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#sec
         <h3 id="name-dynamic-address-reconfigura">
 <a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-dynamic-address-reconfigura" class="section-name selfRef">Dynamic Address Reconfiguration Considerations</a>
         </h3>
-<p id="section-3.7-1">When using Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
-association using DTLS Chunk the ASCONF chunk is protected, thus it
-needs to be unprotected first, furthermore it MAY come from an unknown
-IP Address.  In order to properly address the ASCONF chunk to the
-relevant Association for being unprotected, Destination Address,
-Source, Destination ports and VTag is used. If the combination
-of those parameters is not unique the implementor MAY choose to send
-the DTLS Chunk to all Associations that fit with the parameters in
-order to find the right one. The association will attempt
-de-protection operations on the DTLS chunk, and if that is successful
-the ASCONF chunk can be processed. Note that trial decoding should
-have a limit in number of tried contexts to prevent denial of service
-attacks on the endpoint.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
-<p id="section-3.7-2">The section 4.1.1 of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
+<p id="section-3.7-1"><span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies the support for Dynamic Address Reconfiguration
+in SCTP. DTLS Chunks has limited support for Dynamic Address
+Reconfiguration and requires an update of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span>. Section 4.1.1
+of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF message are
 required to be sent authenticated with SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>.  For
-SCTP associations using DTLS Chunk this results in the use of
-redundant mechanism for Authentication with both SCTP-AUTH and the
-DTLS Chunk. We recommend to amend <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> for including DTLS
-Chunks as Authentication mechanism for ASCONF chunks.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
+SCTP associations using DTLS Chunk this would result in the use of
+redundant and non-compatible mechanisms for Authentication with
+both SCTP-AUTH and the DTLS Chunk.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<div id="limitations">
+<section id="section-3.7.1">
+          <h4 id="name-limitations">
+<a href="#section-3.7.1" class="section-number selfRef">3.7.1. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
+          </h4>
+<p id="section-3.7.1-1">Support for Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
+association using DTLS Chunk is limited to the case where the packet
+containing the ASCONF chunk is sent from an IP address already known.<a href="#section-3.7.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="change">
+<section id="section-3.7.2">
+          <h4 id="name-change">
+<a href="#section-3.7.2" class="section-number selfRef">3.7.2. </a><a href="#name-change" class="section-name selfRef">Change</a>
+          </h4>
+<p id="section-3.7.2-1">Because SCTP-AUTH and DTLS chunks provide non-compatible authentication
+mechanisms, SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span> MUST NOT be used once DTLS chunks have been
+successfully negotiated.<a href="#section-3.7.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="sec-restart">
