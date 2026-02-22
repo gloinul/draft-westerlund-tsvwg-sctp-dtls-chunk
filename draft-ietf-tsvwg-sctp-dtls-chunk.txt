@@ -84,7 +84,7 @@ Table of Contents
    3.  Overview
      3.1.  Protocol Overview
      3.2.  DTLS Considerations
-     3.3.  Considerations about SCTP DTLS Management Methods
+     3.3.  Considerations about SCTP DTLS Key Management Methods
      3.4.  SCTP DTLS Chunk Buffering and Flow Control
      3.5.  PMTU Considerations
      3.6.  Congestion Control Considerations
@@ -95,21 +95,21 @@ Table of Contents
        3.8.1.  Protected SCTP Restart
        3.8.2.  Compatibility with Legacy SCTP Restart
    4.  New Parameter Type
-     4.1.  DTLS Management Parameter
+     4.1.  DTLS Key Management Parameter
    5.  New Chunk Type
      5.1.  DTLS Chunk (DTLS)
      5.2.  Payload formatting in DTLS Chunk
    6.  Error Handling
      6.1.  DTLS Chunk Protected Association Parameter Missing
      6.2.  Error in DTLS Chunk
-       6.2.1.  No Common DTLS Management Method
+       6.2.1.  No Common DTLS Key Management Method
      6.3.  Critical Error from DTLS
      6.4.  Non-critical Error in the Protection
    7.  Procedures
      7.1.  Establishment of a Protected Association
        7.1.1.  Offering Multiple Security Solutions
      7.2.  Termination of a Protected Association
-     7.3.  Considerations on DTLS Management Method
+     7.3.  Considerations on DTLS Key Management Method
    8.  DTLS Chunk Handling
      8.1.  Sending of DTLS Chunks
      8.2.  Receiving of DTLS Chunks
@@ -132,10 +132,10 @@ Table of Contents
        10.3.1.  sctp_dtls_nr_cipher_suits()
        10.3.2.  sctp_dtls_cipher_suits()
      10.4.  Socket Options
-       10.4.1.  Get or Set the Local Protection Method Identifiers
-               (SCTP_DTLS_LOCAL_PMIDS)
-       10.4.2.  Get the Remote Protection Method Identifiers
-               (SCTP_DTLS_REMOTE_PMIDS)
+       10.4.1.  Get or Set the Local DTLS Key Management Identifiers
+               (SCTP_DTLS_LOCAL_KMIDS)
+       10.4.2.  Get the Remote DTLS Key Mangement Identifiers
+               (SCTP_DTLS_REMOTE_KMIDS)
        10.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
        10.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
        10.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
@@ -147,7 +147,7 @@ Table of Contents
    11. Implementation Considerations
      11.1.  Privacy Padding of SCTP Packets
    12. IANA Considerations
-     12.1.  DTLS Management Method Identifiers
+     12.1.  DTLS Key Management Method Identifiers
      12.2.  SCTP Chunk Type
      12.3.  SCTP Chunk Parameter Types
      12.4.  SCTP Error Cause Codes
@@ -176,10 +176,11 @@ Table of Contents
    of endpoints, data confidentiality, DTLS based data origin
    authentication, data integrity protection, and data replay protection
    for SCTP packets after the SCTP association has been established.  It
-   is dependent on a DTLS Management Method that is defined separately
-   to achieve all these capabilities.  The DTLS Management Method uses
-   an API to provision the SCTP association's DTLS chunk protection with
-   key-material to enable and rekey the protection operations.
+   is dependent on a DTLS Key Management Method that is defined
+   separately to achieve all these capabilities.  The DTLS Key
+   Management Method uses an API to provision the SCTP association's
+   DTLS chunk protection with key-material to enable and rekey the
+   protection operations.
 
    Applications using SCTP DTLS chunk can use most transport features
    provided by SCTP and its extensions.  However, there can be some
@@ -216,9 +217,9 @@ Table of Contents
    processed provides the protected SCTP chunks for further processing.
    Figure 1 is an example illustrating the DTLS chunk processing in
    regard to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 as
-   DTLS Management Method.  Here the DTLS Management Method contains
-   validation, i.e. using certificates, handshaking, updating policies
-   etc.
+   the DTLS Key Management Method.  Here the DTLS Key Management Method
+   contains validation, i.e. using certificates, handshaking, updating
+   policies etc.
 
           +---------------+ +-------------------------------+
           |      ULP      | |            DTLS 1.3           |
@@ -259,22 +260,23 @@ Table of Contents
    The Chunk Protection Operator performs protection operations on all
    chunks of an SCTP packet.  Information protection is kept during the
    lifetime of the association and no information is sent unprotected
-   except the initial SCTP handshake, any initial key-management
+   except the initial SCTP handshake, any initial DTLS Key Management
    traffic, the SCTP common header, the SCTP DTLS chunk header, and the
    INIT and INIT-ACK chunks during an SCTP Restart procedure.
 
-   The support of the DTLS chunk and the DTLS Management Method to use
-   is negotiated by the peers at the setup of the SCTP association using
-   a new parameter.  DTLS Management and application traffic is
-   multiplexed using the PPID.  The dedicated PPID 4242 is defined for
-   use by DTLS Management Method for DTLS chunk.  The DTLS Management
-   Method uses an API to key the Chunk protection operation function.
-   Usage of the DTLS 1.3 handshake for initial mutual authentication and
-   key establishment as well as periodic re-authentication and rekeying
-   with Diffe-Hellman of the DTLS chunk protection is defined in
-   separate documents, (see Section 3.3).  To prevent downgrade attacks
-   of the key-management negotiation the DTLS Management Method should
-   implement specific procedures when deriving keys.
+   The support of the DTLS chunk and the DTLS Key Management Method to
+   use is negotiated by the peers at the setup of the SCTP association
+   using a new parameter.  The DTLS Key Management and application
+   traffic is multiplexed using the PPID.  The dedicated PPID 4242 is
+   defined for use by all DTLS Key Management Methods.  The DTLS Key
+   Management Method uses an API to key the Chunk protection operation
+   function.  Usage of the DTLS 1.3 handshake for initial mutual
+   authentication and key establishment as well as periodic re-
+   authentication and rekeying with Diffe-Hellman of the DTLS chunk
+   protection is defined in separate documents, (see Section 3.3).  To
+   prevent downgrade attacks affecting the DTLS Key Management
+   negotiation the DTLS Key Management Method should implement specific
+   procedures when deriving keys.
 
    When the endpoint authentication and key establishment has been
    completed, the association is considered to be secured and the ULP is
@@ -289,13 +291,13 @@ Table of Contents
 3.2.  DTLS Considerations
 
    The DTLS Chunk architecture splits DTLS 1.3 as shown in Figure 1,
-   where the DTLS Management Method is done at DTLS 1.3 block level,
+   where the DTLS Key Management Method is done at DTLS 1.3 block level,
    acting as a parallel User Level Protocol and a Chunk Protection
    Operator functionality inside the SCTP Protocol Stack.
 
-   DTLS Management Method is the set of data and procedures that take
-   care of key distribution, verification, and update, DTLS connection
-   setup, update and maintenance.
+   DTLS Key Management Method is the set of data and procedures that
+   take care of key distribution, verification, and update, DTLS
+   connection setup, update and maintenance.
 
    Chunk Protection Operator functionality is the set of data and
    procedures taking care of User Data encryption into DTLS Record and
@@ -303,26 +305,26 @@ Table of Contents
 
    DTLS 1.3 operations requires to directly handshake messages with the
    remote peer for connection setup and other features, this kind of
-   handshake is part of the DTLS Management Method.  DTLS Management
-   Method achieves these features behaving as a user of the SCTP
-   association.  DTLS Management Method sends and receives its own data
-   via the SCTP User Level interface.  DTLS Management Method's own data
-   are distinguished from any other data by means of a dedicated PPID
-   using the value 4242 (see Table 9).
+   handshake is part of the DTLS Key Management Method.  DTLS Key
+   Management Method achieves these features behaving as a user of the
+   SCTP association.  DTLS Key Management Method sends and receives its
+   own data via the SCTP User Level interface.  DTLS Key Management
+   Method's own data are distinguished from any other data by means of a
+   dedicated PPID using the value 4242 (see Table 9).
 
-   Once DTLS Management Method has established a DTLS 1.3 connection, it
-   can derive primary and restart keys and set the Chunk Protection
-   Operator for SCTP Packet Payload encryption/decryption via an API to
-   create the necessary DTLS key contexts.  Both a DTLS Key context for
-   normal use (primary) and a DTLS Key context for SCTP association
-   restart needs to be created.
+   Once DTLS Key Management Method has established a DTLS 1.3
+   connection, it can derive primary and restart keys and set the Chunk
+   Protection Operator for SCTP Packet Payload encryption/decryption via
+   an API to create the necessary DTLS key contexts.  Both a DTLS Key
+   context for normal use (primary) and a DTLS Key context for SCTP
+   association restart needs to be created.
 
    In this document we use the terms DTLS Key context for indicating a
-   Key and IV, produced by the key-management, and all relevant data
-   that needs to be provided to the Chunk Protection Operator for DTLS
-   encryption and decryption.  DTLS Key context includes Keys and IV for
-   sending and receiving, replay window, last used sequence number.
-   Each DTLS key context is associated with a three-value tuple
+   Key and IV, produced by the DTLS Key Management, and all relevant
+   data that needs to be provided to the Chunk Protection Operator for
+   DTLS encryption and decryption.  DTLS Key context includes Keys and
+   IV for sending and receiving, replay window, last used sequence
+   number.  Each DTLS key context is associated with a three-value tuple
    identifying the context, consisting of SCTP Association, the restart
    indicator, and the DTLS epoch.
 
@@ -342,24 +344,25 @@ Table of Contents
    Endpoints implementing DTLS Chunk MUST support DTLS records
    containing up to 2^14 (16384) bytes of plain text.
 
-3.3.  Considerations about SCTP DTLS Management Methods
+3.3.  Considerations about SCTP DTLS Key Management Methods
 
    This document specifies the mechanisms for SCTP to be protected with
-   DTLS, it doesn't specify how the Key Management works, being limited
-   on what the Key Management MUST provide for achieving the protection.
-   Even though DTLS1.3 is indicated as protocol for providing Key
-   Contexts, different implementations can achieve that and different
-   mechanisms may be used for features such as mutual authentication,
-   rekeying etc.  The DTLS Management Method may use a number of Key
-   Management mechanisms depending on what is being implemented and
-   available and/or according to the local policies.  DTLS Management
-   Methods are defined in their own specific documents, and needs to be
-   registered in the IANA Registry "SCTP DTLS Management Methods" to get
-   their own unique identifier.  This document constitutes a requirement
-   towards any DTLS Management Method.
+   DTLS, it doesn't specify how the DTLS Key Management works, being
+   limited on what the DTLS Key Management MUST provide for achieving
+   the protection.  Even though DTLS1.3 is indicated as protocol for
+   providing Key Contexts, different implementations can achieve that
+   and different mechanisms may be used for features such as mutual
+   authentication, rekeying etc.  The DTLS Key Management Method may use
+   a number of DTLS Key Management methods depending on what is being
+   implemented and available and/or according to the local policies.
+   DTLS Key Management Methods are defined in their own specific
+   documents, and needs to be registered in the IANA Registry "SCTP DTLS
+   Key Management Methods" to get their own unique identifier.  This
+   document constitutes a requirement towards any DTLS Key Management
+   Method.
 
-   Currently there are two in-band DTLS Management Methods defined, they
-   have different properties.  See
+   Currently there are two in-band DTLS Key Management Methods defined,
+   they have different properties.  See
    [I-D.ietf-tsvwg-dtls-chunk-key-management] and
    [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
 
@@ -505,14 +508,14 @@ Table of Contents
    having the R bit (Restart Indicator) set in the DTLS Chunk (see
    Figure 4).  There's exactly one active Restart DTLS Context at a
    time, the newest.  However, a crash at the time having completed the
-   key-management exchange but failing to commit the DTLS Key Context to
-   persistent secure storage could result in loss of the latest DTLS Key
-   Context.  Therefore, the endpoints SHOULD retain the old restart DTLS
-   key context until it the key-management confirms the new ones are
-   committed to secure storage.  This can for example be ensure that at
-   key-changes signals to terminate the old DTLS Key Contexts (including
-   the restart) is never sent until the new restart DTLS Key Context has
-   been committed to storage.
+   DTLS Key Management exchange but failing to commit the DTLS Key
+   Context to persistent secure storage could result in loss of the
+   latest DTLS Key Context.  Therefore, the endpoints SHOULD retain the
+   old restart DTLS key context until it the DTLS Key Management
+   confirms the new ones are committed to secure storage.  This can for
+   example be ensure that at key-changes signals to terminate the old
+   DTLS Key Contexts (including the restart) is never sent until the new
+   restart DTLS Key Context has been committed to storage.
 
      Initiator                                     Responder
          |                                             | -.
@@ -583,15 +586,15 @@ Table of Contents
 
    This section defines the new parameter type that will be used to
    negotiate the use of the DTLS chunk during association setup, its
-   DTLS Management Method and indicate preference in relation to
-   different DTLS Management Methods.  Table 1 illustrates the new
+   DTLS Key Management Method and indicate preference in relation to
+   different DTLS Key Management Methods.  Table 1 illustrates the new
    parameter type.
 
-              +================+===========================+
-              | Parameter Type | Parameter Name            |
-              +================+===========================+
-              |         0x8006 | DTLS Management Parameter |
-              +----------------+---------------------------+
+            +================+===============================+
+            | Parameter Type | Parameter Name                |
+            +================+===============================+
+            |         0x8006 | DTLS Key Management Parameter |
+            +----------------+-------------------------------+
 
                    Table 1: New INIT/INIT-ACK Parameter
 
@@ -600,51 +603,46 @@ Table of Contents
    This is accomplished (as described in [RFC9260], Section 3.2.1.) by
    the use of the upper bits of the parameter type.
 
-4.1.  DTLS Management Parameter
+4.1.  DTLS Key Management Parameter
 
    This parameter is used to the request and acknowledge of support of
    DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
-   order among DTLS Management Methods (if supported).
+   order among DTLS Key Management Methods (if supported).
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |    Parameter Type = 0x8006    |       Parameter Length        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |  DTLS Management Method #1    |  DTLS Management Method #2    |
+     |  DTLS Key Management Id #1    |  DTLS Key Management Id #2    |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     : DTLS Management Methods                                       :
+     :                                                               :
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     | DTLS Management Method #N     | Padding                       |
+     | DTLS Key Management Id #N     | Padding                       |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 3: DTLS Management Parameter
+                  Figure 3: DTLS Key Management Parameter
 
    Parameter Type: 16 bits (unsigned integer)
       This value MUST be set to 0x8006.
 
    Parameter Length: 16 bits (unsigned integer)
-      This value holds the length of the parameter, which will be the
-      number of DTLS Management Method fields (N) times two plus 4.
+      This value holds the length of the parameter, which will be 2
+      times the number of DTLS Key Management identifiers (N) plus 4.
 
-   DTLS Management Method fields: one or more 16-bit DTLS Management
-   Method Identifiers:
-      Each DTLS Management Method Identifier (Section 12.1) is a 16-bit
-      unsigned integer value indicating a DTLS Management Method.  DTLS
-      Management Methods include both DTLS Chunk based, where a solution
-      combines the DTLS chunk with a DTLS Management Method, or non DTLS
-      Chunk based DTLS Management Method.  The DTLS Management Methods
-      are listed in descending order of preference, i.e. the first
-      listed in the parameter is the most preferred and the last the
-      least preferred by the sender in the INIT chunk.  In the INIT-ACK
-      chunk the endpoint includes all of the offered DTLS Management
-      Methods which it supports and lists the selected one first.
-      Including its decreasing preference on the additional DTLS
-      Management Methods.
+   DTLS Key Management Identifier: 16 bits (unsigned integer)
+      Each DTLS Key Management Identifier (Section 12.1) is a 16-bit
+      unsigned integer value indicating a DTLS Key Management Method.
+      The DTLS Management Methods are listed in descending order of
+      preference, i.e. the first listed in the parameter is the most
+      preferred and the last the least preferred by the sender in the
+      INIT chunk.  In the INIT-ACK chunk the endpoint chooses one of the
+      DTLS Management Methods supported by the peer.
 
-   Padding: If the number of included DTLS Management Methods is odd the
-   parameter MUST be padded with two zero (0) bytes of padding to make
-   the parameter 32-bit aligned.
+   Padding: 0 or 16 bits (unsigned integer)
+      If the number of included DTLS Management Methods is odd the
+      parameter MUST be padded with two bytes.  The padding MUST be set
+      to 0 by the sender and MUST be ignored by the receiver.
 
 5.  New Chunk Type
 
@@ -803,33 +801,33 @@ Table of Contents
 
    This specification introduces a new set of error causes that are to
    be used when SCTP endpoint detects a faulty condition.  The special
-   case is when the error is detected by the DTLS Management Method that
-   may provide additional information.
+   case is when the error is detected by the DTLS Key Management Method
+   that may provide additional information.
 
 6.1.  DTLS Chunk Protected Association Parameter Missing
 
    When an initiator SCTP endpoint sends an INIT chunk that doesn't
-   contain the DTLS Management Parameter or a supported DTLS Management
-   Method towards an SCTP endpoint that only accepts protected
-   associations, SCTP will send an ABORT chunk in response to the INIT
-   chunk (Section 5.1 of [RFC9260] including the error cause 'Policy Not
-   Met' (TBA10) (see Section 12.4 and the DTLS Management Method
-   identifiers Section 4.1 in the missing param Information field.  It
-   may also include additional parameters representing other supported
-   protection mechanisms that are acceptable per endpoint security
-   policy.
+   contain the DTLS Key Management Parameter or a supported DTLS Key
+   Management Method towards an SCTP endpoint that only accepts
+   protected associations, SCTP will send an ABORT chunk in response to
+   the INIT chunk (Section 5.1 of [RFC9260] including the error cause
+   'Policy Not Met' (TBA10) (see Section 12.4 and the DTLS Key
+   Management Method identifiers Section 4.1 in the missing param
+   Information field.  It may also include additional parameters
+   representing other supported protection mechanisms that are
+   acceptable per endpoint security policy.
 
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |        Cause Code = 2         |         Cause Length          |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                 Number of missing params = N                  |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |    DTLS Management Parameter  |     Missing Param Type #2     |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |    Missing Param Type #N-1    |     Missing Param Type #N     |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |        Cause Code = 2         |         Cause Length          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                 Number of missing params = N                  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |    DTLS Key Management Parameter  |     Missing Param Type #2     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |    Missing Param Type #N-1    |     Missing Param Type #N     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
           Figure 8: ERROR Missing Protected Association Parameter
 
@@ -882,13 +880,13 @@ Table of Contents
    defined, additional causes can be registered with IANA following the
    rules in Section 12.4.
 
-6.2.1.  No Common DTLS Management Method
+6.2.1.  No Common DTLS Key Management Method
 
    If the responder to do not support any of the DTLS Management Methods
    offered by the association initiator in the Protection Soluiton
    Parameters Figure 3 SCTP will send an ABORT chunk in response to the
    INIT chunk (Section 5.1 of [RFC9260], including the error cause "No
-   Common Protection" (TBA11) (see Section 12.4).
+   Common DTLS Key Management" (TBA11) (see Section 12.4).
 
 6.3.  Critical Error from DTLS
 
@@ -922,19 +920,20 @@ Table of Contents
    An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
    chunk protected association sends to the remote peer an INIT chunk
    containing the DTLS 1.3 Chunk Protected Association parameter (see
-   Section 4.1) indicating supported and preferred key-management
-   solutions (see Figure 3).
+   Section 4.1) indicating supported and preferred DTLS Key Management
+   method (see Figure 3).
 
    An SCTP Endpoint acting as responder, when receiving an INIT chunk
-   with DTLS Management Parameter, will reply with INIT-ACK with its own
-   DTLS Management Parameter containing the selected DTLS Management
-   Method out of the set of supported ones.  In case there are no common
-   set of supported DTLS Management Methods that are accepted by the
-   responder, and the endpoints policy require secured association it
-   MUST reply with an ABORT chunk, include the error cause "No Common
-   Protection" (TBA11) (see Section 12.4).  Otherwise, the responder MAY
-   send an INIT-ACK without the DTLS Management Parameter to indicate it
-   is willing to create a session without security.
+   with a DTLS Key Management Parameter, will reply with INIT-ACK with
+   its own DTLS MKey anagement Parameter containing the selected DTLS
+   Key Management Method out of the set of supported ones.  In case
+   there are no common set of supported DTLS Key Management Methods that
+   are accepted by the responder, and the endpoints' policy require
+   secured association it MUST reply with an ABORT chunk, include the
+   error cause "No DTLS Key Management Method" (TBA11) (see
+   Section 12.4).  Otherwise, the responder MAY send an INIT-ACK without
+   the DTLS Key Management Parameter to indicate that it is willing to
+   create a session without security.
 
    Additionally, an SCTP Endpoint acting as responder willing to support
    only protected associations considers an INIT chunk not containing
@@ -942,30 +941,31 @@ Table of Contents
    Protection Solution accepted by own security policy solution as an
    error, thus it will reply with an ABORT chunk according to what
    specified in Section 6.1 indicating that for this endpoint mandatory
-   DTLS Management Parameter is missing.
+   DTLS Key Management Parameter is missing.
 
    When initiator and responder have agreed on a DTLS Chunk protected
-   association and the DTLS Management Method by means of handshaking
-   INIT/INIT-ACK the SCTP association establishment continues until it
-   has reached the ESTABLISHED state.
+   association and the DTLS Key Management Method by means of
+   handshaking INIT/INIT-ACK the SCTP association establishment
+   continues until it has reached the ESTABLISHED state.
 
    When the SCTP session has been established follow the process defined
-   by the selected DTLS Management Method for establishing DTLS Key
+   by the selected DTLS Key Management Method for establishing DTLS Key
    Contexts and installing them.
 
 7.1.1.  Offering Multiple Security Solutions
 
    An initiator of an SCTP association may want to offer multiple
-   different DTLS Management Method for DTLS Chunk or in combination
-   with other DTLS Management Methods in addition to DTLS 1.3 chunks for
-   the SCTP association.  Multiple DTLS Management Methods offered in
-   the INIT chunk will be ordered based on the priority, where the most
-   preferred will be in the first position and the least preferred in
-   the last.  The INIT-ACK chunk will only contain the chosen DTLS
-   Management Method.  Offers with multiple DTLS Management Methods need
-   to consider the downgrade attack risks (see Section 13.3).
+   different DTLS Key Management Methods for DTLS Chunk or in
+   combination with other DTLS Key Management Methods in addition to
+   DTLS 1.3 chunks for the SCTP association.  Multiple DTLS Key
+   Management Methods offered in the INIT chunk will be ordered based on
+   the priority, where the most preferred will be in the first position
+   and the least preferred in the last.  The INIT-ACK chunk will only
+   contain the chosen DTLS Key Management Method.  Offers with multiple
+   DTLS Key Management Methods need to consider the downgrade attack
+   risks (see Section 13.3).
 
-   The initiator MAY include in its INIT additional DTLS Management
+   The initiator MAY include in its INIT additional DTLS Key Management
    Methods that are compatible to offer in parallel with DTLS Chunks.
    This may include SCTP-AUTH [I-D.ietf-tsvwg-rfc4895-bis].  This will
    result in that a number of different SCTP parameters may be included
@@ -976,11 +976,11 @@ Table of Contents
    offer of DTLS Chunks and SCTP-AUTH, could be interpreted as three
    different solutions with different properties, namely DTLS Chunks,
    DTLS/SCTP [RFC6083], and SCTP-AUTH [I-D.ietf-tsvwg-rfc4895-bis] only.
-   However, here the DTLS Management Parameter can indicate both
+   However, here the DTLS Key Management Parameter can indicate both
    preference and which of the solutions that are preferred.
 
    The responder selects one security solutions and includes it in the
-   response (INIT-ACK).  If DTLS chunks was selected and the DTLS
+   response (INIT-ACK).  If DTLS chunks was selected and the DTLS Key
    Management Method follows the recommendation for down-grade
    prevention the endpoints know that down-grade did not happen.
 
@@ -989,25 +989,26 @@ Table of Contents
    Besides the procedures for terminating an association explained in
    [RFC9260], DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating
    an association when having an internal error or by detecting a
-   security violation.  Note that the closure of any DTLS Management
+   security violation.  Note that the closure of any DTLS Key Management
    Method doesn't compromise the capability of sending and receiving
    protected SHUTDOWN-COMPLETE chunks as that capability only relies on
-   the Key Context and not on the DTLS Management Method from where it
-   has been derived.
+   the Key Context and not on the DTLS Key Management Method from where
+   it has been derived.
 
-7.3.  Considerations on DTLS Management Method
+7.3.  Considerations on DTLS Key Management Method
 
    It is up to the upper layer to manage the keys for the DTLS chunk.
-   The meaning of DTLS Management Method is described in Section 3.3.
+   The meaning of DTLS Key Management Method is described in
+   Section 3.3.
 
-   The DTLS Management Method SHOULD use a dedicated PPID to ensure that
-   the DTLS Management Method related user messages are handled by the
-   appropriate layer.
+   The DTLS Key Management Method SHOULD use a dedicated PPID to ensure
+   that the DTLS Key Management Method related user messages are handled
+   by the appropriate layer.
 
-   When performing DTLS Management, the keys for receiving SHOULD be
+   When performing DTLS Key Management, the keys for receiving SHOULD be
    installed before the corresponding send keys at the peer.  For
    mitigating downgrade attacks the key derivation MUST include the DTLS
-   Management Method Identifiers that were sent and received.
+   Key Management Method Identifiers that were sent and received.
 
    The communication is only protected after both sides have configured
    the keys for sending and both sides have enforced the protection.
@@ -1083,7 +1084,7 @@ Table of Contents
 9.  Abstract API
 
    This section describes an abstract API that is needed between a DTLS
-   Management Method and the DTLS Chunk.  This is an example API and
+   Key Management Method and the DTLS Chunk.  This is an example API and
    there are alternative implementations.
 
    This API enables the cryptographical protection operations by setting
@@ -1097,12 +1098,12 @@ Table of Contents
 
 9.1.  Cipher Suit Capabilities
 
-   The DTLS Management Method needs to know which cipher suits defined
-   for usage with DTLS 1.3 that are supported by the DTLS chunk and its
-   protection operations block.  All TLS cipher suit that are defined
-   are listed in the TLS cipher suit registry [TLS-CIPHER-SUITS] at IANA
-   and are identified by a 2-byte value.  Thus this needs to return a
-   list of all supported cipher suits to the higher layer.
+   The DTLS Key Management Method needs to know which cipher suits
+   defined for usage with DTLS 1.3 that are supported by the DTLS chunk
+   and its protection operations block.  All TLS cipher suit that are
+   defined are listed in the TLS cipher suit registry [TLS-CIPHER-SUITS]
+   at IANA and are identified by a 2-byte value.  Thus this needs to
+   return a list of all supported cipher suits to the higher layer.
 
    Request : Get Cipher Suits
 
@@ -1432,11 +1433,11 @@ Table of Contents
    +==============================+========================+=====+=====+
    | Option Name                  | Data Type              | Set | Get |
    +==============================+========================+=====+=====+
-   | SCTP_DTLS_LOCAL_PMIDS        | struct                 | X   | X   |
-   |                              | sctp_dtls_pmids        |     |     |
+   | SCTP_DTLS_LOCAL_KMIDS        | struct                 | X   | X   |
+   |                              | sctp_dtls_kmids        |     |     |
    +------------------------------+------------------------+-----+-----+
-   | SCTP_DTLS_REMOTE_PMIDS       | struct                 |     | X   |
-   |                              | sctp_dtls_pmids        |     |     |
+   | SCTP_DTLS_REMOTE_KMIDS       | struct                 |     | X   |
+   |                              | sctp_dtls_kmids        |     |     |
    +------------------------------+------------------------+-----+-----+
    | SCTP_DTLS_SET_SEND_KEYS      | struct                 | X   |     |
    |                              | sctp_dtls_keys         |     |     |
@@ -1461,9 +1462,9 @@ Table of Contents
 
    sctp_opt_info() needs to be extended to support:
 
-   *  SCTP_DTLS_LOCAL_PMIDS,
+   *  SCTP_DTLS_LOCAL_KMIDS,
 
-   *  SCTP_DTLS_REMOTE_PMIDS,
+   *  SCTP_DTLS_REMOTE_KMIDS,
 
    *  SCTP_DTLS_ENFORCE_PROTECTION,
 
@@ -1471,20 +1472,20 @@ Table of Contents
 
    *  SCTP_DTLS_STATS.
 
-10.4.1.  Get or Set the Local Protection Method Identifiers
-         (SCTP_DTLS_LOCAL_PMIDS)
+10.4.1.  Get or Set the Local DTLS Key Management Identifiers
+         (SCTP_DTLS_LOCAL_KMIDS)
 
-   This socket option sets the protection method identifiers which will
-   be sent to the peer during the handshake.  It can also be used to
-   retrieve the protection method identifiers which were sent during the
-   handshake.
+   This socket option sets the DTLS Key Management identifiers which
+   will be sent to the peer during the handshake.  It can also be used
+   to retrieve the DTLS Key Manangement identifiers which were sent
+   during the handshake.
 
    The following structure is used as the option_value:
 
    struct sctp_dtls_pmids {
-           sctp_assoc_t sdp_assoc_id;
-           uint16_t sdp_nr_pmids;
-           uint16_t sdp_pmids[];
+           sctp_assoc_t sds_assoc_id;
+           uint16_t sdp_nr_kmids;
+           uint16_t sdp_kmids[];
    };
 
    sdp_assoc_id:  This parameter is ignored for one-to-one style
@@ -1493,9 +1494,9 @@ Table of Contents
       For setsockopt(), only SCTP_FUTURE_ASSOC can be used.  For
       getsockopt(), it is an error to use SCTP_{CURRENT|ALL}_ASSOC.
 
-   sdp_nr_pmids:  The number of entries in sdp_pmids.
+   sdp_nr_kmids:  The number of entries in sdp_kmids.
 
-   sdp_pmids:  The protection method identifiers which will be or have
+   sdp_kmids:  The DTLS Key Management identifiers which will be or have
       been sent to the peer in the sequence they were contained in the
       DTLS 1.3 Chunk Protected Association parameter and in host byte
       order.
@@ -1508,18 +1509,18 @@ Table of Contents
    endpoint is in a state other that SCTP_CLOSED or SCTP_LISTEN, the
    protection method identifiers which have been sent can be retrieved.
 
-10.4.2.  Get the Remote Protection Method Identifiers
-         (SCTP_DTLS_REMOTE_PMIDS)
+10.4.2.  Get the Remote DTLS Key Mangement Identifiers
+         (SCTP_DTLS_REMOTE_KMIDS)
 
-   This socket option reports the protection method identifiers reported
-   by the peer during the handshake.
+   This socket option reports the DTLS Key Mangement identifiers
+   reported by the peer during the handshake.
 
    The following structure is used as the option_value:
 
    struct sctp_dtls_pmids {
-           sctp_assoc_t sdp_assoc_id;
-           uint16_t sdp_nr_pmids;
-           uint16_t sdp_pmids[];
+           sctp_assoc_t sds_assoc_id;
+           uint16_t sdp_nr_kmids;
+           uint16_t sdp_kmids[];
    };
 
    sdp_assoc_id:  This parameter is ignored for one-to-one style
@@ -1527,11 +1528,11 @@ Table of Contents
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
 
-   sdp_nr_pmids:  The number of entries in sdp_pmids.
+   sdp_nr_kmids:  The number of entries in sdp_kmids.
 
-   sdp_pmids:  The protection method identifiers reported by the peer in
-      the sequence they were contained in the DTLS 1.3 Chunk Protected
-      Association parameter and in host byte order.
+   sdp_kmids:  The DTLS Key Management identifiers reported by the peer
+      in the sequence they were contained in the DTLS Key Management
+      parameter and in host byte order.
 
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
@@ -1802,16 +1803,16 @@ Table of Contents
    And finally the update of one registered SCTP Payload Protocol
    Identifier.
 
-12.1.  DTLS Management Method Identifiers
+12.1.  DTLS Key Management Method Identifiers
 
-   IANA is requested to create a new registry called "DTLS Management
-   Method".  This registry is part of the of the Stream Control
-   Transmission Protocol (SCTP) Parameters grouping.
+   IANA is requested to create a new registry called "DTLS Key
+   Management Method".  This registry is part of the of the Stream
+   Control Transmission Protocol (SCTP) Parameters grouping.
 
-   The purpose of this registry is to assign DTLS Management Method
-   Identifier for any DTLS Management Method that is either the DTLS
-   Chunk combined with a DTLS Management Method, offered as an
-   alternative to DTLS chunk.  Any DTLS Management Method that is
+   The purpose of this registry is to assign DTLS Key Management Method
+   Identifier for any DTLS Key Management Method that is either the DTLS
+   Chunk combined with a DTLS Key Management Method, offered as an
+   alternative to DTLS chunk.  Any DTLS Key Management Method that is
    offered through a parameter exchange during the SCTP handshake are
    potential to be included here.
 
@@ -1833,7 +1834,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-                Table 4: DTLS Management Method Identifiers
+              Table 4: DTLS Key Management Method Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
@@ -1890,13 +1891,13 @@ Table of Contents
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-2
 
-           +==========+===========================+===========+
-           | ID Value | Chunk Parameter Type      | Reference |
-           +==========+===========================+===========+
-           |   0x8006 | DTLS Management Parameter | RFC-To-Be |
-           +----------+---------------------------+-----------+
+              +==========+======================+===========+
+              | ID Value | Chunk Parameter Type | Reference |
+              +==========+======================+===========+
+              |   0x8006 | DTLS Key Management  | RFC-To-Be |
+              +----------+----------------------+-----------+
 
-              Table 7: New Chunk Type Parameters Registered
+               Table 7: New Chunk Type Parameters Registered
 
 12.4.  SCTP Error Cause Codes
 
@@ -1929,11 +1930,11 @@ Table of Contents
    https://www.iana.org/assignments/sctp-parameters/sctp-
    parameters.xhtml#sctp-parameters-25
 
-       +==========+====================================+===========+
-       | ID Value | SCTP Payload Protocol Identifier   | Reference |
-       +==========+====================================+===========+
-       |     4242 | DTLS Chunk Key-Management Messages | RFC-To-Be |
-       +----------+------------------------------------+-----------+
+        +==========+==================================+===========+
+        | ID Value | SCTP Payload Protocol Identifier | Reference |
+        +==========+==================================+===========+
+        |     4242 | DTLS Key Management Messages     | RFC-To-Be |
+        +----------+----------------------------------+-----------+
 
         Table 9: Protection Operator Protocol Identifier Registered
 
@@ -1958,42 +1959,42 @@ Table of Contents
    Section 4.5.3 of [RFC9147] defines limits on the number of records q
    that can be protected using the same key as well as limits on the
    number of received packets v that fail authentication with each key.
-   To adhere to these limits the DTLS Management Method can periodically
-   poll the DTLS protection operation function to see when a limit have
-   been reached or is closed to being reached.  Instead of periodic
-   polling, a callback can be used.
+   To adhere to these limits the DTLS Key Management Method can
+   periodically poll the DTLS protection operation function to see when
+   a limit have been reached or is closed to being reached.  Instead of
+   periodic polling, a callback can be used.
 
 13.3.  Downgrade Attacks
 
-   Downgrade attacks may attempt to force the DTLS Management Method by
-   altering the containt of INIT chunk, for instance by removing all
-   offered DTLS Management Methods but the one desired.  This is
+   Downgrade attacks may attempt to force the DTLS Key Management Method
+   by altering the containt of INIT chunk, for instance by removing all
+   offered DTLS Key Management Methods but the one desired.  This is
    possible if the attacker is an on-path attacker that can modify
    packet because INIT and INIT-ACK chunks are plain text.
 
    Preventing the downgrade attacks is implemented by using at the
-   initiator the list of offered DTLS Management Method sent in the INIT
-   chunk plus the selected DTLS Management Method received in the INIT-
-   ACK chunk from the responder for deriving the keys from the
+   initiator the list of offered DTLS Key Management Method sent in the
+   INIT chunk plus the selected DTLS Key Management Method received in
+   the INIT-ACK chunk from the responder for deriving the keys from the
    handshaked secrets obtained during DTLS initial handshake.  At the
-   responder, the list of offered DTLS Management Methods received in
-   the INIT chunk plus the selected DTLS Management Method that is sent
-   in the INIT-ACK chunk will be used for deriving the keys from the
-   handshaked secrets obtained during DTLS initial handshake.
+   responder, the list of offered DTLS Key Management Methods received
+   in the INIT chunk plus the selected DTLS Key Management Method that
+   is sent in the INIT-ACK chunk will be used for deriving the keys from
+   the handshaked secrets obtained during DTLS initial handshake.
 
-   If the attacker suceeds in changing the DTLS Management Methods in
-   either INIT, NINT-ACK or both chunks, the peers will not be able
+   If the attacker suceeds in changing the DTLS Key Management Methods
+   in either INIT, NINT-ACK or both chunks, the peers will not be able
    deriving the same keys and the Association will not be possible to
    proceed.
 
-   Thus, as long as the DTLS Management Method includes the ordered list
-   of protection solutions indicators present in the parameter part of
-   the INIT chunk for the SCTP Association in its key-derivation the
+   Thus, as long as the DTLS Key Management Method includes the ordered
+   list of protection solutions indicators present in the parameter part
+   of the INIT chunk for the SCTP Association in its key-derivation the
    association will be protected from down-grade.
 
-   In case any DTLS Management Method do not include the parameter
+   In case any DTLS Key Management Method do not include the parameter
    content in its key-derivation down-grade might be possible if that
-   DTLS Management Method method is selected.  It is up to endpoint
+   DTLS Key Management Method method is selected.  It is up to endpoint
    policies to determine which protection it deems necessary against
    down-grade attacks.
 
