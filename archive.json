@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-15T01:46:42.608794+00:00",
+  "timestamp": "2026-02-24T01:28:30.075298+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -592,7 +592,7 @@
       "id": "I_kwDOKszxDc6508cU",
       "title": "Should DTLS Chunk update ASCONF (RFC 5061) to not use SCTP-AUTH",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/28",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -603,8 +603,8 @@
       "labels": [],
       "body": "Currently RFC 5061 require that one uses SCTP-AUTH. The draft is currently proposing that ASCONF RFC could be updated to allow using DTLS chunk if in use instead of SCTP-AUTH. \n\nIf agreeable a new section stating the changes to the RFC 5061 one text should be added. ",
       "createdAt": "2025-06-04T12:29:04Z",
-      "updatedAt": "2025-12-08T16:41:14Z",
-      "closedAt": null,
+      "updatedAt": "2026-02-22T11:04:02Z",
+      "closedAt": "2026-02-22T11:04:02Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1531,7 +1531,7 @@
       "id": "I_kwDOKszxDc7muYbx",
       "title": "Remove DTLS Connection ID",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/96",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1540,9 +1540,17 @@
       "labels": [],
       "body": "The design team meeting on the 29th of January discussed this and finds no motivation to maintain the DTLS connection ID. As the DTLS chunk already are scoped by the SCTP association, and the epoch handles key changes this is a redundant mechanism. \n",
       "createdAt": "2026-01-29T14:12:45Z",
-      "updatedAt": "2026-01-29T14:14:04Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-02-22T11:29:03Z",
+      "closedAt": "2026-02-22T11:29:03Z",
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by #99.",
+          "createdAt": "2026-02-22T11:29:03Z",
+          "updatedAt": "2026-02-22T11:29:03Z"
+        }
+      ]
     },
     {
       "number": 97,
@@ -4357,24 +4365,26 @@
       "id": "PR_kwDOKszxDc60DvS8",
       "title": "Changed ASCONF support according to IETF-124 discussion",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/85",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2026-01-15T14:43:00Z",
+      "updatedAt": "2026-02-22T11:04:01Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "09659fe5c511b3e56abe932ae997323cc17c00da",
+      "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue28",
-      "headRefOid": "a75e763febcc17d04685544998055f6d29f0cb9a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "5ec8682700c2051f724b01fccb623bac649e0606",
+      "closedAt": "2026-02-22T11:04:01Z",
+      "mergedAt": "2026-02-22T11:04:01Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "705eb82935e801f93deeae47f05cf06719043453"
+      },
       "comments": [
         {
           "author": "gloinul",
@@ -4476,6 +4486,19 @@
           "body": "",
           "createdAt": "2026-01-15T09:40:30Z",
           "updatedAt": "2026-01-15T09:40:30Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7kuJrU",
+          "commit": {
+            "abbreviatedOid": "a75e763"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-22T10:55:16Z",
+          "updatedAt": "2026-02-22T10:55:16Z",
           "comments": []
         }
       ]
@@ -5211,24 +5234,26 @@
       "id": "PR_kwDOKszxDc7DO2Sb",
       "title": "Use DTLS Key Management Parameter consistently",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/98",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "While there, do some minor cleanups.",
       "createdAt": "2026-02-12T10:09:51Z",
-      "updatedAt": "2026-02-13T07:23:28Z",
+      "updatedAt": "2026-02-22T11:19:15Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
+      "baseRefOid": "7995bb8179068bb959e9abff0ad4354d1883a7ec",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "cleanup",
-      "headRefOid": "92fe465158718ba8d32b89eeb6a4568ac028068e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "906aed048447cdfb05275126ee5df054aa849c37",
+      "closedAt": "2026-02-22T11:19:11Z",
+      "mergedAt": "2026-02-22T11:19:10Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "fa185cb3759e5f83bb1f8f5f585c0d5b2b36ecbb"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5251,24 +5276,26 @@
       "id": "PR_kwDOKszxDc7DPNMI",
       "title": "Remove CID",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/99",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Is the removal of text in Section 3.8.1 correct?\r\nThe formula computing the length of the padding looked wrong.\r\n\r\nLet us discuss this in the VC.",
       "createdAt": "2026-02-12T10:34:39Z",
-      "updatedAt": "2026-02-13T07:22:38Z",
+      "updatedAt": "2026-02-22T11:05:23Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "remove-cid",
       "headRefOid": "a784c2dcd95bf94fbf80f12f7f87118108be916f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-22T11:04:40Z",
+      "mergedAt": "2026-02-22T11:04:40Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "7995bb8179068bb959e9abff0ad4354d1883a7ec"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5282,6 +5309,61 @@
           "body": "",
           "createdAt": "2026-02-13T07:22:38Z",
           "updatedAt": "2026-02-13T07:22:38Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "id": "PR_kwDOKszxDc7Fg4Y0",
+      "title": "Reorg",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/100",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR removes text I think is not needed and shuffles the other text around to get a better structure.\r\n\r\nPlease focus on the location of sections, not on the content of the sections. If we agree on this structure, I can work on the individual sections without the problem of merge conflicts. That is the reason why I want the new structure of sections first. You can look at the individual commits to see what is removed and what is moved.",
+      "createdAt": "2026-02-22T22:13:11Z",
+      "updatedAt": "2026-02-23T12:21:09Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "fa185cb3759e5f83bb1f8f5f585c0d5b2b36ecbb",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "reorg",
+      "headRefOid": "44981627b8e8a5310c44128f3ba63ca4b225b0c7",
+      "closedAt": "2026-02-23T12:21:01Z",
+      "mergedAt": "2026-02-23T12:21:01Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "2da9050c5e1d4ab02934bba06ddb07d26b5fb729"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7k3ZBH",
+          "commit": {
+            "abbreviatedOid": "4498162"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-23T08:33:55Z",
+          "updatedAt": "2026-02-23T08:33:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7k46Ww",
+          "commit": {
+            "abbreviatedOid": "4498162"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-23T10:06:09Z",
+          "updatedAt": "2026-02-23T10:06:09Z",
           "comments": []
         }
       ]
