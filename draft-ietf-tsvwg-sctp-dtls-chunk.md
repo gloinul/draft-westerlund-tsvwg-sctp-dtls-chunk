@@ -573,16 +573,16 @@ When an initiator SCTP endpoint sends an INIT chunk that doesn't
 contain the DTLS Key Management Parameter or a supported DTLS Key Management Method
 towards an SCTP endpoint that only accepts protected
 associations, SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}
+chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}})
 including the error cause 'Policy Not Met' (TBA10)
-(see {{IANA-Extra-Cause}}
+(see {{IANA-Extra-Cause}}).
 
 ### No Common DTLS Key Management Method {#enocommonpsi}
 
 If the responder to do not support any of the DTLS Management Methods
 offered by the association initiator in the Protection Solution
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
+chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}),
 including the error cause "No Common DTLS Key Management" (TBA11)
 (see {{IANA-Extra-Cause}}).
 
@@ -932,7 +932,7 @@ example API and there are alternative implementations.
 This API enables the cryptographical protection operations by setting
 client/server write keys, sequence number keys, and IVs for primary and
 restart DTLS contexts. The write key is the used by the cipher suite
-for DTLS record protection (Section 5.2 of {{RFC8446}}. The initialization
+for DTLS record protection (Section 5.2 of {{RFC8446}}). The initialization
 vector (IV) is random material used to XOR with the sequence
 number to create the nonce per Section 5.3 of {{RFC8446}}.
 The sequence number key is used to encrypt the sequence number
