@@ -10,18 +10,22 @@
 <meta content="Claudio Porfiri" name="author">
 <meta content="Michael Tüxen" name="author">
 <meta content="
-       This document describes a method for adding DTLS Authentication
-and Cryptographic protection to the Stream Control Transmission
-Protocol (SCTP). 
-       The SCTP DTLS chunk defined in this document is intended to enable
-communications privacy for applications that use SCTP as their
-transport protocol and allows applications to communicate in a
-way that is designed to prevent eavesdropping and detect tampering
-or message forgery. 
-       Applications using SCTP DTLS chunk can use all transport
-features provided by SCTP and its extensions but with some limitations,
-and in the case of Dynamic Address Reconfiguration RFC 5061 requires
-updates. 
+       This document describes a method for adding Datagram Transport Layer
+Security (DTLS) based authentication and cryptographic protection to the
+Stream Control Transmission Protocol (SCTP). 
+       This SCTP extension is intended to enable communications privacy for
+applications that use SCTP as their transport protocol and allows applications
+to communicate in a way that is designed to prevent eavesdropping and detect
+tampering or message forgery.
+Once enabled, this also applies to the SCTP payload as well as the SCTP
+control information. 
+       Applications using this SCTP extension can use most of the transport features
+provided by SCTP and its other extensions.
+The use of the SCTP Authentication extension defined in RFC 4895 is incompatible
+with the extension defined in this document but would not provide any
+additional service.
+This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
+can only be used as described in this document. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
 <meta content="draft-ietf-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
@@ -1062,7 +1066,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 27 August 2026</td>
+<td class="center">Expires 29 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1078,12 +1082,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href='https://www.rfc-editor.org/rfc/rfc{"RFC5061"%20=&gt;%20nil}' class="eref">{"RFC5061" =&gt; nil}</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-23" class="published">23 February 2026</time>
+<time datetime="2026-02-25" class="published">25 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-27">27 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-29">29 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,18 +1112,22 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Stream Control Transmission Protocol (SCTP) DTLS Chunk</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes a method for adding DTLS Authentication
-and Cryptographic protection to the Stream Control Transmission
-Protocol (SCTP).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">The SCTP DTLS chunk defined in this document is intended to enable
-communications privacy for applications that use SCTP as their
-transport protocol and allows applications to communicate in a
-way that is designed to prevent eavesdropping and detect tampering
-or message forgery.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">Applications using SCTP DTLS chunk can use all transport
-features provided by SCTP and its extensions but with some limitations,
-and in the case of Dynamic Address Reconfiguration RFC 5061 requires
-updates.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a method for adding Datagram Transport Layer
+Security (DTLS) based authentication and cryptographic protection to the
+Stream Control Transmission Protocol (SCTP).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This SCTP extension is intended to enable communications privacy for
+applications that use SCTP as their transport protocol and allows applications
+to communicate in a way that is designed to prevent eavesdropping and detect
+tampering or message forgery.
+Once enabled, this also applies to the SCTP payload as well as the SCTP
+control information.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Applications using this SCTP extension can use most of the transport features
+provided by SCTP and its other extensions.
+The use of the SCTP Authentication extension defined in RFC 4895 is incompatible
+with the extension defined in this document but would not provide any
+additional service.
+This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
+can only be used as described in this document.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1155,7 +1163,7 @@ updates.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
