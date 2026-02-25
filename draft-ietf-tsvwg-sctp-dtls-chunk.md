@@ -91,20 +91,24 @@ updates:
 
 --- abstract
 
-This document describes a method for adding DTLS Authentication
-and Cryptographic protection to the Stream Control Transmission
-Protocol (SCTP).
+This document describes a method for adding Datagram Transport Layer
+Security (DTLS) based authentication and cryptographic protection to the
+Stream Control Transmission Protocol (SCTP).
 
-The SCTP DTLS chunk defined in this document is intended to enable
-communications privacy for applications that use SCTP as their
-transport protocol and allows applications to communicate in a
-way that is designed to prevent eavesdropping and detect tampering
-or message forgery.
+This SCTP extension is intended to enable communications privacy for
+applications that use SCTP as their transport protocol and allows applications
+to communicate in a way that is designed to prevent eavesdropping and detect
+tampering or message forgery.
+Once enabled, this also applies to the SCTP payload as well as the SCTP
+control information.
 
-Applications using SCTP DTLS chunk can use all transport
-features provided by SCTP and its extensions but with some limitations,
-and in the case of Dynamic Address Reconfiguration RFC 5061 requires
-updates.
+Applications using this SCTP extension can use most of the transport features
+provided by SCTP and its other extensions.
+The use of the SCTP Authentication extension defined in RFC 4895 is incompatible
+with the extension defined in this document but would not provide any
+additional service.
+This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
+can only be used as described in this document.
 
 --- middle
 
