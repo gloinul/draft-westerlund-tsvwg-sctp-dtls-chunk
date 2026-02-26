@@ -508,19 +508,15 @@ Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}
 |    16 bit     |     |Sequence Number|
 |Sequence Number|     +-+-+-+-+-+-+-+-+
 +-+-+-+-+-+-+-+-+     |               |
-|    16 bit     |     |   Encrypted   |
-|    Length     |     /   Record      /
-+-+-+-+-+-+-+-+-+     |               |
+|               |     |   Encrypted   |
+|  Encrypted    |     /   Record      /
+/  Record       /     |               |
 |               |     +-+-+-+-+-+-+-+-+
-|  Encrypted    |
-/  Record       /       DTLSCiphertext
-|               |         Structure
-+-+-+-+-+-+-+-+-+         (minimal)
++-+-+-+-+-+-+-+-+
 
-  DTLSCiphertext
-    Structure
-  (recommended)
-
+  DTLSCiphertext       DTLSCiphertext
+    Structure            Structure
+  (recommended)          (minimal)
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
 
@@ -550,27 +546,61 @@ boundary.
 
 ## New Error Causes
 
-This specification introduces a new set of error causes that are to be
-used when SCTP endpoint detects a faulty condition.
+This specification defines two new error causes.
 
-### Policy Not Met {#enoprotected}
+### Missing DTLS Chunk Support {#enoprotected}
 
-When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the DTLS Key Management Parameter or a supported DTLS Key Management Method
-towards an SCTP endpoint that only accepts protected
-associations, SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}
-including the error cause 'Policy Not Met' (TBA10)
-(see {{IANA-Extra-Cause}}
+The DTLS Chunk Support Required error cause can be sent by the receiver of the
+packet containing the INIT chunk to indicate that the receiver requires the
+support of the DTLS chunk, but no DTLS Key Management parameter was included in
+the INIT chunk.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 100 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-policy-not-met title="Error Cause Policy No Met" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 100 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
 
 ### No Common DTLS Key Management Method {#enocommonpsi}
 
-If the responder to do not support any of the DTLS Management Methods
-offered by the association initiator in the Protection Soluiton
-Parameters {{key-management-parameter}} SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
-including the error cause "No Common DTLS Key Management" (TBA11)
-(see {{IANA-Extra-Cause}}).
+The No Common DTLS Key Management Method error cause can be used by the receiver
+of the packet containing the INIT chunk to indicate that receiver does not
+support any of DTLS key management methods offered by the sender of packet
+containing the INIT chunk.
+
+The format of this error cause is depicted in {{error-cause-no-common-method }}.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 101 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-no-common-method title="Error Cause No Common DTLS Key Management Method" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 100 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
 
 # Procedures {#procedures}
 
@@ -1713,9 +1743,9 @@ In the Stream Control Transmission Protocol (SCTP) Parameters group's
 entries depicted below in in {{iana-error-cause-codes}} with a
 reference to this document.
 
-| ID Value     | Error Cause Codes    | Reference |
-| 100 (TBC)    | Policy Not Met       | RFC-To-Be |
-| 101 (TBC)    | No Common Protection | RFC-To-Be |
+| ID Value     | Error Cause Codes          | Reference |
+| 100 (TBC)    | Missing DTLS chunk support | RFC-To-Be |
+| 101 (TBC)    | No Common Protection       | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
 
 The suggested cause code will need to be confirmed by IANA.
