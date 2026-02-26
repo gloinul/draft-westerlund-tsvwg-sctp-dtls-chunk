@@ -96,7 +96,7 @@ Table of Contents
      5.1.  DTLS Key Management Parameter
      5.2.  DTLS Chunk (DTLS)
      5.3.  New Error Causes
-       5.3.1.  Policy Not Met
+       5.3.1.  Missing DTLS Chunk Support
        5.3.2.  No Common DTLS Key Management Method
    6.  Procedures
      6.1.  Establishment of a Protected Association
@@ -586,25 +586,57 @@ Table of Contents
 
 5.3.  New Error Causes
 
-   This specification introduces a new set of error causes that are to
-   be used when SCTP endpoint detects a faulty condition.
+   This specification defines two new error causes.
 
-5.3.1.  Policy Not Met
+5.3.1.  Missing DTLS Chunk Support
 
-   When an initiator SCTP endpoint sends an INIT chunk that doesn't
-   contain the DTLS Key Management Parameter or a supported DTLS Key
-   Management Method towards an SCTP endpoint that only accepts
-   protected associations, SCTP will send an ABORT chunk in response to
-   the INIT chunk (Section 5.1 of [RFC9260] including the error cause
-   'Policy Not Met' (TBA10) (see Section 10.4
+   The DTLS Chunk Support Required error cause can be sent by the
+   receiver of the packet containing the INIT chunk to indicate that the
+   receiver requires the support of the DTLS chunk, but no DTLS Key
+   Management parameter was included in the INIT chunk.
+
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Cause Code = 100 (TBC)     |       Cause Length = 4        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                    Figure 7: Error Cause Policy No Met
+
+   Cause Code: 16 bits (unsigned integer)
+      This value MUST be set to 100 (TBC).
+
+   Cause Length: 16 bits (unsigned integer)
+      This value MUST be set to 4.
+
+   This error cause MAY be included in an ABORT chunk.  It MUST NOT be
+   included in any other chunk.
 
 5.3.2.  No Common DTLS Key Management Method
 
-   If the responder to do not support any of the DTLS Management Methods
-   offered by the association initiator in the Protection Soluiton
-   Parameters Figure 2 SCTP will send an ABORT chunk in response to the
-   INIT chunk (Section 5.1 of [RFC9260], including the error cause "No
-   Common DTLS Key Management" (TBA11) (see Section 10.4).
+   The No Common DTLS Key Management Method error cause can be used by
+   the receiver of the packet containing the INIT chunk to indicate that
+   receiver does not support any of DTLS key management methods offered
+   by the sender of packet containing the INIT chunk.
+
+   The format of this error cause is depicted in Figure 8.
+
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Cause Code = 101 (TBC)     |       Cause Length = 4        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+         Figure 8: Error Cause No Common DTLS Key Management Method
+
+   Cause Code: 16 bits (unsigned integer)
+      This value MUST be set to 100 (TBC).
+
+   Cause Length: 16 bits (unsigned integer)
+      This value MUST be set to 4.
+
+   This error cause MAY be included in an ABORT chunk.  It MUST NOT be
+   included in any other chunk.
 
 6.  Procedures
 
@@ -694,9 +726,9 @@ Table of Contents
      |                           Chunk #n                            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 7: Unprotected SCTP Packet
+                     Figure 9: Unprotected SCTP Packet
 
-   The diagram shown in Figure 7 describes the structure of an
+   The diagram shown in Figure 9 describes the structure of an
    unprotected SCTP packet as described in [RFC9260].
 
       0                   1                   2                   3
@@ -707,9 +739,9 @@ Table of Contents
      |                          DTLS Chunk                           |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 8: Protected SCTP Packets
+                     Figure 10: Protected SCTP Packets
 
-   The diagram shown in Figure 8 describes the structure of a protected
+   The diagram shown in Figure 10 describes the structure of a protected
    SCTP packet being sent.  Such packets are built with the SCTP common
    header.  Only one DTLS chunk can be sent in a SCTP packet.
 
@@ -869,9 +901,9 @@ Table of Contents
          |                                             | -'
          |                                             |
 
-            Figure 9: Handshake of SCTP Restart for DTLS in SCTP
+           Figure 11: Handshake of SCTP Restart for DTLS in SCTP
 
-   The Figure 9 shows how the control chunks being used for SCTP
+   The Figure 11 shows how the control chunks being used for SCTP
    Association Restart are transported within DTLS in SCTP.
 
    The transport of COOCKIE-ECHO, COOCKIE-ACK by means of DTLS chunk
@@ -1754,13 +1786,13 @@ Table of Contents
    entries depicted below in in Table 6 with a reference to this
    document.
 
-             +===========+======================+===========+
-             |  ID Value | Error Cause Codes    | Reference |
-             +===========+======================+===========+
-             | 100 (TBC) | Policy Not Met       | RFC-To-Be |
-             +-----------+----------------------+-----------+
-             | 101 (TBC) | No Common Protection | RFC-To-Be |
-             +-----------+----------------------+-----------+
+          +===========+============================+===========+
+          |  ID Value | Error Cause Codes          | Reference |
+          +===========+============================+===========+
+          | 100 (TBC) | Missing DTLS chunk support | RFC-To-Be |
+          +-----------+----------------------------+-----------+
+          | 101 (TBC) | No Common Protection       | RFC-To-Be |
+          +-----------+----------------------------+-----------+
 
                         Table 6: Error Cause Codes
 

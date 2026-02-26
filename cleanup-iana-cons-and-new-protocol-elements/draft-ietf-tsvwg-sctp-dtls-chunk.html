@@ -1236,7 +1236,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-new-error-causes" class="internal xref">New Error Causes</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.1">
-                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="auto internal xref">5.3.1</a>.  <a href="#name-policy-not-met" class="internal xref">Policy Not Met</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="auto internal xref">5.3.1</a>.  <a href="#name-missing-dtls-chunk-support" class="internal xref">Missing DTLS Chunk Support</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.2">
                     <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="auto internal xref">5.3.2</a>.  <a href="#name-no-common-dtls-key-manageme" class="internal xref">No Common DTLS Key Management Method</a></p>
@@ -2263,20 +2263,100 @@ boundary.<a href="#section-5.2-14" class="pilcrow">¶</a></p>
         <h3 id="name-new-error-causes">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-new-error-causes" class="section-name selfRef">New Error Causes</a>
         </h3>
-<p id="section-5.3-1">This specification introduces a new set of error causes that are to be
-used when SCTP endpoint detects a faulty condition.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-1">This specification defines two new error causes.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <div id="enoprotected">
 <section id="section-5.3.1">
-          <h4 id="name-policy-not-met">
-<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-policy-not-met" class="section-name selfRef">Policy Not Met</a>
+          <h4 id="name-missing-dtls-chunk-support">
+<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-missing-dtls-chunk-support" class="section-name selfRef">Missing DTLS Chunk Support</a>
           </h4>
-<p id="section-5.3.1-1">When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the DTLS Key Management Parameter or a supported DTLS Key Management Method
-towards an SCTP endpoint that only accepts protected
-associations, SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>
-including the error cause 'Policy Not Met' (TBA10)
-(see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 10.4</a><a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-1">The DTLS Chunk Support Required error cause can be sent by the receiver of the
+packet containing the INIT chunk to indicate that the receiver requires the
+support of the DTLS chunk, but no DTLS Key Management parameter was included in
+the INIT chunk.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<span id="name-error-cause-policy-no-met"></span><div id="error-cause-policy-not-met">
+<figure id="figure-7">
+            <div id="section-5.3.1-2.1">
+              <div class="alignCenter art-svg artwork" id="section-5.3.1-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
+                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
+                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
+                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
+                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
+                  <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
+                  <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
+                  <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
+                  <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
+                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
+                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
+                  <g class="text">
+                    <text x="16" y="36">0</text>
+                    <text x="176" y="36">1</text>
+                    <text x="336" y="36">2</text>
+                    <text x="496" y="36">3</text>
+                    <text x="16" y="52">0</text>
+                    <text x="32" y="52">1</text>
+                    <text x="48" y="52">2</text>
+                    <text x="64" y="52">3</text>
+                    <text x="80" y="52">4</text>
+                    <text x="96" y="52">5</text>
+                    <text x="112" y="52">6</text>
+                    <text x="128" y="52">7</text>
+                    <text x="144" y="52">8</text>
+                    <text x="160" y="52">9</text>
+                    <text x="176" y="52">0</text>
+                    <text x="192" y="52">1</text>
+                    <text x="208" y="52">2</text>
+                    <text x="224" y="52">3</text>
+                    <text x="240" y="52">4</text>
+                    <text x="256" y="52">5</text>
+                    <text x="272" y="52">6</text>
+                    <text x="288" y="52">7</text>
+                    <text x="304" y="52">8</text>
+                    <text x="320" y="52">9</text>
+                    <text x="336" y="52">0</text>
+                    <text x="352" y="52">1</text>
+                    <text x="368" y="52">2</text>
+                    <text x="384" y="52">3</text>
+                    <text x="400" y="52">4</text>
+                    <text x="416" y="52">5</text>
+                    <text x="432" y="52">6</text>
+                    <text x="448" y="52">7</text>
+                    <text x="464" y="52">8</text>
+                    <text x="480" y="52">9</text>
+                    <text x="496" y="52">0</text>
+                    <text x="512" y="52">1</text>
+                    <text x="64" y="84">Cause</text>
+                    <text x="108" y="84">Code</text>
+                    <text x="136" y="84">=</text>
+                    <text x="160" y="84">100</text>
+                    <text x="200" y="84">TBC</text>
+                    <text x="344" y="84">Cause</text>
+                    <text x="396" y="84">Length</text>
+                    <text x="432" y="84">=</text>
+                    <text x="448" y="84">4</text>
+                  </g>
+                </svg><a href="#section-5.3.1-2.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-error-cause-policy-no-met" class="selfRef">Error Cause Policy No Met</a>
+            </figcaption></figure>
+</div>
+<span class="break"></span><dl class="dlNewline" id="section-5.3.1-3">
+            <dt id="section-5.3.1-3.1">Cause Code: 16 bits (unsigned integer)</dt>
+            <dd style="margin-left: 1.5em" id="section-5.3.1-3.2">
+              <p id="section-5.3.1-3.2.1">This value MUST be set to 100 (TBC).<a href="#section-5.3.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-5.3.1-3.3">Cause Length: 16 bits (unsigned integer)</dt>
+            <dd style="margin-left: 1.5em" id="section-5.3.1-3.4">
+              <p id="section-5.3.1-3.4.1">This value MUST be set to 4.<a href="#section-5.3.1-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-5.3.1-4">This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.<a href="#section-5.3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="enocommonpsi">
@@ -2284,12 +2364,95 @@ including the error cause 'Policy Not Met' (TBA10)
           <h4 id="name-no-common-dtls-key-manageme">
 <a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-no-common-dtls-key-manageme" class="section-name selfRef">No Common DTLS Key Management Method</a>
           </h4>
-<p id="section-5.3.2-1">If the responder to do not support any of the DTLS Management Methods
-offered by the association initiator in the Protection Soluiton
-Parameters <a href="#key-management-parameter" class="auto internal xref">Figure 2</a> SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>,
-including the error cause "No Common DTLS Key Management" (TBA11)
-(see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 10.4</a>).<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-1">The No Common DTLS Key Management Method error cause can be used by the receiver
+of the packet containing the INIT chunk to indicate that receiver does not
+support any of DTLS key management methods offered by the sender of packet
+containing the INIT chunk.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-2">The format of this error cause is depicted in <a href="#error-cause-no-common-method" class="auto internal xref">Figure 8</a>.<a href="#section-5.3.2-2" class="pilcrow">¶</a></p>
+<span id="name-error-cause-no-common-dtls-"></span><div id="error-cause-no-common-method">
+<figure id="figure-8">
+            <div id="section-5.3.2-3.1">
+              <div class="alignCenter art-svg artwork" id="section-5.3.2-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
+                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
+                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
+                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
+                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
+                  <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
+                  <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
+                  <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
+                  <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
+                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
+                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
+                  <g class="text">
+                    <text x="16" y="36">0</text>
+                    <text x="176" y="36">1</text>
+                    <text x="336" y="36">2</text>
+                    <text x="496" y="36">3</text>
+                    <text x="16" y="52">0</text>
+                    <text x="32" y="52">1</text>
+                    <text x="48" y="52">2</text>
+                    <text x="64" y="52">3</text>
+                    <text x="80" y="52">4</text>
+                    <text x="96" y="52">5</text>
+                    <text x="112" y="52">6</text>
+                    <text x="128" y="52">7</text>
+                    <text x="144" y="52">8</text>
+                    <text x="160" y="52">9</text>
+                    <text x="176" y="52">0</text>
+                    <text x="192" y="52">1</text>
+                    <text x="208" y="52">2</text>
+                    <text x="224" y="52">3</text>
+                    <text x="240" y="52">4</text>
+                    <text x="256" y="52">5</text>
+                    <text x="272" y="52">6</text>
+                    <text x="288" y="52">7</text>
+                    <text x="304" y="52">8</text>
+                    <text x="320" y="52">9</text>
+                    <text x="336" y="52">0</text>
+                    <text x="352" y="52">1</text>
+                    <text x="368" y="52">2</text>
+                    <text x="384" y="52">3</text>
+                    <text x="400" y="52">4</text>
+                    <text x="416" y="52">5</text>
+                    <text x="432" y="52">6</text>
+                    <text x="448" y="52">7</text>
+                    <text x="464" y="52">8</text>
+                    <text x="480" y="52">9</text>
+                    <text x="496" y="52">0</text>
+                    <text x="512" y="52">1</text>
+                    <text x="64" y="84">Cause</text>
+                    <text x="108" y="84">Code</text>
+                    <text x="136" y="84">=</text>
+                    <text x="160" y="84">101</text>
+                    <text x="200" y="84">TBC</text>
+                    <text x="344" y="84">Cause</text>
+                    <text x="396" y="84">Length</text>
+                    <text x="432" y="84">=</text>
+                    <text x="448" y="84">4</text>
+                  </g>
+                </svg><a href="#section-5.3.2-3.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-error-cause-no-common-dtls-" class="selfRef">Error Cause No Common DTLS Key Management Method</a>
+            </figcaption></figure>
+</div>
+<span class="break"></span><dl class="dlNewline" id="section-5.3.2-4">
+            <dt id="section-5.3.2-4.1">Cause Code: 16 bits (unsigned integer)</dt>
+            <dd style="margin-left: 1.5em" id="section-5.3.2-4.2">
+              <p id="section-5.3.2-4.2.1">This value MUST be set to 100 (TBC).<a href="#section-5.3.2-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-5.3.2-4.3">Cause Length: 16 bits (unsigned integer)</dt>
+            <dd style="margin-left: 1.5em" id="section-5.3.2-4.4">
+              <p id="section-5.3.2-4.4.1">This value MUST be set to 4.<a href="#section-5.3.2-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-5.3.2-5">This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.<a href="#section-5.3.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2379,7 +2542,7 @@ prevention the endpoints know that down-grade did not happen.<a href="#section-6
 <p id="section-6.2-1">The DTLS chunk MUST NOT be bundled with any other chunk.
 In particular, it MUST be the first and only chunk.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <span id="name-unprotected-sctp-packet"></span><div id="sctp-DTLS-encrypt-chunk-states-1">
-<figure id="figure-7">
+<figure id="figure-9">
           <div id="section-6.2-2.1">
             <div class="alignCenter art-svg artwork" id="section-6.2-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="208" width="528" viewBox="0 0 528 208" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2440,14 +2603,14 @@ In particular, it MUST be the first and only chunk.<a href="#section-6.2-1" clas
               </svg><a href="#section-6.2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-unprotected-sctp-packet" class="selfRef">Unprotected SCTP Packet</a>
           </figcaption></figure>
 </div>
-<p id="section-6.2-3">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 7</a> describes
+<p id="section-6.2-3">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-1" class="auto internal xref">Figure 9</a> describes
 the structure of an unprotected SCTP packet as described in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <span id="name-protected-sctp-packets"></span><div id="sctp-DTLS-encrypt-chunk-states-2">
-<figure id="figure-8">
+<figure id="figure-10">
           <div id="section-6.2-4.1">
             <div class="alignCenter art-svg artwork" id="section-6.2-4.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="144" width="528" viewBox="0 0 528 144" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2501,11 +2664,11 @@ the structure of an unprotected SCTP packet as described in <span>[<a href="#RFC
               </svg><a href="#section-6.2-4.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-protected-sctp-packets" class="selfRef">Protected SCTP Packets</a>
           </figcaption></figure>
 </div>
-<p id="section-6.2-5">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 8</a> describes
+<p id="section-6.2-5">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 10</a> describes
 the structure of a protected SCTP packet being sent.
 Such packets are built with the SCTP common header.
 Only one DTLS chunk can be sent in a SCTP packet.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
@@ -2663,7 +2826,7 @@ terminate the old DTLS Key Contexts (including the restart) is never
 sent until the new restart DTLS Key Context has been committed to
 storage.<a href="#section-6.4.1-7" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
-<figure id="figure-9">
+<figure id="figure-11">
             <div id="section-6.4.1-8.1">
               <div class="alignCenter art-svg artwork" id="section-6.4.1-8.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="528" viewBox="0 0 528 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2708,11 +2871,11 @@ storage.<a href="#section-6.4.1-7" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.4.1-8.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
             </figcaption></figure>
 </div>
-<p id="section-6.4.1-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 9</a> shows how the control chunks being
+<p id="section-6.4.1-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 11</a> shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-6.4.1-9" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-10">The transport of COOCKIE-ECHO, COOCKIE-ACK by means of
 DTLS chunk ensures that the peer requesting the restart has been
@@ -4122,7 +4285,7 @@ reference to this document.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
           <tbody>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">100 (TBC)</td>
-              <td class="text-left" rowspan="1" colspan="1">Policy Not Met</td>
+              <td class="text-left" rowspan="1" colspan="1">Missing DTLS chunk support</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
             <tr>
