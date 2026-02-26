@@ -1363,21 +1363,21 @@ Table of Contents
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_pmids {
-           sctp_assoc_t sds_assoc_id;
-           uint16_t sdp_nr_kmids;
-           uint16_t sdp_kmids[];
+   struct sctp_dtls_kmids {
+           sctp_assoc_t sdk_assoc_id;
+           uint16_t sdk_nr_kmids;
+           uint16_t sdk_kmids[];
    };
 
-   sdp_assoc_id:  This parameter is ignored for one-to-one style
+   sdk_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       For setsockopt(), only SCTP_FUTURE_ASSOC can be used.  For
       getsockopt(), it is an error to use SCTP_{CURRENT|ALL}_ASSOC.
 
-   sdp_nr_kmids:  The number of entries in sdp_kmids.
+   sdk_nr_kmids:  The number of entries in sdk_kmids.
 
-   sdp_kmids:  The DTLS Key Management identifiers which will be or have
+   sdk_kmids:  The DTLS Key Management identifiers which will be or have
       been sent to the peer in the sequence they were contained in the
       DTLS 1.3 Chunk Protected Association parameter and in host byte
       order.
@@ -1398,20 +1398,20 @@ Table of Contents
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_pmids {
-           sctp_assoc_t sds_assoc_id;
-           uint16_t sdp_nr_kmids;
-           uint16_t sdp_kmids[];
+   struct sctp_dtls_kmids {
+           sctp_assoc_t sdk_assoc_id;
+           uint16_t sdk_nr_kmids;
+           uint16_t sdk_kmids[];
    };
 
-   sdp_assoc_id:  This parameter is ignored for one-to-one style
+   sdk_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
 
-   sdp_nr_kmids:  The number of entries in sdp_kmids.
+   sdk_nr_kmids:  The number of entries in sdk_kmids.
 
-   sdp_kmids:  The DTLS Key Management identifiers reported by the peer
+   sdk_kmids:  The DTLS Key Management identifiers reported by the peer
       in the sequence they were contained in the DTLS Key Management
       parameter and in host byte order.
 
@@ -1582,10 +1582,10 @@ Table of Contents
 
    struct sctp_dtls_stats {
       sctp_assoc_t sds_assoc_id;
-      uint32_t sds_dropped_unprotected;
-      uint32_t sds_aead_failures;
-      uint32_t sds_recv_protected;
-      uint32_t sds_sent_protected;
+      uint64_t sds_dropped_unprotected;
+      uint64_t sds_aead_failures;
+      uint64_t sds_recv_protected;
+      uint64_t sds_sent_protected;
       /* There will be added more fields before the WGLC. */
       /* There might be additional platform specific counters. */
    };

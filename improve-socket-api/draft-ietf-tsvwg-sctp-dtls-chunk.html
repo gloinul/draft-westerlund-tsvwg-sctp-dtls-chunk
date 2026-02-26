@@ -3461,16 +3461,16 @@ sent during the handshake.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-2">The following structure is used as the <code>option_value</code>:<a href="#section-8.4.1-2" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-8.4.1-3">
 <pre>
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 </pre><a href="#section-8.4.1-3" class="pilcrow">¶</a>
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-8.4.1-4">
             <dt id="section-8.4.1-4.1">
-<code>sdp_assoc_id</code>:</dt>
+<code>sdk_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.2">
               <p id="section-8.4.1-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3480,13 +3480,13 @@ For <code>getsockopt()</code>, it is an error to use <code>SCTP_{CURRENT|ALL}_AS
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.1-4.3">
-<code>sdp_nr_kmids</code>:</dt>
+<code>sdk_nr_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.4">
-              <p id="section-8.4.1-4.4.1">The number of entries in <code>sdp_kmids</code>.<a href="#section-8.4.1-4.4.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.1-4.4.1">The number of entries in <code>sdk_kmids</code>.<a href="#section-8.4.1-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.1-4.5">
-<code>sdp_kmids</code>:</dt>
+<code>sdk_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.6">
               <p id="section-8.4.1-4.6.1">The DTLS Key Management identifiers which will be or have been sent to the peer
 in the sequence they were contained in the DTLS 1.3 Chunk Protected
@@ -3514,16 +3514,16 @@ peer during the handshake.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.2-2">The following structure is used as the <code>option_value</code>:<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-8.4.2-3">
 <pre>
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 </pre><a href="#section-8.4.2-3" class="pilcrow">¶</a>
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-8.4.2-4">
             <dt id="section-8.4.2-4.1">
-<code>sdp_assoc_id</code>:</dt>
+<code>sdk_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.2">
               <p id="section-8.4.2-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3532,13 +3532,13 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.2-4.3">
-<code>sdp_nr_kmids</code>:</dt>
+<code>sdk_nr_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.4">
-              <p id="section-8.4.2-4.4.1">The number of entries in <code>sdp_kmids</code>.<a href="#section-8.4.2-4.4.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.2-4.4.1">The number of entries in <code>sdk_kmids</code>.<a href="#section-8.4.2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.2-4.5">
-<code>sdp_kmids</code>:</dt>
+<code>sdk_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.6">
               <p id="section-8.4.2-4.6.1">The DTLS Key Management identifiers reported by the peer in the sequence they
 were contained in the DTLS Key Management parameter and in host byte order.<a href="#section-8.4.2-4.6.1" class="pilcrow">¶</a></p>
@@ -3829,10 +3829,10 @@ specific SCTP endpoint.<a href="#section-8.4.7-1" class="pilcrow">¶</a></p>
 <pre>
 struct sctp_dtls_stats {
    sctp_assoc_t sds_assoc_id;
-   uint32_t sds_dropped_unprotected;
-   uint32_t sds_aead_failures;
-   uint32_t sds_recv_protected;
-   uint32_t sds_sent_protected;
+   uint64_t sds_dropped_unprotected;
+   uint64_t sds_aead_failures;
+   uint64_t sds_recv_protected;
+   uint64_t sds_sent_protected;
    /* There will be added more fields before the WGLC. */
    /* There might be additional platform specific counters. */
 };
