@@ -81,7 +81,7 @@ normative:
   RFC9147:
   RFC9260:
 
-  TLS-CIPHER-SUITS:
+  TLS-CIPHER-SUITES:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
     date: November 2023
@@ -938,26 +938,26 @@ number to create the nonce per Section 5.3 of {{RFC8446}}.
 The sequence number key is used to encrypt the sequence number
 (Section 4.2.3 of {{RFC9147}}).
 
-## Cipher Suit Capabilities
+## Cipher Suite Capabilities
 
-The DTLS Key Management Method needs to know which cipher suits defined
+The DTLS Key Management Method needs to know which cipher suites defined
 for usage with DTLS 1.3 that are supported by the DTLS chunk and its
-protection operations block. All TLS cipher suit that are defined are
-listed in the TLS cipher suit registry {{TLS-CIPHER-SUITS}} at IANA
+protection operations block. All TLS cipher suite that are defined are
+listed in the TLS cipher suite registry {{TLS-CIPHER-SUITES}} at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
-of all supported cipher suits to the higher layer.
+of all supported cipher suites to the higher layer.
 
-Request : Get Cipher Suits
+Request : Get Cipher Suites
 
 Parameters : none
 
-Reply   : Cipher Suits
+Reply   : Cipher Suites
 
-Parameters : list of cipher suits
+Parameters : list of cipher suites
 
 ## Establish Client Write Keying Material
 
-The DTLS Chunk can use one out of multiple sets of cipher suit and
+The DTLS Chunk can use one out of multiple sets of cipher suite and
 corresponding key materials.
 
 The following information needs to be provided when setting Client Write (transmit) Keying material:
@@ -977,15 +977,15 @@ Parameters :
   3 are not expected as they are used during DTLS handshake.
 
 * Cipher Suit:
-: 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+: 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
 * Write Key, Sequence Number Key and IV:
-: The cipher suit specific binary object containing all necessary
+: The cipher suite specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
-cipher suit used.
+cipher suite used.
 
 
 Reply : Established or Failed
@@ -993,7 +993,7 @@ Reply : Established or Failed
 
 ## Establish Server Write Keying Material
 
-The DTLS Chunk can use one out of multiple sets of cipher suit and
+The DTLS Chunk can use one out of multiple sets of cipher suite and
 corresponding key materials.
 
 The following information needs to be provided when setting Server Write (transmit) Keying material:
@@ -1013,15 +1013,15 @@ Parameters :
   3 are not expected as they are used during DTLS handshake.
 
 * Cipher Suit:
-: 2 bytes cipher suit identification for the DTLS 1.3 Cipher suit used
+: 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
 * Write Key, Sequence Number Key and IV:
-: The cipher suit specific binary object containing all necessary
+: The cipher suite specific binary object containing all necessary
 information for protection operations. The secret will used by the DTLS 1.3 client to
 encrypt the record. Binary arbitrary long object depending on the
-cipher suit used.
+cipher suite used.
 
 Reply : Established or Failed
 
@@ -1214,46 +1214,46 @@ in the ``*flags`` argument.
 
 ## Functions
 
-### ``sctp_dtls_nr_cipher_suits()``
+### ``sctp_dtls_nr_cipher_suites()``
 
-``sctp_dtls_nr_cipher_suits()`` returns the number of cipher suits supported
+``sctp_dtls_nr_cipher_suites()`` returns the number of cipher suites supported
 by the SCTP implementation.
 
 The function prototype is:
 
 ~~~ c
 unsigned int
-sctp_dtls_nr_cipher_suits(void);
+sctp_dtls_nr_cipher_suites(void);
 ~~~
 
-This function can be used in combination with ``sctp_dtls_cipher_suits()``.
+This function can be used in combination with ``sctp_dtls_cipher_suites()``.
 
-### ``sctp_dtls_cipher_suits()``
+### ``sctp_dtls_cipher_suites()``
 
-``sctp_dtls_cipher_suits()`` returns the cipher suits supported by the
+``sctp_dtls_cipher_suites()`` returns the cipher suites supported by the
 SCTP implementation.
 
 The function prototype is:
 
 ~~~ c
 int
-sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
+sctp_dtls_cipher_suites(uint8_t cipher_suites[][2], unsigned int n);
 ~~~
 
 and the arguments are
-``cipher_suits``:
-: An array where the supported cipher suits are stored. A cipher suit is
+``cipher_suites``:
+: An array where the supported cipher suites are stored. A cipher suite is
   represented by two ``uint8_t`` using the IANA assigned values in the
-  TLS cipher suit registry {{TLS-CIPHER-SUITS}}.
+  TLS cipher suite registry {{TLS-CIPHER-SUITES}}.
 
 ``n``:
-The number of cipher suits which can be stored in ``cipher_suits``.
+The number of cipher suites which can be stored in ``cipher_suites``.
 
-``sctp_dtls_cipher_suits`` returns ``-1``, if ``n`` is smaller than the number
+``sctp_dtls_cipher_suites`` returns ``-1``, if ``n`` is smaller than the number
 of cipher suites supported by the stack. If ``n`` is equal to or larger than
 the number of cipher suites supported by the SCTP implementation, the
-cipher suits are stored in ``cipher_suits`` and the number of supported
-cipher suits is returned.
+cipher suites are stored in ``cipher_suites`` and the number of supported
+cipher suites is returned.
 
 ## Socket Options
 
@@ -1361,7 +1361,7 @@ The following structure is used as the ``option_value``:
 ~~~ c
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
-        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_cipher_suite[2];
         uint8_t sdk_restart;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
@@ -1380,8 +1380,8 @@ struct sctp_dtls_keys {
   SCTP association the caller is performing the action.
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
-``sdk_cipher_suit``:
-: The cipher suit for which the keys are used.
+``sdk_cipher_suite``:
+: The cipher suite for which the keys are used.
 
 ``sdk_restart``:
 : If the value is ``0``, the regular keys are added, if a value different
@@ -1427,7 +1427,7 @@ The following structure is used as the ``option_value``:
 ~~~ c
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
-        uint8_t sdk_cipher_suit[2];
+        uint8_t sdk_cipher_suite[2];
         uint8_t sdk_restart;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
@@ -1446,8 +1446,8 @@ struct sctp_dtls_keys {
   SCTP association the caller is performing the action.
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
-``sdk_cipher_suit``:
-: The cipher suit for which the keys are used.
+``sdk_cipher_suite``:
+: The cipher suite for which the keys are used.
 
 ``sdk_restart``:
 : If the value is ``0``, the regular keys are added, if a value different
