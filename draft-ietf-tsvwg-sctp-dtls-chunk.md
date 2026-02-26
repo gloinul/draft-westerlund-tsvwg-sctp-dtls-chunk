@@ -395,33 +395,8 @@ DTLS Key Management Identifier.
 
 ##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
-This section defines the new chunk type that will be used to
-transport the DTLS 1.3 record containing protected SCTP payload.
-{{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
-
-| Chunk Type | Chunk Name |
-| 0x41 | DTLS Chunk (DTLS) |
-{: #sctp-DTLS-chunk-newchunk-crypt title="DTLS Chunk Type" cols="r l"}
-
-It should be noted that the DTLS chunk format requires the receiver
-stop processing this SCTP packet, discard the unrecognized chunk and
-all further chunks, and report the unrecognized chunk in an ERROR
-chunk using the 'Unrecognized Chunk Type' error cause.  This is
-accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
-the upper bits of the chunk type.
-
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.
-
-As the full DTLS record with the header and sequence number, etc the
-start of the cipher text is likely not 32-bit aligned making in-place
-encryption/decryption impossible in some plattforms. Therefore, a
-variable number (0-3) of pre-padding bytes with value fixed to zero MUST
-be added in the DTLS chunk payload before the DTLS Record header
-(DTLS Chunk Payload), to ensure the Encrypted Record part of the
-DTLSCiphertext {{RFC9147}} will start on a 32-bit boundary in relation
-to the start of the DTLS Chunk. The number of these pre-padding bytes
-is indicated in the DTLS Chunk header using the P bits.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -438,7 +413,18 @@ is indicated in the DTLS Chunk header using the P bits.
 |                               |       Post-Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk" artwork-align="center"}
+
+{: vspace="0"}
+Type: 8 bits (unsigned integer)
+: This value MUST be set to 0x41.
+  It should be noted that the chunk type requires the receiver
+  stop processing this SCTP packet, discard the unrecognized chunk and
+  all further chunks, and report the unrecognized chunk in an ERROR
+  chunk using the 'Unrecognized Chunk Type' error cause, if the receiver does
+  not support this chunk type.
+  This is accomplished (as described in {{Section 3.2 of !RFC9260}}) by the use
+  of the upper bits of the chunk type.
 
 reserved: 5 bits
 : Reserved bits for future use. Sender MUST set these bits to 0 and
@@ -449,21 +435,23 @@ R: 1 bit (boolean)
 : Restart indicator. If this bit is set this DTLS chunk is protected
   with by a Restart DTLS Key context.
 
-P: 2 bit (unsigned integer 0-3)
+P: 2 bit (unsigned integer)
 
-: Payload Pre-Padding indicator. It indicates how many bytes
-are inserted for padding before the DTLSCiphertext.
-This allows the encrypted data to be 32 bit aligned.
+: Payload Pre-Padding length. It indicates how many bytes
+  are inserted for padding before the DTLSCiphertext.
+  See the text below for computing P.
 
 Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Payload in bytes plus 4.
+: This value holds the length of the Payload in bytes plus 4 plus the Payload
+  Pre-Padding length.
 
 Pre-Padding: 0, 8, 16, or 24 bits
-: Based on the Payload Pre-Padding Indicator the indicated number of
-8-bit bytes of zero values are included.
+: The length of the padding is given by the Payload Pre-Padding length P.
+  The sender MUST pad with zero bytesand the receiver MUST ignore the
+  padding bytes.
 
 Payload: variable length
-: This holds the DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
+: This MUST contain a exactly one DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
 
 Post-Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
@@ -471,14 +459,11 @@ Post-Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
-### Payload formatting in DTLS Chunk
 
-
-From section 4 of {{RFC9147}}, the DTLS record header has variable length,
-here reported in {{DTLSCiphertext-record-struct}}.
+From {{Section 4 of !RFC9147}}, the DTLS record header has variable length and
+is depicted in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
-
     struct {
         opaque unified_hdr[variable];
         opaque encrypted_record[length];
@@ -487,13 +472,13 @@ here reported in {{DTLSCiphertext-record-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
 
-As shown above, DTLSCiphertext record is built up with the unified_hdr
-and the encrypted_record, where unified_hdr has variable format
-as defined in the first byte. The format of unified_hdr is depicted
-in {{DTLSCiphertext-header-struct}}.
+The DTLSCiphertext contains the unified_hdr followed by the encrypted_record,
+where unified_hdr has variable format.
+The encrypted_record MUST be 32 bit aligned in relation to the start of the
+DTLS Chunk. The Pre-Padding MUST be used to achieve this.
+The format of unified_hdr is depicted in {{DTLSCiphertext-header-struct}}.
 
 ~~~~~~~~~~~ aasvg
-
     0 1 2 3 4 5 6 7
     +-+-+-+-+-+-+-+-+
     |0|0|1|C|S|L|E E|
@@ -509,17 +494,10 @@ in {{DTLSCiphertext-header-struct}}.
     | 16 bit Length |
     | (if present)  |
     +-+-+-+-+-+-+-+-+
-
 ~~~~~~~~~~~
-{: #DTLSCiphertext-header-struct title="DTLSCiphertext header" artwork-align="center"}
+{: #DTLSCiphertext-header-struct title="DTLS unified_hdr" artwork-align="center"}
 
-DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
-in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
-be easily computed by reading the first octet. The Length
-field is redundant with the DTLS chunk's length field and can be
-avoided to be used, and multiple DTLS records SHALL NOT be part of the
-DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
-shown in {{DTLSCiphertext-recommended}}.
+Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
 
@@ -527,11 +505,11 @@ shown in {{DTLSCiphertext-recommended}}.
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
 |0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-|    16 bit     |     |8 bit Seq. No. |
+|    16 bit     |     |Sequence Number|
 |Sequence Number|     +-+-+-+-+-+-+-+-+
 +-+-+-+-+-+-+-+-+     |               |
-|   16 bit      |     |   Encrypted   |
-|   Length      |     /   Record      /
+|    16 bit     |     |   Encrypted   |
+|    Length     |     /   Record      /
 +-+-+-+-+-+-+-+-+     |               |
 |               |     +-+-+-+-+-+-+-+-+
 |  Encrypted    |
@@ -546,14 +524,29 @@ shown in {{DTLSCiphertext-recommended}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
 
-Thus the size of the DTLSCiphertext header, using the first octet B, is computed as follows:
+Thus the size of the DTLSCiphertext header is computed from the first_byte as follows:
 
-size = 1 + (B & 0x08) ? 2 : 1 + (B & 0x04) ? 2 : 0
+~~~ c
+size = 1;
+/* Add in the size of the sequence number. */
+if (first_byte & 0x08)
+    size += 2;
+else
+    size += 1;
+/* Add in the size of the length field, if present. */
+if (first_byte & 0x04)
+    size += 2;
+~~~
+Then the Payload Pre-Padding length P can be computed by
 
-In order the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
-as follows:
+~~~ c
+P = (4 - (size & 0x3)) & 0x03;
+~~~
 
-P = (4 - (size & 0x03)) & 0x03
+The use of the Pre-Padding allows an receiver to perform an in-place decryption
+and then process the sequence of chunks.
+SCTP as specified in {{RFC9260}} guarantees that chunks start on a 32-bit
+boundary.
 
 ## New Error Causes
 
