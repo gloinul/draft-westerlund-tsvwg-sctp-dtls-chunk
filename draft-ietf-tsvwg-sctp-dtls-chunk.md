@@ -1039,8 +1039,6 @@ Parameters :
 
 * Restart indication
 
-* DTLS CID
-
 * DTLS Epoch
 
 Reply: Destroyed
@@ -1060,8 +1058,6 @@ Parameters :
 
 * Restart indication
 
-* DTLS CID
-
 * DTLS Epoch
 
 Reply: Destroyed
@@ -1080,8 +1076,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
-* DTLS CID
 
 * DTLS Epoch
 
@@ -1114,8 +1108,6 @@ Parameters :
 
 * Restart indication
 
-* DTLS CID
-
 * DTLS Epoch
 
 Reply: AEAD Encryption Invocations
@@ -1134,8 +1126,6 @@ Parameters :
 
 * Restart indication
 
-* DTLS CID
-
 * DTLS Epoch
 
 Reply: AEAD Decryption Invocations
@@ -1153,8 +1143,6 @@ Parameters :
 * SCTP Association
 
 * Restart indication
-
-* DTLS CID
 
 * DTLS Epoch
 
