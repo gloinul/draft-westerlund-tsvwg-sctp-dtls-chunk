@@ -398,9 +398,7 @@ Padding: 0 or 16 bits (unsigned integer)
 parameter MUST be padded with two bytes. The padding MUST be set to 0 by
 the sender and MUST be ignored by the receiver.
 
-## New Chunk Type {#new-chunk-type}
-
-###  DTLS Chunk (DTLS) {#DTLS-chunk}
+##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
 This section defines the new chunk type that will be used to
 transport the DTLS 1.3 record containing protected SCTP payload.
@@ -1650,22 +1648,18 @@ padding. Use of DTLS padding hides this packet expansion from SCTP.
 
 # IANA Considerations {#IANA-Consideration}
 
-This document defines two new registries in the Stream Control
-Transmission Protocol (SCTP) Parameters group that IANA
-maintains. Theses registries are for the extra cause codes for
-protection related errors.
-It also adds registry entries into several other
-registries in the Stream Control Transmission Protocol (SCTP)
-Parameters group:
+This document adds registry entries or registries in the Stream Control
+Transmission Protocol (SCTP) Parameters group handled by IANA:
 
-*  One new SCTP Chunk Types
+* One new registry for the Key Management IDs
 
-*  One new SCTP Chunk Parameter Type
+* One new SCTP Chunk Types and its corresponding Chunk Type Flags registry
 
-*  Three new SCTP Error Cause Code
+* One new SCTP Chunk Parameter Type
 
-And finally the update of one registered SCTP Payload Protocol
-Identifier.
+* Two new SCTP Error Cause Code
+
+* A new Payload Protocol Identifier
 
 ## DTLS Key Management Method Identifiers {#IANA-Protection-Solution-ID}
 
@@ -1674,18 +1668,14 @@ This registry is part of the of the Stream
 Control Transmission Protocol (SCTP) Parameters grouping.
 
 The purpose of this registry is to assign DTLS Key Management Method
-Identifier for any DTLS Key Management Method that is either the DTLS
-Chunk combined with a DTLS Key Management Method, offered as an alternative
-to DTLS chunk. Any DTLS Key Management Method that is offered
-through a parameter exchange during the SCTP handshake are potential
-to be included here.
-
+Identifier for any DTLS Key Management Method used for the extension described
+in this document.
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
-| Identifier | Solution Name | Reference | Contact |
-| 0 | DTLS Chunk with Pre- | RFC-TBD | Draft Authors |
-| 1-4095 | Available for Assignment using Specification Required policy | | |
-| 4096-65535 | Available for Assignment using First Come, First Served policy | | |
+| Identifier | Solution Name                                                  | Reference | Contact       |
+| 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-TBD   | Draft Authors |
+| 1-4095     | Available for Assignment using Specification Required policy   |           |               |
+| 4096-65535 | Available for Assignment using First Come, First Served policy |           |               |
 {: #iana-psi title="DTLS Key Management Method Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
@@ -1694,41 +1684,38 @@ as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, 
 ## SCTP Chunk Type
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Types" registry, IANA is requested to add the one new entry
-depicted below in in {{iana-chunk-types}} with a reference to this
-document. The registry at time of writing was available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1
+"Chunk Types" registry, IANA is requested to update the reference for the
+DTLS chunk as depicted in {{iana-chunk-types}} with a reference to this
+document.
 
-| ID Value | Chunk Type | Reference |
-| 0x41 | DTLS Chunk (DTLS) | RFC-To-Be |
-{: #iana-chunk-types title="New Chunk Type Registered" cols="r l l"}
+| ID Value | Chunk Type        | Reference |
+| 0x41     | DTLS Chunk (DTLS) | RFC-To-Be |
+{: #iana-chunk-types title="DTLS Chunk Type" cols="r l l"}
 
-The registration table for the chunk flags of this chunk
-type is initially:
+IANA is requested to add the corresponding registration table for the chunk
+flags of the DTLS chunk with the initial contents show in {{iana-chunk-flags}}:
 
-| Chunk Flag Value | Chunk Flag Name | Reference |
-| 0x01 | R bit | RFC-To-Be |
-| 0x02| Unassigned |  |
-| 0x04| Unassigned |  |
-| 0x08| Unassigned |  |
-| 0x10| Unassigned |  |
-| 0x20| Unassigned |  |
-| 0x40| Unassigned |  |
-| 0x80| Unassigned |  |
+| Chunk Flag Value | Chunk Flag Name  | Reference |
+| 0x01             | R bit            | RFC-To-Be |
+| 0x02             | P low order bit  | RFC-To-Be |
+| 0x04             | P high order bit | RFC-To-Be |
+| 0x08             | Unassigned       |           |
+| 0x10             | Unassigned       |           |
+| 0x20             | Unassigned       |           |
+| 0x40             | Unassigned       |           |
+| 0x80             | Unassigned       |           |
 {: #iana-chunk-flags title="DTLS Chunk Flags" cols="r l l"}
 
 ## SCTP Chunk Parameter Types
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Parameter Types" registry, IANA is requested to add the new
-entry depicted below in in {{iana-chunk-parameter-types}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2
+"Chunk Parameter Types" registry, IANA is requested to update the reference for
+the DTLS Key Management as depicted in {{iana-chunk-parameter-types}} with a
+reference to this document.
 
 | ID Value | Chunk Parameter Type | Reference |
 | 0x8006   | DTLS Key Management  | RFC-To-Be |
-{: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
+{: #iana-chunk-parameter-types title="DTLS Key Management Chunk Parameter" cols="r l l"}
 
 
 ## SCTP Error Cause Codes {#IANA-Extra-Cause}
@@ -1736,27 +1723,24 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
 entries depicted below in in {{iana-error-cause-codes}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24
+reference to this document.
 
-| ID Value | Error Cause Codes | Reference |
-| TBA10 | Policy Not Met | RFC-To-Be |
-| TBA11 | No Common Protection | RFC-To-Be |
-{: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
+| ID Value     | Error Cause Codes    | Reference |
+| 100 (TBC)    | Policy Not Met       | RFC-To-Be |
+| 101 (TBC)    | No Common Protection | RFC-To-Be |
+{: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
 
+The suggested cause code will need to be confirmed by IANA.
 
 ## SCTP Payload Protocol Identifier {#sec-iana-ppid}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
-entry depicted below in in {{iana-payload-protection-id}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
+reference for the PPID 4242 as depicted in {{iana-payload-protection-id}} with a
+reference to this document.
 
 | ID Value | SCTP Payload Protocol Identifier | Reference |
-| 4242 | DTLS Key Management Messages | RFC-To-Be |
+| 4242     | DTLS Key Management Messages     | RFC-To-Be |
 {: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
 
 
