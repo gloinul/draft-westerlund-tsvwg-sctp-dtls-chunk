@@ -423,15 +423,15 @@ Table of Contents
    DTLS Key Management Identifier: 16 bits (unsigned integer)
       Each DTLS Key Management Identifier (Section 10.1) is a 16-bit
       unsigned integer value indicating a DTLS Key Management Method.
-      In the INIT chunk the DTLS Management Methods are listed in
+      In the INIT chunk the DTLS Key Management Methods are listed in
       descending order of preference, i.e. the first listed in the
-      parameter is the most preferred and the last the least preferred
-      by the sender in the INIT chunk.  In the INIT-ACK chunk the
-      endpoint chooses one of the DTLS Management Methods supported by
-      the peer.
+      parameter is the most preferred one and the last kisted one is the
+      least preferred by the sender in the INIT chunk.  In the INIT ACK
+      chunk the endpoint chooses one of the DTLS Key Management Methods
+      supported by the peer.
 
    Padding: 0 or 16 bits (unsigned integer)
-      If the number of included DTLS Management Methods is odd the
+      If the number of included DTLS Key Management Methods is odd the
       parameter MUST be padded with two bytes.  The padding MUST be set
       to 0 by the sender and MUST be ignored by the receiver.
 
@@ -1552,7 +1552,7 @@ Table of Contents
 
    Enabling this socket option on an SCTP endpoint enforces that
    received SCTP packets are only processed, if they are protected.  All
-   received packets with the first chunk not being an INIT chunk, INIT-
+   received packets with the first chunk not being an INIT chunk, INIT
    ACK chunk, or DTLS chunk will be silently discarded.
 
    The following structure is used as the option_value:
@@ -1672,7 +1672,7 @@ Table of Contents
 
    *  One new SCTP Chunk Parameter Type
 
-   *  Two new SCTP Error Cause Code
+   *  Two new SCTP Error Cause Codes
 
    *  A new Payload Protocol Identifier
 
@@ -1688,7 +1688,7 @@ Table of Contents
    unsigned integer value from the suitable range.
 
    +============+================================+===========+=========+
-   | Identifier | Solution Name                  | Reference | Contact |
+   | Identifier | Key Managemen Method Name      | Reference | Contact |
    +============+================================+===========+=========+
    |          0 | DTLS Chunk with Pre-shared     | RFC-TBD   | Draft   |
    |            | cryptographic parameters       |           | Authors |
@@ -1771,13 +1771,13 @@ Table of Contents
    entries depicted below in in Table 6 with a reference to this
    document.
 
-          +===========+============================+===========+
-          |  ID Value | Error Cause Codes          | Reference |
-          +===========+============================+===========+
-          | 100 (TBC) | Missing DTLS chunk support | RFC-To-Be |
-          +-----------+----------------------------+-----------+
-          | 101 (TBC) | No Common Protection       | RFC-To-Be |
-          +-----------+----------------------------+-----------+
+     +===========+======================================+===========+
+     |  ID Value | Error Cause Codes                    | Reference |
+     +===========+======================================+===========+
+     | 100 (TBC) | Missing DTLS chunk support           | RFC-To-Be |
+     +-----------+--------------------------------------+-----------+
+     | 101 (TBC) | No Common DTLS Key Management Method | RFC-To-Be |
+     +-----------+--------------------------------------+-----------+
 
                         Table 6: Error Cause Codes
 

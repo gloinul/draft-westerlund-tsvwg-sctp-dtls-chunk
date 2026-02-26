@@ -1857,16 +1857,16 @@ number of DTLS Key Management identifiers (N) plus 4.<a href="#section-5.1-3.4.1
           <dd style="margin-left: 1.5em" id="section-5.1-3.6">
             <p id="section-5.1-3.6.1">Each DTLS Key Management Identifier (<a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 10.1</a>)
 is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
-In the INIT chunk the DTLS Management Methods are listed in descending order
-of preference, i.e. the first listed in the parameter is the most preferred
-and the last the least preferred by the sender in the INIT chunk.
-In the INIT-ACK chunk the endpoint chooses one of the DTLS Management Methods
+In the INIT chunk the DTLS Key Management Methods are listed in descending order
+of preference, i.e. the first listed in the parameter is the most preferred one
+and the last kisted one is the least preferred by the sender in the INIT chunk.
+In the INIT ACK chunk the endpoint chooses one of the DTLS Key Management Methods
 supported by the peer.<a href="#section-5.1-3.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.1-3.7">Padding: 0 or 16 bits (unsigned integer)</dt>
           <dd style="margin-left: 1.5em" id="section-5.1-3.8">
-            <p id="section-5.1-3.8.1">If the number of included DTLS Management Methods is odd the
+            <p id="section-5.1-3.8.1">If the number of included DTLS Key Management Methods is odd the
 parameter MUST be padded with two bytes. The padding MUST be set to 0 by
 the sender and MUST be ignored by the receiver.<a href="#section-5.1-3.8.1" class="pilcrow">¶</a></p>
 </dd>
@@ -3875,7 +3875,7 @@ from <code>0</code> is used, the restart keys are removed.<a href="#section-8.4.
           </h4>
 <p id="section-8.4.6-1">Enabling this socket option on an SCTP endpoint enforces that received
 SCTP packets are only processed, if they are protected.
-All received packets with the first chunk not being an INIT chunk, INIT-ACK
+All received packets with the first chunk not being an INIT chunk, INIT ACK
 chunk, or DTLS chunk will be silently discarded.<a href="#section-8.4.6-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.6-2">The following structure is used as the <code>option_value</code>:<a href="#section-8.4.6-2" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-8.4.6-3">
@@ -4055,7 +4055,7 @@ Transmission Protocol (SCTP) Parameters group handled by IANA:<a href="#section-
           <p id="section-10-2.3.1">One new SCTP Chunk Parameter Type<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-2.4">
-          <p id="section-10-2.4.1">Two new SCTP Error Cause Code<a href="#section-10-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-10-2.4.1">Two new SCTP Error Cause Codes<a href="#section-10-2.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-2.5">
           <p id="section-10-2.5.1">A new Payload Protocol Identifier<a href="#section-10-2.5.1" class="pilcrow">¶</a></p>
@@ -4067,8 +4067,8 @@ Transmission Protocol (SCTP) Parameters group handled by IANA:<a href="#section-
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-dtls-key-management-method-" class="section-name selfRef">DTLS Key Management Method Identifiers</a>
         </h3>
 <p id="section-10.1-1">IANA is requested to create a new registry called "DTLS Key Management Method".
-This registry is part of the Stream
-Control Transmission Protocol (SCTP) Parameters grouping.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+This registry is part of the Stream Control Transmission Protocol (SCTP)
+Parameters grouping.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
 <p id="section-10.1-2">The purpose of this registry is to assign DTLS Key Management Method
 Identifier for any DTLS Key Management Method used for the extension described
 in this document.
@@ -4082,7 +4082,7 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Identifier</th>
-              <th class="text-left" rowspan="1" colspan="1">Solution Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Key Managemen Method Name</th>
               <th class="text-left" rowspan="1" colspan="1">Reference</th>
               <th class="text-left" rowspan="1" colspan="1">Contact</th>
             </tr>
@@ -4268,7 +4268,7 @@ reference to this document.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">101 (TBC)</td>
-              <td class="text-left" rowspan="1" colspan="1">No Common Protection</td>
+              <td class="text-left" rowspan="1" colspan="1">No Common DTLS Key Management Method</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
