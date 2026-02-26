@@ -4,7 +4,7 @@
 
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
-Updates: {"RFC5061" => nil} (if approved)                     C. Porfiri
+Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
 Expires: 30 August 2026                                         M. Tüxen
                                          Münster Univ. of Appl. Sciences
@@ -112,7 +112,7 @@ Table of Contents
        6.4.2.  Compatibility with Legacy SCTP Restart
      6.5.  Considerations on DTLS Key Management Method
    7.  Abstract API
-     7.1.  Cipher Suit Capabilities
+     7.1.  Cipher Suite Capabilities
      7.2.  Establish Client Write Keying Material
      7.3.  Establish Server Write Keying Material
      7.4.  Destroy Client Write Keying Material
@@ -127,12 +127,12 @@ Table of Contents
      8.1.  SCTP_ASSOC_CHANGE Notification
      8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
      8.3.  Functions
-       8.3.1.  sctp_dtls_nr_cipher_suits()
-       8.3.2.  sctp_dtls_cipher_suits()
+       8.3.1.  sctp_dtls_nr_cipher_suites()
+       8.3.2.  sctp_dtls_cipher_suites()
      8.4.  Socket Options
        8.4.1.  Get or Set the Local DTLS Key Management Identifiers
                (SCTP_DTLS_LOCAL_KMIDS)
-       8.4.2.  Get the Remote DTLS Key Mangement Identifiers
+       8.4.2.  Get the Remote DTLS Key Management Identifiers
                (SCTP_DTLS_REMOTE_KMIDS)
        8.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
        8.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
@@ -268,7 +268,7 @@ Table of Contents
    Management Method uses an API to key the Chunk protection operation
    function.  Usage of the DTLS 1.3 handshake for initial mutual
    authentication and key establishment as well as periodic re-
-   authentication and rekeying with Diffe-Hellman of the DTLS chunk
+   authentication and rekeying with Diffie-Hellman of the DTLS chunk
    protection is defined in separate documents, (see Section 4.2).  To
    prevent downgrade attacks affecting the DTLS Key Management
    negotiation the DTLS Key Management Method should implement specific
@@ -301,13 +301,13 @@ Table of Contents
    procedures taking care of User Data encryption into DTLS Record and
    DTLS record decryption into User Data.
 
-   DTLS 1.3 operations requires to directly handshake messages with the
+   DTLS 1.3 operations require to directly handshake messages with the
    remote peer for connection setup and other features, this kind of
    handshake is part of the DTLS Key Management Method.  DTLS Key
    Management Method achieves these features behaving as a user of the
    SCTP association.  DTLS Key Management Method sends and receives its
    own data via the SCTP User Level interface.  DTLS Key Management
-   Method's own data are distinguished from any other data by means of a
+   Method's own data is distinguished from any other data by means of a
    dedicated PPID using the value 4242 (see Table 7).
 
    Once DTLS Key Management Method has established a DTLS 1.3
@@ -331,7 +331,7 @@ Table of Contents
 
    The first established DTLS key context for any SCTP association MUST
    use epoch=3.  This ensures that the epoch of the DTLS key context
-   will normally match the epoch of a DTLS Management Method´s
+   will normally match the epoch of a DTLS Key Management Method's
    connection.
 
    The Replay window for the DTLS Sequence Number will need to take into
@@ -347,11 +347,11 @@ Table of Contents
    This document specifies the mechanisms for SCTP to be protected with
    DTLS, it doesn't specify how the DTLS Key Management works, being
    limited on what the DTLS Key Management MUST provide for achieving
-   the protection.  Even though DTLS1.3 is indicated as protocol for
+   the protection.  Even though DTLS 1.3 is indicated as protocol for
    providing Key Contexts, different implementations can achieve that
    and different mechanisms may be used for features such as mutual
    authentication, rekeying etc.  The DTLS Key Management Method may use
-   a number of DTLS Key Management methods depending on what is being
+   a number of DTLS Key Management Methods depending on what is being
    implemented and available and/or according to the local policies.
    DTLS Key Management Methods are defined in their own specific
    documents, and needs to be registered in the IANA Registry "SCTP DTLS
@@ -369,7 +369,7 @@ Table of Contents
    [RFC5061] specifies the support for Dynamic Address Reconfiguration
    in SCTP.  DTLS Chunks has limited support for Dynamic Address
    Reconfiguration and requires an update of [RFC5061].  Section 4.1.1
-   of [RFC5061] specifies that ASCONF message are required to be sent
+   of [RFC5061] specifies that ASCONF messages are required to be sent
    authenticated with SCTP-AUTH [RFC4895].  For SCTP associations using
    DTLS Chunk this would result in the use of redundant and non-
    compatible mechanisms for Authentication with both SCTP-AUTH and the
@@ -473,12 +473,12 @@ Table of Contents
       [RFC9260]) by the use of the upper bits of the chunk type.
 
    reserved: 5 bits
-      Reserved bits for future use.  Sender MUST set these bits to 0 and
-      MUST be ignored on reception.
+      Reserved bits for future use.  These bits MUST be set to 0 by the
+      sender and MUST be ignored by the receiver.
 
    R: 1 bit (boolean)
       Restart indicator.  If this bit is set this DTLS chunk is
-      protected with by a Restart DTLS Key context.
+      protected with a Restart DTLS Key context.
 
    P: 2 bit (unsigned integer)
       Payload Pre-Padding length.  It indicates how many bytes are
@@ -641,29 +641,29 @@ Table of Contents
 
    An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
    chunk protected association sends to the remote peer an INIT chunk
-   containing the DTLS 1.3 Chunk Protected Association parameter (see
-   Section 5.1) indicating supported and preferred DTLS Key Management
-   method (see Figure 2).
+   containing the DTLS Key Management Parameter (see Section 5.1)
+   indicating supported and preferred DTLS Key Management method (see
+   Figure 2).
 
    An SCTP Endpoint acting as responder, when receiving an INIT chunk
    with a DTLS Key Management Parameter, will reply with INIT-ACK with
-   its own DTLS MKey anagement Parameter containing the selected DTLS
+   its own DTLS Key Management Parameter containing the selected DTLS
    Key Management Method out of the set of supported ones.  In case
    there are no common set of supported DTLS Key Management Methods that
-   are accepted by the responder, and the endpoints' policy require
+   are accepted by the responder, and the endpoints' policy requires
    secured association it MUST reply with an ABORT chunk, include the
-   error cause "No DTLS Key Management Method" (TBA11) (see
+   error cause "No Common DTLS Key Management Method" (TBA11) (see
    Section 10.4).  Otherwise, the responder MAY send an INIT-ACK without
    the DTLS Key Management Parameter to indicate that it is willing to
    create a session without security.
 
    Additionally, an SCTP Endpoint acting as responder willing to support
    only protected associations considers an INIT chunk not containing
-   the DTLS 1.3 Chunk Protected Association parameter or another
-   Protection Solution accepted by own security policy solution as an
-   error, thus it will reply with an ABORT chunk according to what
-   specified in Section 5.3.1 indicating that for this endpoint
-   mandatory DTLS Key Management Parameter is missing.
+   the DTLS Key Management Parameter or another DTLS Key Management
+   Method accepted by own security policy solution as an error, thus it
+   will reply with an ABORT chunk according to what specified in
+   Section 5.3.1 indicating that for this endpoint mandatory DTLS Key
+   Management Parameter is missing.
 
    When initiator and responder have agreed on a DTLS Chunk protected
    association and the DTLS Key Management Method by means of
@@ -701,7 +701,7 @@ Table of Contents
    However, here the DTLS Key Management Parameter can indicate both
    preference and which of the solutions that are preferred.
 
-   The responder selects one security solutions and includes it in the
+   The responder selects one security solution and includes it in the
    response (INIT-ACK).  If DTLS chunks was selected and the DTLS Key
    Management Method follows the recommendation for down-grade
    prevention the endpoints know that down-grade did not happen.
@@ -818,7 +818,7 @@ Table of Contents
    Association, thus implementing SCTP Restart.
 
    This specification doesn't support SCTP Restart as described in
-   [RFC9260] because the COOCKIE-ECHO and COOKIE-ACK chunks are sent
+   [RFC9260] because the COOKIE-ECHO and COOKIE-ACK chunks are sent
    encrypted (see Section 6.4.1);
 
    When the upper layer protocols require support of SCTP Restart, as in
@@ -837,14 +837,14 @@ Table of Contents
    characteristics of an SCTP Association using DTLS Chunk.
 
    In protected SCTP Restart, INIT and INIT-ACK chunks are sent strictly
-   according to [RFC9260], but COOCKIE-ECHO and COOKIE-ACK chunks are
+   according to [RFC9260], but COOKIE-ECHO and COOKIE-ACK chunks are
    encrypted using DTLS Chunks and Restart DTLS Key contexts.
 
-   In order to support protected SCTP Restart, the SCTP Endpoints needs
+   In order to support protected SCTP Restart, the SCTP Endpoints need
    to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
    packets protected by these contexts will be identified in the DTLS
    chunk with the R (Restart) bit set (see Section 5.2).  Both SCTP
-   Endpoints needs to ensure that Restart DTLS key contexts is preserved
+   Endpoints need to ensure that Restart DTLS key contexts are preserved
    for supporting the protected SCTP Restart use case.
 
    In order for the protected SCTP endpoint to be available for
@@ -861,15 +861,15 @@ Table of Contents
    with the peer node it had a protected SCTP association which can
    identify the right restart Key and DTLS epoch and initialize the
    restart DTLS Key Context for when restarting the SCTP association.
-   The keys and epoch needs to be stored secure and persistently so that
+   The keys and epoch need to be stored secure and persistently so that
    they survive the events that are causing protected SCTP Restart
    procedure to be used, for instance a crash of the SCTP stack.  The
    security considerations for persistent secure storage of keying
    materials is further discussed in Section 11.4.
 
-   The SCTP Restart handshakes INIT, INIT-ACK, COOCKIE-ECHO, COOKIE-ACK
+   The SCTP Restart handshakes INIT, INIT-ACK, COOKIE-ECHO, COOKIE-ACK
    exactly as in legacy SCTP Restart case; INIT, INIT-ACK MUST be sent
-   plain as in the legacy, whereas COOCKIE-ECHO, COOKIE-ACK Chunks MUST
+   plain as in the legacy, whereas COOKIE-ECHO, COOKIE-ACK Chunks MUST
    be sent as DTLS chunk protected using the restart DTLS key context.
 
    A DTLS Chunk using the restart DTLS key context is identified by
@@ -879,11 +879,11 @@ Table of Contents
    DTLS Key Management exchange but failing to commit the DTLS Key
    Context to persistent secure storage could result in loss of the
    latest DTLS Key Context.  Therefore, the endpoints SHOULD retain the
-   old restart DTLS key context until it the DTLS Key Management
-   confirms the new ones are committed to secure storage.  This can for
-   example be ensure that at key-changes signals to terminate the old
-   DTLS Key Contexts (including the restart) is never sent until the new
-   restart DTLS Key Context has been committed to storage.
+   old restart DTLS key context until the DTLS Key Management confirms
+   the new ones are committed to secure storage.  This can for example
+   ensure that at key-changes signals to terminate the old DTLS Key
+   Contexts (including the restart) is never sent until the new restart
+   DTLS Key Context has been committed to storage.
 
      Initiator                                     Responder
          |                                             | -.
@@ -903,7 +903,7 @@ Table of Contents
    The Figure 11 shows how the control chunks being used for SCTP
    Association Restart are transported within DTLS in SCTP.
 
-   The transport of COOCKIE-ECHO, COOCKIE-ACK by means of DTLS chunk
+   The transport of COOKIE-ECHO, COOKIE-ACK by means of DTLS chunk
    ensures that the peer requesting the restart has been previously
    validated and the SCTP state machine after having reached ESTABLISHED
    state moves automatically to PROTECTED state.
@@ -929,12 +929,12 @@ Table of Contents
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
    an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
    the Association.  The effect will be that the restart initiator will
-   receive INIT-ACK but then all sent packets with COOCKE-ECHO will be
+   receive INIT-ACK but then all sent packets with COOKIE-ECHO will be
    dropped until the peer nodes times out the SCTP Association from lack
    of any response from the restarting node.
 
    An SCTP Endpoint supporting only legacy SCTP Restart and involved in
-   an SCTP Association using DTLS Chunks, when receiving an COOCKIE-ECHO
+   an SCTP Association using DTLS Chunks, when receiving an COOKIE-ECHO
    chunk protected by DTLS chunk as described in Section 6.4.1, thus
    having the R bit (Restart Indicator) set in the DTLS Chunk (see
    Figure 3), will silently discard it.
@@ -976,33 +976,34 @@ Table of Contents
 
    This API enables the cryptographical protection operations by setting
    client/server write keys, sequence number keys, and IVs for primary
-   and restart DTLS contexts.  The write key is the used by the cipher
-   suite for DTLS record protection (Section 5.2 of [RFC8446].  The
-   initilization vector (IV) is random material used to XOR with the
+   and restart DTLS contexts.  The write key is used by the cipher suite
+   for DTLS record protection (Section 5.2 of [RFC8446]).  The
+   initialization vector (IV) is random material used to XOR with the
    sequence number to create the nonce per Section 5.3 of [RFC8446].
    The sequence number key is used to encrypt the sequence number
    (Section 4.2.3 of [RFC9147]).
 
-7.1.  Cipher Suit Capabilities
+7.1.  Cipher Suite Capabilities
 
-   The DTLS Key Management Method needs to know which cipher suits
+   The DTLS Key Management Method needs to know which cipher suites
    defined for usage with DTLS 1.3 that are supported by the DTLS chunk
-   and its protection operations block.  All TLS cipher suit that are
-   defined are listed in the TLS cipher suit registry [TLS-CIPHER-SUITS]
-   at IANA and are identified by a 2-byte value.  Thus this needs to
-   return a list of all supported cipher suits to the higher layer.
+   and its protection operations block.  All TLS cipher suite that are
+   defined are listed in the TLS cipher suite registry
+   [TLS-CIPHER-SUITES] at IANA and are identified by a 2-byte value.
+   Thus this needs to return a list of all supported cipher suites to
+   the higher layer.
 
-   Request : Get Cipher Suits
+   Request : Get Cipher Suites
 
    Parameters : none
 
-   Reply : Cipher Suits
+   Reply : Cipher Suites
 
-   Parameters : list of cipher suits
+   Parameters : list of cipher suites
 
 7.2.  Establish Client Write Keying Material
 
-   The DTLS Chunk can use one of out of multiple sets of cipher suit and
+   The DTLS Chunk can use one out of multiple sets of cipher suite and
    corresponding key materials.
 
    The following information needs to be provided when setting Client
@@ -1022,22 +1023,22 @@ Table of Contents
          Epoch lower than 3 are not expected as they are used during
          DTLS handshake.
 
-   *  Cipher Suit:  2 bytes cipher suit identification for the DTLS 1.3
-         Cipher suit used to identify the DTLS AEAD algorithm to perform
-         the DTLS record protection.  The cipher suite is fixed for a
-         (SCTP Association, Key) pair.
+   *  Cipher Suit:  2 bytes cipher suite identification for the DTLS 1.3
+         Cipher suite used to identify the DTLS AEAD algorithm to
+         perform the DTLS record protection.  The cipher suite is fixed
+         for a (SCTP Association, Key) pair.
 
-   *  Write Key, Sequence Number Key and IV:  The cipher suit specific
+   *  Write Key, Sequence Number Key and IV:  The cipher suite specific
          binary object containing all necessary information for
          protection operations.  The secret will used by the DTLS 1.3
          client to encrypt the record.  Binary arbitrary long object
-         depending on the cipher suit used.
+         depending on the cipher suite used.
 
    Reply : Established or Failed
 
 7.3.  Establish Server Write Keying Material
 
-   The DTLS Chunk can use one of out of multiple sets of cipher suit and
+   The DTLS Chunk can use one out of multiple sets of cipher suite and
    corresponding key materials.
 
    The following information needs to be provided when setting Server
@@ -1054,19 +1055,19 @@ Table of Contents
          restart purposes
 
    *  DTLS Epoch:  The DTLS epoch these keys are valid for.  Note that
-         Epoch lower than 3 are note expected as they are used during
+         Epoch lower than 3 are not expected as they are used during
          DTLS handshake.
 
-   *  Cipher Suit:  2 bytes cipher suit identification for the DTLS 1.3
-         Cipher suit used to identify the DTLS AEAD algorithm to perform
-         the DTLS record protection.  The cipher suite is fixed for a
-         (SCTP Association, Key) pair.
+   *  Cipher Suit:  2 bytes cipher suite identification for the DTLS 1.3
+         Cipher suite used to identify the DTLS AEAD algorithm to
+         perform the DTLS record protection.  The cipher suite is fixed
+         for a (SCTP Association, Key) pair.
 
-   *  Write Key, Sequence Number Key and IV:  The cipher suit specific
+   *  Write Key, Sequence Number Key and IV:  The cipher suite specific
          binary object containing all necessary information for
          protection operations.  The secret will used by the DTLS 1.3
          client to encrypt the record.  Binary arbitrary long object
-         depending on the cipher suit used.
+         depending on the cipher suite used.
 
    Reply : Established or Failed
 
@@ -1082,8 +1083,6 @@ Table of Contents
    *  SCTP Association
 
    *  Restart indication
-
-   *  DTLS CID
 
    *  DTLS Epoch
 
@@ -1104,8 +1103,6 @@ Table of Contents
 
    *  Restart indication
 
-   *  DTLS CID
-
    *  DTLS Epoch
 
    Reply: Destroyed
@@ -1124,8 +1121,6 @@ Table of Contents
    *  SCTP Association
 
    *  Restart indication
-
-   *  DTLS CID
 
    *  DTLS Epoch
 
@@ -1158,8 +1153,6 @@ Table of Contents
 
    *  Restart indication
 
-   *  DTLS CID
-
    *  DTLS Epoch
 
    Reply: AEAD Encryption Invocations
@@ -1177,8 +1170,6 @@ Table of Contents
    *  SCTP Association
 
    *  Restart indication
-
-   *  DTLS CID
 
    *  DTLS Epoch
 
@@ -1198,8 +1189,6 @@ Table of Contents
    *  SCTP Association
 
    *  Restart indication
-
-   *  DTLS CID
 
    *  DTLS Epoch
 
@@ -1268,49 +1257,49 @@ Table of Contents
 8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
 
    This flag is returned by recvmsg() in msg_flags for all user messages
-   for which all DATA chunks where received in protected SCTP packets.
+   for which all DATA chunks were received in protected SCTP packets.
    This also means that if sctp_recvv() is used, MSG_PROTECTED is
    returned in the *flags argument.
 
 8.3.  Functions
 
-8.3.1.  sctp_dtls_nr_cipher_suits()
+8.3.1.  sctp_dtls_nr_cipher_suites()
 
-   sctp_dtls_nr_cipher_suits() returns the number of cypher suits
+   sctp_dtls_nr_cipher_suites() returns the number of cipher suites
    supported by the SCTP implementation.
 
    The function prototype is:
 
    unsigned int
-   sctp_dtls_nr_cipher_suits(void);
+   sctp_dtls_nr_cipher_suites(void);
 
    This function can be used in combination with
-   sctp_dtls_cipher_suits().
+   sctp_dtls_cipher_suites().
 
-8.3.2.  sctp_dtls_cipher_suits()
+8.3.2.  sctp_dtls_cipher_suites()
 
-   sctp_dtls_cipher_suits() returns the cypher suits supported by the
+   sctp_dtls_cipher_suites() returns the cipher suites supported by the
    SCTP implementation.
 
    The function prototype is:
 
    int
-   sctp_dtls_cipher_suits(uint8_t cipher_suits[][2], unsigned int n);
+   sctp_dtls_cipher_suites(uint8_t cipher_suites[][2], unsigned int n);
 
    and the arguments are
 
-   cipher_suits:  An array where the supported cypher suits are stored.
-      A cypher suit is represented by two uint8_t using the IANA
-      assigned values in the TLS cipher suit registry
-      [TLS-CIPHER-SUITS].
+   cipher_suites:  An array where the supported cipher suites are
+      stored.  A cipher suite is represented by two uint8_t using the
+      IANA assigned values in the TLS cipher suite registry
+      [TLS-CIPHER-SUITES].
 
-   n: The number of cipher suits which can be stored in cipher_suits.
+   n: The number of cipher suites which can be stored in cipher_suites.
 
-   sctp_dtls_cipher_suits returns -1, if n is smaller than the number of
-   cipher suites supported by the stack.  If n is equal to or larger
-   than the number of cipher suites supported the the SCTP
-   implementation, the cipher suits are stored in cipher_suits and the
-   number of supported cipher suits is returned.
+   sctp_dtls_cipher_suites returns -1, if n is smaller than the number
+   of cipher suites supported by the stack.  If n is equal to or larger
+   than the number of cipher suites supported by the SCTP
+   implementation, the cipher suites are stored in cipher_suites and the
+   number of supported cipher suites is returned.
 
 8.4.  Socket Options
 
@@ -1364,7 +1353,7 @@ Table of Contents
 
    This socket option sets the DTLS Key Management identifiers which
    will be sent to the peer during the handshake.  It can also be used
-   to retrieve the DTLS Key Manangement identifiers which were sent
+   to retrieve the DTLS Key Management identifiers which were sent
    during the handshake.
 
    The following structure is used as the option_value:
@@ -1385,21 +1374,20 @@ Table of Contents
 
    sdp_kmids:  The DTLS Key Management identifiers which will be or have
       been sent to the peer in the sequence they were contained in the
-      DTLS 1.3 Chunk Protected Association parameter and in host byte
-      order.
+      DTLS Key Management Parameter and in host byte order.
 
    This socket option can be used with setsockopt() for SCTP endpoints
    in the SCTP_CLOSED or SCTP_LISTEN state to configure the protection
    method identifiers to be sent.  When used with getsockopt() on an
    SCTP endpoint in the SCTP_LISTEN state, the protection method
    identifiers which will be sent can be retrieved.  If the SCTP
-   endpoint is in a state other that SCTP_CLOSED or SCTP_LISTEN, the
+   endpoint is in a state other than SCTP_CLOSED or SCTP_LISTEN, the
    protection method identifiers which have been sent can be retrieved.
 
-8.4.2.  Get the Remote DTLS Key Mangement Identifiers
+8.4.2.  Get the Remote DTLS Key Management Identifiers
         (SCTP_DTLS_REMOTE_KMIDS)
 
-   This socket option reports the DTLS Key Mangement identifiers
+   This socket option reports the DTLS Key Management identifiers
    reported by the peer during the handshake.
 
    The following structure is used as the option_value:
@@ -1419,7 +1407,7 @@ Table of Contents
 
    sdp_kmids:  The DTLS Key Management identifiers reported by the peer
       in the sequence they were contained in the DTLS Key Management
-      parameter and in host byte order.
+      Parameter and in host byte order.
 
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
@@ -1433,7 +1421,7 @@ Table of Contents
 
    struct sctp_dtls_keys {
            sctp_assoc_t sdk_assoc_id;
-           uint8_t sdk_cipher_suit[2];
+           uint8_t sdk_cipher_suite[2];
            uint8_t sdk_restart;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
@@ -1450,7 +1438,7 @@ Table of Contents
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
 
-   sdk_cipher_suit:  The cipher suit for which the keys are used.
+   sdk_cipher_suite:  The cipher suite for which the keys are used.
 
    sdk_restart:  If the value is 0, the regular keys are added, if a
       value different from 0 is used, the restart keys are added.
@@ -1475,7 +1463,7 @@ Table of Contents
    sdk_sn_key: A pointer to the sequence number key.
 
    This socket option can only be used on SCTP endpoints in states other
-   then SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.  If the
+   than SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.  If the
    socket options is successful, all affected DTLS chunks sent will use
    the specified keys until the keys are changed again by another call
    of this socket option.
@@ -1489,7 +1477,7 @@ Table of Contents
 
    struct sctp_dtls_keys {
            sctp_assoc_t sdk_assoc_id;
-           uint8_t sdk_cipher_suit[2];
+           uint8_t sdk_cipher_suite[2];
            uint8_t sdk_restart;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
@@ -1506,7 +1494,7 @@ Table of Contents
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
 
-   sdk_cipher_suit:  The cipher suit for which the keys are used.
+   sdk_cipher_suite:  The cipher suite for which the keys are used.
 
    sdk_restart:  If the value is 0, the regular keys are added, if a
       value different from 0 is used, the restart keys are added.
@@ -1531,7 +1519,7 @@ Table of Contents
    sdk_sn_key: A pointer to the sequence number key.
 
    This socket option can only be used on SCTP endpoints in states other
-   then SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
+   than SCTP_LISTEN, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
 8.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
 
@@ -1557,14 +1545,14 @@ Table of Contents
    sdki_epoch:  The epoch for which the keys are removed.
 
    This socket option can only be used on SCTP endpoints in states other
-   then SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
+   than SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
    SCTP_COOKIE_ECHOED.
 
 8.4.6.  Set or Get Protection Enforcement (SCTP_DTLS_ENFORCE_PROTECTION)
 
    Enabling this socket option on an SCTP endpoint enforces that
    received SCTP packets are only processed, if they are protected.  All
-   received packets with the first chunk not being an INIT chunk, INIT
+   received packets with the first chunk not being an INIT chunk, INIT-
    ACK chunk, or DTLS chunk will be silently discarded.
 
    The following structure is used as the option_value:
@@ -1655,7 +1643,7 @@ Table of Contents
 
    Both SCTP and DTLS contains mechanisms to pad SCTP payloads, and DTLS
    records respectively.  If padding of SCTP packets are desired to hide
-   actual message sizes it RECOMMEDED to use the SCTP Padding Chunk
+   actual message sizes it is RECOMMENDED to use the SCTP Padding Chunk
    [RFC4820] to generate a consistent SCTP payload size.  Support of
    this chunk is only required on the sender side, any SCTP receiver
    will safely ignore the PAD Chunk.  However, if the PAD chunk is not
@@ -1663,9 +1651,9 @@ Table of Contents
 
    It needs to be noted that independent if SCTP padding or DTLS padding
    is used the padding is not taken into account by the SCTP congestion
-   control.  Extensive use of padding has potential for worsen
-   congestion situations as the SCTP association will consume more
-   bandwidth than its derived share by the congestion control.
+   control.  Extensive use of padding has potential to worsen congestion
+   situations as the SCTP association will consume more bandwidth than
+   its derived share by the congestion control.
 
    The use of SCTP PAD chunk is recommended as it at least can enable
    future extension or SCTP implementation that account also for the
@@ -1691,8 +1679,8 @@ Table of Contents
 10.1.  DTLS Key Management Method Identifiers
 
    IANA is requested to create a new registry called "DTLS Key
-   Management Method".  This registry is part of the of the Stream
-   Control Transmission Protocol (SCTP) Parameters grouping.
+   Management Method".  This registry is part of the Stream Control
+   Transmission Protocol (SCTP) Parameters grouping.
 
    The purpose of this registry is to assign DTLS Key Management Method
    Identifier for any DTLS Key Management Method used for the extension
@@ -1839,7 +1827,7 @@ Table of Contents
 11.3.  Downgrade Attacks
 
    Downgrade attacks may attempt to force the DTLS Key Management Method
-   by altering the containt of INIT chunk, for instance by removing all
+   by altering the content of INIT chunk, for instance by removing all
    offered DTLS Key Management Methods but the one desired.  This is
    possible if the attacker is an on-path attacker that can modify
    packet because INIT and INIT-ACK chunks are plain text.
@@ -1854,9 +1842,9 @@ Table of Contents
    is sent in the INIT-ACK chunk will be used for deriving the keys from
    the handshaked secrets obtained during DTLS initial handshake.
 
-   If the attacker suceeds in changing the DTLS Key Management Methods
-   in either INIT, NINT-ACK or both chunks, the peers will not be able
-   deriving the same keys and the Association will not be possible to
+   If the attacker succeeds in changing the DTLS Key Management Methods
+   in either INIT, INIT-ACK or both chunks, the peers will not be able
+   to derive the same keys and the Association will not be possible to
    proceed.
 
    Thus, as long as the DTLS Key Management Method includes the ordered
@@ -1873,8 +1861,8 @@ Table of Contents
 11.4.  Persistent Secure Storage of Restart Key Context
 
    The Restart DTLS Key Context needs to be stored securely and
-   persistent.  Securely as access to this security context may enable
-   an attacker to perform a restart, resulting a denial of service on
+   persistently.  Securely as access to this security context may enable
+   an attacker to perform a restart, resulting in a denial of service on
    the existing SCTP Association.  It can also give the attacker access
    to the ULP.  Thus the storage needs to provide at least as strong
    resistant against exfiltration as the main DTLS Key Context store.
@@ -1883,7 +1871,7 @@ Table of Contents
    dependent on the ULP and how it can utilize restarted SCTP
    Associations.  One way can be to have an actual secure persistent
    storage solution accessible to the endpoint.  In other use cases the
-   persistence part might be accomplished be keeping the current restart
+   persistence part might be accomplished by keeping the current restart
    DTLS Key Context with the ULP State if that is sufficiently secure.
 
 12.  Acknowledgments
@@ -1933,7 +1921,7 @@ Table of Contents
               Transmission Protocol", RFC 9260, DOI 10.17487/RFC9260,
               June 2022, <https://www.rfc-editor.org/info/rfc9260>.
 
-   [TLS-CIPHER-SUITS]
+   [TLS-CIPHER-SUITES]
               "TLS Cipher Suites", November 2023,
               <https://www.iana.org/assignments/tls-parameters/tls-
               parameters.xhtml#tls-parameters-4>.
