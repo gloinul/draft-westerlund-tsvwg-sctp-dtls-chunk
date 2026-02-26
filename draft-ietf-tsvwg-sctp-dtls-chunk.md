@@ -87,7 +87,7 @@ normative:
     date: November 2023
 
 updates:
-  RFC5061:
+  RFC5061
 
 --- abstract
 
