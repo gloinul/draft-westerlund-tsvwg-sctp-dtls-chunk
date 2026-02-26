@@ -283,7 +283,7 @@ DTLS Chunk MUST NOT be used.
 
 The first established DTLS key context for any SCTP association MUST use epoch=3.
 This ensures that the epoch of the DTLS key context will normally match the epoch of
-a DTLS Management Method's connection.
+a DTLS Key Management Method's connection.
 
 The Replay window for the DTLS Sequence Number will need to take into
 account that heartbeat (HB) chunks are sent concurrently over all
@@ -302,7 +302,7 @@ Even though DTLS 1.3 is indicated as protocol for providing Key
 Contexts, different implementations can achieve that and different
 mechanisms may be used for features such as mutual authentication,
 rekeying etc.  The DTLS Key Management Method may use a number of DTLS Key
-Management methods depending on what is being implemented and
+Management Methods depending on what is being implemented and
 available and/or according to the local policies.
 DTLS Key Management Methods are defined in
 their own specific documents, and needs to be registered in the IANA
@@ -388,13 +388,13 @@ Parameter Length: 16 bits (unsigned integer)
 DTLS Key Management Identifier: 16 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
   is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
-  The DTLS Management Methods are listed in descending order of preference, i.e. the first listed
-  in the parameter is the most preferred and the last the least
-  preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
-  endpoint chooses one of the DTLS Management Methods supported by the peer.
+  The DTLS Key Management Methods are listed in descending order of preference,
+  i.e. the first listed in the parameter is the most preferred and the last the
+  least preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
+  endpoint chooses one of the DTLS Key Management Methods supported by the peer.
 
 Padding: 0 or 16 bits (unsigned integer)
-: If the number of included DTLS Management Methods is odd the
+: If the number of included DTLS Key Management Methods is odd the
 parameter MUST be padded with two bytes. The padding MUST be set to 0 by
 the sender and MUST be ignored by the receiver.
 
@@ -579,11 +579,11 @@ including the error cause 'Policy Not Met' (TBA10)
 
 ### No Common DTLS Key Management Method {#enocommonpsi}
 
-If the responder does not support any of the DTLS Management Methods
-offered by the association initiator in the Protection Solution
+If the responder does not support any of the DTLS Key Management Methods
+offered by the association initiator in the DTLS Key Management
 Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}),
-including the error cause "No Common DTLS Key Management" (TBA11)
+including the error cause "No Common DTLS Key Management Method" (TBA11)
 (see {{IANA-Extra-Cause}}).
 
 # Procedures {#procedures}
@@ -592,9 +592,9 @@ including the error cause "No Common DTLS Key Management" (TBA11)
 
 An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
 chunk protected association sends to the remote peer an INIT
-chunk containing the DTLS 1.3 Chunk Protected Association parameter
+chunk containing the DTLS Key Management Parameter
 (see {{protectedassoc-parameter}}) indicating supported and preferred
-DTLS Key Management method (see {{sctp-DTLS-chunk-init-options}}).
+DTLS Key Management Method (see {{sctp-DTLS-chunk-init-options}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with a DTLS Key Management Parameter, will reply with
@@ -603,14 +603,14 @@ containing the selected DTLS Key Management Method out of the set of supported
 ones. In case there are no common set of supported DTLS Key Management Methods that are
 accepted by the responder, and the endpoints' policy requires secured
 association it MUST reply with an ABORT chunk, include the error
-cause "No DTLS Key Management Method" (TBA11) (see {{IANA-Extra-Cause}}).
+cause "No Common DTLS Key Management Method" (TBA11) (see {{IANA-Extra-Cause}}).
 Otherwise, the responder MAY send an INIT-ACK without the DTLS Key Management Parameter
 to indicate that it is willing to create a session without security.
 
 Additionally, an SCTP Endpoint acting as responder willing to support
 only protected associations considers an INIT chunk not containing
-the DTLS 1.3 Chunk Protected Association parameter or another
-Protection Solution accepted by own security policy solution as an error,
+the DTLS Key Management Parameter or another
+DTLS Key Management Method accepted by own security policy solution as an error,
 thus it will reply with an ABORT chunk according to what specified in
 {{enoprotected}} indicating that for this endpoint mandatory DTLS Key Management
 Parameter is missing.
@@ -1308,8 +1308,8 @@ struct sctp_dtls_pmids {
 
 ``sdp_kmids``:
 : The DTLS Key Management identifiers which will be or have been sent to the peer
-  in the sequence they were contained in the DTLS 1.3 Chunk Protected
-  Association parameter and in host byte order.
+  in the sequence they were contained in the DTLS Key Management Parameter and
+  in host byte order.
 
 This socket option can be used with setsockopt() for SCTP endpoints in the
 ``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
@@ -1346,7 +1346,7 @@ struct sctp_dtls_pmids {
 
 ``sdp_kmids``:
 : The DTLS Key Management identifiers reported by the peer in the sequence they
-  were contained in the DTLS Key Management parameter and in host byte order.
+  were contained in the DTLS Key Management Parameter and in host byte order.
 
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
@@ -1670,7 +1670,7 @@ to be included here.
 
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
-| Identifier | Solution Name | Reference | Contact |
+| Identifier | Method Name | Reference | Contact |
 | 0 | DTLS Chunk with Pre- | RFC-TBD | Draft Authors |
 | 1-4095 | Available for Assignment using Specification Required policy | | |
 | 4096-65535 | Available for Assignment using First Come, First Served policy | | |
@@ -1730,7 +1730,7 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 
 | ID Value | Error Cause Codes | Reference |
 | TBA10 | Policy Not Met | RFC-To-Be |
-| TBA11 | No Common Protection | RFC-To-Be |
+| TBA11 | No Common DTLS Key Management Method | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
 
 
