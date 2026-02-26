@@ -547,18 +547,15 @@ Table of Contents
                   |    16 bit     |     |Sequence Number|
                   |Sequence Number|     +-+-+-+-+-+-+-+-+
                   +-+-+-+-+-+-+-+-+     |               |
-                  |    16 bit     |     |   Encrypted   |
-                  |    Length     |     /   Record      /
-                  +-+-+-+-+-+-+-+-+     |               |
+                  |               |     |   Encrypted   |
+                  |  Encrypted    |     /   Record      /
+                  /  Record       /     |               |
                   |               |     +-+-+-+-+-+-+-+-+
-                  |  Encrypted    |
-                  /  Record       /       DTLSCiphertext
-                  |               |         Structure
-                  +-+-+-+-+-+-+-+-+         (minimal)
+                  +-+-+-+-+-+-+-+-+
 
-                    DTLSCiphertext
-                      Structure
-                    (recommended)
+                    DTLSCiphertext       DTLSCiphertext
+                      Structure            Structure
+                    (recommended)          (minimal)
 
                Figure 6: DTLSCiphertext recommended structure
 
