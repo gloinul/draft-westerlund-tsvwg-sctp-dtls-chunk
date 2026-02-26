@@ -975,70 +975,29 @@ initilization vector (IV) is cryptographical random material used to
 XOR with the sequence number to create the nonce per Section 5.3 of
 {{RFC8446}}.
 
-## Crypto Association UP Indication
+## Set Supported DTLS Key Management Methods
 
-As soon as the SCTP initial handshake has been completed,
-the SCTP protocol informs the Protection Operator about.
-On the socket interface this uses the message SCTP_ASSOC_CHANGE
-as specified in section 6.1.1 of {{RFC6458}}.
-The protection operator validates the Protection Solution
-taking the appropriate decision about terminating the
-Association when policy is not met.
+Prior to attempting to establish an SCTP assocation an SCTP endpoint
+needs to configure which DTLS Key Management Methods it supports if
+establishing a SCTP association. This will be included in INIT if the
+endpoint initiated the SCTP association. Else it will be used to
+determine the selected DTLS Key Management method that is returned in
+the INIT-ACK.
 
-Event : Crypto Association established
+The input is a priortized list of DTLS Key Management identifiers that
+are supported, from the most preferred to the least preferred.
 
-Parameters :
+## Get Offered DTLS Key Management Methods
 
-* SCTP Association:
-: Reference to the relevant SCTP association.
+After an SCTP association has been established the key managment
+function will need to get the list of DTLS key management IDs
+that was present in DTLS Key Management parameter in the INIT chunk.
+This list will be used by the seleted DTLS key management method to
+derive security keys and prevent down grade attacks.
 
-* SCTP Protection Solutions:
-: The list of offered SCTP Protection Solutions at INIT Chunk
+This API call returns the list verbatim as is was sent/received in the
+DTLS Key Management Parameter in the INIT Chunk.
 
-* Agreed Protection Solution:
-: The Protection Solution being agreed at INIT-ACK Chunk
-
-With reference to {{RFC6458}}, the structure sctp_assoc_change is changed as
-described in {{sctp-sctp_assoc_change}}
-
-~~~~~~~~~~~ aasvg
-   struct sctp_assoc_change {
-     uint16_t sac_type;
-     uint16_t sac_flags;
-     uint32_t sac_length;
-     uint16_t sac_state;
-     uint16_t sac_error;
-     uint16_t sac_outbound_streams;
-     uint16_t sac_inbound_streams;
-     sctp_assoc_t sac_assoc_id;
-     union {
-        uint8_t  sac_info[];
-        uint8_t  psec_info[][]; // Protection Solution Info
-     } data;
-   };
-
-~~~~~~~~~~~
-{: #sctp-sctp_assoc_change title="Changes in sctp_assoc_change" artwork-align="center"}
-
-A new value is introduced for sac_state:
-
-* SCTP_CRYPTO_COMM_UP: A new association using Crypto Chunks
-is now ready. It may be used for DTLS handshaking but not for
-user data traffic. When a DTLS Crypto association has been
-established successfully, this notification should be the
-first one.
-
-A new data structure is introduced for validation purposes:
-
-* psec_info: A bidimensional structure of octets has been introduced that is only
-valid when sac_state is SCTP_CRYPTO_COMM_UP. The first element
-contains the complete Protected Association Parameters sent from the
-Association Initiator in the INIT Chunk as a sequence of octets;
-the second element contains the complete Protected Association Parameters
-indicating the selected Protection Selection sent from the
-Association Responder in the INIT-ACK Chunk as a sequence of octets.
-
-Reply   : Association Validated or Failed
 
 ## Cipher Suit Capabilities
 
