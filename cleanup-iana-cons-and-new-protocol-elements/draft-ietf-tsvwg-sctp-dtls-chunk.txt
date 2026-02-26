@@ -93,8 +93,7 @@ Table of Contents
        4.3.1.  Limitations
        4.3.2.  Change
    5.  New Chunk, Parameter and Error Causes
-     5.1.  New Parameter Type
-       5.1.1.  DTLS Key Management Parameter
+     5.1.  DTLS Key Management Parameter
      5.2.  DTLS Chunk (DTLS)
        5.2.1.  Payload formatting in DTLS Chunk
      5.3.  New Error Causes
@@ -310,7 +309,7 @@ Table of Contents
    SCTP association.  DTLS Key Management Method sends and receives its
    own data via the SCTP User Level interface.  DTLS Key Management
    Method's own data are distinguished from any other data by means of a
-   dedicated PPID using the value 4242 (see Table 9).
+   dedicated PPID using the value 4242 (see Table 8).
 
    Once DTLS Key Management Method has established a DTLS 1.3
    connection, it can derive primary and restart keys and set the Chunk
@@ -391,32 +390,11 @@ Table of Contents
 
 5.  New Chunk, Parameter and Error Causes
 
-5.1.  New Parameter Type
+5.1.  DTLS Key Management Parameter
 
-   This section defines the new parameter type that will be used to
-   negotiate the use of the DTLS chunk during association setup, its
-   DTLS Key Management Method and indicate preference in relation to
-   different DTLS Key Management Methods.  Table 1 illustrates the new
-   parameter type.
-
-            +================+===============================+
-            | Parameter Type | Parameter Name                |
-            +================+===============================+
-            |         0x8006 | DTLS Key Management Parameter |
-            +----------------+-------------------------------+
-
-                   Table 1: New INIT/INIT-ACK Parameter
-
-   Note that the parameter format requires the receiver to ignore the
-   parameter and continue processing if the parameter is not understood.
-   This is accomplished (as described in [RFC9260], Section 3.2.1.) by
-   the use of the upper bits of the parameter type.
-
-5.1.1.  DTLS Key Management Parameter
-
-   This parameter is used to the request and acknowledge of support of
-   DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
-   order among DTLS Key Management Methods (if supported).
+   The DTLS Key Management Parameter is used to negotiate the support of
+   the DTLS chunk and the key management method used for the DTLS
+   chunks.  The format if this chunk parameter is depicted in Figure 2.
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -433,7 +411,11 @@ Table of Contents
                   Figure 2: DTLS Key Management Parameter
 
    Parameter Type: 16 bits (unsigned integer)
-      This value MUST be set to 0x8006.
+      This value MUST be set to 0x8006.  Note that this parameter type
+      requires the receiver to ignore the parameter and continue
+      processing if the parameter type is not supported.  This is
+      accomplished (as described Section 3.2.1 of [RFC9260]) by the use
+      of the upper bits of the parameter type.
 
    Parameter Length: 16 bits (unsigned integer)
       This value holds the length of the parameter, which will be 2
@@ -442,22 +424,30 @@ Table of Contents
    DTLS Key Management Identifier: 16 bits (unsigned integer)
       Each DTLS Key Management Identifier (Section 10.1) is a 16-bit
       unsigned integer value indicating a DTLS Key Management Method.
-      The DTLS Management Methods are listed in descending order of
-      preference, i.e. the first listed in the parameter is the most
-      preferred and the last the least preferred by the sender in the
-      INIT chunk.  In the INIT-ACK chunk the endpoint chooses one of the
-      DTLS Management Methods supported by the peer.
+      In the INIT chunk the DTLS Management Methods are listed in
+      descending order of preference, i.e. the first listed in the
+      parameter is the most preferred and the last the least preferred
+      by the sender in the INIT chunk.  In the INIT-ACK chunk the
+      endpoint chooses one of the DTLS Management Methods supported by
+      the peer.
 
    Padding: 0 or 16 bits (unsigned integer)
       If the number of included DTLS Management Methods is odd the
       parameter MUST be padded with two bytes.  The padding MUST be set
       to 0 by the sender and MUST be ignored by the receiver.
 
+   The DTLS Key Management Parameter MAY be included in the INIT and
+   INIT ACK chunk and MUST NOT be included in any other chunk.  When
+   included in an INIT chunk, the DTLS Key Management Parameter MUST
+   include at least one DTLS Key Management Identifier.  When included
+   in an INIT ACK chunk, it MUST include exactly one DTLS Key Management
+   Identifier.
+
 5.2.  DTLS Chunk (DTLS)
 
    This section defines the new chunk type that will be used to
    transport the DTLS 1.3 record containing protected SCTP payload.
-   Table 2 illustrates the new chunk type.
+   Table 1 illustrates the new chunk type.
 
                     +============+===================+
                     | Chunk Type | Chunk Name        |
@@ -465,7 +455,7 @@ Table of Contents
                     |       0x41 | DTLS Chunk (DTLS) |
                     +------------+-------------------+
 
-                         Table 2: DTLS Chunk Type
+                         Table 1: DTLS Chunk Type
 
    It should be noted that the DTLS chunk format requires the receiver
    stop processing this SCTP packet, discard the unrecognized chunk and
@@ -633,7 +623,7 @@ Table of Contents
    An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
    chunk protected association sends to the remote peer an INIT chunk
    containing the DTLS 1.3 Chunk Protected Association parameter (see
-   Section 5.1.1) indicating supported and preferred DTLS Key Management
+   Section 5.1) indicating supported and preferred DTLS Key Management
    method (see Figure 2).
 
    An SCTP Endpoint acting as responder, when receiving an INIT chunk
@@ -1336,7 +1326,7 @@ Table of Contents
    |                              | sctp_dtls_stats        |     |     |
    +------------------------------+------------------------+-----+-----+
 
-                          Table 3: Socket Options
+                          Table 2: Socket Options
 
    sctp_opt_info() needs to be extended to support:
 
@@ -1705,7 +1695,7 @@ Table of Contents
    |            | Served policy                  |           |         |
    +------------+--------------------------------+-----------+---------+
 
-              Table 4: DTLS Key Management Method Identifiers
+              Table 3: DTLS Key Management Method Identifiers
 
    New entries in the range 0-4095 are registered following the
    Specification Required policy as defined by [RFC8126].  New entries
@@ -1715,7 +1705,7 @@ Table of Contents
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Types" registry, IANA is requested to update the reference for
-   the DTLS chunk as depicted in Table 5 with a reference to this
+   the DTLS chunk as depicted in Table 4 with a reference to this
    document.
 
                +==========+===================+===========+
@@ -1724,11 +1714,11 @@ Table of Contents
                |     0x41 | DTLS Chunk (DTLS) | RFC-To-Be |
                +----------+-------------------+-----------+
 
-                         Table 5: DTLS Chunk Type
+                         Table 4: DTLS Chunk Type
 
    IANA is requested to add the corresponding registration table for the
    chunk flags of the DTLS chunk with the initial contents show in
-   Table 6:
+   Table 5:
 
             +==================+==================+===========+
             | Chunk Flag Value | Chunk Flag Name  | Reference |
@@ -1750,13 +1740,13 @@ Table of Contents
             |             0x80 | Unassigned       |           |
             +------------------+------------------+-----------+
 
-                         Table 6: DTLS Chunk Flags
+                         Table 5: DTLS Chunk Flags
 
 10.3.  SCTP Chunk Parameter Types
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Chunk Parameter Types" registry, IANA is requested to update the
-   reference for the DTLS Key Management as depicted in Table 7 with a
+   reference for the DTLS Key Management as depicted in Table 6 with a
    reference to this document.
 
               +==========+======================+===========+
@@ -1765,13 +1755,13 @@ Table of Contents
               |   0x8006 | DTLS Key Management  | RFC-To-Be |
               +----------+----------------------+-----------+
 
-                Table 7: DTLS Key Management Chunk Parameter
+                Table 6: DTLS Key Management Chunk Parameter
 
 10.4.  SCTP Error Cause Codes
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Error Cause Codes" registry, IANA is requested to add the new
-   entries depicted below in in Table 8 with a reference to this
+   entries depicted below in in Table 7 with a reference to this
    document.
 
              +===========+======================+===========+
@@ -1782,7 +1772,7 @@ Table of Contents
              | 101 (TBC) | No Common Protection | RFC-To-Be |
              +-----------+----------------------+-----------+
 
-                        Table 8: Error Cause Codes
+                        Table 7: Error Cause Codes
 
    The suggested cause code will need to be confirmed by IANA.
 
@@ -1790,7 +1780,7 @@ Table of Contents
 
    In the Stream Control Transmission Protocol (SCTP) Parameters group's
    "Payload Protocol Identifiers" registry, IANA is requested to update
-   the reference for the PPID 4242 as depicted in Table 9 with a
+   the reference for the PPID 4242 as depicted in Table 8 with a
    reference to this document.
 
         +==========+==================================+===========+
@@ -1799,7 +1789,7 @@ Table of Contents
         |     4242 | DTLS Key Management Messages     | RFC-To-Be |
         +----------+----------------------------------+-----------+
 
-        Table 9: Protection Operator Protocol Identifier Registered
+        Table 8: Protection Operator Protocol Identifier Registered
 
 11.  Security Considerations
 
