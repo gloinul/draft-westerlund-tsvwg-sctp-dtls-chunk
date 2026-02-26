@@ -1301,24 +1301,24 @@ sent during the handshake.
 The following structure is used as the ``option_value``:
 
 ~~~ c
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 ~~~
 
-``sdp_assoc_id``:
+``sdk_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
   For ``setsockopt()``, only ``SCTP_FUTURE_ASSOC`` can be used.
   For ``getsockopt()``, it is an error to use ``SCTP_{CURRENT|ALL}_ASSOC``.
 
-``sdp_nr_kmids``:
-: The number of entries in ``sdp_kmids``.
+``sdk_nr_kmids``:
+: The number of entries in ``sdk_kmids``.
 
-``sdp_kmids``:
+``sdk_kmids``:
 : The DTLS Key Management identifiers which will be or have been sent to the peer
   in the sequence they were contained in the DTLS 1.3 Chunk Protected
   Association parameter and in host byte order.
@@ -1340,23 +1340,23 @@ peer during the handshake.
 The following structure is used as the ``option_value``:
 
 ~~~ c
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 ~~~
 
-``sdp_assoc_id``:
+``sdk_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
-``sdp_nr_kmids``:
-: The number of entries in ``sdp_kmids``.
+``sdk_nr_kmids``:
+: The number of entries in ``sdk_kmids``.
 
-``sdp_kmids``:
+``sdk_kmids``:
 : The DTLS Key Management identifiers reported by the peer in the sequence they
   were contained in the DTLS Key Management parameter and in host byte order.
 
@@ -1375,14 +1375,12 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
+        uint8_t sdk_unused1; /* if sizeof(sctp_assoc_t) == 4 */
+        uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
-        uint64_t sdk_epoch;
-        uint8_t *sdk_key;
-        uint8_t *sdk_iv;
-        uint8_t *sdk_sn_key;
+        uint8_t sdk_keys[];
 };
 ~~~
 
@@ -1399,29 +1397,25 @@ struct sctp_dtls_keys {
 : If the value is ``0``, the regular keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
-``sdk_key_len``:
-: The length of the key specified in ``sdk_key``.
-
-``sdk_iv_len``:
-: The length of the initialization vector specified in ``sdk_iv``.
-
-``sdk_sn_key_len``:
-: The length of the sequence number key specified in ``sdk_sn_key``.
-
 ``sdk_unused``:
 : This field is ignored.
 
 ``sdk_epoch``:
 : The epoch for which the keys are added.
 
-``sdk_key``:
-: A pointer to the key.
+``sdk_key_len``:
+: The length of the key specified in ``sdk_keys``.
 
-``sdk_iv``:
-: A pointer to the initialization vector.
+``sdk_iv_len``:
+: The length of the initialization vector specified in ``sdk_keys``.
 
-``sdk_sn_key``:
-A pointer to the sequence number key.
+``sdk_sn_key_len``:
+: The length of the sequence number key specified in ``sdk_keys``.
+
+``sdk_keys``:
+: The key of length ``sdk_key_len`` directly followed by the initialization
+  vector of length ``sdk_iv_len`` directly followed by the sequence number key
+  of length ``sdk_sn_key_len``.
 
 This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
@@ -1441,14 +1435,12 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suit[2];
         uint8_t sdk_restart;
+        uint8_t sdk_unused1; /* if sizeof(sctp_assoc_t) == 4 */
+        uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
-        uint64_t sdk_epoch;
-        uint8_t *sdk_key;
-        uint8_t *sdk_iv;
-        uint8_t *sdk_sn_key;
+        uint8_t sdk_keys[];
 };
 ~~~
 
@@ -1465,29 +1457,25 @@ struct sctp_dtls_keys {
 : If the value is ``0``, the regular keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
-``sdk_key_len``:
-: The length of the key specified in ``sdk_key``.
-
-``sdk_iv_len``:
-: The length of the initialization vector specified in ``sdk_iv``.
-
-``sdk_sn_key_len``:
-: The length of the sequence number key specified in ``sdk_sn_key``.
-
 ``sdk_unused``:
 : This field is ignored.
 
 ``sdk_epoch``:
 : The epoch for which the keys are added.
 
-``sdk_key``:
-: A pointer to the key.
+``sdk_key_len``:
+: The length of the key specified in ``sdk_keys``.
 
-``sdk_iv``:
-: A pointer to the initialization vector.
+``sdk_iv_len``:
+: The length of the initialization vector specified in ``sdk_keys``.
 
-``sdk_sn_key``:
-A pointer to the sequence number key.
+``sdk_sn_key_len``:
+: The length of the sequence number key specified in ``sdk_keys``.
+
+``sdk_keys``:
+: The key of length ``sdk_key_len`` directly followed by the initialization
+  vector of length ``sdk_iv_len`` directly followed by the sequence number key
+  of length ``sdk_sn_key_len``.
 
 This socket option can only be used on SCTP endpoints in states other then
 ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
@@ -1568,10 +1556,10 @@ The following structure is used as the ``option_value``:
 ~~~ c
 struct sctp_dtls_stats {
    sctp_assoc_t sds_assoc_id;
-   uint32_t sds_dropped_unprotected;
-   uint32_t sds_aead_failures;
-   uint32_t sds_recv_protected;
-   uint32_t sds_sent_protected;
+   uint64_t sds_dropped_unprotected;
+   uint64_t sds_aead_failures;
+   uint64_t sds_recv_protected;
+   uint64_t sds_sent_protected;
    /* There will be added more fields before the WGLC. */
    /* There might be additional platform specific counters. */
 };
