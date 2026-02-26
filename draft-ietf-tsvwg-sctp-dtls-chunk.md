@@ -339,28 +339,11 @@ successfully negotiated.
 
 # New Chunk, Parameter and Error Causes
 
-## New Parameter Type {#new-parameter-type}
+## DTLS Key Management Parameter {#protectedassoc-parameter}
 
-This section defines the new parameter type that will be used to
-negotiate the use of the DTLS chunk during association setup, its
-DTLS Key Management Method and indicate preference in relation to different
-DTLS Key Management Methods. {{sctp-DTLS-chunk-init-parameter}}
-illustrates the new parameter type.
-
-| Parameter Type | Parameter Name |
-| 0x8006 | DTLS Key Management Parameter |
-{: #sctp-DTLS-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
-
-Note that the parameter format requires the receiver to ignore the
-parameter and continue processing if the parameter is not understood.
-This is accomplished (as described in {{RFC9260}}, Section 3.2.1.)  by
-the use of the upper bits of the parameter type.
-
-### DTLS Key Management Parameter {#protectedassoc-parameter}
-
-This parameter is used to the request and acknowledge of support of
-DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
-order among DTLS Key Management Methods (if supported).
+The DTLS Key Management Parameter is used to negotiate the support of the
+DTLS chunk and the key management method used for the DTLS chunks.
+The format if this chunk parameter is depicted in {{key-management-parameter}}.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -375,28 +358,40 @@ order among DTLS Key Management Methods (if supported).
 | DTLS Key Management Id #N     | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-init-options title="DTLS Key Management Parameter" artwork-align="center"}
+{: #key-management-parameter title="DTLS Key Management Parameter" artwork-align="center"}
 
 {: vspace="0"}
 Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x8006.
+  Note that this parameter type requires the receiver to ignore the
+  parameter and continue processing if the parameter type is not supported.
+  This is accomplished (as described {{Section 3.2.1 of !RFC9260}}) by
+  the use of the upper bits of the parameter type.
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be 2 times the
-  number of DTLS Key Management identifiers  (N) plus 4.
+  number of DTLS Key Management identifiers (N) plus 4.
 
 DTLS Key Management Identifier: 16 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
   is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
-  The DTLS Management Methods are listed in descending order of preference, i.e. the first listed
-  in the parameter is the most preferred and the last the least
-  preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
-  endpoint chooses one of the DTLS Management Methods supported by the peer.
+  In the INIT chunk the DTLS Management Methods are listed in descending order
+  of preference, i.e. the first listed in the parameter is the most preferred
+  and the last the least preferred by the sender in the INIT chunk.
+  In the INIT-ACK chunk the endpoint chooses one of the DTLS Management Methods
+  supported by the peer.
 
 Padding: 0 or 16 bits (unsigned integer)
 : If the number of included DTLS Management Methods is odd the
-parameter MUST be padded with two bytes. The padding MUST be set to 0 by
-the sender and MUST be ignored by the receiver.
+  parameter MUST be padded with two bytes. The padding MUST be set to 0 by
+  the sender and MUST be ignored by the receiver.
+
+The DTLS Key Management Parameter MAY be included in the INIT and INIT ACK chunk
+and MUST NOT be included in any other chunk.
+When included in an INIT chunk, the DTLS Key Management Parameter MUST include
+at least one DTLS Key Management Identifier.
+When included in an INIT ACK chunk, it MUST include exactly one
+DTLS Key Management Identifier.
 
 ##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
@@ -579,7 +574,7 @@ including the error cause 'Policy Not Met' (TBA10)
 
 If the responder to do not support any of the DTLS Management Methods
 offered by the association initiator in the Protection Soluiton
-Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
+Parameters {{key-management-parameter}} SCTP will send an ABORT
 chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}},
 including the error cause "No Common DTLS Key Management" (TBA11)
 (see {{IANA-Extra-Cause}}).
@@ -592,7 +587,7 @@ An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
 chunk protected association sends to the remote peer an INIT
 chunk containing the DTLS 1.3 Chunk Protected Association parameter
 (see {{protectedassoc-parameter}}) indicating supported and preferred
-DTLS Key Management method (see {{sctp-DTLS-chunk-init-options}}).
+DTLS Key Management method (see {{key-management-parameter}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with a DTLS Key Management Parameter, will reply with
