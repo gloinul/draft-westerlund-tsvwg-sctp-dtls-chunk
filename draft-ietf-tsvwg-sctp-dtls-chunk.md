@@ -1400,7 +1400,7 @@ struct sctp_dtls_keys {
   from ``0`` is used, the restart keys are added.
 
 ``sdk_key_len``:
-: The length of the initialization vector specified in ``sdk_key``.
+: The length of the key specified in ``sdk_key``.
 
 ``sdk_iv_len``:
 : The length of the initialization vector specified in ``sdk_iv``.
@@ -1466,7 +1466,7 @@ struct sctp_dtls_keys {
   from ``0`` is used, the restart keys are added.
 
 ``sdk_key_len``:
-: The length of the initialization vector specified in ``sdk_key``.
+: The length of the key specified in ``sdk_key``.
 
 ``sdk_iv_len``:
 : The length of the initialization vector specified in ``sdk_iv``.
