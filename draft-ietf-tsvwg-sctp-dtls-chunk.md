@@ -1650,7 +1650,7 @@ Parameters group:
 
 *  One new SCTP Chunk Parameter Type
 
-*  Three new SCTP Error Cause Codes
+*  Two new SCTP Error Cause Codes
 
 And finally the update of one registered SCTP Payload Protocol
 Identifier.
