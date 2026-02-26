@@ -339,28 +339,11 @@ successfully negotiated.
 
 # New Chunk, Parameter and Error Causes
 
-## New Parameter Type {#new-parameter-type}
+## DTLS Key Management Parameter {#protectedassoc-parameter}
 
-This section defines the new parameter type that will be used to
-negotiate the use of the DTLS chunk during association setup, its
-DTLS Key Management Method and indicate preference in relation to different
-DTLS Key Management Methods. {{sctp-DTLS-chunk-init-parameter}}
-illustrates the new parameter type.
-
-| Parameter Type | Parameter Name |
-| 0x8006 | DTLS Key Management Parameter |
-{: #sctp-DTLS-chunk-init-parameter title="New INIT/INIT-ACK Parameter" cols="r l"}
-
-Note that the parameter format requires the receiver to ignore the
-parameter and continue processing if the parameter is not understood.
-This is accomplished (as described in {{RFC9260}}, Section 3.2.1.)  by
-the use of the upper bits of the parameter type.
-
-### DTLS Key Management Parameter {#protectedassoc-parameter}
-
-This parameter is used for the request and acknowledge of support of
-DTLS Chunk during INIT/INIT-ACK handshake and indicate preference
-order among DTLS Key Management Methods (if supported).
+The DTLS Key Management Parameter is used to negotiate the support of the
+DTLS chunk and the key management method used for the DTLS chunks.
+The format if this chunk parameter is depicted in {{key-management-parameter}}.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -375,60 +358,45 @@ order among DTLS Key Management Methods (if supported).
 | DTLS Key Management Id #N     | Padding                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-init-options title="DTLS Key Management Parameter" artwork-align="center"}
+{: #key-management-parameter title="DTLS Key Management Parameter" artwork-align="center"}
 
 {: vspace="0"}
 Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x8006.
+  Note that this parameter type requires the receiver to ignore the
+  parameter and continue processing if the parameter type is not supported.
+  This is accomplished (as described {{Section 3.2.1 of !RFC9260}}) by
+  the use of the upper bits of the parameter type.
 
 Parameter Length: 16 bits (unsigned integer)
 : This value holds the length of the parameter, which will be 2 times the
-  number of DTLS Key Management identifiers  (N) plus 4.
+  number of DTLS Key Management identifiers (N) plus 4.
 
 DTLS Key Management Identifier: 16 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
   is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
-  The DTLS Key Management Methods are listed in descending order of preference,
-  i.e. the first listed in the parameter is the most preferred and the last the
-  least preferred by the sender in the INIT chunk. In the INIT-ACK chunk the
-  endpoint chooses one of the DTLS Key Management Methods supported by the peer.
+  In the INIT chunk the DTLS Key Management Methods are listed in descending order
+  of preference, i.e. the first listed in the parameter is the most preferred one
+  and the last kisted one is the least preferred by the sender in the INIT chunk.
+  In the INIT ACK chunk the endpoint chooses one of the DTLS Key Management Methods
+  supported by the peer.
 
 Padding: 0 or 16 bits (unsigned integer)
 : If the number of included DTLS Key Management Methods is odd the
-parameter MUST be padded with two bytes. The padding MUST be set to 0 by
-the sender and MUST be ignored by the receiver.
+  parameter MUST be padded with two bytes. The padding MUST be set to 0 by
+  the sender and MUST be ignored by the receiver.
 
-## New Chunk Type {#new-chunk-type}
+The DTLS Key Management Parameter MAY be included in the INIT and INIT ACK chunk
+and MUST NOT be included in any other chunk.
+When included in an INIT chunk, the DTLS Key Management Parameter MUST include
+at least one DTLS Key Management Identifier.
+When included in an INIT ACK chunk, it MUST include exactly one
+DTLS Key Management Identifier.
 
-###  DTLS Chunk (DTLS) {#DTLS-chunk}
-
-This section defines the new chunk type that will be used to
-transport the DTLS 1.3 record containing protected SCTP payload.
-{{sctp-DTLS-chunk-newchunk-crypt}} illustrates the new chunk type.
-
-| Chunk Type | Chunk Name |
-| 0x41 | DTLS Chunk (DTLS) |
-{: #sctp-DTLS-chunk-newchunk-crypt title="DTLS Chunk Type" cols="r l"}
-
-It should be noted that the DTLS chunk format requires the receiver
-stop processing this SCTP packet, discard the unrecognized chunk and
-all further chunks, and report the unrecognized chunk in an ERROR
-chunk using the 'Unrecognized Chunk Type' error cause.  This is
-accomplished (as described in {{RFC9260}} Section 3.2.) by the use of
-the upper bits of the chunk type.
+##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.
-
-As the full DTLS record with the header and sequence number, etc., the
-start of the cipher text is likely not 32-bit aligned making in-place
-encryption/decryption impossible in some platforms. Therefore, a
-variable number (0-3) of pre-padding bytes with value fixed to zero MUST
-be added in the DTLS chunk payload before the DTLS Record header
-(DTLS Chunk Payload), to ensure the Encrypted Record part of the
-DTLSCiphertext {{RFC9147}} will start on a 32-bit boundary in relation
-to the start of the DTLS Chunk. The number of these pre-padding bytes
-is indicated in the DTLS Chunk header using the P bits.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
@@ -445,7 +413,18 @@ is indicated in the DTLS Chunk header using the P bits.
 |                               |       Post-Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk Structure" artwork-align="center"}
+{: #sctp-DTLS-chunk-newchunk-crypt-struct title="DTLS Chunk" artwork-align="center"}
+
+{: vspace="0"}
+Type: 8 bits (unsigned integer)
+: This value MUST be set to 0x41.
+  It should be noted that the chunk type requires the receiver
+  stop processing this SCTP packet, discard the unrecognized chunk and
+  all further chunks, and report the unrecognized chunk in an ERROR
+  chunk using the 'Unrecognized Chunk Type' error cause, if the receiver does
+  not support this chunk type.
+  This is accomplished (as described in {{Section 3.2 of !RFC9260}}) by the use
+  of the upper bits of the chunk type.
 
 reserved: 5 bits
 : Reserved bits for future use. These bits MUST be set to 0 by
@@ -456,21 +435,23 @@ R: 1 bit (boolean)
 : Restart indicator. If this bit is set this DTLS chunk is protected
   with a Restart DTLS Key context.
 
-P: 2 bit (unsigned integer 0-3)
+P: 2 bit (unsigned integer)
 
-: Payload Pre-Padding indicator. It indicates how many bytes
-are inserted for padding before the DTLSCiphertext.
-This allows the encrypted data to be 32 bit aligned.
+: Payload Pre-Padding length. It indicates how many bytes
+  are inserted for padding before the DTLSCiphertext.
+  See the text below for computing P.
 
 Chunk Length: 16 bits (unsigned integer)
-: This value holds the length of the Payload in bytes plus 4.
+: This value holds the length of the Payload in bytes plus 4 plus the Payload
+  Pre-Padding length.
 
 Pre-Padding: 0, 8, 16, or 24 bits
-: Based on the Payload Pre-Padding Indicator the indicated number of
-8-bit bytes of zero values are included.
+: The length of the padding is given by the Payload Pre-Padding length P.
+  The sender MUST pad with zero bytesand the receiver MUST ignore the
+  padding bytes.
 
 Payload: variable length
-: This holds the DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
+: This MUST contain a exactly one DTLSCiphertext as specified in DTLS 1.3 {{RFC9147}}.
 
 Post-Padding: 0, 8, 16, or 24 bits
 : If the length of the Payload is not a multiple of 4 bytes, the sender
@@ -478,14 +459,11 @@ Post-Padding: 0, 8, 16, or 24 bits
   aligned.  The Padding MUST NOT be longer than 3 bytes and it MUST
   be ignored by the receiver.
 
-### Payload formatting in DTLS Chunk
 
-
-From section 4 of {{RFC9147}}, the DTLS record header has variable length,
-here reported in {{DTLSCiphertext-record-struct}}.
+From {{Section 4 of !RFC9147}}, the DTLS record header has variable length and
+is depicted in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
-
     struct {
         opaque unified_hdr[variable];
         opaque encrypted_record[length];
@@ -494,13 +472,13 @@ here reported in {{DTLSCiphertext-record-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
 
-As shown above, DTLSCiphertext record is built up with the unified_hdr
-and the encrypted_record, where unified_hdr has variable format
-as defined in the first byte. The format of unified_hdr is depicted
-in {{DTLSCiphertext-header-struct}}.
+The DTLSCiphertext contains the unified_hdr followed by the encrypted_record,
+where unified_hdr has variable format.
+The encrypted_record MUST be 32 bit aligned in relation to the start of the
+DTLS Chunk. The Pre-Padding MUST be used to achieve this.
+The format of unified_hdr is depicted in {{DTLSCiphertext-header-struct}}.
 
 ~~~~~~~~~~~ aasvg
-
     0 1 2 3 4 5 6 7
     +-+-+-+-+-+-+-+-+
     |0|0|1|C|S|L|E E|
@@ -516,17 +494,10 @@ in {{DTLSCiphertext-header-struct}}.
     | 16 bit Length |
     | (if present)  |
     +-+-+-+-+-+-+-+-+
-
 ~~~~~~~~~~~
-{: #DTLSCiphertext-header-struct title="DTLSCiphertext header" artwork-align="center"}
+{: #DTLSCiphertext-header-struct title="DTLS unified_hdr" artwork-align="center"}
 
-DTLS Chunk requires encrypted_record to be 32 bit aligned as specified
-in {{DTLS-chunk}}.  The size of the header of the DTLSCiphertext can
-be easily computed by reading the first octet. The Length
-field is redundant with the DTLS chunk's length field and can be
-avoided to be used, and multiple DTLS records SHALL NOT be part of the
-DTLS Chunk's payload field.  Examples of preferred DTLSCiphertext are
-shown in {{DTLSCiphertext-recommended}}.
+Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
 
@@ -534,57 +505,102 @@ shown in {{DTLSCiphertext-recommended}}.
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
 |0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-|    16 bit     |     |8 bit Seq. No. |
+|    16 bit     |     |Sequence Number|
 |Sequence Number|     +-+-+-+-+-+-+-+-+
 +-+-+-+-+-+-+-+-+     |               |
-|   16 bit      |     |   Encrypted   |
-|   Length      |     /   Record      /
-+-+-+-+-+-+-+-+-+     |               |
+|               |     |   Encrypted   |
+|  Encrypted    |     /   Record      /
+/  Record       /     |               |
 |               |     +-+-+-+-+-+-+-+-+
-|  Encrypted    |
-/  Record       /       DTLSCiphertext
-|               |         Structure
-+-+-+-+-+-+-+-+-+         (minimal)
++-+-+-+-+-+-+-+-+
 
-  DTLSCiphertext
-    Structure
-  (recommended)
-
+  DTLSCiphertext       DTLSCiphertext
+    Structure            Structure
+  (recommended)          (minimal)
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
 
-Thus the size of the DTLSCiphertext header, using the first octet B, is computed as follows:
+Thus the size of the DTLSCiphertext header is computed from the first_byte as follows:
 
-size = 1 + ((B & 0x08) ? 2 : 1) + ((B & 0x04) ? 2 : 0)
+~~~ c
+size = 1;
+/* Add in the size of the sequence number. */
+if (first_byte & 0x08)
+    size += 2;
+else
+    size += 1;
+/* Add in the size of the length field, if present. */
+if (first_byte & 0x04)
+    size += 2;
+~~~
+Then the Payload Pre-Padding length P can be computed by
 
-In order for the encrypted_record to be 32 bit aligned, P bit in the DTLS Chunk header are computed
-as follows:
+~~~ c
+P = (4 - (size & 0x3)) & 0x03;
+~~~
 
-P = (4 - (size & 0x03)) & 0x03
+The use of the Pre-Padding allows an receiver to perform an in-place decryption
+and then process the sequence of chunks.
+SCTP as specified in {{RFC9260}} guarantees that chunks start on a 32-bit
+boundary.
 
 ## New Error Causes
 
-This specification introduces a new set of error causes that are to be
-used when SCTP endpoint detects a faulty condition.
+This specification defines two new error causes.
 
-### Policy Not Met {#enoprotected}
+### Missing DTLS Chunk Support {#enoprotected}
 
-When an initiator SCTP endpoint sends an INIT chunk that doesn't
-contain the DTLS Key Management Parameter or a supported DTLS Key Management Method
-towards an SCTP endpoint that only accepts protected
-associations, SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}})
-including the error cause 'Policy Not Met' (TBA10)
-(see {{IANA-Extra-Cause}}).
+The DTLS Chunk Support Required error cause can be sent by the receiver of the
+packet containing the INIT chunk to indicate that the receiver requires the
+support of the DTLS chunk, but no DTLS Key Management parameter was included in
+the INIT chunk.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 100 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-policy-not-met title="Error Cause Policy No Met" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 100 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
 
 ### No Common DTLS Key Management Method {#enocommonpsi}
 
-If the responder does not support any of the DTLS Key Management Methods
-offered by the association initiator in the DTLS Key Management
-Parameters {{sctp-DTLS-chunk-init-options}} SCTP will send an ABORT
-chunk in response to the INIT chunk (Section 5.1 of {{RFC9260}}),
-including the error cause "No Common DTLS Key Management Method" (TBA11)
-(see {{IANA-Extra-Cause}}).
+The No Common DTLS Key Management Method error cause can be used by the receiver
+of the packet containing the INIT chunk to indicate that receiver does not
+support any of DTLS key management methods offered by the sender of packet
+containing the INIT chunk.
+
+The format of this error cause is depicted in {{error-cause-no-common-method }}.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 101 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-no-common-method title="Error Cause No Common DTLS Key Management Method" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 100 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
 
 # Procedures {#procedures}
 
@@ -594,7 +610,7 @@ An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
 chunk protected association sends to the remote peer an INIT
 chunk containing the DTLS Key Management Parameter
 (see {{protectedassoc-parameter}}) indicating supported and preferred
-DTLS Key Management Method (see {{sctp-DTLS-chunk-init-options}}).
+DTLS Key Management method (see {{key-management-parameter}}).
 
 An SCTP Endpoint acting as responder, when receiving an INIT chunk
 with a DTLS Key Management Parameter, will reply with
@@ -1516,7 +1532,7 @@ This socket option can only be used on SCTP endpoints in states other than
 
 Enabling this socket option on an SCTP endpoint enforces that received
 SCTP packets are only processed, if they are protected.
-All received packets with the first chunk not being an INIT chunk, INIT-ACK
+All received packets with the first chunk not being an INIT chunk, INIT ACK
 chunk, or DTLS chunk will be silently discarded.
 
 The following structure is used as the ``option_value``:
@@ -1638,42 +1654,34 @@ padding. Use of DTLS padding hides this packet expansion from SCTP.
 
 # IANA Considerations {#IANA-Consideration}
 
-This document defines two new registries in the Stream Control
-Transmission Protocol (SCTP) Parameters group that IANA
-maintains. These registries are for the extra cause codes for
-protection related errors.
-It also adds registry entries into several other
-registries in the Stream Control Transmission Protocol (SCTP)
-Parameters group:
+This document adds registry entries or registries in the Stream Control
+Transmission Protocol (SCTP) Parameters group handled by IANA:
 
-*  One new SCTP Chunk Type
+* One new registry for the Key Management IDs
 
-*  One new SCTP Chunk Parameter Type
+* One new SCTP Chunk Types and its corresponding Chunk Type Flags registry
 
-*  Two new SCTP Error Cause Codes
+* One new SCTP Chunk Parameter Type
 
-And finally the update of one registered SCTP Payload Protocol
-Identifier.
+* Two new SCTP Error Cause Codes
+
+* A new Payload Protocol Identifier
 
 ## DTLS Key Management Method Identifiers {#IANA-Protection-Solution-ID}
 
 IANA is requested to create a new registry called "DTLS Key Management Method".
-This registry is part of the Stream
-Control Transmission Protocol (SCTP) Parameters grouping.
+This registry is part of the Stream Control Transmission Protocol (SCTP)
+Parameters grouping.
 
 The purpose of this registry is to assign DTLS Key Management Method
-Identifier for any DTLS Key Management Method that is either the DTLS
-Chunk combined with a DTLS Key Management Method, offered as an alternative
-to DTLS chunk. Any DTLS Key Management Method that is offered
-through a parameter exchange during the SCTP handshake is potential
-to be included here.
-
+Identifier for any DTLS Key Management Method used for the extension described
+in this document.
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
-| Identifier | Method Name | Reference | Contact |
-| 0 | DTLS Chunk with Pre- | RFC-TBD | Draft Authors |
-| 1-4095 | Available for Assignment using Specification Required policy | | |
-| 4096-65535 | Available for Assignment using First Come, First Served policy | | |
+| Identifier | Key Managemen Method Name                                      | Reference | Contact       |
+| 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-TBD   | Draft Authors |
+| 1-4095     | Available for Assignment using Specification Required policy   |           |               |
+| 4096-65535 | Available for Assignment using First Come, First Served policy |           |               |
 {: #iana-psi title="DTLS Key Management Method Identifiers" cols="r l l l"}
 
 New entries in the range 0-4095 are registered following the Specification Required policy
@@ -1682,41 +1690,38 @@ as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, 
 ## SCTP Chunk Type
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Types" registry, IANA is requested to add the one new entry
-depicted below in {{iana-chunk-types}} with a reference to this
-document. The registry at time of writing was available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-1
+"Chunk Types" registry, IANA is requested to update the reference for the
+DTLS chunk as depicted in {{iana-chunk-types}} with a reference to this
+document.
 
-| ID Value | Chunk Type | Reference |
-| 0x41 | DTLS Chunk (DTLS) | RFC-To-Be |
-{: #iana-chunk-types title="New Chunk Type Registered" cols="r l l"}
+| ID Value | Chunk Type        | Reference |
+| 0x41     | DTLS Chunk (DTLS) | RFC-To-Be |
+{: #iana-chunk-types title="DTLS Chunk Type" cols="r l l"}
 
-The registration table for the chunk flags of this chunk
-type is initially:
+IANA is requested to add the corresponding registration table for the chunk
+flags of the DTLS chunk with the initial contents show in {{iana-chunk-flags}}:
 
-| Chunk Flag Value | Chunk Flag Name | Reference |
-| 0x01 | R bit | RFC-To-Be |
-| 0x02| Unassigned |  |
-| 0x04| Unassigned |  |
-| 0x08| Unassigned |  |
-| 0x10| Unassigned |  |
-| 0x20| Unassigned |  |
-| 0x40| Unassigned |  |
-| 0x80| Unassigned |  |
+| Chunk Flag Value | Chunk Flag Name  | Reference |
+| 0x01             | R bit            | RFC-To-Be |
+| 0x02             | P low order bit  | RFC-To-Be |
+| 0x04             | P high order bit | RFC-To-Be |
+| 0x08             | Unassigned       |           |
+| 0x10             | Unassigned       |           |
+| 0x20             | Unassigned       |           |
+| 0x40             | Unassigned       |           |
+| 0x80             | Unassigned       |           |
 {: #iana-chunk-flags title="DTLS Chunk Flags" cols="r l l"}
 
 ## SCTP Chunk Parameter Types
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Chunk Parameter Types" registry, IANA is requested to add the new
-entry depicted below in in {{iana-chunk-parameter-types}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-2
+"Chunk Parameter Types" registry, IANA is requested to update the reference for
+the DTLS Key Management as depicted in {{iana-chunk-parameter-types}} with a
+reference to this document.
 
 | ID Value | Chunk Parameter Type | Reference |
 | 0x8006   | DTLS Key Management  | RFC-To-Be |
-{: #iana-chunk-parameter-types title="New Chunk Type Parameters Registered" cols="r l l"}
+{: #iana-chunk-parameter-types title="DTLS Key Management Chunk Parameter" cols="r l l"}
 
 
 ## SCTP Error Cause Codes {#IANA-Extra-Cause}
@@ -1724,27 +1729,24 @@ https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-para
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Error Cause Codes" registry, IANA is requested to add the new
 entries depicted below in in {{iana-error-cause-codes}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-24
+reference to this document.
 
-| ID Value | Error Cause Codes | Reference |
-| TBA10 | Policy Not Met | RFC-To-Be |
-| TBA11 | No Common DTLS Key Management Method | RFC-To-Be |
-{: #iana-error-cause-codes title="Error Cause Codes Parameters Registered" cols="r l l"}
+| ID Value     | Error Cause Codes                    | Reference |
+| 100 (TBC)    | Missing DTLS chunk support           | RFC-To-Be |
+| 101 (TBC)    | No Common DTLS Key Management Method | RFC-To-Be |
+{: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
 
+The suggested cause code will need to be confirmed by IANA.
 
 ## SCTP Payload Protocol Identifier {#sec-iana-ppid}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
 "Payload Protocol Identifiers" registry, IANA is requested to update the
-entry depicted below in in {{iana-payload-protection-id}} with a
-reference to this document. The registry at time of writing was
-available at:
-https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
+reference for the PPID 4242 as depicted in {{iana-payload-protection-id}} with a
+reference to this document.
 
 | ID Value | SCTP Payload Protocol Identifier | Reference |
-| 4242 | DTLS Key Management Messages | RFC-To-Be |
+| 4242     | DTLS Key Management Messages     | RFC-To-Be |
 {: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
 
 
