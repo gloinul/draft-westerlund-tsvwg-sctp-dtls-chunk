@@ -3537,16 +3537,16 @@ sent during the handshake.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-2">The following structure is used as the <code>option_value</code>:<a href="#section-8.4.1-2" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-8.4.1-3">
 <pre>
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 </pre><a href="#section-8.4.1-3" class="pilcrow">¶</a>
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-8.4.1-4">
             <dt id="section-8.4.1-4.1">
-<code>sdp_assoc_id</code>:</dt>
+<code>sdk_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.2">
               <p id="section-8.4.1-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3556,13 +3556,13 @@ For <code>getsockopt()</code>, it is an error to use <code>SCTP_{CURRENT|ALL}_AS
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.1-4.3">
-<code>sdp_nr_kmids</code>:</dt>
+<code>sdk_nr_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.4">
-              <p id="section-8.4.1-4.4.1">The number of entries in <code>sdp_kmids</code>.<a href="#section-8.4.1-4.4.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.1-4.4.1">The number of entries in <code>sdk_kmids</code>.<a href="#section-8.4.1-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.1-4.5">
-<code>sdp_kmids</code>:</dt>
+<code>sdk_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.1-4.6">
               <p id="section-8.4.1-4.6.1">The DTLS Key Management identifiers which will be or have been sent to the peer
 in the sequence they were contained in the DTLS Key Management Parameter and
@@ -3590,16 +3590,16 @@ peer during the handshake.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.2-2">The following structure is used as the <code>option_value</code>:<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-8.4.2-3">
 <pre>
-struct sctp_dtls_pmids {
-        sctp_assoc_t sds_assoc_id;
-        uint16_t sdp_nr_kmids;
-        uint16_t sdp_kmids[];
+struct sctp_dtls_kmids {
+        sctp_assoc_t sdk_assoc_id;
+        uint16_t sdk_nr_kmids;
+        uint16_t sdk_kmids[];
 };
 </pre><a href="#section-8.4.2-3" class="pilcrow">¶</a>
 </div>
 <span class="break"></span><dl class="dlParallel" id="section-8.4.2-4">
             <dt id="section-8.4.2-4.1">
-<code>sdp_assoc_id</code>:</dt>
+<code>sdk_assoc_id</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.2">
               <p id="section-8.4.2-4.2.1">This parameter is ignored for one-to-one style sockets.
 For one-to-many style sockets, this parameter indicates upon which
@@ -3608,13 +3608,13 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.2-4.3">
-<code>sdp_nr_kmids</code>:</dt>
+<code>sdk_nr_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.4">
-              <p id="section-8.4.2-4.4.1">The number of entries in <code>sdp_kmids</code>.<a href="#section-8.4.2-4.4.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.2-4.4.1">The number of entries in <code>sdk_kmids</code>.<a href="#section-8.4.2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.2-4.5">
-<code>sdp_kmids</code>:</dt>
+<code>sdk_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.6">
               <p id="section-8.4.2-4.6.1">The DTLS Key Management identifiers reported by the peer in the sequence they
 were contained in the DTLS Key Management Parameter and in host byte order.<a href="#section-8.4.2-4.6.1" class="pilcrow">¶</a></p>
@@ -3639,14 +3639,12 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
         uint8_t sdk_restart;
+        uint8_t sdk_unused1; /* if sizeof(sctp_assoc_t) == 4 */
+        uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
-        uint64_t sdk_epoch;
-        uint8_t *sdk_key;
-        uint8_t *sdk_iv;
-        uint8_t *sdk_sn_key;
+        uint8_t sdk_keys[];
 };
 </pre><a href="#section-8.4.3-3" class="pilcrow">¶</a>
 </div>
@@ -3674,55 +3672,49 @@ from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.3-
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.7">
-<code>sdk_key_len</code>:</dt>
+<code>sdk_unused</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.8">
-              <p id="section-8.4.3-4.8.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-8.4.3-4.8.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.8.1">This field is ignored.<a href="#section-8.4.3-4.8.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.9">
-<code>sdk_iv_len</code>:</dt>
+<code>sdk_epoch</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.10">
-              <p id="section-8.4.3-4.10.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-8.4.3-4.10.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.10.1">The epoch for which the keys are added.<a href="#section-8.4.3-4.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.11">
-<code>sdk_sn_key_len</code>:</dt>
+<code>sdk_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.12">
-              <p id="section-8.4.3-4.12.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-8.4.3-4.12.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.12.1">The length of the key specified in <code>sdk_keys</code>.<a href="#section-8.4.3-4.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.13">
-<code>sdk_unused</code>:</dt>
+<code>sdk_iv_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.14">
-              <p id="section-8.4.3-4.14.1">This field is ignored.<a href="#section-8.4.3-4.14.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.14.1">The length of the initialization vector specified in <code>sdk_keys</code>.<a href="#section-8.4.3-4.14.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.15">
-<code>sdk_epoch</code>:</dt>
+<code>sdk_sn_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.16">
-              <p id="section-8.4.3-4.16.1">The epoch for which the keys are added.<a href="#section-8.4.3-4.16.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.16.1">The length of the sequence number key specified in <code>sdk_keys</code>.<a href="#section-8.4.3-4.16.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.3-4.17">
-<code>sdk_key</code>:</dt>
+<code>sdk_keys</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.3-4.18">
-              <p id="section-8.4.3-4.18.1">A pointer to the key.<a href="#section-8.4.3-4.18.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-8.4.3-4.19">
-<code>sdk_iv</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-8.4.3-4.20">
-              <p id="section-8.4.3-4.20.1">A pointer to the initialization vector.<a href="#section-8.4.3-4.20.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.3-4.18.1">The key of length <code>sdk_key_len</code> directly followed by the initialization
+vector of length <code>sdk_iv_len</code> directly followed by the sequence number key
+of length <code>sdk_sn_key_len</code>.<a href="#section-8.4.3-4.18.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-8.4.3-5"><code>sdk_sn_key</code>:
-A pointer to the sequence number key.<a href="#section-8.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-8.4.3-6">This socket option can only be used on SCTP endpoints in states other than
+<p id="section-8.4.3-5">This socket option can only be used on SCTP endpoints in states other than
 <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.
 If the socket options is successful, all affected DTLS chunks sent will use the
 specified keys until the keys are changed again by another call of this
-socket option.<a href="#section-8.4.3-6" class="pilcrow">¶</a></p>
+socket option.<a href="#section-8.4.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="add-receive-keys-sctpdtlsaddrecvkeys">
@@ -3739,14 +3731,12 @@ struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
         uint8_t sdk_restart;
+        uint8_t sdk_unused1; /* if sizeof(sctp_assoc_t) == 4 */
+        uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
-        uint32_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
-        uint64_t sdk_epoch;
-        uint8_t *sdk_key;
-        uint8_t *sdk_iv;
-        uint8_t *sdk_sn_key;
+        uint8_t sdk_keys[];
 };
 </pre><a href="#section-8.4.4-3" class="pilcrow">¶</a>
 </div>
@@ -3774,52 +3764,46 @@ from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.4-
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.7">
-<code>sdk_key_len</code>:</dt>
+<code>sdk_unused</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.8">
-              <p id="section-8.4.4-4.8.1">The length of the initialization vector specified in <code>sdk_key</code>.<a href="#section-8.4.4-4.8.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.8.1">This field is ignored.<a href="#section-8.4.4-4.8.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.9">
-<code>sdk_iv_len</code>:</dt>
+<code>sdk_epoch</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.10">
-              <p id="section-8.4.4-4.10.1">The length of the initialization vector specified in <code>sdk_iv</code>.<a href="#section-8.4.4-4.10.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.10.1">The epoch for which the keys are added.<a href="#section-8.4.4-4.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.11">
-<code>sdk_sn_key_len</code>:</dt>
+<code>sdk_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.12">
-              <p id="section-8.4.4-4.12.1">The length of the sequence number key specified in <code>sdk_sn_key</code>.<a href="#section-8.4.4-4.12.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.12.1">The length of the key specified in <code>sdk_keys</code>.<a href="#section-8.4.4-4.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.13">
-<code>sdk_unused</code>:</dt>
+<code>sdk_iv_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.14">
-              <p id="section-8.4.4-4.14.1">This field is ignored.<a href="#section-8.4.4-4.14.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.14.1">The length of the initialization vector specified in <code>sdk_keys</code>.<a href="#section-8.4.4-4.14.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.15">
-<code>sdk_epoch</code>:</dt>
+<code>sdk_sn_key_len</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.16">
-              <p id="section-8.4.4-4.16.1">The epoch for which the keys are added.<a href="#section-8.4.4-4.16.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.16.1">The length of the sequence number key specified in <code>sdk_keys</code>.<a href="#section-8.4.4-4.16.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.4-4.17">
-<code>sdk_key</code>:</dt>
+<code>sdk_keys</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.4-4.18">
-              <p id="section-8.4.4-4.18.1">A pointer to the key.<a href="#section-8.4.4-4.18.1" class="pilcrow">¶</a></p>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-8.4.4-4.19">
-<code>sdk_iv</code>:</dt>
-            <dd style="margin-left: 1.5em" id="section-8.4.4-4.20">
-              <p id="section-8.4.4-4.20.1">A pointer to the initialization vector.<a href="#section-8.4.4-4.20.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.4-4.18.1">The key of length <code>sdk_key_len</code> directly followed by the initialization
+vector of length <code>sdk_iv_len</code> directly followed by the sequence number key
+of length <code>sdk_sn_key_len</code>.<a href="#section-8.4.4-4.18.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-8.4.4-5"><code>sdk_sn_key</code>:
-A pointer to the sequence number key.<a href="#section-8.4.4-5" class="pilcrow">¶</a></p>
-<p id="section-8.4.4-6">This socket option can only be used on SCTP endpoints in states other than
-<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-8.4.4-6" class="pilcrow">¶</a></p>
+<p id="section-8.4.4-5">This socket option can only be used on SCTP endpoints in states other than
+<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-8.4.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="delete-receive-keys-sctpdtlsdelrecvkeys">
@@ -3921,10 +3905,10 @@ specific SCTP endpoint.<a href="#section-8.4.7-1" class="pilcrow">¶</a></p>
 <pre>
 struct sctp_dtls_stats {
    sctp_assoc_t sds_assoc_id;
-   uint32_t sds_dropped_unprotected;
-   uint32_t sds_aead_failures;
-   uint32_t sds_recv_protected;
-   uint32_t sds_sent_protected;
+   uint64_t sds_dropped_unprotected;
+   uint64_t sds_aead_failures;
+   uint64_t sds_recv_protected;
+   uint64_t sds_sent_protected;
    /* There will be added more fields before the WGLC. */
    /* There might be additional platform specific counters. */
 };
