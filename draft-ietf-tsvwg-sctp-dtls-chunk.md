@@ -923,7 +923,7 @@ it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
 will accept the initiation of the new Association while still supervising
 the old one.
 
-## Considerations on DTLS Key Management Method {#key-management-considerations}
+# DTLS Key Management Method Considerations {#key-management-considerations}
 
 It is up to the upper layer to manage the keys for the DTLS chunk.
 The meaning of DTLS Key Management Method is described in {{dtls-management-method}}.
