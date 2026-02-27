@@ -1064,7 +1064,7 @@ Parameters :
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are not expected as they are used during DTLS handshake.
 
-* Cipher Suit:
+* Cipher Suite:
 : 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
@@ -1100,7 +1100,7 @@ Parameters :
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
   3 are not expected as they are used during DTLS handshake.
 
-* Cipher Suit:
+* Cipher Suite:
 : 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
