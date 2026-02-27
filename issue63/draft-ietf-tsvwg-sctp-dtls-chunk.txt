@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 30 August 2026                                         M. Tüxen
+Expires: 31 August 2026                                         M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        26 February 2026
+                                                        27 February 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2026.
+   This Internet-Draft will expire on 31 August 2026.
 
 Copyright Notice
 
@@ -989,19 +989,45 @@ Table of Contents
    determine the selected DTLS Key Management method that is returned in
    the INIT-ACK.
 
-   The input is a priortized list of DTLS Key Management identifiers
-   that are supported, from the most preferred to the least preferred.
+   Request: Set Supported DTLS Key Management Methods
+
+   Parameters:
+
+   *  SCTP Association Handle:  The handle to what may become an SCTP
+         Association or a server port accepting association
+         establishment.
+
+   *  List of Identifiers:  A priortized list of DTLS Key Management
+         identifiers that are supported, from the most preferred to the
+         least preferred.
+
+   Reply: Success or Error
+
+   Parameters: None
 
 7.2.  Get Offered DTLS Key Management Methods
 
    After an SCTP association has been established the key managment
    function will need to get the list of DTLS key management IDs that
-   was present in DTLS Key Management parameter in the INIT chunk.  This
-   list will be used by the seleted DTLS key management method to derive
-   security keys and prevent down grade attacks.
+   was present in DTLS Key Management parameter in the INIT and INIT-ACK
+   chunks.  This list will be used by the seleted DTLS key management
+   method to derive security keys and prevent down grade attacks.
 
-   This API call returns the list verbatim as is was sent/received in
-   the DTLS Key Management Parameter in the INIT Chunk.
+   Request: Get DTLS Key Management Methods
+
+   Parameters:
+
+   *  SCTP Association:  Reference to the relevant SCTP association to
+         request the exchanged Identifiers.
+
+   Reply: Offered and Selected DTLS Key Management Methods
+
+   *  List of Identifiers:  This API call returns a list of DTLS key-
+         management Identifiers.  The list first contains all the
+         Identifiers present in DTLS Key Management Parameter in the
+         INIT Chunk, followed by the single identifier for the selected
+         methods that was exchanged in the DTLS Key Management Parameter
+         in the INIT-ACK chunk.
 
 7.3.  Cipher Suite Capabilities
 
