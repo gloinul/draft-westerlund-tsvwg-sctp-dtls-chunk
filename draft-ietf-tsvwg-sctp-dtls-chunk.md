@@ -983,7 +983,7 @@ needs to configure which DTLS Key Management Methods it supports if
 establishing a SCTP association. This will be included in INIT if the
 endpoint initiated the SCTP association. Else it will be used to
 determine the selected DTLS Key Management method that is returned in
-the INIT-ACK.
+the INIT ACK.
 
 Request: Set Supported DTLS Key Management Methods
 
@@ -1005,7 +1005,7 @@ Parameters: None
 
 After an SCTP association has been established the key managment
 function will need to get the list of DTLS key management IDs
-that was present in DTLS Key Management parameter in the INIT and INIT-ACK chunks.
+that was present in DTLS Key Management parameter in the INIT and INIT ACK chunks.
 This list will be used by the seleted DTLS key management method to
 derive security keys and prevent down grade attacks.
 
@@ -1023,7 +1023,7 @@ Reply: Offered and Selected DTLS Key Management Methods
 list first contains all the Identifiers present in DTLS Key Management
 Parameter in the INIT Chunk, followed by the single identifier
 for the selected methods that was exchanged in the DTLS Key Management
-Parameter in the INIT-ACK chunk.
+Parameter in the INIT ACK chunk.
 
 
 ## Cipher Suite Capabilities
