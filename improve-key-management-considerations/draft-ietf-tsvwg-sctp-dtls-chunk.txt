@@ -110,17 +110,19 @@ Table of Contents
        5.4.2.  Compatibility with Legacy SCTP Restart
    6.  DTLS Key Management Method Considerations
    7.  Abstract API
-     7.1.  Cipher Suite Capabilities
-     7.2.  Establish Client Write Keying Material
-     7.3.  Establish Server Write Keying Material
-     7.4.  Destroy Client Write Keying Material
-     7.5.  Destroy Server Write Keying Material
-     7.6.  Set Key to Use
-     7.7.  Require Protected SCTP Packets
-     7.8.  Get AEAD Encryption Invocations
-     7.9.  Get AEAD Decryption Invocations
-     7.10. Get Failed AEAD Decryption Invocations
-     7.11. Configure Replay Protection
+     7.1.  Set Supported DTLS Key Management Methods
+     7.2.  Get Offered DTLS Key Management Methods
+     7.3.  Cipher Suite Capabilities
+     7.4.  Establish Client Write Keying Material
+     7.5.  Establish Server Write Keying Material
+     7.6.  Destroy Client Write Keying Material
+     7.7.  Destroy Server Write Keying Material
+     7.8.  Set Key to Use
+     7.9.  Require Protected SCTP Packets
+     7.10. Get AEAD Encryption Invocations
+     7.11. Get AEAD Decryption Invocations
+     7.12. Get Failed AEAD Decryption Invocations
+     7.13. Configure Replay Protection
    8.  Socket API Considerations
      8.1.  SCTP_ASSOC_CHANGE Notification
      8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
@@ -1001,7 +1003,56 @@ Table of Contents
    The sequence number key is used to encrypt the sequence number
    (Section 4.2.3 of [RFC9147]).
 
-7.1.  Cipher Suite Capabilities
+7.1.  Set Supported DTLS Key Management Methods
+
+   Prior to attempting to establish an SCTP assocation an SCTP endpoint
+   needs to configure which DTLS Key Management Methods it supports if
+   establishing a SCTP association.  This will be included in INIT if
+   the endpoint initiated the SCTP association.  Else it will be used to
+   determine the selected DTLS Key Management method that is returned in
+   the INIT ACK.
+
+   Request: Set Supported DTLS Key Management Methods
+
+   Parameters:
+
+   *  SCTP Association Handle:  The handle to what may become an SCTP
+         Association or a server port accepting association
+         establishment.
+
+   *  List of Identifiers:  A priortized list of DTLS Key Management
+         identifiers that are supported, from the most preferred to the
+         least preferred.
+
+   Reply: Success or Error
+
+   Parameters: None
+
+7.2.  Get Offered DTLS Key Management Methods
+
+   After an SCTP association has been established the key managment
+   function will need to get the list of DTLS key management IDs that
+   was present in DTLS Key Management parameter in the INIT and INIT ACK
+   chunks.  This list will be used by the seleted DTLS key management
+   method to derive security keys and prevent down grade attacks.
+
+   Request: Get DTLS Key Management Methods
+
+   Parameters:
+
+   *  SCTP Association:  Reference to the relevant SCTP association to
+         request the exchanged Identifiers.
+
+   Reply: Offered and Selected DTLS Key Management Methods
+
+   *  List of Identifiers:  This API call returns a list of DTLS key-
+         management Identifiers.  The list first contains all the
+         Identifiers present in DTLS Key Management Parameter in the
+         INIT Chunk, followed by the single identifier for the selected
+         methods that was exchanged in the DTLS Key Management Parameter
+         in the INIT ACK chunk.
+
+7.3.  Cipher Suite Capabilities
 
    The DTLS Key Management Method needs to know which cipher suites
    defined for usage with DTLS 1.3 that are supported by the DTLS chunk
@@ -1019,7 +1070,7 @@ Table of Contents
 
    Parameters : list of cipher suites
 
-7.2.  Establish Client Write Keying Material
+7.4.  Establish Client Write Keying Material
 
    The DTLS Chunk can use one out of multiple sets of cipher suite and
    corresponding key materials.
@@ -1054,7 +1105,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-7.3.  Establish Server Write Keying Material
+7.5.  Establish Server Write Keying Material
 
    The DTLS Chunk can use one out of multiple sets of cipher suite and
    corresponding key materials.
@@ -1089,7 +1140,7 @@ Table of Contents
 
    Reply : Established or Failed
 
-7.4.  Destroy Client Write Keying Material
+7.6.  Destroy Client Write Keying Material
 
    A function to destroy the Client Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1108,7 +1159,7 @@ Table of Contents
 
    Parameters : true or false
 
-7.5.  Destroy Server Write Keying Material
+7.7.  Destroy Server Write Keying Material
 
    A function to destroy the Server Write (transmit) keying material for
    a given epoch for a given Key for a given SCTP Association.
@@ -1127,7 +1178,7 @@ Table of Contents
 
    Parameters : true or false
 
-7.6.  Set Key to Use
+7.8.  Set Key to Use
 
    Set which key to use to protect the future SCTP packets sent by the
    SCTP Association.
@@ -1146,7 +1197,7 @@ Table of Contents
 
    Parameters : true or false
 
-7.7.  Require Protected SCTP Packets
+7.9.  Require Protected SCTP Packets
 
    A function to configure an SCTP association to require that normal
    SCTP packets being received must be protected in a DTLS Chunk going
@@ -1158,7 +1209,7 @@ Table of Contents
 
    Reply: Acknowledgement
 
-7.8.  Get AEAD Encryption Invocations
+7.10.  Get AEAD Encryption Invocations
 
    Get the number of AEAD encryption invocations (protected messages)
    for a given epoch.
@@ -1177,7 +1228,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.9.  Get AEAD Decryption Invocations
+7.11.  Get AEAD Decryption Invocations
 
    Get the number of AEAD decryption invocations for a given epoch.
 
@@ -1195,7 +1246,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.10.  Get Failed AEAD Decryption Invocations
+7.12.  Get Failed AEAD Decryption Invocations
 
    Get the number of failed AEAD decryption invocations for a given
    epoch.
@@ -1214,7 +1265,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.11.  Configure Replay Protection
+7.13.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
