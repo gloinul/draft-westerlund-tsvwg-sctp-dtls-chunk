@@ -566,7 +566,7 @@ the INIT chunk.
 |    Cause Code = 100 (TBC)     |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
-{: #error-cause-policy-not-met title="Error Cause Policy Not Met" artwork-align="center"}
+{: #error-missing-dtls-chunk-support title="Error Missing DTLS Chunk Support" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
@@ -1763,7 +1763,7 @@ entries depicted below in {{iana-error-cause-codes}} with a
 reference to this document.
 
 | ID Value     | Error Cause Codes                    | Reference |
-| 100 (TBC)    | Missing DTLS chunk support           | RFC-To-Be |
+| 100 (TBC)    | Missing DTLS Chunk Support           | RFC-To-Be |
 | 101 (TBC)    | No Common DTLS Key Management Method | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
 
