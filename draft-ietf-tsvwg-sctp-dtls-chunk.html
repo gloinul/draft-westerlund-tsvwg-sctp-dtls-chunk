@@ -2978,7 +2978,7 @@ needs to configure which DTLS Key Management Methods it supports if
 establishing a SCTP association. This will be included in INIT if the
 endpoint initiated the SCTP association. Else it will be used to
 determine the selected DTLS Key Management method that is returned in
-the INIT-ACK.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+the INIT ACK.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">Request: Set Supported DTLS Key Management Methods<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Parameters:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3014,7 +3014,7 @@ are supported, from the most preferred to the least preferred.<a href="#section-
         </h3>
 <p id="section-7.2-1">After an SCTP association has been established the key managment
 function will need to get the list of DTLS key management IDs
-that was present in DTLS Key Management parameter in the INIT and INIT-ACK chunks.
+that was present in DTLS Key Management parameter in the INIT and INIT ACK chunks.
 This list will be used by the seleted DTLS key management method to
 derive security keys and prevent down grade attacks.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">Request: Get DTLS Key Management Methods<a href="#section-7.2-2" class="pilcrow">¶</a></p>
@@ -3040,7 +3040,7 @@ derive security keys and prevent down grade attacks.<a href="#section-7.2-1" cla
 list first contains all the Identifiers present in DTLS Key Management
 Parameter in the INIT Chunk, followed by the single identifier
 for the selected methods that was exchanged in the DTLS Key Management
-Parameter in the INIT-ACK chunk.<a href="#section-7.2-6.1.1.2.1" class="pilcrow">¶</a></p>
+Parameter in the INIT ACK chunk.<a href="#section-7.2-6.1.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
