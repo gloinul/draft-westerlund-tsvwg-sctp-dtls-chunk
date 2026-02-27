@@ -296,8 +296,8 @@ Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
 
 {{RFC5061}} specifies the support for Dynamic Address Reconfiguration
 in SCTP. DTLS Chunks has limited support for Dynamic Address
-Reconfiguration and requires an update of {{RFC5061}}. Section 4.1.1
-of {{RFC5061}} specifies that ASCONF messages are
+Reconfiguration and requires an update of {{RFC5061}}. {{Section 4.1.1
+of RFC5061}} specifies that ASCONF messages are
 required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
 SCTP associations using DTLS Chunk this would result in the use of
 redundant and non-compatible mechanisms for Authentication with
@@ -369,7 +369,7 @@ Parameter Type: 16 bits (unsigned integer)
 : This value MUST be set to 0x8006.
   Note that this parameter type requires the receiver to ignore the
   parameter and continue processing if the parameter type is not supported.
-  This is accomplished (as described {{Section 3.2.1 of !RFC9260}}) by
+  This is accomplished (as described {{Section 3.2.1 of RFC9260}}) by
   the use of the upper bits of the parameter type.
 
 Parameter Length: 16 bits (unsigned integer)
@@ -427,7 +427,7 @@ Type: 8 bits (unsigned integer)
   all further chunks, and report the unrecognized chunk in an ERROR
   chunk using the 'Unrecognized Chunk Type' error cause, if the receiver does
   not support this chunk type.
-  This is accomplished (as described in {{Section 3.2 of !RFC9260}}) by the use
+  This is accomplished (as described in {{Section 3.2 of RFC9260}}) by the use
   of the upper bits of the chunk type.
 
 reserved: 5 bits
@@ -464,7 +464,7 @@ Post-Padding: 0, 8, 16, or 24 bits
   be ignored by the receiver.
 
 
-From {{Section 4 of !RFC9147}}, the DTLS record header has variable length and
+From {{Section 4 of RFC9147}}, the DTLS record header has variable length and
 is depicted in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
@@ -784,7 +784,7 @@ been derived.
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk
-during an Association lifetime as described in Section 5.2 of {{RFC9260}}
+during an Association lifetime as described in {{Section 5.2 of RFC9260}}
 with the purpose of achieving a Restart of the current Association,
 thus implementing SCTP Restart.
 
@@ -809,7 +809,7 @@ The protected SCTP Restart procedure keeps the security
 characteristics of an SCTP Association using DTLS Chunk.
 
 In protected SCTP Restart, INIT and INIT ACK chunks are sent
-strictly according to  {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
+strictly according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
 are encrypted using DTLS Chunks and Restart DTLS Key contexts.
 
 In order to support protected SCTP Restart, the SCTP Endpoints need
@@ -970,11 +970,11 @@ example API and there are alternative implementations.
 This API enables the cryptographical protection operations by setting
 client/server write keys, sequence number keys, and IVs for primary and
 restart DTLS contexts. The write key is used by the cipher suite
-for DTLS record protection (Section 5.2 of {{RFC8446}}). The initialization
+for DTLS record protection ({{Section 5.2 of RFC8446}}). The initialization
 vector (IV) is random material used to XOR with the sequence
-number to create the nonce per Section 5.3 of {{RFC8446}}.
+number to create the nonce per {{Section 5.3 of RFC8446}}.
 The sequence number key is used to encrypt the sequence number
-(Section 4.2.3 of {{RFC9147}}).
+({{Section 4.2.3 of RFC9147}}).
 
 ## Cipher Suite Capabilities
 
@@ -1237,8 +1237,8 @@ several new ``IPPROTO_SCTP``-level socket options and a new flag for
 ``recvmsg()``.
 
 ## ``SCTP_ASSOC_CHANGE`` Notification
-When an ``SCTP_ASSOC_CHANGE`` notification (specified in Section 6.1.1 of
-{{RFC6458}}) is delivered indicating a ``sac_state`` of ``SCTP_COMM_UP`` or
+When an ``SCTP_ASSOC_CHANGE`` notification (specified in {{Section 6.1.1 of
+RFC6458}}) is delivered indicating a ``sac_state`` of ``SCTP_COMM_UP`` or
 ``SCTP_RESTART`` for an SCTP association where both peers support the
 DTLS chunk, ``SCTP_ASSOC_SUPPORTS_DTLS`` should be listed in the
 ``sac_info`` field.
@@ -1749,7 +1749,7 @@ therefore have limited effect.
 
 ## AEAD Limit Considerations
 
-Section 4.5.3 of {{RFC9147}} defines limits on the number of records
+{{Section 4.5.3 of RFC9147}} defines limits on the number of records
 q that can be protected using the same key as well as limits on the
 number of received packets v that fail authentication with each key.
 To adhere to these limits the DTLS Key Management Method can
