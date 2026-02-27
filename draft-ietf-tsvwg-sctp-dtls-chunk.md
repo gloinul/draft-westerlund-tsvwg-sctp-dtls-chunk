@@ -947,19 +947,45 @@ endpoint initiated the SCTP association. Else it will be used to
 determine the selected DTLS Key Management method that is returned in
 the INIT-ACK.
 
-The input is a priortized list of DTLS Key Management identifiers that
+Request: Set Supported DTLS Key Management Methods
+
+Parameters:
+
+* SCTP Association Handle:
+: The handle to what may become an SCTP Association or a server port
+accepting association establishment.
+
+* List of Identifiers:
+: A priortized list of DTLS Key Management identifiers that
 are supported, from the most preferred to the least preferred.
+
+Reply: Success or Error
+
+Parameters: None
 
 ## Get Offered DTLS Key Management Methods
 
 After an SCTP association has been established the key managment
 function will need to get the list of DTLS key management IDs
-that was present in DTLS Key Management parameter in the INIT chunk.
+that was present in DTLS Key Management parameter in the INIT and INIT-ACK chunks.
 This list will be used by the seleted DTLS key management method to
 derive security keys and prevent down grade attacks.
 
-This API call returns the list verbatim as is was sent/received in the
-DTLS Key Management Parameter in the INIT Chunk.
+Request: Get DTLS Key Management Methods
+
+Parameters:
+
+* SCTP Association:
+: Reference to the relevant SCTP association to request the exchanged Identifiers.
+
+Reply: Offered and Selected DTLS Key Management Methods
+
+* List of Identifiers:
+: This API call returns a list of DTLS key-management Identifiers. The
+list first contains all the Identifiers present in DTLS Key Management
+Parameter in the INIT Chunk, followed by the single identifier
+for the selected methods that was exchanged in the DTLS Key Management
+Parameter in the INIT-ACK chunk.
 
 
 ## Cipher Suite Capabilities
