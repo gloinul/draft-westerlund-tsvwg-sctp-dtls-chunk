@@ -537,7 +537,7 @@ of the packet containing the INIT chunk to indicate that receiver does not
 support any of DTLS key management methods offered by the sender of packet
 containing the INIT chunk.
 
-The format of this error cause is depicted in {{error-cause-no-common-method }}.
+The format of this error cause is depicted in {{error-cause-no-common-method}}.
 
 ~~~~~~~~~~~ aasvg
  0                   1                   2                   3
