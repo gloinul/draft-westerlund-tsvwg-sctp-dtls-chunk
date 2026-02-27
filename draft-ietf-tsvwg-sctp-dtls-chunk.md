@@ -790,7 +790,7 @@ thus implementing SCTP Restart.
 
 This specification doesn't support SCTP Restart as described in
 {{RFC9260}} because the COOKIE ECHO and COOKIE ACK chunks
-are sent encrypted (see {{protected-restart}});
+are sent encrypted (see {{protected-restart}}).
 
 When the upper layer protocols require support of SCTP Restart, as in
 case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the endpoint needs to
@@ -1335,7 +1335,7 @@ and the arguments are
   TLS cipher suite registry {{TLS-CIPHER-SUITES}}.
 
 ``n``:
-The number of cipher suites which can be stored in ``cipher_suites``.
+: The number of cipher suites which can be stored in ``cipher_suites``.
 
 ``sctp_dtls_cipher_suites`` returns ``-1``, if ``n`` is smaller than the number
 of cipher suites supported by the stack. If ``n`` is equal to or larger than
@@ -1399,7 +1399,7 @@ struct sctp_dtls_kmids {
   in the sequence they were contained in the DTLS Key Management Parameter and
   in host byte order.
 
-This socket option can be used with setsockopt() for SCTP endpoints in the
+This socket option can be used with ``setsockopt()`` for SCTP endpoints in the
 ``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
 identifiers to be sent.
 When used with ``getsockopt()`` on an SCTP endpoint in the ``SCTP_LISTEN``
