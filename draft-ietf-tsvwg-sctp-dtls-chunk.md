@@ -203,7 +203,7 @@ The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet. Information protection is kept during the lifetime of
 the association and no information is sent unprotected except the
 initial SCTP handshake, any initial DTLS Key Management traffic, the SCTP
-common header, the SCTP DTLS chunk header, and the INIT and INIT-ACK
+common header, the SCTP DTLS chunk header, and the INIT and INIT ACK
 chunks during an SCTP Restart procedure.
 
 The support of the DTLS chunk and the DTLS Key Management Method to use is
@@ -283,7 +283,7 @@ This ensures that the epoch of the DTLS key context will normally match the epoc
 a DTLS Key Management Method's connection.
 
 The Replay window for the DTLS Sequence Number will need to take into
-account that heartbeat (HB) chunks are sent concurrently over all
+account that HEARTBEAT chunks are sent concurrently over all
 paths in multihomed Associations, thus it needs to be large enough to
 accommodate latency differences.
 
