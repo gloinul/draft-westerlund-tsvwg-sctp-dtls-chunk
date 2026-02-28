@@ -929,37 +929,33 @@ the old one.
 
 # DTLS Key Management Method Considerations {#key-management-considerations}
 
-This document specifies the mechanisms for SCTP to be protected with
-DTLS, it doesn't specify how the DTLS Key Management works, being limited
-on what the DTLS Key Management MUST provide for achieving the protection.
-Even though DTLS 1.3 is indicated as protocol for providing Key
-Contexts, different implementations can achieve that and different
-mechanisms may be used for features such as mutual authentication,
-rekeying etc.  The DTLS Key Management Method may use a number of DTLS Key
-Management Methods depending on what is being implemented and
-available and/or according to the local policies.
-DTLS Key Management Methods are defined in
-their own specific documents, and needs to be registered in the IANA
-Registry "SCTP DTLS Key Management Methods" to get their own unique identifier.
-This document constitutes a requirement towards any DTLS Key Management Method.
+This document specifies the mechanisms for protecting SCTP associations using
+DTLS chunks, including an API for managing the corresponding key material.
+While this document defines the interface, the upper layer is responsible
+for the actual key management.
 
-Currently there are two in-band DTLS Key Management Methods defined,
-they have different properties. See
-{{I-D.ietf-tsvwg-dtls-chunk-key-management}} and
-{{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}.
+DTLS Key Management Methods define the procedures for initial key generation,
+key updates and peer authentication. These procedures are out of scope for
+this document.
+Currently two DTLS Key Management Methods with different properties (such as
+mutual authentication and rekeying) are defined:
 
-It is up to the upper layer to manage the keys for the DTLS chunk.
+* {{I-D.ietf-tsvwg-dtls-chunk-key-management}}
+* {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}
 
-The DTLS Key Management Method SHOULD use a dedicated PPID to ensure that the
-DTLS Key Management Method related user messages are handled by the appropriate layer.
+An SCTP endpoint MAY support multiple DTLS Key Management Methods subject to
+implementation requirements and local security policies.
 
-When performing DTLS Key Management, the keys for receiving SHOULD be installed
-before the corresponding send keys at the peer. For mitigating downgrade
-attacks the key derivation MUST include the DTLS Key Management Method Identifiers
-that were sent and received.
+Every DTLS Key Management Method
 
-The communication is only protected after both sides have configured the keys
-for sending and both sides have enforced the protection.
+* MUST be registered in the IANA Registry {{IANA-Protection-Solution-ID}}
+  to receive a unique identifier, enabling negotiation during the SCTP handshake.
+* SHOULD use the PPID from {{sec-iana-ppid}} to ensure that the DTLS Key
+  Management Method related user messages are processed by the relevant entity.
+* SHOULD ensure that the local receive keys are installed before the peer
+  installs the corresponding send keys.
+* MUST include the DTLS Key Management Method Identifiers sent and received
+  during the SCTP handshake in the key derivation to mitigate downgrade attacks.
 
 # Abstract API  {#abstract-api}
 
