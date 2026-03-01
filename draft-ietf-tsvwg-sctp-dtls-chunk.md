@@ -483,21 +483,21 @@ DTLS Chunk. The Pre-Padding MUST be used to achieve this.
 The format of unified_hdr is depicted in {{DTLSCiphertext-header-struct}}.
 
 ~~~~~~~~~~~ aasvg
-    0 1 2 3 4 5 6 7
-    +-+-+-+-+-+-+-+-+
-    |0|0|1|C|S|L|E E|
-    +-+-+-+-+-+-+-+-+
-    | Connection ID |   Legend:
-    | (if any,      |
-    /  length as    /   C   - Connection ID (CID) present
-    |  negotiated)  |   S   - Sequence number length
-    +-+-+-+-+-+-+-+-+   L   - Length present
-    |  8 or 16 bit  |   E   - Epoch
-    |Sequence Number|
-    +-+-+-+-+-+-+-+-+
-    | 16 bit Length |
-    | (if present)  |
-    +-+-+-+-+-+-+-+-+
+ 0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+
+|0|0|1|C|S|L|E E|
++-+-+-+-+-+-+-+-+
+| Connection ID |   Legend:
+| (if any,      |
+/  length as    /   C   - Connection ID (CID) present
+|  negotiated)  |   S   - Sequence number length
++-+-+-+-+-+-+-+-+   L   - Length present
+|  8 or 16 bit  |   E   - Epoch
+|Sequence Number|
++-+-+-+-+-+-+-+-+
+| 16 bit Length |
+| (if present)  |
++-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #DTLSCiphertext-header-struct title="DTLS unified_hdr" artwork-align="center"}
 
