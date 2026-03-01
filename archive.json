@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-26T01:27:53.548109+00:00",
+  "timestamp": "2026-03-01T01:48:16.111137+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1138,7 +1138,7 @@
       "id": "I_kwDOKszxDc7Kfhix",
       "title": "Add to Abstact API to modify Assocation UP message to include offered Protection Solution Vector",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/63",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1147,8 +1147,8 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-09T08:28:39Z",
-      "updatedAt": "2025-09-30T07:44:26Z",
-      "closedAt": null,
+      "updatedAt": "2026-02-27T10:57:19Z",
+      "closedAt": "2026-02-27T10:57:19Z",
       "comments": [
         {
           "author": "teiclap",
@@ -3372,7 +3372,7 @@
       "id": "PR_kwDOKszxDc6m2hxC",
       "title": "Issue29 - Clarify interactions with higher layers. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/61",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3381,14 +3381,14 @@
       "labels": [],
       "body": "Added a description on how to deal with plain text messages.\r\nAdded references to the INIT parameter list in the abstract API.\r\n\r\nWe may not need any State Machine to be added.",
       "createdAt": "2025-09-04T12:45:58Z",
-      "updatedAt": "2026-02-12T14:45:12Z",
+      "updatedAt": "2026-02-27T10:00:42Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "443522c5dac9f777ead1f45efd2e26bbbbe2638a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue29",
       "headRefOid": "a6ca0dffd43bcf5b2f3e9b82bd94edcef60c1ed5",
-      "closedAt": null,
+      "closedAt": "2026-02-27T10:00:42Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -3420,6 +3420,13 @@
           "body": "Yes, lets discuss this, and then we can ensure aligned language. ",
           "createdAt": "2025-10-17T10:47:02Z",
           "updatedAt": "2025-10-17T10:47:02Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This has PR have been overtaken by the document reorg. I think we can evaluate the issue and see if it has been resolved when the document reorg has completed. ",
+          "createdAt": "2026-02-27T10:00:42Z",
+          "updatedAt": "2026-02-27T10:00:42Z"
         }
       ],
       "reviews": [
@@ -3672,7 +3679,7 @@
       "id": "PR_kwDOKszxDc6pf4Ch",
       "title": "Added API for including Protection Solution Vector",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/69",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3682,17 +3689,19 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-19T12:35:50Z",
-      "updatedAt": "2026-01-29T14:18:31Z",
+      "updatedAt": "2026-02-27T10:57:19Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "4855aadb25b4224fab87257ca6780ff12a1d6e33",
+      "baseRefOid": "9721493da458b187a8d5e5f5f4d0183ffbf93c65",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue63",
-      "headRefOid": "6f43b141232a92b5a69908260ae7c51012ed4ace",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "baa1b658a8d4997320f1d59cfa7374dc7218841c",
+      "closedAt": "2026-02-27T10:57:19Z",
+      "mergedAt": "2026-02-27T10:57:19Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "ae7cffbcd2678d186557f905ed335e8ce090d7d9"
+      },
       "comments": [
         {
           "author": "teiclap",
@@ -3782,6 +3791,32 @@
           "body": "Use Protection operator. This do needs updated. Waiting for @tuexen proposal. ",
           "createdAt": "2025-12-04T10:35:34Z",
           "updatedAt": "2025-12-04T10:35:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7mMS9Y",
+          "commit": {
+            "abbreviatedOid": "3b33f29"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-26T16:07:24Z",
+          "updatedAt": "2026-02-26T16:07:24Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7mcvkT",
+          "commit": {
+            "abbreviatedOid": "baa1b65"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-27T10:57:10Z",
+          "updatedAt": "2026-02-27T10:57:10Z",
           "comments": []
         }
       ]
@@ -5422,6 +5457,213 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 102,
+      "id": "PR_kwDOKszxDc7GZ456",
+      "title": "Editorial Fixes and Terminology Updates",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/102",
+      "state": "MERGED",
+      "author": "lxin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This patch series includes small editorial improvements to the SCTP-DTLS draft for correctness, terminology consistency with DTLS key management, and readability. No protocol behavior is changed.\r\n\r\nIt covers:\r\n- Grammar, wording, and typo fixes\r\n- Correcting \"cipher suit\" -> \"cipher suite\"\r\n- Aligning terminology with DTLS key management\r\n- Cleaning up DTLS CID references in the abstract API\r\n\r\n",
+      "createdAt": "2026-02-26T02:14:32Z",
+      "updatedAt": "2026-02-26T15:09:46Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "2d1aec8d078b5e65b398ad6dd1c31d64dfd1b788",
+      "headRepository": "lxin/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "minor-fixes",
+      "headRefOid": "5fa3af295d6db42ccd1bdb3f2b0028d1a5582a11",
+      "closedAt": "2026-02-26T15:09:46Z",
+      "mergedAt": "2026-02-26T15:09:46Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "9721493da458b187a8d5e5f5f4d0183ffbf93c65"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7mH2ru",
+          "commit": {
+            "abbreviatedOid": "5fa3af2"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-26T13:07:53Z",
+          "updatedAt": "2026-02-26T13:07:53Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 103,
+      "id": "PR_kwDOKszxDc7GdGTe",
+      "title": "Improve socket api",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/103",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-26T07:41:47Z",
+      "updatedAt": "2026-02-26T17:40:51Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "84f714b8f86b168bf8de611d56bd310126636263",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-socket-api",
+      "headRefOid": "b6b3c4f27a9ed7d71defc1d6a78f3b214256addb",
+      "closedAt": "2026-02-26T17:40:47Z",
+      "mergedAt": "2026-02-26T17:40:47Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "5a9910e3fc0d0e9eae3265f5f56908cdd9d9b29e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 104,
+      "id": "PR_kwDOKszxDc7GjX3c",
+      "title": "Cleanup iana cons and new protocol elements",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/104",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-26T13:55:00Z",
+      "updatedAt": "2026-02-26T17:40:18Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "9721493da458b187a8d5e5f5f4d0183ffbf93c65",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup-iana-cons-and-new-protocol-elements",
+      "headRefOid": "7faaf4b609d8b8ca092335cf1441058368fba045",
+      "closedAt": "2026-02-26T17:40:12Z",
+      "mergedAt": "2026-02-26T17:40:12Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "b7402ab72f58dc4e40c5856698c734140c988e36"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 105,
+      "id": "PR_kwDOKszxDc7Gp1AX",
+      "title": "Shuffle text around",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/105",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Just put the text where we discussed it today. Also fix names of chunks.",
+      "createdAt": "2026-02-26T20:47:00Z",
+      "updatedAt": "2026-02-27T08:46:43Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "5a9910e3fc0d0e9eae3265f5f56908cdd9d9b29e",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "shuffle",
+      "headRefOid": "3079dcdd640eaf224b7572cad28abc1d6c89bc74",
+      "closedAt": "2026-02-27T08:46:43Z",
+      "mergedAt": "2026-02-27T08:46:43Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "39942529c2ee54036dd26794d5eff35b968c0461"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7mZLc1",
+          "commit": {
+            "abbreviatedOid": "3079dcd"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-27T07:09:47Z",
+          "updatedAt": "2026-02-27T07:09:47Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7majcM",
+          "commit": {
+            "abbreviatedOid": "3079dcd"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-27T08:44:22Z",
+          "updatedAt": "2026-02-27T08:44:22Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 106,
+      "id": "PR_kwDOKszxDc7G363t",
+      "title": "Fix more typos, error cause and formatting",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/106",
+      "state": "MERGED",
+      "author": "lxin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This patch series contains:\r\n\r\n\u2013 Correct remaining typos and grammar errors.\r\n- Fix formatting issues for readability.\r\n- Update \"Missing DTLS Chunk Support\" anchor and capitalize it.\r\n\r\nThese are purely editorial and do not affect implementation.",
+      "createdAt": "2026-02-27T17:00:12Z",
+      "updatedAt": "2026-02-28T20:33:34Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "dcc8960a30fd58ed5c2c24d968bdb88524b90064",
+      "headRepository": "lxin/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "more-typos",
+      "headRefOid": "7f144669438fbd391b9afb2f6ea0e064a182c545",
+      "closedAt": "2026-02-28T20:33:34Z",
+      "mergedAt": "2026-02-28T20:33:34Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "e4edb9f7814cd89ad6fff826967ed7fcefded66c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 107,
+      "id": "PR_kwDOKszxDc7HBssI",
+      "title": "Cleanup of Key Management Considerations",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/107",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-28T17:42:09Z",
+      "updatedAt": "2026-02-28T20:35:01Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "e4edb9f7814cd89ad6fff826967ed7fcefded66c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-key-management-considerations",
+      "headRefOid": "b4afc1c2f01163eeb9a7d0d5cf6d19c9254fa909",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
