@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 1 September 2026                                       M. Tüxen
+Expires: 2 September 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        28 February 2026
+                                                            1 March 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2026.
+   This Internet-Draft will expire on 2 September 2026.
 
 Copyright Notice
 
@@ -987,7 +987,8 @@ Table of Contents
 
    *  MUST include the DTLS Key Management Method Identifiers sent and
       received during the SCTP handshake in the key derivation to
-      mitigate downgrade attacks.
+      mitigate downgrade attacks.  Both sides MUST use the same byte
+      ordering for the DTLS Key Management Method Identifiers.
 
 7.  Abstract API
 
@@ -1443,7 +1444,7 @@ Table of Contents
 
    sdk_kmids:  The DTLS Key Management identifiers which will be or have
       been sent to the peer in the sequence they were contained in the
-      DTLS Key Management Parameter and in host byte order.
+      DTLS Key Management Parameter and in network byte order.
 
    This socket option can be used with setsockopt() for SCTP endpoints
    in the SCTP_CLOSED or SCTP_LISTEN state to configure the protection
@@ -1476,7 +1477,7 @@ Table of Contents
 
    sdk_kmids:  The DTLS Key Management identifiers reported by the peer
       in the sequence they were contained in the DTLS Key Management
-      Parameter and in host byte order.
+      Parameter and in network byte order.
 
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
