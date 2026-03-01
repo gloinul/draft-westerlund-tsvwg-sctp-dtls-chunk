@@ -507,7 +507,7 @@ Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}
 
  0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-|0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
+|0|0|1|0|1|0|E E|     |0|0|1|0|0|0|E E|
 +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
 |    16 bit     |     |Sequence Number|
 |Sequence Number|     +-+-+-+-+-+-+-+-+
