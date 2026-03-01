@@ -114,38 +114,38 @@ can only be used as described in this document.
 
 # Introduction and Protocol Overview {#introduction}
 
-   This document defines a DTLS chunk for the Stream Control
-   Transmission Protocol (SCTP), as defined in {{RFC9260}}.
+This document defines a DTLS chunk for the Stream Control
+Transmission Protocol (SCTP), as defined in {{RFC9260}}.
 
-   This specification defines the actual DTLS chunk, how to enable
-   its usage, how it interacts with the SCTP association establishment
-   to enable endpoint authentication, key-establishment, and key
-   updates.
+This specification defines the actual DTLS chunk, how to enable
+its usage, how it interacts with the SCTP association establishment
+to enable endpoint authentication, key-establishment, and key
+updates.
 
-   The DTLS chunk is designed to enable mutual DTLS based
-   authentication of endpoints, data confidentiality, DTLS based
-   data origin authentication, data integrity protection, and data replay
-   protection for SCTP packets after the SCTP association has been
-   established. It is dependent on a DTLS Key Management Method that is
-   defined separately to achieve all these capabilities. The
-   DTLS Key Management Method uses an API to provision the SCTP
-   association's DTLS chunk protection with key-material to enable and
-   rekey the protection operations.
+The DTLS chunk is designed to enable mutual DTLS based
+authentication of endpoints, data confidentiality, DTLS based
+data origin authentication, data integrity protection, and data replay
+protection for SCTP packets after the SCTP association has been
+established. It is dependent on a DTLS Key Management Method that is
+defined separately to achieve all these capabilities. The
+DTLS Key Management Method uses an API to provision the SCTP
+association's DTLS chunk protection with key-material to enable and
+rekey the protection operations.
 
-   Applications using SCTP DTLS chunk can use most transport features
-   provided by SCTP and its extensions. However, there can be some
-   limitations or additional requirements for them to function such as
-   those noted for SCTP restart {{sec-restart}} and an actual update
-   of the specification of Dynamic Address Reconfiguration {{RFC5061}},
-   see {{sec-asconf}}. Due to DTLS chunk's
-   level of integration as discussed in next section it will provide
-   its security functions on all content of the SCTP packet, and will
-   thus not impact the potential to utilize any SCTP functionalities
-   or extensions that are possible to use between two SCTP peers with
-   full security and SCTP association state.
+Applications using SCTP DTLS chunk can use most transport features
+provided by SCTP and its extensions. However, there can be some
+limitations or additional requirements for them to function such as
+those noted for SCTP restart {{sec-restart}} and an actual update
+of the specification of Dynamic Address Reconfiguration {{RFC5061}},
+see {{sec-asconf}}. Due to DTLS chunk's
+level of integration as discussed in next section it will provide
+its security functions on all content of the SCTP packet, and will
+thus not impact the potential to utilize any SCTP functionalities
+or extensions that are possible to use between two SCTP peers with
+full security and SCTP association state.
 
-   DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
-   other versions are explicitly not part of this document.
+DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
+other versions are explicitly not part of this document.
 
 The DTLS chunk can be used for secure and confidential transfer of
 SCTP packets. This is implemented inside the SCTP protocol.
