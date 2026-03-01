@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 1 September 2026                                       M. Tüxen
+Expires: 2 September 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                        28 February 2026
+                                                            1 March 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2026.
+   This Internet-Draft will expire on 2 September 2026.
 
 Copyright Notice
 
@@ -544,7 +544,7 @@ Table of Contents
 
                    0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
                   +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-                  |0|0|1|0|1|1|E E|     |0|0|1|0|0|0|E E|
+                  |0|0|1|0|1|0|E E|     |0|0|1|0|0|0|E E|
                   +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
                   |    16 bit     |     |Sequence Number|
                   |Sequence Number|     +-+-+-+-+-+-+-+-+
