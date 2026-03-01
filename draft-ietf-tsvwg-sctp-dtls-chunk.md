@@ -956,6 +956,8 @@ Every DTLS Key Management Method
   installs the corresponding send keys.
 * MUST include the DTLS Key Management Method Identifiers sent and received
   during the SCTP handshake in the key derivation to mitigate downgrade attacks.
+  Both sides MUST use the same byte ordering for the DTLS Key Management Method
+  Identifiers.
 
 # Abstract API  {#abstract-api}
 
@@ -1393,7 +1395,7 @@ struct sctp_dtls_kmids {
 ``sdk_kmids``:
 : The DTLS Key Management identifiers which will be or have been sent to the peer
   in the sequence they were contained in the DTLS Key Management Parameter and
-  in host byte order.
+  in network byte order.
 
 This socket option can be used with ``setsockopt()`` for SCTP endpoints in the
 ``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
@@ -1430,7 +1432,7 @@ struct sctp_dtls_kmids {
 
 ``sdk_kmids``:
 : The DTLS Key Management identifiers reported by the peer in the sequence they
-  were contained in the DTLS Key Management Parameter and in host byte order.
+  were contained in the DTLS Key Management Parameter and in network byte order.
 
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
