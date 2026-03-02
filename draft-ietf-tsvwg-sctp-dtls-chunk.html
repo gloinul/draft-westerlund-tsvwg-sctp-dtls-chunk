@@ -1987,7 +1987,7 @@ is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref
 </div>
 <p id="section-4.2-6">The DTLSCiphertext contains the unified_hdr followed by the encrypted_record,
 where unified_hdr has variable format.
-The encrypted_record MUST be 32 bit aligned in relation to the start of the
+The encrypted_record MUST be 32-bit aligned in relation to the start of the
 DTLS Chunk. The Pre-Padding MUST be used to achieve this.
 The format of unified_hdr is depicted in <a href="#DTLSCiphertext-header-struct" class="auto internal xref">Figure 5</a>.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <span id="name-dtls-unified_hdr"></span><div id="DTLSCiphertext-header-struct">
@@ -2170,17 +2170,20 @@ The format of unified_hdr is depicted in <a href="#DTLSCiphertext-header-struct"
 <a href="#name-dtlsciphertext-recommended-" class="selfRef">DTLSCiphertext recommended structure</a>
           </figcaption></figure>
 </div>
-<p id="section-4.2-10">Thus the size of the DTLSCiphertext header is computed from the first_byte as follows:<a href="#section-4.2-10" class="pilcrow">¶</a></p>
+<p id="section-4.2-10">Thus the size of the DTLSCiphertext header is computed from the <code>first_byte</code> as follows:<a href="#section-4.2-10" class="pilcrow">¶</a></p>
 <div class="lang-c sourcecode" id="section-4.2-11">
 <pre>
+#define S_BIT 0x08
+#define L_BIT 0x04
+
 size = 1;
 /* Add in the size of the sequence number. */
-if (first_byte &amp; 0x08)
+if ((first_byte &amp; S_BIT) != 0)
     size += 2;
 else
     size += 1;
 /* Add in the size of the length field, if present. */
-if (first_byte &amp; 0x04)
+if ((first_byte &amp; L_BIT) != 0)
     size += 2;
 </pre><a href="#section-4.2-11" class="pilcrow">¶</a>
 </div>

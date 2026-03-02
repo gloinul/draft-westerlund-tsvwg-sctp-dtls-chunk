@@ -481,7 +481,7 @@ Table of Contents
 
    The DTLSCiphertext contains the unified_hdr followed by the
    encrypted_record, where unified_hdr has variable format.  The
-   encrypted_record MUST be 32 bit aligned in relation to the start of
+   encrypted_record MUST be 32-bit aligned in relation to the start of
    the DTLS Chunk.  The Pre-Padding MUST be used to achieve this.  The
    format of unified_hdr is depicted in Figure 5.
 
@@ -527,14 +527,17 @@ Table of Contents
    Thus the size of the DTLSCiphertext header is computed from the
    first_byte as follows:
 
+   #define S_BIT 0x08
+   #define L_BIT 0x04
+
    size = 1;
    /* Add in the size of the sequence number. */
-   if (first_byte & 0x08)
+   if ((first_byte & S_BIT) != 0)
        size += 2;
    else
        size += 1;
    /* Add in the size of the length field, if present. */
-   if (first_byte & 0x04)
+   if ((first_byte & L_BIT) != 0)
        size += 2;
 
    Then the Payload Pre-Padding length P can be computed by
