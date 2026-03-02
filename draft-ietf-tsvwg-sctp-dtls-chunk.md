@@ -281,7 +281,7 @@ This introduces the following limitations:
 
 To mitigate potential information leakage from packet size variations,
 implementations MAY pad SCTP packets to uniform sizes.
-However, the padding MSU be applied within the encryption envelope to ensure
+However, the padding MUST be applied within the encryption envelope to ensure
 the padding itself is protected.
 
 Both SCTP and DTLS provide mechanisms for padding packets.
