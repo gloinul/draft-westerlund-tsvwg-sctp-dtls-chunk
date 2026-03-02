@@ -573,7 +573,7 @@ DTLS Key Management Parameter, it MUST reply with a packet containing an
 INIT ACK containing its own DTLS Key Management Parameter.
 This parameter MUST contains exactly one DTLS Key Management Method Identifier
 out of the list of received ones.
-If there us no DTLS Key Management Method supported by both endpoints,
+If there is no DTLS Key Management Method supported by both endpoints,
 and the endpoints' policy requires requires the use of the DTLS chunk,
 the receiver MUST reply with an SCTP packet containing an ABORT chunk and MAY
 include the error cause "No Common DTLS Key Management Method"
@@ -600,7 +600,7 @@ If the endpoint's policy does not require the use of the DTLS chunk, it MAY
 continue with the handshake.
 
 When the SCTP association has been established the process defined by the
-selected DTLS Key Management Method MUS be followed for establishing
+selected DTLS Key Management Method MUST be followed for establishing
 DTLS Key Contexts and installing them.
 
 ## DTLS Chunk Handling {#dtls-chunk-handling}
