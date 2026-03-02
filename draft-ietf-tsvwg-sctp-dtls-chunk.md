@@ -136,8 +136,8 @@ can only be used as described in this document.
    provided by SCTP and its extensions. However, there can be some
    limitations or additional requirements for them to function such as
    those noted for SCTP restart {{sec-restart}} and an actual update
-   of the specification of Dynamic Address Reconfiguration {{RFC5061}},
-   see {{sec-asconf}}. Due to DTLS chunk's
+   of the specification of Dynamic Address Reconfiguration {{RFC5061}}.
+   Due to DTLS chunk's
    level of integration as discussed in next section it will provide
    its security functions on all content of the SCTP packet, and will
    thus not impact the potential to utilize any SCTP functionalities
@@ -237,35 +237,12 @@ protection will be used to suppress duplicated DTLS chunks.
 
 ## DTLS Considerations {#DTLS-engines}
 
-The DTLS Chunk architecture splits DTLS 1.3 as shown in
-{{sctp-DTLS-chunk-layering}}, where the DTLS Key Management Method
-is done at DTLS 1.3 block level, acting as a parallel User Level Protocol
-and a Chunk Protection Operator functionality inside the SCTP
-Protocol Stack.
-
-DTLS Key Management Method is the set of data and procedures that take care of key
-distribution, verification, and update, DTLS connection setup, update and
-maintenance.
-
-Chunk Protection Operator functionality is the set of data and procedures
-taking care of User Data encryption into DTLS Record and DTLS record
-decryption into User Data.
-
-DTLS 1.3 operations require to directly handshake messages with the
-remote peer for connection setup and other features, this kind of
-handshake is part of the DTLS Key Management Method.  DTLS Key Management Method
-achieves these features behaving as a user of the SCTP
-association.  DTLS Key Management Method sends and receives its own data via the
-SCTP User Level interface.  DTLS Key Management Method's own data is
-distinguished from any other data by means of a dedicated PPID using
-the value 4242 (see {{iana-payload-protection-id}}).
-
-Once DTLS Key Management Method has established a DTLS 1.3 connection, it can
-derive primary and restart keys and set the Chunk Protection Operator
-for SCTP Packet Payload encryption/decryption via an API to create the
-necessary DTLS key contexts. Both a DTLS Key context for normal use
-(primary) and a DTLS Key context for SCTP association restart needs to
-be created.
+Once the DTLS Key Management Method has established its context, it
+derives primary and restart keys and configures the Chunk Protection Operator
+via an API. This establishes the necessary DTLS key contexts for SCTP chunk
+encryption and decryption.
+A DTLS key context for normal operations use MUST be created, while a DTLS key
+context for SCTP association restart SHOULD be created.
 
 In this document we use the terms DTLS Key context for indicating a
 Key and IV, produced by the DTLS Key Management, and all relevant data that
@@ -275,71 +252,56 @@ receiving, replay window, last used sequence number. Each DTLS key
 context is associated with a three-value tuple identifying the context,
 consisting of SCTP Association, the restart indicator, and the DTLS epoch.
 
-The DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk MUST NOT be used.
+The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
+be used.
 
-The first established DTLS key context for any SCTP association MUST use epoch=3.
-This ensures that the epoch of the DTLS key context will normally match the epoch of
-a DTLS Key Management Method's connection.
+The first  DTLS key context established for any SCTP association MUST use epoch 3.
 
-The Replay window for the DTLS Sequence Number will need to take into
-account that HEARTBEAT chunks are sent concurrently over all
-paths in multihomed Associations, thus it needs to be large enough to
-accommodate latency differences.
+The replay window for the DTLS Sequence Number need to account for the
+concurrent transmission of packets on multiple paths in multihomed associations.
+In particular, this applies to packets containing HEARTBEAT chunks.
+The window size must be sufficiently large to accommodate these latency differences.
 
 Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
 2<sup>14</sup> (16384) bytes of plain text.
 
 ## SCTP Considerations
 
-### Dynamic Address Reconfiguration Considerations  {#sec-asconf}
+The SCTP authentication extension (SCTP-AUTH) defined in {{RFC4895}} is incompatible
+with the extension defined in this document. Therefore, its support MUST NOT
+be negotiated in combination with the support of the DTLS chunk.
 
-{{RFC5061}} specifies the support for Dynamic Address Reconfiguration
-in SCTP. DTLS Chunks has limited support for Dynamic Address
-Reconfiguration and requires an update of {{RFC5061}}. {{Section 4.1.1
-of RFC5061}} specifies that ASCONF messages are
-required to be sent authenticated with SCTP-AUTH {{RFC4895}}.  For
-SCTP associations using DTLS Chunk this would result in the use of
-redundant and non-compatible mechanisms for Authentication with
-both SCTP-AUTH and the DTLS Chunk.
+In particular, the dynamic address reconfiguration defined in {{RFC5061}} cannot
+use SCTP-AUTH. Instead, the DTLS chunk is used for authentication.
+This introduces the following limitations:
 
-#### Limitations
+* The lookup address MUST NOT be used.
+* The dynamic address reconfiguration extension MUST NOT be used unless
+  DTLS chunk handling is enabled in both directions.
 
-Support for Dynamic Address Reconfiguration {{RFC5061}} in an SCTP
-association using DTLS Chunk is limited to the case where the packet
-containing the ASCONF chunk is sent from an IP address already known.
+To mitigate potential information leakage from packet size variations,
+implementations MAY pad SCTP packets to uniform sizes.
+However, the padding MSU be applied within the encryption envelope to ensure
+the padding itself is protected.
 
-#### Change
-
-Because SCTP-AUTH and DTLS chunks provide non-compatible authentication
-mechanisms, SCTP-AUTH {{RFC4895}} MUST NOT be used once DTLS chunks have been
-successfully negotiated.
-
-### Privacy Padding of SCTP Packets
-
-To reduce the potential information leakage from packet size
-variations one may select to pad the SCTP Packets to uniform packet
-sizes. This size may be either the maximum used, or in block sized
-increments. However, the padding needs to be done inside of the
-encryption envelope.
-
-Both SCTP and DTLS contains mechanisms to pad SCTP payloads, and DTLS
-records respectively. If padding of SCTP packets are desired to hide
-actual message sizes it is RECOMMENDED to use the SCTP Padding Chunk
-{{RFC4820}} to generate a consistent SCTP payload size. Support of
-this chunk is only required on the sender side, any SCTP receiver will
-safely ignore the PAD Chunk. However, if the PAD chunk is not
+Both SCTP and DTLS provide mechanisms for padding packets.
+If padding of SCTP packets are desired to hide actual message sizes it is
+RECOMMENDED to use the SCTP Padding Chunk {{RFC4820}} to generate a consistent
+SCTP payload size.
+Support of this chunk is only required on the sender side, any SCTP receiver
+will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.
 
-It needs to be noted that independent if SCTP padding or DTLS padding
-is used the padding is not taken into account by the SCTP congestion
-control. Extensive use of padding has potential to worsen congestion
-situations as the SCTP association will consume more bandwidth than
-its derived share by the congestion control.
+It should be noted that regardless of whether SCTP padding or DTLS padding
+is used, the additional bytes are not account for by the SCTP congestion control.
+Extensive use of padding has potential to worsen congestion situations, as the
+SCTP association will consume more bandwidth than its derived share by the
+congestion control.
 
-The use of SCTP PAD chunk is recommended as it at least can enable
-future extension or SCTP implementation that account also for the
-padding. Use of DTLS padding hides this packet expansion from SCTP.
+Using the SCTP PAD chunk is preferred because it is visible in the SCTP layer.
+Therefore, future extension or SCTP implementation that account for the padding
+in the congestion control.
+In contrast, DTLS padding hides this packet expansion from the SCTP layer.
 
 # New Chunk, Parameter and Error Causes
 
