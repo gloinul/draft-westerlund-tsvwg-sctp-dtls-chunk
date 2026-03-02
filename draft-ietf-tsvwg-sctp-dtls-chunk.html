@@ -1236,42 +1236,15 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-establishment-of-a-protecte" class="internal xref">Establishment of a Protected Association</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-offering-multiple-security-" class="internal xref">Offering Multiple Security Solutions</a></p>
-</li>
-                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-dtls-chunk-handling" class="internal xref">DTLS Chunk Handling</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
-                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-sending-of-dtls-chunks" class="internal xref">Sending of DTLS Chunks</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
-                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-receiving-of-dtls-chunks" class="internal xref">Receiving of DTLS Chunks</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.3">
-                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-critical-error-from-dtls" class="internal xref">Critical Error from DTLS</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.4">
-                    <p id="section-toc.1-1.5.2.2.2.4.1"><a href="#section-5.2.4" class="auto internal xref">5.2.4</a>.  <a href="#name-non-critical-error-in-the-p" class="internal xref">Non-critical Error in the Protection</a></p>
-</li>
-                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-termination-of-a-protected-" class="internal xref">Termination of a Protected Association</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-sctp-restart-considerations" class="internal xref">SCTP Restart Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4.2.1">
-                    <p id="section-toc.1-1.5.2.4.2.1.1"><a href="#section-5.4.1" class="auto internal xref">5.4.1</a>.  <a href="#name-protected-sctp-restart" class="internal xref">Protected SCTP Restart</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4.2.2">
-                    <p id="section-toc.1-1.5.2.4.2.2.1"><a href="#section-5.4.2" class="auto internal xref">5.4.2</a>.  <a href="#name-compatibility-with-legacy-s" class="internal xref">Compatibility with Legacy SCTP Restart</a></p>
-</li>
-                </ul>
 </li>
             </ul>
 </li>
@@ -2410,69 +2383,43 @@ It MUST NOT be included in any other chunk.<a href="#section-4.3.2-5" class="pil
         <h3 id="name-establishment-of-a-protecte">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-establishment-of-a-protecte" class="section-name selfRef">Establishment of a Protected Association</a>
         </h3>
-<p id="section-5.1-1">An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
-chunk protected association sends to the remote peer an INIT
-chunk containing the DTLS Key Management Parameter
-(see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>) indicating supported and preferred
-DTLS Key Management method (see <a href="#key-management-parameter" class="auto internal xref">Figure 2</a>).<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">An SCTP Endpoint acting as responder, when receiving an INIT chunk
-with a DTLS Key Management Parameter, will reply with
-INIT ACK with its own DTLS Key Management Parameter
-containing the selected DTLS Key Management Method out of the set of supported
-ones. In case there are no common set of supported DTLS Key Management Methods that are
-accepted by the responder, and the endpoints' policy requires secured
-association it MUST reply with an ABORT chunk, include the error
-cause "No Common DTLS Key Management Method" (TBA11) (see <a href="#IANA-Extra-Cause" class="auto internal xref">Section 9.4</a>).
-Otherwise, the responder MAY send an INIT ACK without the DTLS Key Management Parameter
-to indicate that it is willing to create a session without security.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">Additionally, an SCTP Endpoint acting as responder willing to support
-only protected associations considers an INIT chunk not containing
-the DTLS Key Management Parameter or another
-DTLS Key Management Method accepted by own security policy solution as an error,
-thus it will reply with an ABORT chunk according to what specified in
-<a href="#enoprotected" class="auto internal xref">Section 4.3.1</a> indicating that for this endpoint mandatory DTLS Key Management
-Parameter is missing.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">When initiator and responder have agreed on a DTLS Chunk protected
-association and the DTLS Key Management Method by means of handshaking
-INIT/INIT ACK the SCTP association establishment continues until it
-has reached the ESTABLISHED state.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">When the SCTP session has been established follow the process defined
-by the selected DTLS Key Management Method for establishing DTLS Key Contexts
-and installing them.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<div id="offering-multiple-security-solutions">
-<section id="section-5.1.1">
-          <h4 id="name-offering-multiple-security-">
-<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-offering-multiple-security-" class="section-name selfRef">Offering Multiple Security Solutions</a>
-          </h4>
-<p id="section-5.1.1-1">An initiator of an SCTP association may want to offer multiple
-different DTLS Key Management Methods for DTLS Chunk or in combination
-with other DTLS Key Management Methods in addition to DTLS 1.3 chunks for the
-SCTP association.
-Multiple DTLS Key Management Methods offered in the INIT chunk will be
-ordered based on the priority, where the most preferred will be
-in the first position and the least preferred in the last.
-The INIT ACK chunk will only contain the chosen DTLS Key Management Method.
-Offers with multiple DTLS Key Management Methods need to
-consider the downgrade attack risks (see <a href="#Downgrade-Attacks" class="auto internal xref">Section 10.3</a>).<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">The initiator MAY include in its INIT additional DTLS Key Management Methods
-that are compatible to offer in parallel with DTLS Chunks. This
-may include SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span>. This will result
-in that a number of different SCTP parameters may be included that are
-not possible to use simultaneously. Instead the responder needs to parse
-these parameters to figure out which sets of solutions that are
-offered that the implementation support, and apply its security
-policies to select the most appropriate. For example an offer of DTLS
-Chunks and SCTP-AUTH, could be interpreted as three different
-solutions with different properties, namely DTLS Chunks,
-DTLS/SCTP <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span>, and SCTP-AUTH <span>[<a href="#I-D.ietf-tsvwg-rfc4895-bis" class="cite xref">I-D.ietf-tsvwg-rfc4895-bis</a>]</span> only.
-However, here the DTLS Key Management Parameter can
-indicate both preference and which of the solutions that are preferred.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-3">The responder selects one security solution and includes it in the
-response (INIT ACK). If DTLS chunks was selected and the
-DTLS Key Management Method follows the recommendation for down-grade
-prevention the endpoints know that down-grade did not happen.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-5.1-1">To initiate an SCTP association, an SCTP endpoint wanting to use the DTLS chunk
+MUST send an SCTP packet with an INIT chunk containing the DTLS Key Management
+Parameter (see <a href="#protectedassoc-parameter" class="auto internal xref">Section 4.1</a>).
+This parameter lists the supported DTLS Key Management Identifiers
+(see <a href="#key-management-parameter" class="auto internal xref">Figure 2</a>) in descending order or preference.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">If an SCTP endpoint receives an SCTP packet containing an INIT chunk with a
+DTLS Key Management Parameter, it MUST reply with a packet containing an
+INIT ACK containing its own DTLS Key Management Parameter.
+This parameter MUST contains exactly one DTLS Key Management Method Identifier
+out of the list of received ones.
+If there is no DTLS Key Management Method supported by both endpoints,
+and the endpoints' policy requires requires the use of the DTLS chunk,
+the receiver MUST reply with an SCTP packet containing an ABORT chunk and MAY
+include the error cause "No Common DTLS Key Management Method"
+(see <a href="#enocommonpsi" class="auto internal xref">Section 4.3.2</a>).
+If the endpoints' policy does not require the use of the DTLS chunk, the receiver
+MAY reply with an SCTP packet containing an INIT ACK chunk without any
+DTLS Key Management Parameter to indicate that it is willing to setup an
+association without DTLS chunk support.
+Additionally, when an SCTP endpoint requiring DTLS chunk support receives an
+SCTP packet containing an INIT chunk without a DTLS Key Management Parameter,
+it MUST reply with an packet containing an ABORT chunk an MAY include the
+error cause indicating that the DTLS chunk support is missing (see <a href="#enoprotected" class="auto internal xref">Section 4.3.1</a>).<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">If an SCTP endpoint, which has sent an SCTP packet with an INIT chunk containing
+DTLS Key Management Parameter receives a packet containing an INIT ACK chunk with
+a DTLS Key Management Parameter not containing exactly one of the DTLS Key
+Mangement Identifiers it sent, the endpoint MUST reply with an packet containing
+an ABORT chunk. The ABORT chunk MAY include the Protocol Violation error cause.
+If the INIT ACK does not contain any DTLS Key Management Parameter and the
+endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
+an SCTP packet with an ABORT chunk. It MAY include the error cause indicating
+that DTLS chunk support is missing (see <a href="#enoprotected" class="auto internal xref">Section 4.3.1</a>).
+If the endpoint's policy does not require the use of the DTLS chunk, it MAY
+continue with the handshake.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">When the SCTP association has been established the process defined by the
+selected DTLS Key Management Method MUST be followed for establishing
+DTLS Key Contexts and installing them.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dtls-chunk-handling">
@@ -2611,72 +2558,29 @@ the structure of an unprotected SCTP packet as described in <span>[<a href="#RFC
 </div>
 <p id="section-5.2-5">The diagram shown in <a href="#sctp-DTLS-encrypt-chunk-states-2" class="auto internal xref">Figure 10</a> describes
 the structure of a protected SCTP packet being sent.
-Such packets are built with the SCTP common header.
-Only one DTLS chunk can be sent in a SCTP packet.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
-<div id="dtls-chunk-sending">
-<section id="section-5.2.1">
-          <h4 id="name-sending-of-dtls-chunks">
-<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-sending-of-dtls-chunks" class="section-name selfRef">Sending of DTLS Chunks</a>
-          </h4>
-<p id="section-5.2.1-1">When the credentials for sending DTLS chunks have been configured by the
-application, all SCTP packets are sent with a DTLS chunk.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-2">When an SCTP packet needs to be sent, the sequence of chunks is used
-as DTLSInnerPlaintext.content and DTLSInnerPlaintext.type is set to
-application_data. Then the DTLSCiphertext is computed and used as the
-payload of the DTLS chunk. Finally the SCTP common header is prepended.<a href="#section-5.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-3">When the DTLS chunk is used, the DTLS chunk header and the overhead of DTLS
-has to be considered to ensure that the final SCTP packet does not exceed
-the PMTU.<a href="#section-5.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="dtls-chunk-receiving">
-<section id="section-5.2.2">
-          <h4 id="name-receiving-of-dtls-chunks">
-<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-receiving-of-dtls-chunks" class="section-name selfRef">Receiving of DTLS Chunks</a>
-          </h4>
-<p id="section-5.2.2-1">When an SCTP packet containing a DTLS chunk bundled with any other
-chunk is received, the packet MUST be silently discarded.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-2">After the application has restricted the SCTP packet handling to protected
+Such packets contain only the SCTP common header and one DTLS chunk.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-6">Once the credentials for sending DTLS chunks have been configured by the
+application, all SCTP packets are sent with a DTLS chunk.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">When an SCTP packet needs to be sent, the sequence of chunks is used
+as <code>DTLSInnerPlaintext.content</code> and <code>DTLSInnerPlaintext.type</code> is set to
+<code>application_data</code>. Then the <code>DTLSCiphertext</code> is computed and used as the
+payload of the DTLS chunk. Finally the SCTP common header is prepended.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8">When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
+and the overhead of DTLS to ensure that the final SCTP packet does not exceed
+the PMTU.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+<p id="section-5.2-9">When an SCTP packet containing a DTLS chunk bundled with any other
+chunk is received, the packet MUST be silently discarded.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
+<p id="section-5.2-10">After the application has restricted the SCTP packet handling to protected
 SCTP packets only, a SCTP packet not containing a DTLS chunk MUST be
-silently discarded.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-3">When processing the payload of the DTLS chunk (i.e. the DTLSCiphertext),
-the Restart flag in addition to the unified_hdr is used to find the keys for
-processing the encrypted_record.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-4">After the encrypted_record has been verified and decrypted, the
-corresponding chunks (the DTLSInnerPlaintext.content) are processed as
-defined in the corresponding specifications.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="eengine">
-<section id="section-5.2.3">
-          <h4 id="name-critical-error-from-dtls">
-<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-critical-error-from-dtls" class="section-name selfRef">Critical Error from DTLS</a>
-          </h4>
-<p id="section-5.2.3-1">The Chunk Protection Operator MAY inform local SCTP endpoint about errors.
-When an Error in the DTLS 1.3 compromises the protection mechanism,
-the Chunk Protection Operator may stop processing data altogether, thus the
-local SCTP endpoint will not be able to send or receive any chunk for
-the specified Association.  This will cause the SCTP Association to be
-closed by legacy timer-based mechanism. Since the Association
-protection is compromised no further data will be sent and the remote
-peer will also experience timeout on the Association.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="non-critical-errors">
-<section id="section-5.2.4">
-          <h4 id="name-non-critical-error-in-the-p">
-<a href="#section-5.2.4" class="section-number selfRef">5.2.4. </a><a href="#name-non-critical-error-in-the-p" class="section-name selfRef">Non-critical Error in the Protection</a>
-          </h4>
-<p id="section-5.2.4-1">A non-critical error in Chunk Protection Operator means that the
-Chunk Protection Operator is capable of recovering without the need
-of the whole SCTP Association to be re-established.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-2">From SCTP perspective, a non-critical error will be perceived
-as a temporary problem in the transport and will be handled
-with retransmissions and SACKS according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-3">When the Chunk Protection Operator will experience a non-critical error,
-an ABORT chunk MUST NOT be sent.<a href="#section-5.2.4-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+silently discarded.<a href="#section-5.2-10" class="pilcrow">¶</a></p>
+<p id="section-5.2-11">When processing the payload of the DTLS chunk (i.e. the <code>DTLSCiphertext</code>),
+the Restart flag in addition to the <code>unified_hdr</code> is used to find the keys for
+processing the <code>encrypted_record</code>.<a href="#section-5.2-11" class="pilcrow">¶</a></p>
+<p id="section-5.2-12">After the <code>encrypted_record</code> has been verified and decrypted, the
+corresponding chunks (the <code>DTLSInnerPlaintext.content</code>) are processed as
+defined in the corresponding specifications.<a href="#section-5.2-12" class="pilcrow">¶</a></p>
+<p id="section-5.2-13">When the Chunk Protection Operator will experience a non-critical error,
+it MUST NOT abort the association.<a href="#section-5.2-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="termination-procedure">
@@ -2684,14 +2588,10 @@ an ABORT chunk MUST NOT be sent.<a href="#section-5.2.4-3" class="pilcrow">¶</a
         <h3 id="name-termination-of-a-protected-">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-termination-of-a-protected-" class="section-name selfRef">Termination of a Protected Association</a>
         </h3>
-<p id="section-5.3-1">Besides the procedures for terminating an association explained in
-<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating an
-association when having an internal error or by detecting a security
-violation. Note that the closure of any DTLS Key Management Method doesn't
-compromise the capability of sending and receiving protected
-SHUTDOWN COMPLETE chunks as that capability only relies on the
-Key Context and not on the DTLS Key Management Method from where it has
-been derived.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-1">Note that the closure of any DTLS Key Management Method doesn't
+compromise the capability of terminating the SCTP association gracefully as
+that capability only relies on the Key Context and not on the DTLS Key
+Management Method from where it has been derived.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-restart">
@@ -2701,59 +2601,47 @@ been derived.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-5.4-1">This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in <span><a href="https://rfc-editor.org/rfc/rfc9260#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>
-with the purpose of achieving a Restart of the current Association,
-thus implementing SCTP Restart.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">This specification doesn't support SCTP Restart as described in
-<span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> because the COOKIE ECHO and COOKIE ACK chunks
-are sent encrypted (see <a href="#protected-restart" class="auto internal xref">Section 5.4.1</a>).<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3">When the upper layer protocols require support of SCTP Restart, as in
-case of 3GPP NG-C protocol <span>[<a href="#ETSI-TS-38.413" class="cite xref">ETSI-TS-38.413</a>]</span>, the endpoint needs to
-support also initiating protected SCTP Restart procedure described in
-<a href="#protected-restart" class="auto internal xref">Section 5.4.1</a>. Implementing initiating protected restart
-procedure is RECOMMENDED, however not required as persistent secure
-storage of the restart DTLS Key Context is needed.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
-<p id="section-5.4-4">The cases where one of the SCTP Endpoints only implements initiating
-legacy SCTP Restart are described in <a href="#sctp-rest-comp" class="auto internal xref">Section 5.4.2</a>.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
-<div id="protected-restart">
-<section id="section-5.4.1">
-          <h4 id="name-protected-sctp-restart">
-<a href="#section-5.4.1" class="section-number selfRef">5.4.1. </a><a href="#name-protected-sctp-restart" class="section-name selfRef">Protected SCTP Restart</a>
-          </h4>
-<p id="section-5.4.1-1">The protected SCTP Restart procedure keeps the security
-characteristics of an SCTP Association using DTLS Chunk.<a href="#section-5.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-2">In protected SCTP Restart, INIT and INIT ACK chunks are sent
+with the purpose of defining a protected restart procedure.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">When the upper layer protocols require support of SCTP Restart for associations
+using the DTLS chunk, as in case of 3GPP NG-C protocol <span>[<a href="#ETSI-TS-38.413" class="cite xref">ETSI-TS-38.413</a>]</span>,
+the endpoint needs to support also the protected SCTP Restart procedure
+described below. Implementing the protected restart procedure is RECOMMENDED,
+however not required as persistent secure storage of the restart DTLS Key
+Context is needed.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3">The protected SCTP restart procedure keeps the security characteristics of
+an SCTP Association using DTLS chunks.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4">In protected SCTP Restart, INIT and INIT ACK chunks are sent
 strictly according to <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span>, but COOKIE ECHO and COOKIE ACK chunks
-are encrypted using DTLS Chunks and Restart DTLS Key contexts.<a href="#section-5.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-3">In order to support protected SCTP Restart, the SCTP Endpoints need
-to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
+are encrypted using DTLS chunks and the restart DTLS Key contexts.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
+<p id="section-5.4-5">In order to support protected SCTP Restart, the SCTP Endpoints need
+to allocate and maintain dedicated restart DTLS Key contexts, SCTP
 packets protected by these contexts will be identified in the DTLS
 chunk with the R (Restart) bit set (see <a href="#DTLS-chunk" class="auto internal xref">Section 4.2</a>).  Both SCTP
-Endpoints need to ensure that Restart DTLS key contexts are preserved
-for supporting the protected SCTP Restart use case.<a href="#section-5.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-4">In order for the protected SCTP endpoint to be available for protected SCTP
+endpoints need to ensure that Restart DTLS key contexts are preserved
+for supporting the protected SCTP Restart use case.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
+<p id="section-5.4-6">In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs access to a DTLS Key context for
 this SCTP association that needs to be kept in a well-known state so
-that both SCTP Endpoints are aware of the DTLS sequence numbers and
-replay window, i.e. initialized but never used. An SCTP Endpoint MUST
-NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
-association restart.<a href="#section-5.4.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-5">An SCTP endpoint wanting to be able to initiate a protected SCTP
+that both SCTP endpoints are aware of the DTLS sequence numbers and
+replay window, i.e. initialized but never used. An SCTP endpoint MUST
+NOT use the SCTP Restart DTLS Key for any other use case than SCTP
+association restart.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
+<p id="section-5.4-7">An SCTP endpoint wanting to be able to initiate a protected SCTP
 restart needs to store securely and persistently the restart Keys,
-and related DTLS epoch, indexed so that when
-performing a restart with the peer node it had a protected SCTP
-association which can identify the right restart Key and DTLS epoch and
-initialize the restart DTLS Key Context for when restarting the SCTP
-association. The keys and epoch need to be stored
+and related DTLS epoch, indexed so that when performing a restart with the
+peer node it had a protected SCTP association which can identify the right
+restart Key and DTLS epoch and initialize the restart DTLS Key Context for
+when restarting the SCTP association. The keys and epoch need to be stored
 securely and persistently so that they survive the events that are
 causing protected SCTP Restart procedure to be used, for instance a
 crash of the SCTP stack. The security considerations for persistent
 secure storage of keying materials is further discussed in
-<a href="#sec-considertation-storage" class="auto internal xref">Section 10.4</a>.<a href="#section-5.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-6">The SCTP Restart handshakes INIT, INIT ACK, COOKIE ECHO, COOKIE ACK
+<a href="#sec-considertation-storage" class="auto internal xref">Section 10.4</a>.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
+<p id="section-5.4-8">The SCTP Restart handshakes INIT, INIT ACK, COOKIE ECHO, COOKIE ACK
 exactly as in legacy SCTP Restart case; INIT, INIT ACK MUST be
 sent plain as in the legacy, whereas COOKIE ECHO, COOKIE ACK
-Chunks MUST be sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-5.4.1-6" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-7">A DTLS Chunk using the restart DTLS key context is identified by
+Chunks MUST be sent as DTLS chunk protected using the restart DTLS key context.<a href="#section-5.4-8" class="pilcrow">¶</a></p>
+<p id="section-5.4-9">A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
 <a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>).  There's exactly one
 active Restart DTLS Context at a time, the newest. However, a crash at
@@ -2765,107 +2653,84 @@ DTLS Key Management confirms the new ones are committed to secure storage.
 This can for example ensure that at key-changes signals to
 terminate the old DTLS Key Contexts (including the restart) is never
 sent until the new restart DTLS Key Context has been committed to
-storage.<a href="#section-5.4.1-7" class="pilcrow">¶</a></p>
+storage.<a href="#section-5.4-9" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-11">
-            <div id="section-5.4.1-8.1">
-              <div class="alignCenter art-svg artwork" id="section-5.4.1-8.1.1">
+          <div id="section-5.4-10.1">
+            <div class="alignCenter art-svg artwork" id="section-5.4-10.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="528" viewBox="0 0 528 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 40,48 L 40,208" fill="none" stroke="black"></path>
-                  <path d="M 408,48 L 408,208" fill="none" stroke="black"></path>
-                  <path d="M 440,64 L 440,96" fill="none" stroke="black"></path>
-                  <path d="M 440,144 L 440,176" fill="none" stroke="black"></path>
-                  <path d="M 440,64 L 496,64" fill="none" stroke="black"></path>
-                  <path d="M 40,80 L 208,80" fill="none" stroke="black"></path>
-                  <path d="M 248,80 L 400,80" fill="none" stroke="black"></path>
-                  <path d="M 48,96 L 192,96" fill="none" stroke="black"></path>
-                  <path d="M 264,96 L 408,96" fill="none" stroke="black"></path>
-                  <path d="M 440,96 L 496,96" fill="none" stroke="black"></path>
-                  <path d="M 440,144 L 496,144" fill="none" stroke="black"></path>
-                  <path d="M 40,160 L 112,160" fill="none" stroke="black"></path>
-                  <path d="M 320,160 L 400,160" fill="none" stroke="black"></path>
-                  <path d="M 48,176 L 112,176" fill="none" stroke="black"></path>
-                  <path d="M 312,176 L 408,176" fill="none" stroke="black"></path>
-                  <path d="M 440,176 L 496,176" fill="none" stroke="black"></path>
-                  <path d="M 424,48 C 432.83064,48 440,55.16936 440,64" fill="none" stroke="black"></path>
-                  <path d="M 424,112 C 432.83064,112 440,104.83064 440,96" fill="none" stroke="black"></path>
-                  <path d="M 424,128 C 432.83064,128 440,135.16936 440,144" fill="none" stroke="black"></path>
-                  <path d="M 424,192 C 432.83064,192 440,184.83064 440,176" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="408,160 396,154.4 396,165.6" fill="black" transform="rotate(0,400,160)"></polygon>
-                  <polygon class="arrowhead" points="408,80 396,74.4 396,85.6" fill="black" transform="rotate(0,400,80)"></polygon>
-                  <polygon class="arrowhead" points="56,176 44,170.4 44,181.6" fill="black" transform="rotate(180,48,176)"></polygon>
-                  <polygon class="arrowhead" points="56,96 44,90.4 44,101.6" fill="black" transform="rotate(180,48,96)"></polygon>
-                  <g class="text">
-                    <text x="40" y="36">Initiator</text>
-                    <text x="408" y="36">Responder</text>
-                    <text x="228" y="84">INIT</text>
-                    <text x="472" y="84">Plain</text>
-                    <text x="212" y="100">INIT</text>
-                    <text x="248" y="100">ACK</text>
-                    <text x="136" y="164">[DTLS</text>
-                    <text x="212" y="164">CHUNK(COOKIE</text>
-                    <text x="292" y="164">ECHO)]</text>
-                    <text x="488" y="164">Protected</text>
-                    <text x="136" y="180">[DTLS</text>
-                    <text x="212" y="180">CHUNK(COOKIE</text>
-                    <text x="288" y="180">ACK)]</text>
-                  </g>
-                </svg><a href="#section-5.4.1-8.1.1" class="pilcrow">¶</a>
+                <path d="M 40,48 L 40,208" fill="none" stroke="black"></path>
+                <path d="M 408,48 L 408,208" fill="none" stroke="black"></path>
+                <path d="M 440,64 L 440,96" fill="none" stroke="black"></path>
+                <path d="M 440,144 L 440,176" fill="none" stroke="black"></path>
+                <path d="M 440,64 L 496,64" fill="none" stroke="black"></path>
+                <path d="M 40,80 L 208,80" fill="none" stroke="black"></path>
+                <path d="M 248,80 L 400,80" fill="none" stroke="black"></path>
+                <path d="M 48,96 L 192,96" fill="none" stroke="black"></path>
+                <path d="M 264,96 L 408,96" fill="none" stroke="black"></path>
+                <path d="M 440,96 L 496,96" fill="none" stroke="black"></path>
+                <path d="M 440,144 L 496,144" fill="none" stroke="black"></path>
+                <path d="M 40,160 L 112,160" fill="none" stroke="black"></path>
+                <path d="M 320,160 L 400,160" fill="none" stroke="black"></path>
+                <path d="M 48,176 L 112,176" fill="none" stroke="black"></path>
+                <path d="M 312,176 L 408,176" fill="none" stroke="black"></path>
+                <path d="M 440,176 L 496,176" fill="none" stroke="black"></path>
+                <path d="M 424,48 C 432.83064,48 440,55.16936 440,64" fill="none" stroke="black"></path>
+                <path d="M 424,112 C 432.83064,112 440,104.83064 440,96" fill="none" stroke="black"></path>
+                <path d="M 424,128 C 432.83064,128 440,135.16936 440,144" fill="none" stroke="black"></path>
+                <path d="M 424,192 C 432.83064,192 440,184.83064 440,176" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="408,160 396,154.4 396,165.6" fill="black" transform="rotate(0,400,160)"></polygon>
+                <polygon class="arrowhead" points="408,80 396,74.4 396,85.6" fill="black" transform="rotate(0,400,80)"></polygon>
+                <polygon class="arrowhead" points="56,176 44,170.4 44,181.6" fill="black" transform="rotate(180,48,176)"></polygon>
+                <polygon class="arrowhead" points="56,96 44,90.4 44,101.6" fill="black" transform="rotate(180,48,96)"></polygon>
+                <g class="text">
+                  <text x="40" y="36">Initiator</text>
+                  <text x="408" y="36">Responder</text>
+                  <text x="228" y="84">INIT</text>
+                  <text x="472" y="84">Plain</text>
+                  <text x="212" y="100">INIT</text>
+                  <text x="248" y="100">ACK</text>
+                  <text x="136" y="164">[DTLS</text>
+                  <text x="212" y="164">CHUNK(COOKIE</text>
+                  <text x="292" y="164">ECHO)]</text>
+                  <text x="488" y="164">Protected</text>
+                  <text x="136" y="180">[DTLS</text>
+                  <text x="212" y="180">CHUNK(COOKIE</text>
+                  <text x="288" y="180">ACK)]</text>
+                </g>
+              </svg><a href="#section-5.4-10.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
-            </figcaption></figure>
+          </figcaption></figure>
 </div>
-<p id="section-5.4.1-9">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 11</a> shows how the control chunks being
-used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-5.4.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-10">The transport of COOKIE ECHO, COOKIE ACK by means of
-DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.<a href="#section-5.4.1-10" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-11">A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
-for User Traffic until a new primary DTLS Key Context will be available. The
+<p id="section-5.4-11">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 11</a> shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-5.4-11" class="pilcrow">¶</a></p>
+<p id="section-5.4-12">A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
+for user traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
-to restart the SCTP association.<a href="#section-5.4.1-11" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-12">After restart the next primary DTLS key context MUST use epoch=3,
+to restart the SCTP association.<a href="#section-5.4-12" class="pilcrow">¶</a></p>
+<p id="section-5.4-13">After restart the next primary DTLS key context MUST use epoch 3,
 i.e. the epoch value is reset. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
-after any old in-flight restart packets will have been received.<a href="#section-5.4.1-12" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="sctp-rest-comp">
-<section id="section-5.4.2">
-          <h4 id="name-compatibility-with-legacy-s">
-<a href="#section-5.4.2" class="section-number selfRef">5.4.2. </a><a href="#name-compatibility-with-legacy-s" class="section-name selfRef">Compatibility with Legacy SCTP Restart</a>
-          </h4>
-<p id="section-5.4.2-1">An SCTP Endpoint supporting only legacy SCTP Restart and involved in
+after any old in-flight restart packets will have been received.<a href="#section-5.4-13" class="pilcrow">¶</a></p>
+<p id="section-5.4-14">An SCTP Endpoint supporting only normal SCTP Restart and involved in
 an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
 the Association. The effect will be that the restart initiator will
 receive INIT ACK but then all sent packets with COOKIE ECHO will be
 dropped until the peer nodes times out the SCTP Association from lack
-of any response from the restarting node.<a href="#section-5.4.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.4.2-2">An SCTP Endpoint supporting only legacy SCTP Restart and involved
+of any response from the restarting node.<a href="#section-5.4-14" class="pilcrow">¶</a></p>
+<p id="section-5.4-15">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks, when receiving a COOKIE ECHO
-chunk protected by DTLS chunk as described in <a href="#protected-restart" class="auto internal xref">Section 5.4.1</a>,
-thus having the R bit (Restart Indicator) set in the DTLS Chunk (see
-<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>), will silently discard it.<a href="#section-5.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.4.2-3">Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
-in an SCTP Association using DTLS Chunks cannot use SCTP Restart
-legacy procedure, in case of need to restart the Association
-it SHOULD keep on retrying initiating a new Association
-until the remote SCTP Endpoint has closed the existing Association
-(i.e. due to timeout) and will accept a new one.
-As alternative, depending on the Use Case and the Upper Layer protocol,
-it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
-will accept the initiation of the new Association while still supervising
-the old one.<a href="#section-5.4.2-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+chunk protected by DTLS chunk as described above, thus having the
+ R bit (Restart Indicator) set in the DTLS Chunk (see
+<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>), MUST silently discard it.<a href="#section-5.4-15" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
