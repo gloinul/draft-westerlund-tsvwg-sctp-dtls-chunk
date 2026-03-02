@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 2 September 2026                                       M. Tüxen
+Expires: 3 September 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                            1 March 2026
+                                                            2 March 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
@@ -954,39 +954,41 @@ Table of Contents
 
 6.  DTLS Key Management Method Considerations
 
-   This document specifies the mechanisms for SCTP to be protected with
-   DTLS, it doesn't specify how the DTLS Key Management works, being
-   limited on what the DTLS Key Management MUST provide for achieving
-   the protection.  Even though DTLS 1.3 is indicated as protocol for
-   providing Key Contexts, different implementations can achieve that
-   and different mechanisms may be used for features such as mutual
-   authentication, rekeying etc.  The DTLS Key Management Method may use
-   a number of DTLS Key Management Methods depending on what is being
-   implemented and available and/or according to the local policies.
-   DTLS Key Management Methods are defined in their own specific
-   documents, and needs to be registered in the IANA Registry "SCTP DTLS
-   Key Management Methods" to get their own unique identifier.  This
-   document constitutes a requirement towards any DTLS Key Management
-   Method.
+   This document specifies the mechanisms for protecting SCTP
+   associations using DTLS chunks, including an API for managing the
+   corresponding key material.  While this document defines the
+   interface, the upper layer is responsible for the actual key
+   management.
 
-   Currently there are two in-band DTLS Key Management Methods defined,
-   they have different properties.  See
-   [I-D.ietf-tsvwg-dtls-chunk-key-management] and
-   [I-D.westerlund-tsvwg-sctp-DTLS-handshake].
+   DTLS Key Management Methods define the procedures for initial key
+   generation, key updates and peer authentication.  These procedures
+   are out of scope for this document.  Currently two DTLS Key
+   Management Methods with different properties (such as mutual
+   authentication and rekeying) are defined:
 
-   It is up to the upper layer to manage the keys for the DTLS chunk.
+   *  [I-D.ietf-tsvwg-dtls-chunk-key-management]
 
-   The DTLS Key Management Method SHOULD use a dedicated PPID to ensure
-   that the DTLS Key Management Method related user messages are handled
-   by the appropriate layer.
+   *  [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
 
-   When performing DTLS Key Management, the keys for receiving SHOULD be
-   installed before the corresponding send keys at the peer.  For
-   mitigating downgrade attacks the key derivation MUST include the DTLS
-   Key Management Method Identifiers that were sent and received.
+   An SCTP endpoint MAY support multiple DTLS Key Management Methods
+   subject to implementation requirements and local security policies.
 
-   The communication is only protected after both sides have configured
-   the keys for sending and both sides have enforced the protection.
+   Every DTLS Key Management Method
+
+   *  MUST be registered in the IANA Registry Section 9.1 to receive a
+      unique identifier, enabling negotiation during the SCTP handshake.
+
+   *  SHOULD use the PPID from Section 9.5 to ensure that the DTLS Key
+      Management Method related user messages are processed by the
+      relevant entity.
+
+   *  SHOULD ensure that the local receive keys are installed before the
+      peer installs the corresponding send keys.
+
+   *  MUST include the DTLS Key Management Method Identifiers sent and
+      received during the SCTP handshake in the key derivation to
+      mitigate downgrade attacks.  Both sides MUST use the same byte
+      ordering for the DTLS Key Management Method Identifiers.
 
 7.  Abstract API
 
@@ -1442,7 +1444,7 @@ Table of Contents
 
    sdk_kmids:  The DTLS Key Management identifiers which will be or have
       been sent to the peer in the sequence they were contained in the
-      DTLS Key Management Parameter and in host byte order.
+      DTLS Key Management Parameter and in network byte order.
 
    This socket option can be used with setsockopt() for SCTP endpoints
    in the SCTP_CLOSED or SCTP_LISTEN state to configure the protection
@@ -1475,7 +1477,7 @@ Table of Contents
 
    sdk_kmids:  The DTLS Key Management identifiers reported by the peer
       in the sequence they were contained in the DTLS Key Management
-      Parameter and in host byte order.
+      Parameter and in network byte order.
 
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
