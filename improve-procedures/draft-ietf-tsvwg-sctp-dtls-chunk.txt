@@ -611,7 +611,7 @@ Table of Contents
    containing an INIT ACK containing its own DTLS Key Management
    Parameter.  This parameter MUST contains exactly one DTLS Key
    Management Method Identifier out of the list of received ones.  If
-   there us no DTLS Key Management Method supported by both endpoints,
+   there is no DTLS Key Management Method supported by both endpoints,
    and the endpoints' policy requires requires the use of the DTLS
    chunk, the receiver MUST reply with an SCTP packet containing an
    ABORT chunk and MAY include the error cause "No Common DTLS Key
@@ -640,7 +640,7 @@ Table of Contents
    the DTLS chunk, it MAY continue with the handshake.
 
    When the SCTP association has been established the process defined by
-   the selected DTLS Key Management Method MUS be followed for
+   the selected DTLS Key Management Method MUST be followed for
    establishing DTLS Key Contexts and installing them.
 
 5.2.  DTLS Chunk Handling
@@ -1587,6 +1587,9 @@ Table of Contents
 
 9.1.  DTLS Key Management Method Identifiers
 
+   Note: The RFC Editor is requested to replace RFC-To-Be with a
+   reference to this document.
+
    IANA is requested to create a new registry called "DTLS Key
    Management Method".  This registry is part of the Stream Control
    Transmission Protocol (SCTP) Parameters grouping.
@@ -1599,7 +1602,7 @@ Table of Contents
    +============+================================+===========+=========+
    | Identifier | Key Management Method Name     | Reference | Contact |
    +============+================================+===========+=========+
-   |          0 | DTLS Chunk with Pre-shared     | RFC-TBD   | Draft   |
+   |          0 | DTLS Chunk with Pre-shared     | RFC-To-Be | Draft   |
    |            | cryptographic parameters       |           | Authors |
    +------------+--------------------------------+-----------+---------+
    |     1-4095 | Available for Assignment       |           |         |
