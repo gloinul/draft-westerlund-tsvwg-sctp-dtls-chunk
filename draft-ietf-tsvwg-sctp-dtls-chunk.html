@@ -1206,14 +1206,6 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-sctp-considerations" class="internal xref">SCTP Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
-                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-dynamic-address-reconfigura" class="internal xref">Dynamic Address Reconfiguration Considerations</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.2">
-                    <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="auto internal xref">3.2.2</a>.  <a href="#name-privacy-padding-of-sctp-pac" class="internal xref">Privacy Padding of SCTP Packets</a></p>
-</li>
-                </ul>
 </li>
             </ul>
 </li>
@@ -1621,49 +1613,28 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <h3 id="name-dtls-considerations">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-dtls-considerations" class="section-name selfRef">DTLS Considerations</a>
         </h3>
-<p id="section-3.1-1">The DTLS Chunk architecture splits DTLS 1.3 as shown in
-<a href="#sctp-DTLS-chunk-layering" class="auto internal xref">Figure 1</a>, where the DTLS Key Management Method
-is done at DTLS 1.3 block level, acting as a parallel User Level Protocol
-and a Chunk Protection Operator functionality inside the SCTP
-Protocol Stack.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">DTLS Key Management Method is the set of data and procedures that take care of key
-distribution, verification, and update, DTLS connection setup, update and
-maintenance.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Chunk Protection Operator functionality is the set of data and procedures
-taking care of User Data encryption into DTLS Record and DTLS record
-decryption into User Data.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">DTLS 1.3 operations require to directly handshake messages with the
-remote peer for connection setup and other features, this kind of
-handshake is part of the DTLS Key Management Method.  DTLS Key Management Method
-achieves these features behaving as a user of the SCTP
-association.  DTLS Key Management Method sends and receives its own data via the
-SCTP User Level interface.  DTLS Key Management Method's own data is
-distinguished from any other data by means of a dedicated PPID using
-the value 4242 (see <a href="#iana-payload-protection-id" class="auto internal xref">Table 7</a>).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">Once DTLS Key Management Method has established a DTLS 1.3 connection, it can
-derive primary and restart keys and set the Chunk Protection Operator
-for SCTP Packet Payload encryption/decryption via an API to create the
-necessary DTLS key contexts. Both a DTLS Key context for normal use
-(primary) and a DTLS Key context for SCTP association restart needs to
-be created.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
-<p id="section-3.1-6">In this document we use the terms DTLS Key context for indicating a
+<p id="section-3.1-1">Once the DTLS Key Management Method has established its context, it
+derives primary and restart keys and configures the Chunk Protection Operator
+via an API. This establishes the necessary DTLS key contexts for SCTP chunk
+encryption and decryption.
+A DTLS key context for normal operations use MUST be created, while a DTLS key
+context for SCTP association restart SHOULD be created.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">In this document we use the terms DTLS Key context for indicating a
 Key and IV, produced by the DTLS Key Management, and all relevant data that
 needs to be provided to the Chunk Protection Operator for DTLS encryption
 and decryption.  DTLS Key context includes Keys and IV for sending and
 receiving, replay window, last used sequence number. Each DTLS key
 context is associated with a three-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, and the DTLS epoch.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.1-7">The DTLS Connection ID in the DTLS Record layer used in the
-DTLS Chunk MUST NOT be used.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.1-8">The first established DTLS key context for any SCTP association MUST use epoch=3.
-This ensures that the epoch of the DTLS key context will normally match the epoch of
-a DTLS Key Management Method's connection.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
-<p id="section-3.1-9">The Replay window for the DTLS Sequence Number will need to take into
-account that HEARTBEAT chunks are sent concurrently over all
-paths in multihomed Associations, thus it needs to be large enough to
-accommodate latency differences.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
-<p id="section-3.1-10">Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
-2<sup>14</sup> (16384) bytes of plain text.<a href="#section-3.1-10" class="pilcrow">¶</a></p>
+consisting of SCTP Association, the restart indicator, and the DTLS epoch.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
+be used.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">The first  DTLS key context established for any SCTP association MUST use epoch 3.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The replay window for the DTLS Sequence Number need to account for the
+concurrent transmission of packets on multiple paths in multihomed associations.
+In particular, this applies to packets containing HEARTBEAT chunks.
+The window size must be sufficiently large to accommodate these latency differences.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
+2<sup>14</sup> (16384) bytes of plain text.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-considerations">
@@ -1671,67 +1642,41 @@ accommodate latency differences.<a href="#section-3.1-9" class="pilcrow">¶</a><
         <h3 id="name-sctp-considerations">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-sctp-considerations" class="section-name selfRef">SCTP Considerations</a>
         </h3>
-<div id="sec-asconf">
-<section id="section-3.2.1">
-          <h4 id="name-dynamic-address-reconfigura">
-<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-dynamic-address-reconfigura" class="section-name selfRef">Dynamic Address Reconfiguration Considerations</a>
-          </h4>
-<p id="section-3.2.1-1"><span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies the support for Dynamic Address Reconfiguration
-in SCTP. DTLS Chunks has limited support for Dynamic Address
-Reconfiguration and requires an update of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span>. <span><a href="https://rfc-editor.org/rfc/rfc5061#section-4.1.1" class="relref">Section 4.1.1</a> of [<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> specifies that ASCONF messages are
-required to be sent authenticated with SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>.  For
-SCTP associations using DTLS Chunk this would result in the use of
-redundant and non-compatible mechanisms for Authentication with
-both SCTP-AUTH and the DTLS Chunk.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
-<div id="limitations">
-<section id="section-3.2.1.1">
-            <h5 id="name-limitations">
-<a href="#section-3.2.1.1" class="section-number selfRef">3.2.1.1. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
-            </h5>
-<p id="section-3.2.1.1-1">Support for Dynamic Address Reconfiguration <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> in an SCTP
-association using DTLS Chunk is limited to the case where the packet
-containing the ASCONF chunk is sent from an IP address already known.<a href="#section-3.2.1.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="change">
-<section id="section-3.2.1.2">
-            <h5 id="name-change">
-<a href="#section-3.2.1.2" class="section-number selfRef">3.2.1.2. </a><a href="#name-change" class="section-name selfRef">Change</a>
-            </h5>
-<p id="section-3.2.1.2-1">Because SCTP-AUTH and DTLS chunks provide non-compatible authentication
-mechanisms, SCTP-AUTH <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span> MUST NOT be used once DTLS chunks have been
-successfully negotiated.<a href="#section-3.2.1.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="privacy-padding-of-sctp-packets">
-<section id="section-3.2.2">
-          <h4 id="name-privacy-padding-of-sctp-pac">
-<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-privacy-padding-of-sctp-pac" class="section-name selfRef">Privacy Padding of SCTP Packets</a>
-          </h4>
-<p id="section-3.2.2-1">To reduce the potential information leakage from packet size
-variations one may select to pad the SCTP Packets to uniform packet
-sizes. This size may be either the maximum used, or in block sized
-increments. However, the padding needs to be done inside of the
-encryption envelope.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-2">Both SCTP and DTLS contains mechanisms to pad SCTP payloads, and DTLS
-records respectively. If padding of SCTP packets are desired to hide
-actual message sizes it is RECOMMENDED to use the SCTP Padding Chunk
-<span>[<a href="#RFC4820" class="cite xref">RFC4820</a>]</span> to generate a consistent SCTP payload size. Support of
-this chunk is only required on the sender side, any SCTP receiver will
-safely ignore the PAD Chunk. However, if the PAD chunk is not
-supported DTLS padding MAY be used.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">It needs to be noted that independent if SCTP padding or DTLS padding
-is used the padding is not taken into account by the SCTP congestion
-control. Extensive use of padding has potential to worsen congestion
-situations as the SCTP association will consume more bandwidth than
-its derived share by the congestion control.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-4">The use of SCTP PAD chunk is recommended as it at least can enable
-future extension or SCTP implementation that account also for the
-padding. Use of DTLS padding hides this packet expansion from SCTP.<a href="#section-3.2.2-4" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-3.2-1">The SCTP authentication extension (SCTP-AUTH) defined in <span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span> is incompatible
+with the extension defined in this document. Therefore, its support MUST NOT
+be negotiated in combination with the support of the DTLS chunk.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">In particular, the dynamic address reconfiguration defined in <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> cannot
+use SCTP-AUTH. Instead, the DTLS chunk is used for authentication.
+This introduces the following limitations:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-3.1">
+            <p id="section-3.2-3.1.1">The lookup address MUST NOT be used.<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-3.2">
+            <p id="section-3.2-3.2.1">The dynamic address reconfiguration extension MUST NOT be used unless
+DTLS chunk handling is enabled in both directions.<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.2-4">To mitigate potential information leakage from packet size variations,
+implementations MAY pad SCTP packets to uniform sizes.
+However, the padding MUST be applied within the encryption envelope to ensure
+the padding itself is protected.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Both SCTP and DTLS provide mechanisms for padding packets.
+If padding of SCTP packets are desired to hide actual message sizes it is
+RECOMMENDED to use the SCTP Padding Chunk <span>[<a href="#RFC4820" class="cite xref">RFC4820</a>]</span> to generate a consistent
+SCTP payload size.
+Support of this chunk is only required on the sender side, any SCTP receiver
+will safely ignore the PAD Chunk. However, if the PAD chunk is not
+supported DTLS padding MAY be used.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">It should be noted that regardless of whether SCTP padding or DTLS padding
+is used, the additional bytes are not account for by the SCTP congestion control.
+Extensive use of padding has potential to worsen congestion situations, as the
+SCTP association will consume more bandwidth than its derived share by the
+congestion control.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2-7">Using the SCTP PAD chunk is preferred because it is visible in the SCTP layer.
+Therefore, future extension or SCTP implementation that account for the padding
+in the congestion control.
+In contrast, DTLS padding hides this packet expansion from the SCTP layer.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
