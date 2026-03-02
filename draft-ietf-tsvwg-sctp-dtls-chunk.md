@@ -562,71 +562,46 @@ It MUST NOT be included in any other chunk.
 
 ## Establishment of a Protected Association {#establishment-procedure}
 
-An SCTP Endpoint acting as initiator willing to create a DTLS 1.3
-chunk protected association sends to the remote peer an INIT
-chunk containing the DTLS Key Management Parameter
-(see {{protectedassoc-parameter}}) indicating supported and preferred
-DTLS Key Management method (see {{key-management-parameter}}).
+To initiate an SCTP association, an SCTP endpoint wanting to use the DTLS chunk
+MUST send an SCTP packet with an INIT chunk containing the DTLS Key Management
+Parameter (see {{protectedassoc-parameter}}).
+This parameter lists the supported DTLS Key Management Identifiers
+(see {{key-management-parameter}}) in descending order or preference.
 
-An SCTP Endpoint acting as responder, when receiving an INIT chunk
-with a DTLS Key Management Parameter, will reply with
-INIT ACK with its own DTLS Key Management Parameter
-containing the selected DTLS Key Management Method out of the set of supported
-ones. In case there are no common set of supported DTLS Key Management Methods that are
-accepted by the responder, and the endpoints' policy requires secured
-association it MUST reply with an ABORT chunk, include the error
-cause "No Common DTLS Key Management Method" (TBA11) (see {{IANA-Extra-Cause}}).
-Otherwise, the responder MAY send an INIT ACK without the DTLS Key Management Parameter
-to indicate that it is willing to create a session without security.
+If an SCTP endpoint receives an SCTP packet containing an INIT chunk with a
+DTLS Key Management Parameter, it MUST reply with a packet containing an
+INIT ACK containing its own DTLS Key Management Parameter.
+This parameter MUST contains exactly one DTLS Key Management Method Identifier
+out of the list of received ones.
+If there is no DTLS Key Management Method supported by both endpoints,
+and the endpoints' policy requires requires the use of the DTLS chunk,
+the receiver MUST reply with an SCTP packet containing an ABORT chunk and MAY
+include the error cause "No Common DTLS Key Management Method"
+(see {{enocommonpsi}}).
+If the endpoints' policy does not require the use of the DTLS chunk, the receiver
+MAY reply with an SCTP packet containing an INIT ACK chunk without any
+DTLS Key Management Parameter to indicate that it is willing to setup an
+association without DTLS chunk support.
+Additionally, when an SCTP endpoint requiring DTLS chunk support receives an
+SCTP packet containing an INIT chunk without a DTLS Key Management Parameter,
+it MUST reply with an packet containing an ABORT chunk an MAY include the
+error cause indicating that the DTLS chunk support is missing (see {{enoprotected}}).
 
-Additionally, an SCTP Endpoint acting as responder willing to support
-only protected associations considers an INIT chunk not containing
-the DTLS Key Management Parameter or another
-DTLS Key Management Method accepted by own security policy solution as an error,
-thus it will reply with an ABORT chunk according to what specified in
-{{enoprotected}} indicating that for this endpoint mandatory DTLS Key Management
-Parameter is missing.
+If an SCTP endpoint, which has sent an SCTP packet with an INIT chunk containing
+DTLS Key Management Parameter receives a packet containing an INIT ACK chunk with
+a DTLS Key Management Parameter not containing exactly one of the DTLS Key
+Mangement Identifiers it sent, the endpoint MUST reply with an packet containing
+an ABORT chunk. The ABORT chunk MAY include the Protocol Violation error cause.
+If the INIT ACK does not contain any DTLS Key Management Parameter and the
+endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
+an SCTP packet with an ABORT chunk. It MAY include the error cause indicating
+that DTLS chunk support is missing (see {{enoprotected}}).
+If the endpoint's policy does not require the use of the DTLS chunk, it MAY
+continue with the handshake.
 
-When initiator and responder have agreed on a DTLS Chunk protected
-association and the DTLS Key Management Method by means of handshaking
-INIT/INIT ACK the SCTP association establishment continues until it
-has reached the ESTABLISHED state.
-
-When the SCTP session has been established follow the process defined
-by the selected DTLS Key Management Method for establishing DTLS Key Contexts
-and installing them.
-
-### Offering Multiple Security Solutions
-
-An initiator of an SCTP association may want to offer multiple
-different DTLS Key Management Methods for DTLS Chunk or in combination
-with other DTLS Key Management Methods in addition to DTLS 1.3 chunks for the
-SCTP association.
-Multiple DTLS Key Management Methods offered in the INIT chunk will be
-ordered based on the priority, where the most preferred will be
-in the first position and the least preferred in the last.
-The INIT ACK chunk will only contain the chosen DTLS Key Management Method.
-Offers with multiple DTLS Key Management Methods need to
-consider the downgrade attack risks (see {{Downgrade-Attacks}}).
-
-The initiator MAY include in its INIT additional DTLS Key Management Methods
-that are compatible to offer in parallel with DTLS Chunks. This
-may include SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}}. This will result
-in that a number of different SCTP parameters may be included that are
-not possible to use simultaneously. Instead the responder needs to parse
-these parameters to figure out which sets of solutions that are
-offered that the implementation support, and apply its security
-policies to select the most appropriate. For example an offer of DTLS
-Chunks and SCTP-AUTH, could be interpreted as three different
-solutions with different properties, namely DTLS Chunks,
-DTLS/SCTP {{RFC6083}}, and SCTP-AUTH {{I-D.ietf-tsvwg-rfc4895-bis}} only.
-However, here the DTLS Key Management Parameter can
-indicate both preference and which of the solutions that are preferred.
-
-The responder selects one security solution and includes it in the
-response (INIT ACK). If DTLS chunks was selected and the
-DTLS Key Management Method follows the recommendation for down-grade
-prevention the endpoints know that down-grade did not happen.
+When the SCTP association has been established the process defined by the
+selected DTLS Key Management Method MUST be followed for establishing
+DTLS Key Contexts and installing them.
 
 ## DTLS Chunk Handling {#dtls-chunk-handling}
 
@@ -664,24 +639,19 @@ the structure of an unprotected SCTP packet as described in {{RFC9260}}.
 
 The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
 the structure of a protected SCTP packet being sent.
-Such packets are built with the SCTP common header.
-Only one DTLS chunk can be sent in a SCTP packet.
+Such packets contain only the SCTP common header and one DTLS chunk.
 
-### Sending of DTLS Chunks {#dtls-chunk-sending}
-
-When the credentials for sending DTLS chunks have been configured by the
+Once the credentials for sending DTLS chunks have been configured by the
 application, all SCTP packets are sent with a DTLS chunk.
 
 When an SCTP packet needs to be sent, the sequence of chunks is used
-as DTLSInnerPlaintext.content and DTLSInnerPlaintext.type is set to
-application_data. Then the DTLSCiphertext is computed and used as the
+as `DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set to
+`application_data`. Then the `DTLSCiphertext` is computed and used as the
 payload of the DTLS chunk. Finally the SCTP common header is prepended.
 
-When the DTLS chunk is used, the DTLS chunk header and the overhead of DTLS
-has to be considered to ensure that the final SCTP packet does not exceed
+When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
+and the overhead of DTLS to ensure that the final SCTP packet does not exceed
 the PMTU.
-
-### Receiving of DTLS Chunks {#dtls-chunk-receiving}
 
 When an SCTP packet containing a DTLS chunk bundled with any other
 chunk is received, the packet MUST be silently discarded.
@@ -690,102 +660,65 @@ After the application has restricted the SCTP packet handling to protected
 SCTP packets only, a SCTP packet not containing a DTLS chunk MUST be
 silently discarded.
 
-When processing the payload of the DTLS chunk (i.e. the DTLSCiphertext),
-the Restart flag in addition to the unified_hdr is used to find the keys for
-processing the encrypted_record.
+When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
+the Restart flag in addition to the `unified_hdr` is used to find the keys for
+processing the `encrypted_record`.
 
-After the encrypted_record has been verified and decrypted, the
-corresponding chunks (the DTLSInnerPlaintext.content) are processed as
+After the `encrypted_record` has been verified and decrypted, the
+corresponding chunks (the `DTLSInnerPlaintext.content`) are processed as
 defined in the corresponding specifications.
 
-### Critical Error from DTLS {#eengine}
-
-The Chunk Protection Operator MAY inform local SCTP endpoint about errors.
-When an Error in the DTLS 1.3 compromises the protection mechanism,
-the Chunk Protection Operator may stop processing data altogether, thus the
-local SCTP endpoint will not be able to send or receive any chunk for
-the specified Association.  This will cause the SCTP Association to be
-closed by legacy timer-based mechanism. Since the Association
-protection is compromised no further data will be sent and the remote
-peer will also experience timeout on the Association.
-
-### Non-critical Error in the Protection {#non-critical-errors}
-
-A non-critical error in Chunk Protection Operator means that the
-Chunk Protection Operator is capable of recovering without the need
-of the whole SCTP Association to be re-established.
-
-From SCTP perspective, a non-critical error will be perceived
-as a temporary problem in the transport and will be handled
-with retransmissions and SACKS according to {{RFC9260}}.
-
 When the Chunk Protection Operator will experience a non-critical error,
-an ABORT chunk MUST NOT be sent.
+it MUST NOT abort the association.
 
 ## Termination of a Protected Association {#termination-procedure}
 
-Besides the procedures for terminating an association explained in
-{{RFC9260}}, DTLS 1.3 chunk MUST ask the SCTP endpoint for terminating an
-association when having an internal error or by detecting a security
-violation. Note that the closure of any DTLS Key Management Method doesn't
-compromise the capability of sending and receiving protected
-SHUTDOWN COMPLETE chunks as that capability only relies on the
-Key Context and not on the DTLS Key Management Method from where it has
-been derived.
+Note that the closure of any DTLS Key Management Method doesn't
+compromise the capability of terminating the SCTP association gracefully as
+that capability only relies on the Key Context and not on the DTLS Key
+Management Method from where it has been derived.
 
 ## SCTP Restart Considerations  {#sec-restart}
 
 This section deals with the handling of an unexpected INIT chunk
 during an Association lifetime as described in {{Section 5.2 of RFC9260}}
-with the purpose of achieving a Restart of the current Association,
-thus implementing SCTP Restart.
+with the purpose of defining a protected restart procedure.
 
-This specification doesn't support SCTP Restart as described in
-{{RFC9260}} because the COOKIE ECHO and COOKIE ACK chunks
-are sent encrypted (see {{protected-restart}}).
+When the upper layer protocols require support of SCTP Restart for associations
+using the DTLS chunk, as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}},
+the endpoint needs to support also the protected SCTP Restart procedure
+described below. Implementing the protected restart procedure is RECOMMENDED,
+however not required as persistent secure storage of the restart DTLS Key
+Context is needed.
 
-When the upper layer protocols require support of SCTP Restart, as in
-case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the endpoint needs to
-support also initiating protected SCTP Restart procedure described in
-{{protected-restart}}. Implementing initiating protected restart
-procedure is RECOMMENDED, however not required as persistent secure
-storage of the restart DTLS Key Context is needed.
-
-The cases where one of the SCTP Endpoints only implements initiating
-legacy SCTP Restart are described in {{sctp-rest-comp}}.
-
-
-### Protected SCTP Restart {#protected-restart}
-
-The protected SCTP Restart procedure keeps the security
-characteristics of an SCTP Association using DTLS Chunk.
+The protected SCTP restart procedure keeps the security characteristics of
+an SCTP Association using DTLS chunks.
 
 In protected SCTP Restart, INIT and INIT ACK chunks are sent
 strictly according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
-are encrypted using DTLS Chunks and Restart DTLS Key contexts.
+are encrypted using DTLS chunks and the restart DTLS Key contexts.
 
 In order to support protected SCTP Restart, the SCTP Endpoints need
-to allocate and maintain dedicated Restart DTLS Key contexts, SCTP
+to allocate and maintain dedicated restart DTLS Key contexts, SCTP
 packets protected by these contexts will be identified in the DTLS
 chunk with the R (Restart) bit set (see {{DTLS-chunk}}).  Both SCTP
-Endpoints need to ensure that Restart DTLS key contexts are preserved
+endpoints need to ensure that Restart DTLS key contexts are preserved
 for supporting the protected SCTP Restart use case.
 
 In order for the protected SCTP endpoint to be available for protected SCTP
 Restart purposes, the DTLS chunk needs access to a DTLS Key context for
 this SCTP association that needs to be kept in a well-known state so
-that both SCTP Endpoints are aware of the DTLS sequence numbers and
-replay window, i.e. initialized but never used. An SCTP Endpoint MUST
-NEVER use the SCTP Restart DTLS Key for any other use case than SCTP
+that both SCTP endpoints are aware of the DTLS sequence numbers and
+replay window, i.e. initialized but never used. An SCTP endpoint MUST
+NOT use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
 An SCTP endpoint wanting to be able to initiate a protected SCTP
 restart needs to store securely and persistently the restart Keys,
-and related DTLS epoch, indexed so that when
-performing a restart with the peer node it had a protected SCTP
-association which can identify the right restart Key and DTLS epoch and
-initialize the restart DTLS Key Context for when restarting the SCTP
-association. The keys and epoch need to be stored
+and related DTLS epoch, indexed so that when performing a restart with the
+peer node it had a protected SCTP association which can identify the right
+restart Key and DTLS epoch and initialize the restart DTLS Key Context for
+when restarting the SCTP association. The keys and epoch need to be stored
 securely and persistently so that they survive the events that are
 causing protected SCTP Restart procedure to be used, for instance a
 crash of the SCTP stack. The security considerations for persistent
@@ -833,13 +766,8 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP Association Restart are transported within DTLS in SCTP.
 
-The transport of COOKIE ECHO, COOKIE ACK by means of
-DTLS chunk ensures that the peer requesting the restart has been
-previously validated and the SCTP state machine after having reached
-ESTABLISHED state moves automatically to PROTECTED state.
-
 A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
-for User Traffic until a new primary DTLS Key Context will be available. The
+for user traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
@@ -847,15 +775,13 @@ restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
 to restart the SCTP association.
 
-After restart the next primary DTLS key context MUST use epoch=3,
+After restart the next primary DTLS key context MUST use epoch 3,
 i.e. the epoch value is reset. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
 after any old in-flight restart packets will have been received.
 
-### Compatibility with Legacy SCTP Restart {#sctp-rest-comp}
-
-An SCTP Endpoint supporting only legacy SCTP Restart and involved in
+An SCTP Endpoint supporting only normal SCTP Restart and involved in
 an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
 the Association. The effect will be that the restart initiator will
 receive INIT ACK but then all sent packets with COOKIE ECHO will be
@@ -864,20 +790,9 @@ of any response from the restarting node.
 
 An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks, when receiving a COOKIE ECHO
-chunk protected by DTLS chunk as described in {{protected-restart}},
-thus having the R bit (Restart Indicator) set in the DTLS Chunk (see
-{{sctp-DTLS-chunk-newchunk-crypt-struct}}), will silently discard it.
-
-Since an SCTP Endpoint supporting only legacy SCTP Restart and involved
-in an SCTP Association using DTLS Chunks cannot use SCTP Restart
-legacy procedure, in case of need to restart the Association
-it SHOULD keep on retrying initiating a new Association
-until the remote SCTP Endpoint has closed the existing Association
-(i.e. due to timeout) and will accept a new one.
-As alternative, depending on the Use Case and the Upper Layer protocol,
-it MAY use a different SCTP Source port number so that the peer SCTP Endpoint
-will accept the initiation of the new Association while still supervising
-the old one.
+chunk protected by DTLS chunk as described above, thus having the
+ R bit (Restart Indicator) set in the DTLS Chunk (see
+{{sctp-DTLS-chunk-newchunk-crypt-struct}}), MUST silently discard it.
 
 # DTLS Key Management Method Considerations {#key-management-considerations}
 
