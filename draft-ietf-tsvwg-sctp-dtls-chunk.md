@@ -1650,6 +1650,8 @@ Transmission Protocol (SCTP) Parameters group handled by IANA:
 
 ## DTLS Key Management Method Identifiers {#IANA-Protection-Solution-ID}
 
+Note: The RFC Editor is requested to replace RFC-To-Be with a reference to this document.
+
 IANA is requested to create a new registry called "DTLS Key Management Method".
 This registry is part of the Stream Control Transmission Protocol (SCTP)
 Parameters grouping.
@@ -1660,7 +1662,7 @@ in this document.
 Each entry will be assigned a 16-bit unsigned integer value from the suitable range.
 
 | Identifier | Key Management Method Name                                     | Reference | Contact       |
-| 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-TBD   | Draft Authors |
+| 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-To-Be | Draft Authors |
 | 1-4095     | Available for Assignment using Specification Required policy   |           |               |
 | 4096-65535 | Available for Assignment using First Come, First Served policy |           |               |
 {: #iana-psi title="DTLS Key Management Method Identifiers" cols="r l l l"}
