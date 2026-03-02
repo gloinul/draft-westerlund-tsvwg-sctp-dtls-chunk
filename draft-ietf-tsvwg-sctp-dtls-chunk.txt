@@ -1676,6 +1676,9 @@ Table of Contents
 
 9.1.  DTLS Key Management Method Identifiers
 
+   Note: The RFC Editor is requested to replace RFC-To-Be with a
+   reference to this document.
+
    IANA is requested to create a new registry called "DTLS Key
    Management Method".  This registry is part of the Stream Control
    Transmission Protocol (SCTP) Parameters grouping.
@@ -1688,7 +1691,7 @@ Table of Contents
    +============+================================+===========+=========+
    | Identifier | Key Management Method Name     | Reference | Contact |
    +============+================================+===========+=========+
-   |          0 | DTLS Chunk with Pre-shared     | RFC-TBD   | Draft   |
+   |          0 | DTLS Chunk with Pre-shared     | RFC-To-Be | Draft   |
    |            | cryptographic parameters       |           | Authors |
    +------------+--------------------------------+-----------+---------+
    |     1-4095 | Available for Assignment       |           |         |
