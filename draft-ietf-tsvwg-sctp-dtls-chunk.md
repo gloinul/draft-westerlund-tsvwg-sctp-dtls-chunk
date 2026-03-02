@@ -114,52 +114,32 @@ can only be used as described in this document.
 
 # Introduction and Protocol Overview {#introduction}
 
-   This document defines a DTLS chunk for the Stream Control
-   Transmission Protocol (SCTP), as defined in {{RFC9260}}.
+This document extends the Stream Control Transmission Protocol (SCTP), as
+specified in {{RFC9260}}, by defining the DTLS chunk format and the procedures
+for negotiating and managing its usage.
+DTLS chunk support is integrated into the SCTP implementation, enabling the
+secure transfer of SCTP packets (including both control and DATA chunks).
 
-   This specification defines the actual DTLS chunk, how to enable
-   its usage, how it interacts with the SCTP association establishment
-   to enable endpoint authentication, key-establishment, and key
-   updates.
+The DTLS chunk protects a sequence of SCTP chunks by encapsulating their
+DTLS-based ciphertext. This processing is based on DTLS 1.3, as specified in
+{{RFC9147}}.
 
-   The DTLS chunk is designed to enable mutual DTLS based
-   authentication of endpoints, data confidentiality, DTLS based
-   data origin authentication, data integrity protection, and data replay
-   protection for SCTP packets after the SCTP association has been
-   established. It is dependent on a DTLS Key Management Method that is
-   defined separately to achieve all these capabilities. The
-   DTLS Key Management Method uses an API to provision the SCTP
-   association's DTLS chunk protection with key-material to enable and
-   rekey the protection operations.
+Key mangement is performed outside of the SCTP implementation and is out of scope
+of this document. This process is referred to as the DTLS Key Managenement Method.
+While these methods can be also be based on DTLS 1.3 it is not a requirement.
 
-   Applications using SCTP DTLS chunk can use most transport features
-   provided by SCTP and its extensions. However, there can be some
-   limitations or additional requirements for them to function such as
-   those noted for SCTP restart {{sec-restart}} and an actual update
-   of the specification of Dynamic Address Reconfiguration {{RFC5061}},
-   see {{sec-asconf}}. Due to DTLS chunk's
-   level of integration as discussed in next section it will provide
-   its security functions on all content of the SCTP packet, and will
-   thus not impact the potential to utilize any SCTP functionalities
-   or extensions that are possible to use between two SCTP peers with
-   full security and SCTP association state.
+The DTLS chunk in combination with the DTLS key management method provide
+mutual authentication, confidentiality, DTLS based data origin authentication,
+integrity, and replay protection for SCTP packets.
+The DTLS Key Management Method utilizes an API to provision the SCTP
+association's DTLS chunk protection with key-material to enable and rekey the
+protection operations.
 
-   DTLS is considered version 1.3 as specified in {{RFC9147}} whereas
-   other versions are explicitly not part of this document.
-
-The DTLS chunk can be used for secure and confidential transfer of
-SCTP packets. This is implemented inside the SCTP protocol.
-Once an SCTP packet has been received and the SCTP common header has
-been used to identify the SCTP association, the DTLS chunk is processed by
-the Chunk Protection Operator that will perform replay protection, decrypt,
-verify authenticity, and if the DTLS chunk is successfully processed provides
-the protected SCTP chunks for further processing.
-{{sctp-DTLS-chunk-layering}} is an example
-illustrating the DTLS chunk processing in regard
-to SCTP and the Upper Layer Protocol (ULP) using
-DTLS 1.3 as the DTLS Key Management Method. Here the DTLS Key Management Method
-contains validation, i.e. using certificates, handshaking,
-updating policies etc.
+{{sctp-DTLS-chunk-layering}} is an example illustrating the DTLS chunk
+processing in regard to SCTP and the Upper Layer Protocol (ULP) using
+DTLS 1.3 as the DTLS Key Management Method.
+Here the DTLS Key Management Method provides validation, i.e. using certificates,
+handshaking, updating policies etc.
 
 ~~~~~~~~~~~ aasvg
 +---------------+ +-------------------------------+
@@ -193,41 +173,48 @@ updating policies etc.
 {: #sctp-DTLS-chunk-layering title="DTLS Chunk Layering
 in Regard to SCTP and ULP" artwork-align="center"}
 
-In the outgoing direction, once the SCTP stack has created the
-unprotected SCTP packet containing control and/or DATA chunks,
-SCTP chunks will be processed by the Chunk Protection Operator to be
-protected. The result of this computation is a DTLS 1.3 record
-encapsulated in a SCTP chunk which is named the DTLS chunk.
+After receiving an SCTP packet and identifying the association using the
+SCTP common header, the DTLS chunk is processed by the Chunk Protection Operator.
+The Chunk Protection Operator performs replay protection, decryption,
+and authentication. If this processing is successul, the encapsulated SCTP chunks
+are further processed.
 
-The Chunk Protection Operator performs protection operations on all
-chunks of an SCTP packet. Information protection is kept during the lifetime of
-the association and no information is sent unprotected except the
-initial SCTP handshake, any initial DTLS Key Management traffic, the SCTP
-common header, the SCTP DTLS chunk header, and the INIT and INIT ACK
-chunks during an SCTP Restart procedure.
+For outgoing traffic, after the SCTP stack has created the unprotected SCTP
+packet containing control and/or DATA chunks, these SCTP chunks will be
+processed by the Chunk Protection Operator for protection.
+This results in a DTLS 1.3 record encapsulated in a DTLS chunk.
 
-The support of the DTLS chunk and the DTLS Key Management Method to use is
-negotiated by the peers at the setup of the SCTP association using a
-new parameter. The DTLS Key Management and application traffic is multiplexed
-using the PPID. The dedicated PPID 4242 is defined for use by all DTLS Key
-Management Methods. The DTLS Key Management Method uses an API to
-key the Chunk protection operation function. Usage of the DTLS 1.3
-handshake for initial mutual authentication and key establishment as
-well as periodic re-authentication and rekeying with Diffie-Hellman of
-the DTLS chunk protection is defined in separate documents,
-(see {{key-management-considerations}}). To prevent
-downgrade attacks affecting the DTLS Key Management negotiation
+The use of the DTLS 1.3 handshake for initial mutual authentication, key
+establishment, and periodic re-authentication and rekeying with
+Diffie-Hellman of the DTLS chunk protection is defined in separate documents,
+(see {{key-management-considerations}}).
+To prevent downgrade attacks affecting the DTLS Key Management negotiation
 the DTLS Key Management Method should implement specific procedures when
 deriving keys.
 
-When the endpoint authentication and key establishment has been
-completed, the association is considered to be secured and the ULP is
-informed about that. From this time on it's possible for the ULPs to
-exchange data securely with its peer.
+The Chunk Protection Operator performs protection operations on all
+chunks of an SCTP packet.
+No information is sent in plain text except for the following:
 
-A DTLS chunk will never be retransmitted, retransmission is implemented
-by SCTP endpoint at chunk level as specified in {{RFC9260}}. DTLS replay
-protection will be used to suppress duplicated DTLS chunks.
+* The initial SCTP handshake.
+* The initial DTLS Key Management traffic.
+* the SCTP common header, the SCTP DTLS chunk header.
+* The INIT and INIT ACK chunks during an SCTP Restart procedure.
+
+Support of the DTLS chunk and the selection of a DTLS Key Management Method
+are negotiated during the SCTP handshake using a new parameter.
+DTLS Key Management and application traffic are then multiplexed
+using the Payload Protocol Identifier (PPID).
+This document defines the dedicated PPID 4242 for use by all DTLS Key Management
+Methods.
+
+Applications using the DTLS chunk can leverage most transport features provided by
+SCTP and its extensions. However, the following limitations apply:
+
+* The handling of INIT collisions is not supported.
+* Performing an SCTP restart without knowing the restart key material is not supported.
+* The use of the lookup address in the Dynamic Address Reconfiguration
+  extension as specified in {{RFC5061}} is not supported.
 
 # Conventions
 
