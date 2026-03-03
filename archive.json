@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-01T01:48:16.111137+00:00",
+  "timestamp": "2026-03-03T01:43:15.735821+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1557,7 +1557,7 @@
       "id": "I_kwDOKszxDc7muu4A",
       "title": "Clean up error causes",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/97",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1566,9 +1566,17 @@
       "labels": [],
       "body": "Need to extend error causes to give coverage and handle protocol violations. ",
       "createdAt": "2026-01-29T14:32:47Z",
-      "updatedAt": "2026-01-29T14:32:47Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-03-02T14:06:25Z",
+      "closedAt": "2026-03-02T14:06:25Z",
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This is now addressed. Closing it.",
+          "createdAt": "2026-03-02T14:06:25Z",
+          "updatedAt": "2026-03-02T14:06:25Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -5644,26 +5652,202 @@
       "id": "PR_kwDOKszxDc7HBssI",
       "title": "Cleanup of Key Management Considerations",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/107",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-28T17:42:09Z",
-      "updatedAt": "2026-02-28T20:35:01Z",
+      "updatedAt": "2026-03-02T10:52:50Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "e4edb9f7814cd89ad6fff826967ed7fcefded66c",
+      "baseRefOid": "0f2e02f801a804dd4d36b90082e0c55703abaf8d",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-key-management-considerations",
-      "headRefOid": "b4afc1c2f01163eeb9a7d0d5cf6d19c9254fa909",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "458959b81c058ffac5538d0b447630764ce22734",
+      "closedAt": "2026-03-02T10:52:50Z",
+      "mergedAt": "2026-03-02T10:52:50Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "8344cacb61f7e048936609f324f31f701a2f822c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7mxsh1",
+          "commit": {
+            "abbreviatedOid": "458959b"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-01T09:31:10Z",
+          "updatedAt": "2026-03-01T09:31:10Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7m_Fpl",
+          "commit": {
+            "abbreviatedOid": "458959b"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-02T10:30:48Z",
+          "updatedAt": "2026-03-02T10:30:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 108,
+      "id": "PR_kwDOKszxDc7HRT5q",
+      "title": "Cleanup introduction",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/108",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-03-02T08:57:43Z",
+      "updatedAt": "2026-03-02T10:53:24Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0f2e02f801a804dd4d36b90082e0c55703abaf8d",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup-introduction",
+      "headRefOid": "7181be2673181108f288dc44a33a43b82a2b6df3",
+      "closedAt": "2026-03-02T10:53:18Z",
+      "mergedAt": "2026-03-02T10:53:18Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "8b32859d1b6cae78303cf20d574c483181ff2db0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7m9oy3",
+          "commit": {
+            "abbreviatedOid": "7181be2"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-02T09:12:32Z",
+          "updatedAt": "2026-03-02T09:12:32Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7m_L-a",
+          "commit": {
+            "abbreviatedOid": "7181be2"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-02T10:34:26Z",
+          "updatedAt": "2026-03-02T10:34:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 109,
+      "id": "PR_kwDOKszxDc7HSYMs",
+      "title": "Cleanup",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/109",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-03-02T10:12:38Z",
+      "updatedAt": "2026-03-02T10:57:03Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "8b32859d1b6cae78303cf20d574c483181ff2db0",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup-protocol-considerations",
+      "headRefOid": "9eaddcc7f57f1c3ba36ceeb438123df9876cacc2",
+      "closedAt": "2026-03-02T10:57:03Z",
+      "mergedAt": "2026-03-02T10:57:03Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "f51b121d16572b24e9e6ac6067935659e2dae3a6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7m_Sus",
+          "commit": {
+            "abbreviatedOid": "8301f86"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-02T10:38:05Z",
+          "updatedAt": "2026-03-02T10:38:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 110,
+      "id": "PR_kwDOKszxDc7HVi9w",
+      "title": "Improve procedures",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/110",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-03-02T13:44:47Z",
+      "updatedAt": "2026-03-02T18:37:42Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "578190c5dd269d5b5c3f8aec39d5b8959562ec41",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-procedures",
+      "headRefOid": "02d5713478fdfd7cb65df15d98a7b9f27c4e8bc4",
+      "closedAt": "2026-03-02T18:37:35Z",
+      "mergedAt": "2026-03-02T18:37:35Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "7e1a2f9029cc7ee7ac297e520c4415a3fe0741ec"
+      },
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Only two typos: Line 576 \"If there us\" --> \"If there is\" Line 603 \"selected DTLS Key Management Method MUS be\" --> \"selected DTLS Key Management Method MUST be\"\r\n\r\nFixed. Thanks for catching them.",
+          "createdAt": "2026-03-02T14:06:03Z",
+          "updatedAt": "2026-03-02T14:06:03Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7nDMUo",
+          "commit": {
+            "abbreviatedOid": "cedff5f"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Only two typos:\nLine 576 \"If there us\" --> \"If there is\"\nLine 603 \"selected DTLS Key Management Method MUS be\" --> \"selected DTLS Key Management Method MUST be\"",
+          "createdAt": "2026-03-02T13:52:52Z",
+          "updatedAt": "2026-03-02T13:52:52Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
