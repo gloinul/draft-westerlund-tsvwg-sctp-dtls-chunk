@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-08T01:40:38.145166+00:00",
+  "timestamp": "2026-03-10T01:24:00.569373+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1590,9 +1590,31 @@
       "labels": [],
       "body": "While reviewing the following structures, I noticed a potential ambiguity around the flexible array members:\n```\nstruct sctp_dtls_kmids {\n        sctp_assoc_t sdk_assoc_id;\n        uint16_t sdk_nr_kmids;\n        uint16_t sdk_kmids[];\n};\n\nstruct sctp_dtls_keys {\n        sctp_assoc_t sdk_assoc_id;\n        uint8_t sdk_cipher_suite[2];\n        uint8_t sdk_restart;\n        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */\n        uint64_t sdk_epoch;\n        uint16_t sdk_key_len;\n        uint16_t sdk_iv_len;\n        uint16_t sdk_sn_key_len;\n        uint8_t sdk_keys[];\n};\n```\n\nFor example, given `struct sctp_dtls_kmids *kmids = BIG_BUF;`, The flexible array may be accessed as:\n\n`kmids->sdk_kmids;`\n\n`(uint8_t *)kmids + sizeof(*kmids);` or `(uint8_t *)(kmids + 1)`\n\nIn many cases these are expected to point to the same location, but with the current layout this is not guaranteed because there is no explicit padding before the flexible array. As a result, the offset computed using sizeof(struct) may differ from the actual start of the array.\n\nOne possible improvement would be to introduce explicit padding/unused fields or adjust field sizes so that the layout is unambiguous. For example:\n\n```\nstruct sctp_dtls_kmids {\n        sctp_assoc_t sdk_assoc_id;\n        uint16_t sdk_unused;\n        uint16_t sdk_nr_kmids;\n        uint16_t sdk_kmids[];\n};\n\nstruct sctp_dtls_keys {\n        sctp_assoc_t sdk_assoc_id;\n        uint8_t sdk_cipher_suite[2];\n        uint8_t sdk_restart;\n        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */\n        uint64_t sdk_epoch;\n        uint16_t sdk_unused;\n        uint16_t sdk_key_len;\n        uint16_t sdk_iv_len;\n        uint16_t sdk_sn_key_len;\n        uint8_t sdk_keys[];\n};\n```\nOr, sdk_nr_kmids in sctp_dtls_kmids could be changed to uint32_t to naturally align the structure.",
       "createdAt": "2026-03-07T15:34:50Z",
-      "updatedAt": "2026-03-07T15:35:14Z",
+      "updatedAt": "2026-03-08T21:00:09Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@tuexen ",
+          "createdAt": "2026-03-08T17:11:49Z",
+          "updatedAt": "2026-03-08T17:11:49Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What is the alignment requirement of `uint16_t sdk_kmids[]`? I thought it is 16-bit, not 32-bit. Am I missing something?",
+          "createdAt": "2026-03-08T17:44:49Z",
+          "updatedAt": "2026-03-08T17:44:49Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> What is the alignment requirement of `uint16_t sdk_kmids[]`? I thought it is 16-bit, not 32-bit. Am I missing something?\n\nThis is not the problem.\n\nThe problem is:\n\n`kmids->sdk_kmids` and `(uint8_t *)(kmids + 1)` are pointing to the different memory?\n\nis it okay to you?\n\nWhen packing or parsing the kmids at the end of `struct sctp_dtls_kmids`, I think some users may use `kmids->sdk_kmids` and others may use `(uint8_t *)(kmids + 1)`.\n\n```\n#include <stdint.h>\n#include <stdio.h>\n\nstruct sctp_dtls_kmids {\n\tuint32_t sdk_assoc_id;\n\tuint16_t sdk_nr_kmids;\n\tuint16_t sdk_kmids[];\n};\n\nint main()\n{\n\tstruct sctp_dtls_kmids *kmids;\n\tuint8_t buf[100];\n\n\tkmids = (struct sctp_dtls_kmids *)buf;\n\n\tprintf(\"%p %p\\n\", kmids->sdk_kmids, (uint8_t *)(kmids + 1));\n}\n```",
+          "createdAt": "2026-03-08T20:31:35Z",
+          "updatedAt": "2026-03-08T21:00:09Z"
+        }
+      ]
     }
   ],
   "pulls": [
