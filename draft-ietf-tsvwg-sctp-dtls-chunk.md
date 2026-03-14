@@ -832,19 +832,26 @@ This section describes an abstract API that is needed between a
 DTLS Key Management Method and the DTLS Chunk. This is an
 example API and there are alternative implementations.
 
-This API enables the cryptographical protection operations by setting
-client/server write keys, sequence number keys, and IVs for primary and
-restart DTLS contexts. The write key is used by the cipher suite
-for DTLS record protection ({{Section 5.2 of RFC8446}}). The initialization
-vector (IV) is random material used to XOR with the sequence
-number to create the nonce per {{Section 5.3 of RFC8446}}.
+This API enables the cryptographical protection operations by establishing the
+the primary and restart DTLS Key Contexts that consist of
+client/server write keys, sequence number keys, IVs, replay window and
+last used sequence number. The write key is used by the cipher suite
+for DTLS record protection ({{Section 5.2 of RFC8446}}). The
+initialization vector (IV) is random material used to XOR with the
+sequence number to create the nonce per {{Section 5.3 of RFC8446}}.
 The sequence number key is used to encrypt the sequence number
-({{Section 4.2.3 of RFC9147}}).
+({{Section 4.2.3 of RFC9147}}). Last used sequence number is maintained
+to prevent multiple uses of the same sequence number. The replay window
+tracks which packets have been received.
+
+The SCTP Association Initiator will take the DTLS Client Role in
+regards to DTLS Key Context while the SCTP responder takes the DTLS
+Server Role.
 
 ## Set Supported DTLS Key Management Methods
 
 Prior to attempting to establish an SCTP assocation an SCTP endpoint
-needs to configure which DTLS Key Management Methods it supports if
+needs to configure which DTLS Key Management Methods it supports when
 establishing a SCTP association. This will be included in INIT if the
 endpoint initiated the SCTP association. Else it will be used to
 determine the selected DTLS Key Management method that is returned in
@@ -855,24 +862,25 @@ Request: Set Supported DTLS Key Management Methods
 Parameters:
 
 * SCTP Association Handle:
-: The handle to what may become an SCTP Association or a server port
+   : The handle to what may become an SCTP Association or a server port
 accepting association establishment.
 
 * List of Identifiers:
-: A prioritized list of DTLS Key Management identifiers that
+   : A prioritized list of DTLS Key Management identifiers that
 are supported, from the most preferred to the least preferred.
 
 Reply: Success or Error
 
 Parameters: None
 
-## Get Offered DTLS Key Management Methods
+## Get Offered and Selected DTLS Key Management Methods
 
 After an SCTP association has been established the key management
-function will need to get the list of DTLS key management IDs
-that was present in DTLS Key Management parameter in the INIT and INIT ACK chunks.
-This list will be used by the selected DTLS key management method to
-derive security keys and prevent downgrade attacks.
+method will need to get the list of DTLS key management identifiers
+that was present in DTLS Key Management parameter in the INIT and INIT
+ACK chunks.  This list will be used by the selected DTLS key
+management method to derive security keys and prevent downgrade
+attacks.
 
 Request: Get DTLS Key Management Methods
 
@@ -887,18 +895,19 @@ Reply: Offered and Selected DTLS Key Management Methods
 : This API call returns a list of DTLS key-management Identifiers. The
 list first contains all the Identifiers present in DTLS Key Management
 Parameter in the INIT Chunk, followed by the single identifier
-for the selected methods that was exchanged in the DTLS Key Management
+for the selected method that was exchanged in the DTLS Key Management
 Parameter in the INIT ACK chunk.
 
 
 ## Cipher Suite Capabilities
 
-The DTLS Key Management Method needs to know which cipher suites defined
-for usage with DTLS 1.3 that are supported by the DTLS chunk and its
-protection operations block. All TLS cipher suites that are defined are
-listed in the TLS cipher suite registry {{TLS-CIPHER-SUITES}} at IANA
-and are identified by a 2-byte value. Thus this needs to return a list
-of all supported cipher suites to the higher layer.
+The DTLS Key Management Method needs to know which cipher suites
+defined for usage with DTLS 1.3 that are supported by the DTLS chunk
+implementation and its protection operations block. All TLS cipher
+suites that are defined are listed in the TLS cipher suite registry
+{{TLS-CIPHER-SUITES}} at IANA and are identified by a 2-byte
+value. Thus, this needs to return a list of all supported cipher
+suites to the higher layer.
 
 Request : Get Cipher Suites
 
@@ -911,34 +920,39 @@ Parameters : list of cipher suites
 ## Establish Client Write Keying Material
 
 The DTLS Chunk can use one out of multiple sets of cipher suite and
-corresponding key materials.
+corresponding DTLS Key Context.
 
-The following information needs to be provided when setting Client Write (transmit) Keying material:
+The following information needs to be provided when setting write
+(transmit) keying material for the endpoint with the DTLS Client Role:
 
-Request : Establish Client Write Key and IV
+Request : Establish Client Write Keying Material
 
 Parameters :
 
 * SCTP Association:
-: Reference to the relevant SCTP association to set the keying material for.
+: Reference to the relevant SCTP association to set the keying
+material for, including restarting SCTP association.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
 
 * DTLS Epoch:
-: The DTLS epoch these keys are valid for. Note that Epoch lower than
-  3 are not expected as they are used during DTLS handshake.
+: The DTLS epoch these keys are valid for in the indicated SCTP
+  Association. Note that Epoch lower than 3 are not expected as they
+  are used during DTLS handshake.
 
 * Cipher Suite:
-: 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
-  to identify the DTLS AEAD algorithm to perform the DTLS record protection.
-  The cipher suite is fixed for a (SCTP Association, Key) pair.
+: 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite
+  used to identify the DTLS AEAD algorithm to perform the DTLS record
+  protection.  The cipher suite is fixed for a (SCTP Association, Key)
+  pair.
+
 
 * Write Key, Sequence Number Key and IV:
 : The cipher suite specific binary object containing all necessary
-information for protection operations. The secret will be used by the DTLS 1.3 client to
-encrypt the record. Binary arbitrary long object depending on the
-cipher suite used.
+information for protection operations. The secret will be used by the
+DTLS 1.3 client to encrypt the record. Binary arbitrary long object
+depending on the cipher suite used.
 
 
 Reply : Established or Failed
@@ -949,14 +963,16 @@ Reply : Established or Failed
 The DTLS Chunk can use one out of multiple sets of cipher suite and
 corresponding key materials.
 
-The following information needs to be provided when setting Server Write (transmit) Keying material:
+The following information needs to be provided when setting Write
+(transmit) Keying material for the endpoint with the DTLS Server Role:
 
-Request : Establish Server Write Key and IV
+Request : Establish Server Write Keying Material
 
 Parameters :
 
 * SCTP Association:
-: Reference to the relevant SCTP association to set the keying material for.
+: Reference to the relevant SCTP association to set the keying
+material for, including restarting SCTP association.
 
 * Restart indication:
 : A bit indicating whether the Key is for restart purposes
@@ -972,19 +988,19 @@ Parameters :
 
 * Write Key, Sequence Number Key and IV:
 : The cipher suite specific binary object containing all necessary
-information for protection operations. The secret will be used by the DTLS 1.3 client to
-encrypt the record. Binary arbitrary long object depending on the
-cipher suite used.
+information for protection operations. The secret will be used by the
+DTLS 1.3 client to encrypt the record. Binary arbitrary long object
+depending on the cipher suite used.
 
 Reply : Established or Failed
 
 
 ## Destroy Client Write Keying Material
 
-A function to destroy the Client Write (transmit) keying material for a given epoch for a given
-Key for a given SCTP Association.
+A function to destroy the Client Write (transmit) keying material for
+a given epoch for a given Key for a given SCTP Association.
 
-Request : Destroy client write key and IV
+Request : Destroy client write keying material
 
 Parameters :
 
@@ -1000,10 +1016,10 @@ Parameters : true or false
 
 ## Destroy Server Write Keying Material
 
-A function to destroy the Server Write (transmit) keying material for a given epoch for a given
-Key for a given SCTP Association.
+A function to destroy the Server Write (transmit) keying material for
+a given epoch for a given Key for a given SCTP Association.
 
-Request : Destroy server write key and IV
+Request : Destroy server write keying material
 
 Parameters :
 
@@ -1017,6 +1033,7 @@ Reply: Destroyed
 
 Parameters : true or false
 
+
 ## Set Key to Use
 
 Set which key to use to protect the future SCTP packets sent by the
@@ -1026,7 +1043,7 @@ Request : Set Key used
 
 Parameters :
 
-* SCTP Association
+* SCTP Association, including association to be created when restarting.
 
 * Restart indication
 
@@ -1051,7 +1068,7 @@ Reply: Acknowledgement
 ## Get AEAD Encryption Invocations
 
 Get the number of AEAD encryption invocations (protected messages) for
-a given epoch.
+a given epoch performed when transmitting packets from this endpoint.
 
 Request : Get AEAD Encryption Invocations
 
@@ -1069,7 +1086,8 @@ Parameters : non-negative integer
 
 ## Get AEAD Decryption Invocations
 
-Get the number of AEAD decryption invocations for a given epoch.
+Get the number of AEAD decryption invocations for a given epoch
+performed when receiving packets on this endpoint.
 
 Request : Get AEAD Decryption Invocations
 
@@ -1087,7 +1105,8 @@ Parameters : non-negative integer
 
 ## Get Failed AEAD Decryption Invocations
 
-Get the number of failed AEAD decryption invocations for a given epoch.
+Get the number of failed AEAD decryption invocations for a given epoch
+performed when receiving packets on this endpoint.
 
 Request : Get Failed AEAD Decryption Invocations
 
@@ -1108,14 +1127,14 @@ Parameters : non-negative integer
 The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
-association. However as the actual reordering in number of packets is
+association. However, as the actual reordering in number of packets is
 a combination of how delayed one packet may be compared to another
 times the actual packet rate this can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
 
 Note this sets this configuration to be used across any DTLS key
-context for a given SCTP Association and primary/restart usages.
+context for a given SCTP Association and both primary/restart usages.
 
 Request : Configure Replay Protection
 
