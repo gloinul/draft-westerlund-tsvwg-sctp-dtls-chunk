@@ -1037,7 +1037,10 @@ Parameters : true or false
 ## Set Key to Use
 
 Set which key to use to protect the future SCTP packets sent by the
-SCTP Association.
+SCTP Association. Once any DTLS Key Context has been set to use for
+an SCTP Association, all future SCTP packets sent by this endpoint
+will be protected. There are no possibility to go back to send
+unprotected packets.
 
 Request : Set Key used
 
