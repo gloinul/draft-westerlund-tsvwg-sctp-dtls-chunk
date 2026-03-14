@@ -3095,7 +3095,10 @@ a given epoch for a given Key for a given SCTP Association.<a href="#section-7.7
 <a href="#section-7.8" class="section-number selfRef">7.8. </a><a href="#name-set-key-to-use" class="section-name selfRef">Set Key to Use</a>
         </h3>
 <p id="section-7.8-1">Set which key to use to protect the future SCTP packets sent by the
-SCTP Association.<a href="#section-7.8-1" class="pilcrow">¶</a></p>
+SCTP Association. Once any DTLS Key Context has been set to use for
+an SCTP Association, all future SCTP packets sent by this endpoint
+will be protected. There are no possibility to go back to send
+unprotected packets.<a href="#section-7.8-1" class="pilcrow">¶</a></p>
 <p id="section-7.8-2">Request : Set Key used<a href="#section-7.8-2" class="pilcrow">¶</a></p>
 <p id="section-7.8-3">Parameters :<a href="#section-7.8-3" class="pilcrow">¶</a></p>
 <ul class="normal">
