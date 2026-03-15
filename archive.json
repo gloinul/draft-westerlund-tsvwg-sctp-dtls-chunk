@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-10T01:24:00.569373+00:00",
+  "timestamp": "2026-03-15T01:51:20.040984+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1613,6 +1613,78 @@
           "body": "> What is the alignment requirement of `uint16_t sdk_kmids[]`? I thought it is 16-bit, not 32-bit. Am I missing something?\n\nThis is not the problem.\n\nThe problem is:\n\n`kmids->sdk_kmids` and `(uint8_t *)(kmids + 1)` are pointing to the different memory?\n\nis it okay to you?\n\nWhen packing or parsing the kmids at the end of `struct sctp_dtls_kmids`, I think some users may use `kmids->sdk_kmids` and others may use `(uint8_t *)(kmids + 1)`.\n\n```\n#include <stdint.h>\n#include <stdio.h>\n\nstruct sctp_dtls_kmids {\n\tuint32_t sdk_assoc_id;\n\tuint16_t sdk_nr_kmids;\n\tuint16_t sdk_kmids[];\n};\n\nint main()\n{\n\tstruct sctp_dtls_kmids *kmids;\n\tuint8_t buf[100];\n\n\tkmids = (struct sctp_dtls_kmids *)buf;\n\n\tprintf(\"%p %p\\n\", kmids->sdk_kmids, (uint8_t *)(kmids + 1));\n}\n```",
           "createdAt": "2026-03-08T20:31:35Z",
           "updatedAt": "2026-03-08T21:00:09Z"
+        }
+      ]
+    },
+    {
+      "number": 112,
+      "id": "I_kwDOKszxDc7y4l-O",
+      "title": "The Key Context Information is inconsistent",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/112",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "So Section 7 says:\n\nThis API enables the cryptographical protection operations by setting client/server write keys, sequence number keys, and IVs for primary and restart DTLS contexts. The write key is used by the cipher suite for DTLS record protection ([Section 5.2](https://rfc-editor.org/rfc/rfc8446#section-5.2) of [[RFC8446](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC8446)]). The initialization vector (IV) is random material used to XOR with the sequence number to create the nonce per [Section 5.3](https://rfc-editor.org/rfc/rfc8446#section-5.3) of [[RFC8446](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC8446)]. The sequence number key is used to encrypt the sequence number ([Section 4.2.3](https://rfc-editor.org/rfc/rfc9147#section-4.2.3) of [[RFC9147](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC9147)]).\n\nSection 3.1 says:\n\nIn this document we use the terms DTLS Key context for indicating a Key and IV, produced by the DTLS Key Management, and all relevant data that needs to be provided to the Chunk Protection Operator for DTLS encryption and decryption. DTLS Key context includes Keys and IV for sending and receiving, replay window, last used sequence number. Each DTLS key context is associated with a three-value tuple identifying the context, consisting of SCTP Association, the restart indicator, and the DTLS epoch.\n\nThese definitions and naming of the DTLS Key Context is not conistent as the one in 3.1 lacks the sequence number protection key. So we need to address this. ",
+      "createdAt": "2026-03-14T06:56:23Z",
+      "updatedAt": "2026-03-14T06:56:23Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 113,
+      "id": "I_kwDOKszxDc7y5vj8",
+      "title": "Clarify who has the DTLS Client role when SCTP Simultanous open happens",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/113",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "When setting the DTLS Key Context it is very important that both side agrees which endpoint that has the DTLS Client Role and who has the server role so the right set of keys are installed. \n\nAs SCTP do support simultanous open, i.e. when both sides sends INIT at the same time there need to be clarified who gets the DTLS client/server role in this case. ",
+      "createdAt": "2026-03-14T09:01:49Z",
+      "updatedAt": "2026-03-14T09:01:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 114,
+      "id": "I_kwDOKszxDc7y5517",
+      "title": "Define which DTLS Sequence Number the restart DTLS Key Context is initiated to",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/114",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Part of the known state necessary for SCTP Restart with DTLS Chunk to work is what is the first DTLS sequence number will be used when sedning restart DTLS key context protected data. This appear to be currently missing, but should be defined.\n\n- A never used restart context starts from a given sequence number. \n- When a restart context have been used, even if the restart failed the restart DTLS Key Context needs to be invalidated as it can't be resused for a second attempt without resulting in using the same nonce twice.",
+      "createdAt": "2026-03-14T09:18:17Z",
+      "updatedAt": "2026-03-14T09:18:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 115,
+      "id": "I_kwDOKszxDc7y6oNi",
+      "title": "Clarify how primary and restart key context interact with DTLS sequence number and replay window",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/115",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The primary and restart DTLS key context have independent state for DTLS record sequence numbers as well as replay window. While concurrent sets of the DTLS Key Contexts for primary context interact with the same sequence number and replay window. This should be made clearer in the draft to avoid confusion. ",
+      "createdAt": "2026-03-14T10:36:47Z",
+      "updatedAt": "2026-03-14T10:41:48Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Realize that I mispoke about the sequence number. The sequence number is per Epoch, thus being reset for each new epoch. So the replay window is independent. However, the difference here between primary and restart might need some improvement. ",
+          "createdAt": "2026-03-14T10:41:48Z",
+          "updatedAt": "2026-03-14T10:41:48Z"
         }
       ]
     }
@@ -5886,6 +5958,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 116,
+      "id": "PR_kwDOKszxDc7Klo3E",
+      "title": "Clarifying direction and restart variant usage of the API. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/116",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Atempting to be using more consistent language.\r\n\r\nFixes #82 and will help to improve #112 ",
+      "createdAt": "2026-03-14T10:54:54Z",
+      "updatedAt": "2026-03-14T10:59:29Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "api-fixes",
+      "headRefOid": "34e993c52e0193837c652a0eac18c51f8ef1a40e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
