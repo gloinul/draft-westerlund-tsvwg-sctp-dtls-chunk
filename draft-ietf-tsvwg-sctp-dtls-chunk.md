@@ -70,7 +70,7 @@ informative:
   ETSI-TS-38.413:
     target: "https://www.etsi.org/deliver/etsi_ts/138400_138499/138413/18.05.00_60/ts_138413v180500p.pdf"
     title: "NG Application Protocol (NGAP) version 18.5.0 Release 18"
-  date: March 2025
+    date: Mar 2025
 
 normative:
   RFC4820:
@@ -84,7 +84,7 @@ normative:
   TLS-CIPHER-SUITES:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
-    date: November 2023
+    date: Nov 2023
 
 updates:
   RFC5061
