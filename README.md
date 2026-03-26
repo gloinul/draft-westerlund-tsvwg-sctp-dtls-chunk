@@ -1,11 +1,13 @@
+<!-- regenerate: on (set to off if you edit this file) -->
+
 # Stream Control Transmission Protocol (SCTP) DTLS Chunk
 
-This is the working area for the individual Internet-Draft, "Stream Control Transmission Protocol (SCTP) DTLS Chunk".
+This is the working area for the IETF [TSVWG Working Group](https://datatracker.ietf.org/group/tsvwg/documents/) Internet-Draft, "Stream Control Transmission Protocol (SCTP) DTLS Chunk".
 
-* [Editor's Copy](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/#go.draft-westerlund-tsvwg-sctp-dtls-chunk.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-chunk)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-westerlund-tsvwg-sctp-dtls-chunk)
-* [Compare Editor's Copy to Individual Draft](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/#go.draft-westerlund-tsvwg-sctp-dtls-chunk.diff)
+* [Editor's Copy](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/#go.draft-ietf-tsvwg-sctp-dtls-chunk.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-tsvwg-sctp-dtls-chunk)
+* [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-sctp-dtls-chunk)
+* [Compare Editor's Copy to Working Group Draft](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/#go.draft-ietf-tsvwg-sctp-dtls-chunk.diff)
 
 
 ## Contributing
@@ -13,9 +15,8 @@ This is the working area for the individual Internet-Draft, "Stream Control Tran
 See the
 [guidelines for contributions](https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/blob/main/CONTRIBUTING.md).
 
-Contributions can be made by creating pull requests.
-The GitHub interface supports creating pull requests using the Edit (✏) button.
-
+The contributing file also has tips on how to make contributions, if you
+don't already know how to do that.
 
 ## Command Line Usage
 
