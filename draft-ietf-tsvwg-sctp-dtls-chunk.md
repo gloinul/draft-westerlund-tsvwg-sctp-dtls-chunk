@@ -232,12 +232,14 @@ A DTLS key context for normal operations use MUST be created, while a DTLS key
 context for SCTP association restart SHOULD be created.
 
 In this document we use the terms DTLS Key context for indicating a
-Key and IV, produced by the DTLS Key Management, and all relevant data that
-needs to be provided to the Chunk Protection Operator for DTLS encryption
-and decryption.  DTLS Key context includes Keys and IV for sending and
-receiving, replay window, last used sequence number. Each DTLS key
-context is associated with a three-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, and the DTLS epoch.
+Key and IV, produced by the DTLS Key Management, and all relevant data
+that needs to be provided to the Chunk Protection Operator for DTLS
+encryption and decryption.  DTLS Key context includes Keys, sequence
+number protection key, and IV for sending and receiving, replay
+window, last used sequence number for sending. Each DTLS key context
+is associated with a three-value tuple identifying the context,
+consisting of SCTP Association, the restart indicator, and the DTLS
+epoch.
 
 The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
 be used.
