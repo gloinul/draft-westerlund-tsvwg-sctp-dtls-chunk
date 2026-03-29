@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-22T01:45:39.849910+00:00",
+  "timestamp": "2026-03-29T01:53:46.752619+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1651,9 +1651,66 @@
       "labels": [],
       "body": "When setting the DTLS Key Context it is very important that both side agrees which endpoint that has the DTLS Client Role and who has the server role so the right set of keys are installed. \n\nAs SCTP do support simultanous open, i.e. when both sides sends INIT at the same time there need to be clarified who gets the DTLS client/server role in this case. ",
       "createdAt": "2026-03-14T09:01:49Z",
-      "updatedAt": "2026-03-14T09:01:49Z",
+      "updatedAt": "2026-03-27T19:17:14Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that the role for DTLS should follow the role SCTP gets after solving the race condition",
+          "createdAt": "2026-03-26T10:12:14Z",
+          "updatedAt": "2026-03-26T10:12:14Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Can you @teiclap point to any text in an RFC that actually makes this role clear after an simultanous open. I looked quickly and didn't find anything in rfc9260 that the resulting role clear, only that this is part of the exception processing and how to resolve this into one association. We will need some text for this that point to the relevant part of the SCTP specifications on how to arrive at this role. ",
+          "createdAt": "2026-03-26T10:34:21Z",
+          "updatedAt": "2026-03-26T10:34:21Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi Magnus,\r\nThe solution uses the concept of Tie-Tags.\r\n\r\nI\u2019ve used AI for creating a summary.\r\n\r\nRegards,\r\nClaudio\r\n\r\n\r\nRFC\u202f9260 explicitly defines how the \u201csimultaneous INIT\u201d race condition is detected and resolved, and it is handled under Section\u202f5.2.1 (\u201cINIT Chunk Received in COOKIE\u2011WAIT or COOKIE\u2011ECHOED State\u201d). This is the SCTP equivalent of a simultaneous open in TCP, but with SCTP\u2011specific resolution logic.\r\n\r\nBelow is a precise, RFC\u2011faithful explanation, with no extrapolation beyond the text.\r\n\r\n________________________________\r\n1. What is the race condition?\r\n\r\nThe race occurs when both endpoints send an INIT at roughly the same time, i.e.:\r\n\r\n  *   A sends INIT to Z\r\n  *   Z sends INIT to A\r\n  *   Each endpoint receives an INIT while already trying to establish the association\r\n\r\nRFC\u202f9260 explicitly classifies this as case (B) in Section\u202f5.2.\r\n\r\n________________________________\r\n2. Where this is defined in RFC\u202f9260\r\n\r\nSection\u202f5.2.1 \u2013 \u201cINIT Chunk Received in COOKIE\u2011WAIT or COOKIE\u2011ECHOED State (Item\u202fB)\u201d\r\n\r\nThis section is entirely dedicated to resolving simultaneous INITs.\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n3. Detection of the race\r\n\r\nAn endpoint detects a simultaneous INIT when:\r\n\r\n  *   It is in COOKIE\u2011WAIT or COOKIE\u2011ECHOED state\r\n  *   It receives an INIT chunk from the peer\r\n\r\nThis combination is defined by the RFC as an initialization collision.\r\n\r\n\u201cThis usually indicates an initialization collision, i.e., each endpoint is attempting, at about the same time, to establish an association with the other endpoint.\u201d\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n4. Resolution rules (normative behavior)\r\nCase A \u2014 INIT received while in COOKIE\u2011WAIT\r\n\r\nMandatory behavior:\r\n\r\n  1.  Respond with INIT ACK\r\n  2.  Use the same parameters as the original INIT\r\n     *   Initiate Tag MUST NOT change\r\n  3.  Generate a new State Cookie\r\n  4.  Do NOT change state\r\n  5.  Do NOT destroy the TCB\r\n  6.  Leave T1\u2011init running\r\n\r\nKey quote (paraphrased precisely):\r\n\r\nThe endpoint MUST respond with an INIT ACK chunk using the same parameters it sent in its original INIT chunk (including its Initiate Tag, unchanged).\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\nCase B \u2014 INIT received while in COOKIE\u2011ECHOED\r\n\r\nSame handling unless new addresses are introduced:\r\n\r\n  *   If no new addresses \u2192 same behavior as COOKIE\u2011WAIT\r\n  *   If new addresses are added \u2192 INIT is rejected\r\n\r\nIf new addresses appear:\r\n\r\n  *   Discard INIT\r\n  *   Send ABORT\r\n  *   Include \u201cRestart of an Association with New Addresses\u201d error cause\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n5. Why this works (important insight grounded in RFC)\r\n\r\nThe race is resolved because:\r\n\r\n  *   Both sides continue their original INIT attempt\r\n  *   Verification Tags are preserved\r\n  *   State Cookies carry tie\u2011breaking information\r\n  *   Final resolution happens during COOKIE ECHO processing\r\n\r\nThe RFC is explicit:\r\n\r\n\u201cThe normal procedures for handling State Cookies when a TCB exists will resolve the duplicate INIT chunks to a single association.\u201d\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\nSo the collision is not resolved immediately at INIT time, but deterministically later, when cookies are validated.\r\n\r\n________________________________\r\n6. Tie\u2011Tags: the deterministic tie\u2011breaker\r\n\r\nWhen simultaneous INITs occur, SCTP uses Tie\u2011Tags (Section\u202f5.2.2 / 5.2.4):\r\n\r\n  *   Two random 32\u2011bit values\r\n  *   Stored both:\r\n     *   In the TCB\r\n     *   In the State Cookie\r\n  *   Used to correlate restarted / collided associations\r\n\r\nTie\u2011Tags ensure:\r\n\r\n  *   No duplicate associations\r\n  *   No ambiguity after both sides exchange cookies\r\n\r\n[rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n7. Final outcome guarantee\r\n\r\nRFC\u202f9260 guarantees that:\r\n\r\n  *   \u2705 Only one SCTP association survives\r\n  *   \u2705 Both endpoints converge to ESTABLISHED\r\n  *   \u2705 No resources are leaked\r\n  *   \u2705 No symmetry deadlock exists\r\n\r\nThis is stronger than TCP\u2019s simultaneous open handling, because SCTP remains stateless until cookie validation.\r\n\r\n________________________________\r\n8. Minimal sequence diagram (race case)\r\n\r\nA                                   Z\r\n\r\n---------------------------------------\r\n\r\nINIT (Tag_A) ----------->\r\n\r\n                   <----------- INIT (Tag_Z)\r\n\r\n\r\n\r\nINIT ACK (Tag_A, Cookie_A) <---------\r\n\r\n                   ---------> INIT ACK (Tag_Z, Cookie_Z)\r\n\r\n\r\n\r\nCOOKIE ECHO (Cookie_Z) ---->\r\n\r\n                   <---- COOKIE ECHO (Cookie_A)\r\n\r\n\r\n\r\nCOOKIE ACK <---------------\r\n\r\n                   --------------> COOKIE ACK\r\n\r\n\r\n\r\nAssociation ESTABLISHED (single)\r\n\r\nThe cookie + tie\u2011tag logic collapses this into one association.\r\n\r\n________________________________\r\n9. Key takeaway (one\u2011sentence answer)\r\n\r\nRFC\u202f9260 resolves simultaneous INIT races by replying with INIT ACK using unchanged parameters, deferring resolution to State Cookie and Tie\u2011Tag processing, which deterministically collapses both attempts into a single association.\r\n\r\n\r\nAbout Tie-Tags\r\n\r\n\r\nTie\u2011Tags are a narrowly scoped but crucial mechanism in RFC\u202f9260, and their purpose, meaning, and usage are defined explicitly and normatively in a few specific places. Below I\u2019ll walk through this in a structured, RFC\u2011accurate way, focusing on what Tie\u2011Tags are, where their meaning is defined, when they are used, and how they resolve races/restarts\u2014without adding behavior not stated in the RFC.\r\n\r\n________________________________\r\n1. Where Tie\u2011Tags are defined (normative definition)\r\nPrimary definition \u2014 Section\u202f1.3 (Key Terms)\r\n\r\nRFC\u202f9260 defines Tie\u2011Tags explicitly as a protocol concept:\r\n\r\nTie\u2011Tags: Two 32\u2011bit random numbers that together make a 64\u2011bit nonce.\r\nThese tags are used within a State Cookie and TCB so that a newly restarting association can be linked to the original association within the endpoint that did not restart and yet not reveal the true Verification Tags of an existing association. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\nImportant points from the definition:\r\n\r\n  *   Tie\u2011Tags are not Verification Tags\r\n  *   They are:\r\n     *   Random\r\n     *   Paired (local + peer)\r\n     *   Used only for correlation, not packet validation\r\n  *   Their purpose is association disambiguation, not security enforcement\r\n\r\nThis is the semantic anchor for Tie\u2011Tags in the RFC.\r\n\r\n________________________________\r\n2. Where Tie\u2011Tags are introduced into protocol operation\r\n\r\nTie\u2011Tags are not present during a normal, collision\u2011free startup.\r\n\r\nThey are introduced only when an INIT is received while an association (or partial association) already exists.\r\n\r\nSection\u202f5.2.1 \u2014 simultaneous INIT (collision)\r\n\r\nWhen an endpoint receives an INIT while in:\r\n\r\n  *   COOKIE-WAIT, or\r\n  *   COOKIE-ECHOED\r\n\r\nthe RFC mandates that:\r\n\r\nFor an endpoint that is in the COOKIE\u2011ECHOED state, it MUST populate its Tie\u2011Tags within both the association TCB and inside the State Cookie. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\nKey implications:\r\n\r\n  *   Tie\u2011Tags are generated only in collision/restart scenarios\r\n  *   They are stored in two places:\r\n     *   The existing TCB\r\n     *   The newly generated State Cookie\r\n\r\nThis ensures later correlation.\r\n\r\n________________________________\r\n3. Where Tie\u2011Tags are used (actual decision logic)\r\nSection\u202f5.2.4 \u2014 \u201cHandle a COOKIE ECHO Chunk When a TCB Exists\u201d\r\n\r\nThis is the core operational use of Tie\u2011Tags.\r\n\r\nWhen a COOKIE ECHO arrives and a TCB already exists, the endpoint:\r\n\r\n  1.  Authenticates the cookie\r\n  2.  Extracts Tie\u2011Tags from:\r\n     *   The cookie\r\n     *   The existing TCB\r\n  3.  Compares:\r\n     *   Local Tag\r\n     *   Peer\u2019s Tag\r\n     *   Local\u2011Tie\u2011Tag\r\n     *   Peer\u2011Tie\u2011Tag\r\n\r\nThe RFC then defines Table\u202f12, which maps these comparisons to deterministic actions. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n4. What Tie\u2011Tags mean (their semantic role)\r\n\r\nTie\u2011Tags answer one very specific question:\r\n\r\nIs this COOKIE ECHO logically related to my current association attempt, or is it stale / competing / from a restarted peer?\r\n\r\nThey do not:\r\n\r\n  *   Authenticate packets\r\n  *   Replace Verification Tags\r\n  *   Select \u201cwinner\u201d by numeric ordering\r\n\r\nInstead, they:\r\n\r\n  *   Provide continuity identity across:\r\n     *   Simultaneous INIT collisions\r\n     *   Association restarts\r\n  *   Without exposing real Verification Tags\r\n\r\nThis is why the RFC explicitly says Tie\u2011Tags avoid revealing verification tags while still allowing linkage. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n5. How Tie\u2011Tags resolve the race (step\u2011by\u2011step logic)\r\nTypical simultaneous INIT resolution\r\n\r\n  1.  Both endpoints send INIT\r\n  2.  Both generate INIT ACK + State Cookie\r\n  3.  Tie\u2011Tags are generated and embedded\r\n  4.  COOKIE ECHO messages cross\r\n  5.  On receipt:\r\n     *   Endpoint compares Tie\u2011Tags from cookie vs TCB\r\n  6.  Exactly one association survives, per Table\u202f12\r\n\r\nRFC guarantee:\r\n\r\nThe normal procedures for handling State Cookies when a TCB exists will resolve the duplicate INIT chunks to a single association. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\nTie\u2011Tags are the data that makes this deterministic.\r\n\r\n________________________________\r\n6. Tie\u2011Tags vs Verification Tags (important distinction)\r\nAspect\r\nVerification Tag\r\nTie\u2011Tag\r\nSize\r\n32\u2011bit\r\n64\u2011bit (2\u00d732)\r\nVisible on wire\r\nYes (common header)\r\nOnly inside cookies\r\nPurpose\r\nPacket association validation\r\nAssociation correlation\r\nLifetime\r\nEntire association\r\nCollision/restart window\r\nSecurity role\r\nPrevent blind injection\r\nPrevent ambiguity\r\n\r\nThis distinction is explicitly implied by how the RFC scopes Tie\u2011Tags. [rfc9260 | Txt]<https://ericsson-my.sharepoint.com/personal/claudio_porfiri_ericsson_com/Documents/Microsoft%20Copilot%20Chat%20Files/rfc9260.txt>\r\n\r\n________________________________\r\n7. Why Tie\u2011Tags are necessary (RFC rationale, implicit but clear)\r\n\r\nWithout Tie\u2011Tags:\r\n\r\n  *   Simultaneous INITs could create:\r\n     *   Duplicate associations\r\n     *   Verification\u2011tag confusion\r\n  *   Restarted endpoints could:\r\n     *   Be mistaken for attackers\r\n     *   Or cause false aborts\r\n\r\nTie\u2011Tags allow SCTP to:\r\n\r\n  *   Remain stateless until COOKIE ECHO\r\n  *   Resolve races without global ordering\r\n  *   Avoid TCP\u2011style simultaneous\u2011open ambiguity\r\n\r\n________________________________\r\n8. One\u2011sentence authoritative summary\r\n\r\nIn RFC\u202f9260, Tie\u2011Tags are a pair of random 32\u2011bit values stored in both the TCB and State Cookie, defined in Section\u202f1.3 and used in Sections\u202f5.2.1 and\u202f5.2.4 to deterministically correlate simultaneous INITs or restarts into a single SCTP association without exposing Verification Tags.\r\n\r\n\r\nFrom: Magnus Westerlund ***@***.***>\r\nSent: Thursday, March 26, 2026 11:35 AM\r\nTo: gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk ***@***.***>\r\nCc: Claudio Porfiri ***@***.***>; Mention ***@***.***>\r\nSubject: Re: [gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk] Clarify who has the DTLS Client role when SCTP Simultanous open happens (Issue #113)\r\n\r\n[https://avatars.githubusercontent.com/u/11295323?s=20&v=4]gloinul left a comment (gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk#113)<https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/113#issuecomment-4133477334>\r\n\r\nCan you @teiclap<https://github.com/teiclap> point to any text in an RFC that actually makes this role clear after an simultanous open. I looked quickly and didn't find anything in rfc9260 that the resulting role clear, only that this is part of the exception processing and how to resolve this into one association. We will need some text for this that point to the relevant part of the SCTP specifications on how to arrive at this role.\r\n\r\n\u2014\r\nReply to this email directly, view it on GitHub<https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/113?email_source=notifications&email_token=AQE4BRYQG3TPZDYPY757FVT4SUBUHA5CNFSNUABFM5UWIORPF5TWS5BNNB2WEL2JONZXKZKDN5WW2ZLOOQXTIMJTGM2DONZTGM2KM4TFMFZW63VHNVSW45DJN5XKKZLWMVXHJLDGN5XXIZLSL5RWY2LDNM#issuecomment-4133477334>, or unsubscribe<https://github.com/notifications/unsubscribe-auth/AQE4BRZKY2U6F6G6GH2I7D34SUBUHAVCNFSM6AAAAACWRZIU2CVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHM2DCMZTGQ3TOMZTGQ>.\r\nYou are receiving this because you were mentioned.Message ID: ***@***.******@***.***>>\r\n",
+          "createdAt": "2026-03-26T10:52:24Z",
+          "updatedAt": "2026-03-26T10:52:24Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The keys have to be provided in a consistent way at the API layer. I don't see it bound to client or server role. The key management methods (both the Ericsson one and the IETF one) run a DTLS connection. At that layer the client and server role is clear.\nAt the SCTP layer you can use client code on both sides, but not at the DTLS layer. So for the key management solutions it is clear. Therefore, I don't understand which problem needs to be solved. Could you elaborate on that?",
+          "createdAt": "2026-03-26T11:00:14Z",
+          "updatedAt": "2026-03-26T11:00:14Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The core of the problem is that the key-management then will have to replicate the tie-breaker mechanism. At least for 3GPP Xn interface we have the potential that two gNB at the same time needs to create an SCTP association and thus perform simultanous open. This interface is bi-directional, either side can run the same procedures with their peer as it is doing mobility procedures in either direction between two radio bases station.  \n\nThus, both are initiators and will continue into key-management as DTLS Clients. Thus, you would need to resolve this tie such that you know that the DTLS message you receive is not a servers response to your client request, but instead a client request to your server. This is clearly not a problem for SCTP association where one have a clear client and server role in the higher protocol. ",
+          "createdAt": "2026-03-26T14:24:48Z",
+          "updatedAt": "2026-03-26T14:24:48Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Interesting. My recollection was that we don't need to support INIT collision. We make an explicit statement about this at the end of section 1:\n```\n   Applications using the DTLS chunk can leverage most transport\n   features provided by SCTP and its extensions.  However, the following\n   limitations apply:\n\n   *  The handling of INIT collisions is not supported.\n\n   *  Performing an SCTP restart without knowing the restart key\n      material is not supported.\n\n   *  The use of the lookup address in the Dynamic Address\n      Reconfiguration extension as specified in [RFC5061] is not\n      supported.\n```\nIs this not true anymore?",
+          "createdAt": "2026-03-26T14:34:26Z",
+          "updatedAt": "2026-03-26T14:34:26Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "We are investigating impact of simultaneous open on the 3GPP interface. \n\nI do think we will need to consider this issue more than what we have so far. The reason is that we need to make it clear to SCTP implementers if they need to prevent simultaneous open from working if one include DTLS chunk parameters, or if we can provide a clear guidance so that key-management can handle this situation correctly. Because I do think if we just declare it not supported we end up with a rather bad failure mode:\n\nEndpoints A and B do simultaneous open against each other. Both stacks supports this. The both establish this, but the higher layer both think they have the client role. @tuexen are there any Socket API indication that a simultaneous open has happened, or will this just look like a normal open? \n\nIf both endpoint has no indication that this is a simultaneous open then we will a client role mismatch on the key-management layer unless we make it very explicit that they need to be ready for this to happen. \n\nI think the issue that do exist around this is if the DTLS key-management method parameter lists may not result in the same outcome. I think the core here is that unless A and B have the same list, the two endpoints will have different offered list, even if they both select the same method in the end. Thus resulting in key-derivation failures. \n\nI don't think we can leave this as is, we need to deal with it in some way.  ",
+          "createdAt": "2026-03-27T14:27:44Z",
+          "updatedAt": "2026-03-27T14:27:44Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> We are investigating impact of simultaneous open on the 3GPP interface.\nOK. But this is a change of requirements.\n\nDTLS has a clear client and server role. So you need to define which side has which role. In most implementations also the code is different.\n> \n> I do think we will need to consider this issue more than what we have so far. The reason is that we need to make it clear to SCTP implementers if they need to prevent simultaneous open from working if one include DTLS chunk parameters, or if we can provide a clear guidance so that key-management can handle this situation correctly. Because I do think if we just declare it not supported we end up with a rather bad failure mode:\n> \n> Endpoints A and B do simultaneous open against each other. Both stacks supports this. The both establish this, but the higher layer both think they have the client role. [@tuexen](https://github.com/tuexen) are there any Socket API \nindication that a simultaneous open has happened, or will this just look like a normal open?\n\nYou don't get such an indication. And it is not relevant for the upper layer. It is only important that the collision only results in  a single SCTP association.\n> \n> If both endpoint has no indication that this is a simultaneous open then we will a client role mismatch on the key-management layer unless we make it very explicit that they need to be ready for this to happen.\n\n> \n> I think the issue that do exist around this is if the DTLS key-management method parameter lists may not result in the same outcome. I think the core here is that unless A and B have the same list, the two endpoints will have different offered list, even if they both select the same method in the end. Thus resulting in key-derivation failures.\n\nSure. The current solution works only under the assumption that no INIT collision happens. If you change now that requirement, we need to change the handling of the Key Management Parameter in the handshake. We can make sure that both sides get a consistent view.\n\nAre you saying that the 3GPP interface has no notion of different roles? Both sides are the same? Why was this changed?\n\n> \n> I don't think we can leave this as is, we need to deal with it in some way.\n\nAny more late changes of requirements of the solution we are working on?\n",
+          "createdAt": "2026-03-27T19:17:14Z",
+          "updatedAt": "2026-03-27T19:17:14Z"
+        }
+      ]
     },
     {
       "number": 114,
@@ -5978,7 +6035,7 @@
       "labels": [],
       "body": "Atempting to be using more consistent language.\r\n\r\nFixes #82 and will help to improve #112 ",
       "createdAt": "2026-03-14T10:54:54Z",
-      "updatedAt": "2026-03-14T10:59:29Z",
+      "updatedAt": "2026-03-26T14:10:33Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
@@ -5989,7 +6046,110 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Now I realize why you have a problem. In the abstract API you deal with client and server write key material. So you need to know the roles. This is not true on the socket API. There it is the send and receive keys. Couldn't you do the same in the abstract API or did I miss anything in the socket API if I don't know the client/server role?",
+          "createdAt": "2026-03-26T11:07:37Z",
+          "updatedAt": "2026-03-26T11:07:37Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "It could be possible to redefine into using send/recv. However, that moves this problem to the key-management side, where it might be even harder to resolve as one don't have SCTP  association information to break the tie. So I think this becomes a question. Leave it to the key-management, or alternative have well defined rules that allow the role to be determinable based on SCTP association information. \r\n\r\nMight be a good topic for our next meeting, but please continue for now in this issue. ",
+          "createdAt": "2026-03-26T14:08:58Z",
+          "updatedAt": "2026-03-26T14:08:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7vKK6j",
+          "commit": {
+            "abbreviatedOid": "34e993c"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-26T09:00:42Z",
+          "updatedAt": "2026-03-26T09:00:42Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7vM5ph",
+          "commit": {
+            "abbreviatedOid": "34e993c"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-26T11:03:39Z",
+          "updatedAt": "2026-03-26T11:03:39Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "I think this is new in this document. Do we need to specify that? My understanding is that all relevant processing is done by the key management solution and SCTP only has send / recv keys.",
+              "createdAt": "2026-03-26T11:03:39Z",
+              "updatedAt": "2026-03-26T11:03:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7vSSl7",
+          "commit": {
+            "abbreviatedOid": "34e993c"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-26T14:10:33Z",
+          "updatedAt": "2026-03-26T14:10:33Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "As long as the abstract API uses the client server role which it currently does this is necessary. We can ",
+              "createdAt": "2026-03-26T14:10:33Z",
+              "updatedAt": "2026-03-26T14:10:33Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 117,
+      "id": "PR_kwDOKszxDc7NpIO1",
+      "title": "Clarified that sequence number protection key are part of the DTLS ke\u2026",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/117",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "\u2026y context.\r\nFixes #112 ",
+      "createdAt": "2026-03-26T09:21:55Z",
+      "updatedAt": "2026-03-26T09:48:51Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "intro-fix-issue-113",
+      "headRefOid": "796c800ae74634466cf31f5e9387507a507f34db",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So the checks currently fails due to an issue with AASVG that deployed a feature that makes the github side build fails. It works fine on my local machine. ",
+          "createdAt": "2026-03-26T09:48:51Z",
+          "updatedAt": "2026-03-26T09:48:51Z"
+        }
+      ],
       "reviews": []
     }
   ]
