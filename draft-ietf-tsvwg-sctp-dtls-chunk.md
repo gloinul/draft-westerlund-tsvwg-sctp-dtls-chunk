@@ -70,7 +70,7 @@ informative:
   ETSI-TS-38.413:
     target: "https://www.etsi.org/deliver/etsi_ts/138400_138499/138413/18.05.00_60/ts_138413v180500p.pdf"
     title: "NG Application Protocol (NGAP) version 18.5.0 Release 18"
-  date: March 2025
+    date: Mar 2025
 
 normative:
   RFC4820:
@@ -84,7 +84,7 @@ normative:
   TLS-CIPHER-SUITES:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
-    date: November 2023
+    date: Nov 2023
 
 updates:
   RFC5061
@@ -232,12 +232,14 @@ A DTLS key context for normal operations use MUST be created, while a DTLS key
 context for SCTP association restart SHOULD be created.
 
 In this document we use the terms DTLS Key context for indicating a
-Key and IV, produced by the DTLS Key Management, and all relevant data that
-needs to be provided to the Chunk Protection Operator for DTLS encryption
-and decryption.  DTLS Key context includes Keys and IV for sending and
-receiving, replay window, last used sequence number. Each DTLS key
-context is associated with a three-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, and the DTLS epoch.
+Key and IV, produced by the DTLS Key Management, and all relevant data
+that needs to be provided to the Chunk Protection Operator for DTLS
+encryption and decryption.  DTLS Key context includes Keys, sequence
+number protection key, and IV for sending and receiving, replay window
+for receiving, and last used sequence number for sending. Each DTLS
+key context is associated with a three-value tuple identifying the
+context, consisting of SCTP Association, the restart indicator, and
+the DTLS epoch.
 
 The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
 be used.
