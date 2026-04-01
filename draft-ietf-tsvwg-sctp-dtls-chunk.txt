@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 28 September 2026                                      M. Tüxen
+Expires: 3 October 2026                                         M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                           27 March 2026
+                                                            1 April 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 September 2026.
+   This Internet-Draft will expire on 3 October 2026.
 
 Copyright Notice
 
@@ -284,11 +284,12 @@ Table of Contents
    In this document we use the terms DTLS Key context for indicating a
    Key and IV, produced by the DTLS Key Management, and all relevant
    data that needs to be provided to the Chunk Protection Operator for
-   DTLS encryption and decryption.  DTLS Key context includes Keys and
-   IV for sending and receiving, replay window, last used sequence
-   number.  Each DTLS key context is associated with a three-value tuple
-   identifying the context, consisting of SCTP Association, the restart
-   indicator, and the DTLS epoch.
+   DTLS encryption and decryption.  DTLS Key context includes Keys,
+   sequence number protection key, and IV for sending and receiving,
+   replay window for receiving, and last used sequence number for
+   sending.  Each DTLS key context is associated with a three-value
+   tuple identifying the context, consisting of SCTP Association, the
+   restart indicator, and the DTLS epoch.
 
    The DTLS Connection ID in the DTLS Record layer used in the DTLS
    Chunk MUST NOT be used.
@@ -1884,7 +1885,7 @@ Table of Contents
 
    [ETSI-TS-38.413]
               "NG Application Protocol (NGAP) version 18.5.0 Release
-              18", n.d., <https://www.etsi.org/deliver/
+              18", March 2025, <https://www.etsi.org/deliver/
               etsi_ts/138400_138499/138413/18.05.00_60/
               ts_138413v180500p.pdf>.
 
