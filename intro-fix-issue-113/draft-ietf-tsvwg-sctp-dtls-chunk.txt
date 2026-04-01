@@ -286,10 +286,10 @@ Table of Contents
    data that needs to be provided to the Chunk Protection Operator for
    DTLS encryption and decryption.  DTLS Key context includes Keys,
    sequence number protection key, and IV for sending and receiving,
-   replay window, last used sequence number for sending.  Each DTLS key
-   context is associated with a three-value tuple identifying the
-   context, consisting of SCTP Association, the restart indicator, and
-   the DTLS epoch.
+   replay window for receiving, and last used sequence number for
+   sending.  Each DTLS key context is associated with a three-value
+   tuple identifying the context, consisting of SCTP Association, the
+   restart indicator, and the DTLS epoch.
 
    The DTLS Connection ID in the DTLS Record layer used in the DTLS
    Chunk MUST NOT be used.

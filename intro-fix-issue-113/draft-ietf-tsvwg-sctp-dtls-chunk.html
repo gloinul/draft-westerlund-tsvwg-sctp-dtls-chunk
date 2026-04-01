@@ -1596,11 +1596,11 @@ context for SCTP association restart SHOULD be created.<a href="#section-3.1-1" 
 Key and IV, produced by the DTLS Key Management, and all relevant data
 that needs to be provided to the Chunk Protection Operator for DTLS
 encryption and decryption.  DTLS Key context includes Keys, sequence
-number protection key, and IV for sending and receiving, replay
-window, last used sequence number for sending. Each DTLS key context
-is associated with a three-value tuple identifying the context,
-consisting of SCTP Association, the restart indicator, and the DTLS
-epoch.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+number protection key, and IV for sending and receiving, replay window
+for receiving, and last used sequence number for sending. Each DTLS
+key context is associated with a three-value tuple identifying the
+context, consisting of SCTP Association, the restart indicator, and
+the DTLS epoch.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
 be used.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">The first  DTLS key context established for any SCTP association MUST use epoch 3.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
