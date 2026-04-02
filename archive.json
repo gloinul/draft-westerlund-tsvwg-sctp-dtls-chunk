@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-31T01:52:06.617916+00:00",
+  "timestamp": "2026-04-02T01:48:46.410349+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1628,15 +1628,15 @@
       "id": "I_kwDOKszxDc7y4l-O",
       "title": "The Key Context Information is inconsistent",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/112",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "So Section 7 says:\n\nThis API enables the cryptographical protection operations by setting client/server write keys, sequence number keys, and IVs for primary and restart DTLS contexts. The write key is used by the cipher suite for DTLS record protection ([Section 5.2](https://rfc-editor.org/rfc/rfc8446#section-5.2) of [[RFC8446](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC8446)]). The initialization vector (IV) is random material used to XOR with the sequence number to create the nonce per [Section 5.3](https://rfc-editor.org/rfc/rfc8446#section-5.3) of [[RFC8446](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC8446)]. The sequence number key is used to encrypt the sequence number ([Section 4.2.3](https://rfc-editor.org/rfc/rfc9147#section-4.2.3) of [[RFC9147](https://www.ietf.org/archive/id/draft-ietf-tsvwg-sctp-dtls-chunk-02.html#RFC9147)]).\n\nSection 3.1 says:\n\nIn this document we use the terms DTLS Key context for indicating a Key and IV, produced by the DTLS Key Management, and all relevant data that needs to be provided to the Chunk Protection Operator for DTLS encryption and decryption. DTLS Key context includes Keys and IV for sending and receiving, replay window, last used sequence number. Each DTLS key context is associated with a three-value tuple identifying the context, consisting of SCTP Association, the restart indicator, and the DTLS epoch.\n\nThese definitions and naming of the DTLS Key Context is not conistent as the one in 3.1 lacks the sequence number protection key. So we need to address this. ",
       "createdAt": "2026-03-14T06:56:23Z",
-      "updatedAt": "2026-03-14T06:56:23Z",
-      "closedAt": null,
+      "updatedAt": "2026-04-01T11:06:12Z",
+      "closedAt": "2026-04-01T11:06:12Z",
       "comments": []
     },
     {
@@ -1651,7 +1651,7 @@
       "labels": [],
       "body": "When setting the DTLS Key Context it is very important that both side agrees which endpoint that has the DTLS Client Role and who has the server role so the right set of keys are installed. \n\nAs SCTP do support simultanous open, i.e. when both sides sends INIT at the same time there need to be clarified who gets the DTLS client/server role in this case. ",
       "createdAt": "2026-03-14T09:01:49Z",
-      "updatedAt": "2026-03-30T18:38:01Z",
+      "updatedAt": "2026-03-31T13:55:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -1765,6 +1765,27 @@
           "body": "> What about deciding based on the lower VTag?\n\nYes, that is what I am proposing. I am assuming the middleboxes are not playing with verification tags.\n> Or even on the lower Source Ip address?\n\nThat breaks as soon as you have NATs changing the IP addresses...\n> \n> Get Outlook for Android<https://aka.ms/AAb9ysg>\n> [\u2026](#)\n\n",
           "createdAt": "2026-03-30T18:37:47Z",
           "updatedAt": "2026-03-30T18:38:01Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > What about deciding based on the lower VTag?\n> \n> Yes, that is what I am proposing. I am assuming the middleboxes are not playing with verification tags.\n\nI vote for this solution.\nIn case of race condition, the DTLS Client role is determined by the lower VTag.\nBeing random, it may happen that the same VTag is generated, but I think it's acceptable, and can be detected by SCTP.\nIn such case we can add that an EP detecting VTag collision MAY ABORT the Association.\n\n> \n> > Or even on the lower Source Ip address?\n> \n> That breaks as soon as you have NATs changing the IP addresses...\n> \n> > Get Outlook for Androidhttps://aka.ms/AAb9ysg\n> > [\u2026](#)\n\n",
+          "createdAt": "2026-03-31T06:33:23Z",
+          "updatedAt": "2026-03-31T06:35:05Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > > What about deciding based on the lower VTag?\n> > \n> > \n> > Yes, that is what I am proposing. I am assuming the middleboxes are not playing with verification tags.\n> \n> I vote for this solution. In case of race condition, the DTLS Client role is determined by the lower VTag. Being random, it may happen that the same VTag is generated, but I think it's acceptable, and can be detected by SCTP. In such case we can add that an EP detecting VTag collision MAY ABORT the Association.\n\nI need to look into this. I have some discussion in my inbox I need to look into in detail. Will do that before the next VC.\n\n> \n> > > Or even on the lower Source Ip address?\n> > \n> > \n> > That breaks as soon as you have NATs changing the IP addresses...\n> > > Get Outlook for Androidhttps://aka.ms/AAb9ysg\n> > > [\u2026](#)\n\n",
+          "createdAt": "2026-03-31T06:59:50Z",
+          "updatedAt": "2026-03-31T06:59:50Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@teiclap and I had a white boarding session and came up with a design which we think works for all cases. First of all we need to make clear that we need to preserve some capabilities here.\n\nClient/Server interaction where the server will never open an association must not be impacted as a role reversal would not work from a security perspective, as potentially only the server have a certificate identity, so the client can't act as key-management layer server. \n\nWe also need to deal with the simultaneous open cases, also when there are losses of messages during the handshake. Based on this we came up with fours pieces of a solution. \n\n1) Change the Key-Management method parameter to only be used as each side declaring its preference list of methods. \n2) Define a Init collision state for the SCTP association. The core here is that we need to ensure that each side enters this if we have a simultaneous open case. I think we have something that might work in most cases, but I do have some questions about state transition to see if this is an issue or not. \n3) In case of an INIT collision state has been triggered. Then the two SCTP endpoints resolve their roles by comparing their Initialization tags. The one with lower value is considered the initiator of the SCTP association.\n4) A deterministic algorithm that takes the two endpoint's Key-management preference lists and determine the offered and selected method from these two. This algorithm I think is as simple as two step process:\n       4A) Determine commonly supported methods between the two endpoint's preference lists.\n       4B) Select the most preferred method out of the common ones for the endpoint that was determined to be the responder (server). \n       4C) Create the offered+selected list, by combining the Initiator role's Offered preference list, and the select method from 4B.\n\nThen we do a tweak to the API to include in the abstract API's \"Get Offered DTLS Key Management Methods\" to include the indicator of collision and which role this endpoint was selected. The offered+selected list is provided based on 4. \n\nI think all these steps are straight forward. Where we are uncertain if one 2) that we have an method that does not contain issues. Thus I would hope that @tuexen can help clarify what really happens in a particular case when one perform simultaneous open.\n\nSo the case is the following:\n\nA: Sends INIT\nB: Send INIT \nA: Receives INIT and Sends INIT ACK\nB: Receives A's INIT and Sends A an INIT ACK\nNetwork drops A's INIT ACK to B.\nA: Receives INIT ACK and Sends Cookie ECHO\nB: Receives Cookie ECHO\n\nWhat does B do at this stage. Will it enters Established as it received its valid Cookie, or will it not enter Established as it is not in Cookie WAIT as it hasn't received A's Cookie? In case of the later Then B's T1 timer will fire and B will retransmit it's INIT, and hopefully receive an INIT ACK and thus Send Cookie ECHO which result in it entering Cookie ECHOED, in which allows it to enter ESTABLISHED based on Option D per Section 5.2.4 of RFC 9260. \n\nSo for the step 2 process to work reliable each peer should enter collision state when it has received an INIT from the peer that matches the process of 5.2.1 in RFC 9260, but only if it knows that the peer will also enter this state, which do requires each endpoint to see an INIT ACK from its peer in response to its sent INIT. \n\nThus this process is very dependent on if an endpoint will enter ESTABLISHED from receiving a valid cookie in COOKIE-WAIT state when simultaneous open case is occurring. I will note that to my understanding if one enters collision state when receiving INIT, this can become one sided in case the endpoint that received an INIT had its INIT being lost by the network before it arrived at the peer. \n\n\n\n",
+          "createdAt": "2026-03-31T13:55:11Z",
+          "updatedAt": "2026-03-31T13:55:11Z"
         }
       ]
     },
@@ -6091,7 +6112,7 @@
       "labels": [],
       "body": "Atempting to be using more consistent language.\r\n\r\nFixes #82 and will help to improve #112 ",
       "createdAt": "2026-03-14T10:54:54Z",
-      "updatedAt": "2026-03-26T14:10:33Z",
+      "updatedAt": "2026-04-01T09:57:17Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
@@ -6116,6 +6137,13 @@
           "body": "It could be possible to redefine into using send/recv. However, that moves this problem to the key-management side, where it might be even harder to resolve as one don't have SCTP  association information to break the tie. So I think this becomes a question. Leave it to the key-management, or alternative have well defined rules that allow the role to be determinable based on SCTP association information. \r\n\r\nMight be a good topic for our next meeting, but please continue for now in this issue. ",
           "createdAt": "2026-03-26T14:08:58Z",
           "updatedAt": "2026-03-26T14:08:58Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This PR is on hold until we have a plan for how to deal with Simultanous open (#113) and what impact that might have anyway on the API and what signal on roles will be provided. ",
+          "createdAt": "2026-04-01T09:57:17Z",
+          "updatedAt": "2026-04-01T09:57:17Z"
         }
       ],
       "reviews": [
@@ -6179,24 +6207,26 @@
       "id": "PR_kwDOKszxDc7NpIO1",
       "title": "Clarified that sequence number protection key are part of the DTLS ke\u2026",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/117",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "\u2026y context.\r\nFixes #112 ",
       "createdAt": "2026-03-26T09:21:55Z",
-      "updatedAt": "2026-03-26T09:48:51Z",
+      "updatedAt": "2026-04-01T11:06:16Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "intro-fix-issue-113",
-      "headRefOid": "796c800ae74634466cf31f5e9387507a507f34db",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "009a5c19bd93d6960a2d681858a231555358e3ff",
+      "closedAt": "2026-04-01T11:06:11Z",
+      "mergedAt": "2026-04-01T11:06:11Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "ad2e696491ad20c4a4fce9fddb28c4cb5bee7f1d"
+      },
       "comments": [
         {
           "author": "gloinul",
@@ -6206,7 +6236,74 @@
           "updatedAt": "2026-03-26T09:48:51Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc7w9RWs",
+          "commit": {
+            "abbreviatedOid": "1bcfdd6"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-04-01T08:36:02Z",
+          "updatedAt": "2026-04-01T08:36:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc7w96sz",
+          "commit": {
+            "abbreviatedOid": "1bcfdd6"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-01T09:04:45Z",
+          "updatedAt": "2026-04-01T09:04:45Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Would it is more clear o use:\nwindow for receiving, and last used sequence number for sending",
+              "createdAt": "2026-04-01T09:04:45Z",
+              "updatedAt": "2026-04-01T09:04:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7w-sW7",
+          "commit": {
+            "abbreviatedOid": "1bcfdd6"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-01T09:41:40Z",
+          "updatedAt": "2026-04-01T09:41:40Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Yes, I have done as you suggest.",
+              "createdAt": "2026-04-01T09:41:40Z",
+              "updatedAt": "2026-04-01T09:41:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc7w_IId",
+          "commit": {
+            "abbreviatedOid": "009a5c1"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-04-01T10:03:27Z",
+          "updatedAt": "2026-04-01T10:03:27Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
