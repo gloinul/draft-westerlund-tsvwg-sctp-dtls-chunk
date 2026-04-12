@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-02T01:48:46.410349+00:00",
+  "timestamp": "2026-04-12T01:59:59.123465+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1651,7 +1651,7 @@
       "labels": [],
       "body": "When setting the DTLS Key Context it is very important that both side agrees which endpoint that has the DTLS Client Role and who has the server role so the right set of keys are installed. \n\nAs SCTP do support simultanous open, i.e. when both sides sends INIT at the same time there need to be clarified who gets the DTLS client/server role in this case. ",
       "createdAt": "2026-03-14T09:01:49Z",
-      "updatedAt": "2026-03-31T13:55:12Z",
+      "updatedAt": "2026-04-09T13:56:36Z",
       "closedAt": null,
       "comments": [
         {
@@ -1786,6 +1786,34 @@
           "body": "@teiclap and I had a white boarding session and came up with a design which we think works for all cases. First of all we need to make clear that we need to preserve some capabilities here.\n\nClient/Server interaction where the server will never open an association must not be impacted as a role reversal would not work from a security perspective, as potentially only the server have a certificate identity, so the client can't act as key-management layer server. \n\nWe also need to deal with the simultaneous open cases, also when there are losses of messages during the handshake. Based on this we came up with fours pieces of a solution. \n\n1) Change the Key-Management method parameter to only be used as each side declaring its preference list of methods. \n2) Define a Init collision state for the SCTP association. The core here is that we need to ensure that each side enters this if we have a simultaneous open case. I think we have something that might work in most cases, but I do have some questions about state transition to see if this is an issue or not. \n3) In case of an INIT collision state has been triggered. Then the two SCTP endpoints resolve their roles by comparing their Initialization tags. The one with lower value is considered the initiator of the SCTP association.\n4) A deterministic algorithm that takes the two endpoint's Key-management preference lists and determine the offered and selected method from these two. This algorithm I think is as simple as two step process:\n       4A) Determine commonly supported methods between the two endpoint's preference lists.\n       4B) Select the most preferred method out of the common ones for the endpoint that was determined to be the responder (server). \n       4C) Create the offered+selected list, by combining the Initiator role's Offered preference list, and the select method from 4B.\n\nThen we do a tweak to the API to include in the abstract API's \"Get Offered DTLS Key Management Methods\" to include the indicator of collision and which role this endpoint was selected. The offered+selected list is provided based on 4. \n\nI think all these steps are straight forward. Where we are uncertain if one 2) that we have an method that does not contain issues. Thus I would hope that @tuexen can help clarify what really happens in a particular case when one perform simultaneous open.\n\nSo the case is the following:\n\nA: Sends INIT\nB: Send INIT \nA: Receives INIT and Sends INIT ACK\nB: Receives A's INIT and Sends A an INIT ACK\nNetwork drops A's INIT ACK to B.\nA: Receives INIT ACK and Sends Cookie ECHO\nB: Receives Cookie ECHO\n\nWhat does B do at this stage. Will it enters Established as it received its valid Cookie, or will it not enter Established as it is not in Cookie WAIT as it hasn't received A's Cookie? In case of the later Then B's T1 timer will fire and B will retransmit it's INIT, and hopefully receive an INIT ACK and thus Send Cookie ECHO which result in it entering Cookie ECHOED, in which allows it to enter ESTABLISHED based on Option D per Section 5.2.4 of RFC 9260. \n\nSo for the step 2 process to work reliable each peer should enter collision state when it has received an INIT from the peer that matches the process of 5.2.1 in RFC 9260, but only if it knows that the peer will also enter this state, which do requires each endpoint to see an INIT ACK from its peer in response to its sent INIT. \n\nThus this process is very dependent on if an endpoint will enter ESTABLISHED from receiving a valid cookie in COOKIE-WAIT state when simultaneous open case is occurring. I will note that to my understanding if one enters collision state when receiving INIT, this can become one sided in case the endpoint that received an INIT had its INIT being lost by the network before it arrived at the peer. \n\n\n\n",
           "createdAt": "2026-03-31T13:55:11Z",
           "updatedAt": "2026-03-31T13:55:11Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> We are investigating impact of simultaneous open on the 3GPP interface.\n> \n> I do think we will need to consider this issue more than what we have so far. The reason is that we need to make it clear to SCTP implementers if they need to prevent simultaneous open from working if one include DTLS chunk parameters, or if we can provide a clear guidance so that key-management can handle this situation correctly. Because I do think if we just declare it not supported we end up with a rather bad failure mode:\n> \n> Endpoints A and B do simultaneous open against each other. Both stacks supports this. The both establish this, but the higher layer both think they have the client role. [@tuexen](https://github.com/tuexen) are there any Socket API indication that a simultaneous open has happened, or will this just look like a normal open?\n\nA simultaneous open is not indicated in the socket API. Only if it is a restart: [RFC 6458](https://datatracker.ietf.org/doc/html/rfc6458#section-6.1.1). `sac_state` would be `SCTP_RESTART`.\n> \n> If both endpoint has no indication that this is a simultaneous open then we will a client role mismatch on the key-management layer unless we make it very explicit that they need to be ready for this to happen.\n> \n> I think the issue that do exist around this is if the DTLS key-management method parameter lists may not result in the same outcome. I think the core here is that unless A and B have the same list, the two endpoints will have different offered list, even if they both select the same method in the end. Thus resulting in key-derivation failures.\n> \n> I don't think we can leave this as is, we need to deal with it in some way.\n\n",
+          "createdAt": "2026-04-09T10:51:10Z",
+          "updatedAt": "2026-04-09T10:51:10Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We probably need to talk a bit about the reason why we need to properly identify Client and Server role.\nIn the current agreement, we need to have a Client and a Server because of the way we compute the mask used for Key Context extraction.\nIn the draft, the INIT/INIT-ACK handshake requires that Client sends a list of proposed Methods and the Server replies the one chosen, then the set of proposed methods+the chosen are used uniquely from both peers for Key Context extraction.\nMagnus suggests that both Client and Server send the list of proposed methods and then a Method Selection algorithm is used at both peers on the two lists that will provide a unique choice.\nA function would provide the method so that  m(list1,list2) = m(list2,list1)\nIf we start from Magnus' proposal, we can continue on the same approach and add a Mask Selection algorithm that given the two list of methods provides a unique mask.\nA function would provide the mask so that  n(list1,list2) = n(list2,list1)\n",
+          "createdAt": "2026-04-09T11:08:00Z",
+          "updatedAt": "2026-04-09T11:08:00Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think we have two problems to solve:\n1. Negotiate the cryptographic algorithms used for the DTLS chunk.\n2. Run the DTLS handshake in the key management layer.\n\nOriginally, we assumed a client/server role for the SCTP handshake and derived from that solutions for the above problems. If we do not require the SCTP client and server roles anymore, we need different solutions. I think for the first problem it doesn't matter how the algorithm is selected as long as it is done consistently. For the second problem we need to define if each end can support client and server roles for DTLS or not. Here we need to be clear on the requirements of the solution before we discuss a specific solution.\nLet us discuss this in detail during the VC.",
+          "createdAt": "2026-04-09T12:47:16Z",
+          "updatedAt": "2026-04-09T12:47:34Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Part of the issue is that we have both cases here:\n\nClient Server application where a server would never initiated the SCTP association so a simultaneous open will never occur. Also in these cases I would also expect that the server has a well defined identity used in the key-management. The client may practice mutual authentication in this application, but there can also be application that do not need to have an identity. \n\nThen we have applications like the Xn Interface where we have nodes that need PtP associations between each other where either side can open a new association when need arise. In these simultanous open may occur. On the key-management level these likely are performing mutual authentication. So they can likely do either role when it comes to key-management but they would need to know to avoid additional complexities with both sides opening key-management. The above assuming that both endpoints agree on the method, i.e. SCTP API should deliver one common result for both endpoints, both for initiating the right method and secondly provide the same key-deriviation string. \n\n",
+          "createdAt": "2026-04-09T13:56:36Z",
+          "updatedAt": "2026-04-09T13:56:36Z"
         }
       ]
     },
