@@ -306,11 +306,13 @@ The format of this chunk parameter is depicted in {{key-management-parameter}}.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    Parameter Type = 0x8006    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  DTLS Key Management Id #1    |  DTLS Key Management Id #2    |
+|                          Tie Breaker                          |
++---------------------------------------------------------------+
+|Reserved |R|S|C| DTLS KMId #1  | DTLS KMId #2  | DTLS KMId #3  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 :                                                               :
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| DTLS Key Management Id #N     | Padding                       |
+| DTLS KMId #N  |                    Padding                    |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #key-management-parameter title="DTLS Key Management Parameter" artwork-align="center"}
@@ -324,10 +326,27 @@ Parameter Type: 16 bits (unsigned integer)
   the use of the upper bits of the parameter type.
 
 Parameter Length: 16 bits (unsigned integer)
-: This value holds the length of the parameter, which will be 2 times the
-  number of DTLS Key Management identifiers (N) plus 4.
+: This value holds the length of the parameter, which is the
+  number of DTLS Key Management identifiers (N) plus 9.
 
-DTLS Key Management Identifier: 16 bits (unsigned integer)
+Tie Breaker: 32 bits (unsigned integer)
+: This is a 32-bit random number to be used to determine the client and
+  server role for the key management method.
+
+Reserved: 5 bits (unsigned integer)
+: The reserved bits MUST be set to 0 by the sender and MUST be ignored by the
+  receiver.
+
+R bit: 1 bit
+: The (R)estart supported bit.
+
+S bit: 1 bit
+: The (S)erver role supported bit.
+
+C bit: 1 bit
+: The (C)lient role supported bit.
+
+DTLS Key Management Identifier: 8 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
   is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
   In the INIT chunk the DTLS Key Management Methods are listed in descending order
@@ -336,10 +355,8 @@ DTLS Key Management Identifier: 16 bits (unsigned integer)
   In the INIT ACK chunk the endpoint chooses one of the DTLS Key Management Methods
   supported by the peer.
 
-Padding: 0 or 16 bits (unsigned integer)
-: If the number of included DTLS Key Management Methods is odd the
-  parameter MUST be padded with two bytes. The padding MUST be set to 0 by
-  the sender and MUST be ignored by the receiver.
+Padding: 0, 8, 16, or 24 bits (unsigned integer)
+: The padding MUST be set to 0 by the sender and MUST be ignored by the receiver.
 
 The DTLS Key Management Parameter MAY be included in the INIT and INIT ACK chunk
 and MUST NOT be included in any other chunk.
