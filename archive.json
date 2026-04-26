@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-12T01:59:59.123465+00:00",
+  "timestamp": "2026-04-26T02:07:27.168366+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1829,9 +1829,17 @@
       "labels": [],
       "body": "Part of the known state necessary for SCTP Restart with DTLS Chunk to work is what is the first DTLS sequence number will be used when sedning restart DTLS key context protected data. This appear to be currently missing, but should be defined.\n\n- A never used restart context starts from a given sequence number. \n- When a restart context have been used, even if the restart failed the restart DTLS Key Context needs to be invalidated as it can't be resused for a second attempt without resulting in using the same nonce twice.",
       "createdAt": "2026-03-14T09:18:17Z",
-      "updatedAt": "2026-03-14T09:18:17Z",
+      "updatedAt": "2026-04-23T13:57:25Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The sequence number will start from 0 per Section 4.2 of https://www.ietf.org/archive/id/draft-ietf-tls-rfc9147bis-01.html#name-sequence-number-and-epoch\n\nFrom a sequence number aspect as long as one are inside the peers replay window incrementing the sequence number works. The real danger here with restart during the restart process is if the restarting node not correctly peristantly store the sequence numbers used. Then a two time pad can occur. So I think it is basically  a security consideration that if one have attempted to do a restart that should immediately be recorded in one persistant state so that node do not attempt a restart.",
+          "createdAt": "2026-04-23T13:57:25Z",
+          "updatedAt": "2026-04-23T13:57:25Z"
+        }
+      ]
     },
     {
       "number": 115,
@@ -6332,6 +6340,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 118,
+      "id": "PR_kwDOKszxDc7VP35h",
+      "title": "Parameter format",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/118",
+      "state": "MERGED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-24T07:21:33Z",
+      "updatedAt": "2026-04-24T07:24:01Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "ad2e696491ad20c4a4fce9fddb28c4cb5bee7f1d",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "update-key-management-parameter",
+      "headRefOid": "b8d7eb5f77c645bcb91c15887a3c956daa157b20",
+      "closedAt": "2026-04-24T07:24:01Z",
+      "mergedAt": "2026-04-24T07:24:00Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "f0cc687abe601ce025e3dd680e2e9a1852e8db36"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
