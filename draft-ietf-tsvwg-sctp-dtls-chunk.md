@@ -885,29 +885,69 @@ Reply: Success or Error
 
 Parameters: None
 
-## Get Offered DTLS Key Management Methods
+## Set Supported DTLS Key Management Roles
+
+Prior to attempting to establish an SCTP assocation an SCTP endpoint
+needs to configure which roles in the key-management it accepts and if
+the endpoint suopports SCTP restart with the DTLS Chunk.
+
+An endpoint can either support, client only, server only, or client or
+server. The last is for situation where both endpoints may attempt to
+establish an SCTP association towards each other causing a simultanous
+open situation. Depending on port configuration SCTP supports this
+happening during the association establishment, and results in a
+single SCTP association. However, to select the same key management
+method on both sides the SCTP stack will resolve the key management
+role for this association.
+
+Request: Set Supported DTLS Key Management Roles
+
+Parameters:
+* SCTP Association Handle:
+: The handle to what may become an SCTP Association or a server port
+accepting association establishment.
+
+* Key Management Roles Supported:
+: The endpoint indicates if it is client only, server only, or client or server.
+
+* Support SCTP Restart (boolean):
+: Indicate if the endpoint is capable of supporting SCTP restart when DTLS chunk
+  has been negotiated.
+
+Reply: Success or Error
+
+Parameters: None
+
+## Get Agreed DTLS Key Management Method and Role
 
 After an SCTP association has been established the key management
-function will need to get the list of DTLS key management IDs
-that was present in DTLS Key Management parameter in the INIT and INIT ACK chunks.
-This list will be used by the selected DTLS key management method to
-derive security keys and prevent downgrade attacks.
+function needs to know which method was agreed on and which role this
+endpoint will have. The function also needs to get both peers actuall
+values in the DTLS Key Management Parameter to include it in its key
+derviation to prevent down-grade attacks.
 
-Request: Get DTLS Key Management Methods
+Request: Set Supported DTLS Key Management Roles
+
+Parameters:
+* SCTP Association Handle:
+: The handle to what may become an SCTP Association or a server port
+accepting association establishment.
+
+
+Reply: Success or Error
 
 Parameters:
 
-* SCTP Association:
-: Reference to the relevant SCTP association to request the exchanged Identifiers.
+* Key Management Role:
+: The role that was selected for this endpoint, one of client or server.
 
-Reply: Offered and Selected DTLS Key Management Methods
+* Key Management Method:
+: The selected Key Management Method as a DTLS Key Management Identifier.
 
-* List of Identifiers:
-: This API call returns a list of DTLS key-management Identifiers. The
-list first contains all the Identifiers present in DTLS Key Management
-Parameter in the INIT Chunk, followed by the single identifier
-for the selected methods that was exchanged in the DTLS Key Management
-Parameter in the INIT ACK chunk.
+* Down Grade Prevention Data: : In network bytes order the whole of
+the DTLS Key Management Parameter without padding that the endpoint
+with the client role offered, followed by the corresponding what the
+endpoint with the server role offered.
 
 
 ## Cipher Suite Capabilities
@@ -955,9 +995,9 @@ Parameters :
 
 * Write Key, Sequence Number Key and IV:
 : The cipher suite specific binary object containing all necessary
-information for protection operations. The secret will be used by the DTLS 1.3 client to
-encrypt the record. Binary arbitrary long object depending on the
-cipher suite used.
+  information for protection operations. The secret will be used by
+  the DTLS 1.3 client to encrypt the record. Binary arbitrary long
+  object depending on the cipher suite used.
 
 
 Reply : Established or Failed
