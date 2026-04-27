@@ -944,10 +944,11 @@ Parameters:
 * Key Management Method:
 : The selected Key Management Method as a DTLS Key Management Identifier.
 
-* Down Grade Prevention Data: : In network bytes order the whole of
-the DTLS Key Management Parameter without padding that the endpoint
-with the client role offered, followed by the corresponding what the
-endpoint with the server role offered.
+* Down Grade Prevention Data:
+: In network bytes order the whole of the DTLS Key Management
+Parameter without padding that the endpoint with the client role
+offered, followed by the corresponding what the endpoint with the
+server role offered.
 
 
 ## Cipher Suite Capabilities
