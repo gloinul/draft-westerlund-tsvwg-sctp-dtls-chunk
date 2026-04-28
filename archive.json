@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-26T02:07:27.168366+00:00",
+  "timestamp": "2026-04-28T02:25:13.389411+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -6368,6 +6368,110 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 119,
+      "id": "PR_kwDOKszxDc7V5-uk",
+      "title": "Updated the Abstract API to handle the new Key-Management Parameter and its ne\u2026",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/119",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "\u2026gotation of the key management role.",
+      "createdAt": "2026-04-27T09:37:56Z",
+      "updatedAt": "2026-04-27T12:07:42Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "f0cc687abe601ce025e3dd680e2e9a1852e8db36",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "api-changes",
+      "headRefOid": "6ce82f947c63c334bc3df32a18b3b0d719ade50c",
+      "closedAt": "2026-04-27T12:07:33Z",
+      "mergedAt": "2026-04-27T12:07:33Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "975b1f733f293917ae3ba82e545fb44fbc337f6a"
+      },
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "And what is in the next parameter? The whole parameters concatenated in a fixed order. ",
+          "createdAt": "2026-04-27T11:30:42Z",
+          "updatedAt": "2026-04-27T11:30:42Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> And what is in the next parameter? The whole parameters concatenated in a fixed order.\r\n\r\nYes, the whole parameter sent as an array of bytes, with the length. The Key Management Method will parse it and the union of the Client + Server will be used for key extraction",
+          "createdAt": "2026-04-27T11:33:30Z",
+          "updatedAt": "2026-04-27T11:33:30Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I think this solution is much better. The SCTP stack deliver the outcome of the selection process that will be defined in DTLS chunk. And it provides the downgrade data in the defined order. Thus, the key management methods never have to implemement this. Yes, you could deliver the local endpoints sent parameter and the peers parameter and provide that to the key management function. However, that forces that to do all the process. \r\n\r\nI think the API represents the agreement in a way that is friendly to the key management function. ",
+          "createdAt": "2026-04-27T11:40:33Z",
+          "updatedAt": "2026-04-27T11:40:33Z"
+        },
+        {
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think this solution is much better. The SCTP stack deliver the outcome of the selection process that will be defined in DTLS chunk. And it provides the downgrade data in the defined order. Thus, the key management methods never have to implemement this. Yes, you could deliver the local endpoints sent parameter and the peers parameter and provide that to the key management function. However, that forces that to do all the process.\r\n> \r\n> I think the API represents the agreement in a way that is friendly to the key management function.\r\n\r\nIn a summary, on the API you need to provide\r\n1. The role of the current node\r\n2. The list of the Key Management for Client, and their number\r\n3. The list of Key Management for Server, and their number\r\n4. The choice of the Key Management Method is implicit\r\n\r\nCorrect?",
+          "createdAt": "2026-04-27T11:45:28Z",
+          "updatedAt": "2026-04-27T11:45:28Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "> > I think this solution is much better. The SCTP stack deliver the outcome of the selection process that will be defined in DTLS chunk. And it provides the downgrade data in the defined order. Thus, the key management methods never have to implemement this. Yes, you could deliver the local endpoints sent parameter and the peers parameter and provide that to the key management function. However, that forces that to do all the process.\r\n> > I think the API represents the agreement in a way that is friendly to the key management function.\r\n> \r\n> In a summary, on the API you need to provide\r\n> \r\n>     1. The role of the current node\r\n> \r\n>     2. The list of the Key Management for Client, and their number\r\n> \r\n>     3. The list of Key Management for Server, and their number\r\n> \r\n>     4. The choice of the Key Management Method is implicit\r\n> \r\n> \r\n> Correct?\r\n\r\n\r\n\r\n> > I think this solution is much better. The SCTP stack deliver the outcome of the selection process that will be defined in DTLS chunk. And it provides the downgrade data in the defined order. Thus, the key management methods never have to implemement this. Yes, you could deliver the local endpoints sent parameter and the peers parameter and provide that to the key management function. However, that forces that to do all the process.\r\n> > I think the API represents the agreement in a way that is friendly to the key management function.\r\n> \r\n> In a summary, on the API you need to provide\r\n> \r\n>     1. The role of the current node\r\n> \r\n>     2. The list of the Key Management for Client, and their number\r\n> \r\n>     3. The list of Key Management for Server, and their number\r\n> \r\n>     4. The choice of the Key Management Method is implicit\r\n> \r\n> \r\n> Correct?\r\n\r\nAlmost,\r\n\r\nBefore starting your listner or doing the connect to create an association you need to do two things.\r\n\r\nSet acceptable roles and if you support restart to set the client, server and restart flags in the parameter this sends.\r\nIn another call you set the supported key management IDs.\r\n\r\nAfter association is established one do one call to get the resulting role for this endpoint and which method as well as the datablob one should include in ones key derivation.\r\n",
+          "createdAt": "2026-04-27T12:06:58Z",
+          "updatedAt": "2026-04-27T12:06:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc75KQqs",
+          "commit": {
+            "abbreviatedOid": "dae8de3"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Line 944 Key Management Method: I think that we agreed on having the whole Parameter, not only the Key Management Method in the API. ",
+          "createdAt": "2026-04-27T10:49:56Z",
+          "updatedAt": "2026-04-27T10:49:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc75L6Jy",
+          "commit": {
+            "abbreviatedOid": "6ce82f9"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-04-27T11:53:53Z",
+          "updatedAt": "2026-04-27T11:53:53Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc75L_9W",
+          "commit": {
+            "abbreviatedOid": "6ce82f9"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-04-27T11:58:07Z",
+          "updatedAt": "2026-04-27T11:58:07Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
