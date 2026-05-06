@@ -699,7 +699,7 @@ Table of Contents
    Tie breaker Collision".  Endpoints are RECOMMENDED to attempt
    establishing a new SCTP assocation.
 
-   C.  Neither A or C applies, in this case both endpoints indicate the
+   C.  Neither A or B applies, in this case both endpoints indicate the
    same role and neither indicate both role.  This is non viable case
    and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
    attempted.  The ABORT is recommended to use SCTP Error Cause
