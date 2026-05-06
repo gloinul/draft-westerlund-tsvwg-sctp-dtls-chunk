@@ -657,8 +657,7 @@ Parameter to indicate that it is willing to setup an association without DTLS
 chunk support.  Additionally, when an SCTP endpoint requiring DTLS chunk support
 receives an SCTP packet containing an INIT chunk without a DTLS Key Management
 Parameter, it MUST reply with an packet containing an ABORT chunk an MAY include
-the error cause indicating that the DTLS chunk support is missing (see
-{{enoprotected}}).
+the error cause "Missing DTLS Chunk Support" (see {{enoprotected}}).
 
 If the INIT ACK does not contain any DTLS Key Management Parameter and the
 endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
@@ -691,16 +690,16 @@ B. Both endpoint indicate both roles, this is to be expected for endpoints
    using the parameter's Tie breaker. The endpoint with the larger value SHALL be
    the server, and the other endpoint takes the client role. In case both
    endpoints have the same tie breaker value, the selection has failed and the
-   assocation MUST be aborted.
-   The ABORT chunk MAY include the SCTP error cause indicating a tie breaker
-   collision {{tiebreakercol}}.
+   association MUST be aborted.
+   The ABORT chunk MAY include the SCTP error cause
+   "DTLS Key Management Tie Breaker Collision" (see {{tiebreakercol}}).
    Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.
 
 C. Neither A or B applies, in this case both endpoints indicate the
    same role and neither indicate both roles. This is non viable case
    and the SCTP Assocation MUST be aborted, no retry SHALL be
    attempted. The ABORT chunk MAY include the SCTP error cause
-   indicating incompatible DTLS Key Management roles {{incompatroles}}.
+   "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
 
 With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
