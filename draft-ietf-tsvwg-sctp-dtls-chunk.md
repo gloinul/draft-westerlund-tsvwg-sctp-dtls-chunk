@@ -692,17 +692,18 @@ the structure of an unprotected SCTP packet as described in {{RFC9260}}.
 ~~~~~~~~~~~
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
-The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of a protected SCTP packet being sent.
-Such packets contain only the SCTP common header and one DTLS chunk.
+The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes the
+structure of a protected SCTP packet being sent.  Such packets contain only the
+SCTP common header and one DTLS chunk.
 
-Once the credentials for sending DTLS chunks have been configured by the
-application, all SCTP packets are sent with a DTLS chunk.
+Once the part of the DTLS Key Context for sending DTLS chunks have been
+configured by the application, all SCTP packets are sent with a DTLS chunk.
 
-When an SCTP packet needs to be sent, the sequence of chunks is used
-as `DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set to
-`application_data`. Then the `DTLSCiphertext` is computed and used as the
-payload of the DTLS chunk. Finally the SCTP common header is prepended.
+When an SCTP packet needs to be sent, the sequence of chunks is used as
+`DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set to
+`application_data` {{RFC9147}}. Then the `DTLSCiphertext` is computed per the
+DTLS 1.3 specification {{RFC9147}} and configured cipher suit and used as the payload of the
+DTLS chunk. Finally the SCTP common header is prepended.
 
 When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
@@ -717,13 +718,13 @@ silently discarded.
 
 When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
 the Restart flag in addition to the `unified_hdr` is used to find the keys for
-processing the `encrypted_record`.
+processing the `encrypted_record` following DTLS 1.3 {{RFC9147}}.
 
 After the `encrypted_record` has been verified and decrypted, the
 corresponding chunks (the `DTLSInnerPlaintext.content`) are processed as
 defined in the corresponding specifications.
 
-When the Chunk Protection Operator will experience a non-critical error,
+If the Chunk Protection Operator experience a non-critical error,
 it MUST NOT abort the association.
 
 ## Termination of a Protected Association {#termination-procedure}
