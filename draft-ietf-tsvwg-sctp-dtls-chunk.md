@@ -1555,7 +1555,7 @@ This socket option can only be used on SCTP endpoints in states other than
 ``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and
 ``SCTP_COOKIE_ECHOED``.
 
-### Set or Get Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
+### Get or Set Protection Enforcement (``SCTP_DTLS_ENFORCE_PROTECTION``)
 
 Enabling this socket option on an SCTP endpoint enforces that received
 SCTP packets are only processed, if they are protected.
