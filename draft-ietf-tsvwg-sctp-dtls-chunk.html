@@ -2473,29 +2473,37 @@ with a DTLS Key Management method parameter.<a href="#section-5.1.1-1" class="pi
 <p id="section-5.1.1-2">First the Key Management role of each endpoint is determined. This is
 done by evaluating the S and C bits in the two endpoint's
 parameter. This falls into the following cases:<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-3">A. At least one end point indicate a single role, client or server and the peer
-   supports the other role. In this case the endpoint indicating a single role
-   takes that role, and the other endpoint takes the reverse role.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-4">B. Both endpoint indicate both roles, this is to be expected for endpoints
-   supporting simultanous open. In this case the role needs to be determined
-   using the parameter's Tie breaker. The endpoint with the larger value SHALL be
-   the server, and the other endpoint takes the client role. In case both
-   endpoints have the same tie breaker value, the selection has failed and the
-   assocations SHALL be ABORTED. The ABORT message SHOULD use SCTP Error Cause
-   "DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
-   attempt establishing a new SCTP assocation.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-5">C. Neither A or B applies, in this case both endpoints indicate the
-   same role and neither indicate both role. This is non viable case
-   and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
-   attempted. The ABORT is recommended to use SCTP Error Cause
-   "Incompatible DTLS Key Management Roles" <a href="#IANA-Extra-Cause" class="auto internal xref">Section 9.4</a>.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-6">With the key management roles selected the endpoints can now calculate which
+<ol start="1" type="1" class="normal type-1" id="section-5.1.1-3">
+<li id="section-5.1.1-3.1">
+              <p id="section-5.1.1-3.1.1">At least one end point indicate a single role, client or server and the peer
+supports the other role. In this case the endpoint indicating a single role
+takes that role, and the other endpoint takes the reverse role.<a href="#section-5.1.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.1.1-3.2">
+              <p id="section-5.1.1-3.2.1">Both endpoint indicate both roles, this is to be expected for endpoints
+supporting simultanous open. In this case the role needs to be determined
+using the parameter's Tie breaker. The endpoint with the larger value SHALL be
+the server, and the other endpoint takes the client role. In case both
+endpoints have the same tie breaker value, the selection has failed and the
+assocations SHALL be ABORTED. The ABORT message SHOULD use SCTP Error Cause
+"DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
+attempt establishing a new SCTP assocation.<a href="#section-5.1.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.1.1-3.3">
+              <p id="section-5.1.1-3.3.1">Neither of the above apply, in this case both endpoints indicate the
+same role and neither indicate both role. This is non viable case
+and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
+attempted. The ABORT is recommended to use SCTP Error Cause
+"Incompatible DTLS Key Management Roles" <a href="#IANA-Extra-Cause" class="auto internal xref">Section 9.4</a>.<a href="#section-5.1.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+<p id="section-5.1.1-4">With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
 Idenfiers from the endpoint that was selected as server. Pick the first one
 in the list that is also supported by the other endpoint. If no common
-method exists this is indicated.<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-7">The role and selected method is provided to the DTLS Key Management
-Functionality.<a href="#section-5.1.1-7" class="pilcrow">¶</a></p>
+method exists this is indicated.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-5">The role and selected method is provided to the DTLS Key Management
+Functionality.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
