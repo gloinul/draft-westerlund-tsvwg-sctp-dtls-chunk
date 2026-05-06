@@ -655,18 +655,12 @@ Table of Contents
    the error cause indicating that the DTLS chunk support is missing
    (see Section 4.3.1).
 
-   If an SCTP endpoint, which has sent an SCTP packet with an INIT chunk
-   containing DTLS Key Management Parameter receives a packet containing
-   an INIT ACK chunk with a DTLS Key Management Parameter not containing
-   exactly one of the DTLS Key Mangement Identifiers it sent, the
-   endpoint MUST reply with an packet containing an ABORT chunk.  The
-   ABORT chunk MAY include the Protocol Violation error cause.  If the
-   INIT ACK does not contain any DTLS Key Management Parameter and the
-   endpoint's policy requires the use of the DTLS chunk, the endpoint
-   MUST send an SCTP packet with an ABORT chunk.  It MAY include the
-   error cause indicating that DTLS chunk support is missing (see
-   Section 4.3.1).  If the endpoint's policy does not require the use of
-   the DTLS chunk, it MAY continue with the handshake.
+   If the INIT ACK does not contain any DTLS Key Management Parameter
+   and the endpoint's policy requires the use of the DTLS chunk, the
+   endpoint MUST send an SCTP packet with an ABORT chunk.  It MAY
+   include the error cause indicating that DTLS chunk support is missing
+   (see Section 4.3.1).  If the endpoint's policy does not require the
+   use of the DTLS chunk, it MAY continue with the handshake.
 
    When the SCTP association has been established the process defined by
    the selected DTLS Key Management Method MUST be followed for
@@ -680,24 +674,24 @@ Table of Contents
    either sent or received the INIT ACK with a DTLS Key Management
    method parameter.
 
-   First the role of each endpoint is determined.  This is done by
-   evaluating the S and C bits in the two endpoint's parameter.  This
-   falls into the following cases:
+   First the Key Management role of each endpoint is determined.  This
+   is done by evaluating the S and C bits in the two endpoint's
+   parameter.  This falls into the following cases:
 
    A.  At least one end point indicate a single role, client or server
    and the peer supports the other role.  In this case the endpoint
-   indicating a single role take that role, and the other endpoint takes
-   the reverse.
+   indicating a single role takes that role, and the other endpoint
+   takes the reverse role.
 
    B.  Both endpoint indicate both roles, this is to be expected for
    endpoints supporting simultanous open.  In this case the role needs
-   to be determined using the parameters Tie breaker.  The endpoint with
-   the larger value SHALL be the server, and the other endpoint takes
-   the client role.  In case both endpoints have the same tie breaker
-   roll, the selection has failed and the assocations SHALL be ABORTED.
-   The ABORT message SHOULD use SCTP Error Cause "DTLS Key Management
-   Tie breaker Collision".  Endpoints are RECOMMENDED to attempt
-   establishing a new SCTP assocation.
+   to be determined using the parameter's Tie breaker.  The endpoint
+   with the larger value SHALL be the server, and the other endpoint
+   takes the client role.  In case both endpoints have the same tie
+   breaker value, the selection has failed and the assocations SHALL be
+   ABORTED.  The ABORT message SHOULD use SCTP Error Cause "DTLS Key
+   Management Tie breaker Collision".  Endpoints are RECOMMENDED to
+   attempt establishing a new SCTP assocation.
 
    C.  Neither A or B applies, in this case both endpoints indicate the
    same role and neither indicate both role.  This is non viable case
@@ -709,9 +703,8 @@ Table of Contents
    calculate which method that shall be used.  Taking the prioritzed
    list of DTLS Key Management Idenfiers from the endpoint that was
    selected as server.  Pick the first one in the list that is also
-   supported by the other endpoint.  If no common method exists, then
-   ABORT the SCTP Association and include the SCTP Error Cause "No
-   Common DTLS Key Management Method" Section 9.4.
+   supported by the other endpoint.  If no common method exists this is
+   indicated.
 
    The role and selected method is provided to the DTLS Key Management
    Functionality.
