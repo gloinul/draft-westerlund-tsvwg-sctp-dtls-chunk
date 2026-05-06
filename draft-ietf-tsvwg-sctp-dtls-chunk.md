@@ -1365,9 +1365,9 @@ struct sctp_dtls_kmids {
 : The DTLS Key Management identifiers which will be or have been sent to the peer
   in the sequence they were contained in the DTLS Key Management Parameter.
 
-This socket option can be used with ``setsockopt()`` for SCTP endpoints in the
-``SCTP_CLOSED`` or ``SCTP_LISTEN`` state to configure the protection method
-identifiers to be sent.
+This socket option can be used with ``setsockopt()`` only for SCTP endpoints in
+the ``SCTP_CLOSED`` state to configure the protection method identifiers to be
+sent.
 When used with ``getsockopt()`` on an SCTP endpoint in the ``SCTP_LISTEN``
 state, the protection method identifiers which will be sent can be retrieved.
  If the SCTP endpoint is in a state other than ``SCTP_CLOSED`` or
