@@ -4127,22 +4127,30 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
               <td class="text-left" rowspan="1" colspan="1">Draft Authors</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">1-4095</td>
+              <td class="text-right" rowspan="1" colspan="1">1-191</td>
               <td class="text-left" rowspan="1" colspan="1">Available for Assignment using Specification Required policy</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">4096-65535</td>
+              <td class="text-right" rowspan="1" colspan="1">192-254</td>
               <td class="text-left" rowspan="1" colspan="1">Available for Assignment using First Come, First Served policy</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">255</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for extension of the identifier space</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="section-9.1-5">New entries in the range 0-4095 are registered following the Specification Required policy
-as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  New entries in the range 4096-65535 are first come, first served.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
+<p id="section-9.1-5">New entries in the range 1-191 are registered following the Specification Required policy
+as defined by <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.  New entries in the range 192-254 are first come, first served with
+expert review. The expert reviewers primary purpose is to ensure that the registration is
+relevant and not performed to consume the number space.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sctp-chunk-type">
