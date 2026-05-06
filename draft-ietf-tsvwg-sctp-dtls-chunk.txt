@@ -130,7 +130,7 @@ Table of Contents
        8.4.3.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
        8.4.4.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
        8.4.5.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
-       8.4.6.  Set or Get Protection Enforcement
+       8.4.6.  Get or Set Protection Enforcement
                (SCTP_DTLS_ENFORCE_PROTECTION)
        8.4.7.  Get Statistic Counters (SCTP_DTLS_STATS)
        8.4.8.  Get or Set the Replay Protection Window Size
@@ -1600,7 +1600,7 @@ Table of Contents
    than SCTP_CLOSED, SCTP_LISTEN, SCTP_COOKIE_WAIT and
    SCTP_COOKIE_ECHOED.
 
-8.4.6.  Set or Get Protection Enforcement (SCTP_DTLS_ENFORCE_PROTECTION)
+8.4.6.  Get or Set Protection Enforcement (SCTP_DTLS_ENFORCE_PROTECTION)
 
    Enabling this socket option on an SCTP endpoint enforces that
    received SCTP packets are only processed, if they are protected.  All
