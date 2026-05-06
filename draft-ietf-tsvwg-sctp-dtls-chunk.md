@@ -306,7 +306,7 @@ The format of this chunk parameter is depicted in {{key-management-parameter}}.
 |    Parameter Type = 0x8006    |       Parameter Length        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                          Tie Breaker                          |
-+---------------------------------------------------------------+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |Reserved |R|S|C| DTLS KMId #1  | DTLS KMId #2  | DTLS KMId #3  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 :                                                               :
@@ -383,7 +383,7 @@ payload of a plain text SCTP packet without the SCTP common header.
 |                                                               |
 |                            Payload                            |
 |                                                               |
-|                               +-------------------------------+
+|                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                               |       Post-Padding            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
