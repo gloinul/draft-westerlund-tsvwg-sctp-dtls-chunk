@@ -932,10 +932,11 @@ Table of Contents
    *  SHOULD ensure that the local receive keys are installed before the
       peer installs the corresponding send keys.
 
-   *  MUST include the DTLS Key Management Method Identifiers sent and
-      received during the SCTP handshake in the key derivation to
+   *  MUST include the DTLS Key Management Method Parameter content sent
+      and received during the SCTP handshake in the key derivation to
       mitigate downgrade attacks.  Both sides MUST use the same byte
-      ordering for the DTLS Key Management Method Identifiers.
+      ordering for the DTLS Key Management Method Identifiers.  The
+      defined role selection ensure that an order can be defined.
 
 7.  Abstract API
 
@@ -951,6 +952,9 @@ Table of Contents
    sequence number to create the nonce per Section 5.3 of [RFC8446].
    The sequence number key is used to encrypt the sequence number
    (Section 4.2.3 of [RFC9147]).
+
+   This API uses the client and server role to reference which
+   transmissions by which endpoint the API call refers to when relevant.
 
 7.1.  Set Supported DTLS Key Management Methods
 
@@ -1188,8 +1192,9 @@ Table of Contents
 7.10.  Require Protected SCTP Packets
 
    A function to configure an SCTP association to require that normal
-   SCTP packets being received must be protected in a DTLS Chunk going
-   forward.
+   SCTP packets being received on this endpoint are required to be
+   protected in a DTLS Chunk going forward.  Any unprotected SCTP
+   Packets to this SCTP association will be discarded.
 
    Parameters:
 
@@ -1259,10 +1264,11 @@ Table of Contents
    robust.  Its depth of handling is related to maximum network path
    reordering that the receiver expects to see during the SCTP
    association.  However as the actual reordering in number of packets
-   is a combination of how delayed one packet may be compared to another
-   times the actual packet rate this can grow for some applications and
-   may need to be tuned.  Thus, having the potential for setting this a
-   more suitable value depending on the use case should be considered.
+   is a combination of how delayed one packet may be compared to
+   another, times the actual packet rate, this value can grow for some
+   applications and may need to be tuned.  Thus, having the potential
+   for setting this a more suitable value depending on the use case
+   should be considered.
 
    Note this sets this configuration to be used across any DTLS key
    context for a given SCTP Association and primary/restart usages.
