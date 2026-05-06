@@ -4378,7 +4378,7 @@ used as the Chunk Protection Operator applies.<a href="#section-10-1" class="pil
 <p id="section-10.1-1">Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
-port are fixed for each direction. Advanced privacy features such
+port and VTag are fixed for each direction. Advanced privacy features such
 as sequence number encryption might
 therefore have limited effect.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
 </section>
@@ -4407,26 +4407,22 @@ by altering the content of INIT chunk, for instance by removing
 all offered DTLS Key Management Methods but the one desired. This is possible
 if the attacker is an on-path attacker that can modify packet
 because INIT and INIT ACK chunks are plain text.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
-<p id="section-10.3-2">Preventing the downgrade attacks is implemented by using at the initiator
-the list of offered DTLS Key Management Method sent in the INIT chunk plus
-the selected DTLS Key Management Method received in the INIT ACK chunk from the responder
-for deriving the keys from the handshaked secrets obtained during
-DTLS initial handshake.
-At the responder, the list of offered DTLS Key Management Methods received in
-the INIT chunk plus the selected DTLS Key Management Method that is sent
-in the INIT ACK chunk will be used for deriving the keys from the handshaked
-secrets obtained during DTLS initial handshake.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
-<p id="section-10.3-3">If the attacker succeeds in changing the DTLS Key Management Methods in either
-INIT, INIT ACK or both chunks, the peers will not be able to derive the
-same keys and the Association will not be possible to proceed.<a href="#section-10.3-3" class="pilcrow">¶</a></p>
-<p id="section-10.3-4">Thus, as long as the DTLS Key Management Method includes the ordered list of protection
-solutions indicators present in the parameter part of the INIT chunk
-for the SCTP Association in its key-derivation the association will be
-protected from down-grade.<a href="#section-10.3-4" class="pilcrow">¶</a></p>
-<p id="section-10.3-5">In case any DTLS Key Management Method does not include the parameter content in
+<p id="section-10.3-2">Preventing the downgrade attacks is implemented by using the content
+of the DTLS Key Management parameter sent in the INIT chunk plus the
+content of the DTLS Key Management parameter received in the INIT ACK
+chunk from the responder for deriving the keys from the handshaked
+secrets obtained during DTLS initial handshake. Using the whole
+content of the parameters ensures that the role selection and thus the
+method selection isn't possible to manipulate.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
+<p id="section-10.3-3">If the attacker succeeds in changing the DTLS Key Management parameter
+in either INIT, INIT ACK or both chunks, the peers will not be able to
+derive the same keys and the Association will not be possible to
+proceed. Any modification will result in Association failure, thus
+preventing down-grade.<a href="#section-10.3-3" class="pilcrow">¶</a></p>
+<p id="section-10.3-4">In case any DTLS Key Management Method does not include the parameter content in
 its key-derivation down-grade might be possible if that DTLS Key Management Method
 method is selected. It is up to endpoint policies to determine
-which protection it deems necessary against down-grade attacks.<a href="#section-10.3-5" class="pilcrow">¶</a></p>
+which protection it deems necessary against down-grade attacks.<a href="#section-10.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-considertation-storage">
