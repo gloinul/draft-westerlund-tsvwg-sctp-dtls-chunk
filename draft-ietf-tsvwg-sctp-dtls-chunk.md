@@ -630,11 +630,11 @@ First the Key Management role of each endpoint is determined. This is
 done by evaluating the S and C bits in the two endpoint's
 parameter. This falls into the following cases:
 
-A. At least one end point indicate a single role, client or server and the peer
+1. At least one end point indicate a single role, client or server and the peer
    supports the other role. In this case the endpoint indicating a single role
    takes that role, and the other endpoint takes the reverse role.
 
-B. Both endpoint indicate both roles, this is to be expected for endpoints
+2. Both endpoint indicate both roles, this is to be expected for endpoints
    supporting simultanous open. In this case the role needs to be determined
    using the parameter's Tie breaker. The endpoint with the larger value SHALL be
    the server, and the other endpoint takes the client role. In case both
@@ -643,7 +643,7 @@ B. Both endpoint indicate both roles, this is to be expected for endpoints
    "DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
    attempt establishing a new SCTP assocation.
 
-C. Neither A or B applies, in this case both endpoints indicate the
+3. Neither of the above apply, in this case both endpoints indicate the
    same role and neither indicate both role. This is non viable case
    and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
    attempted. The ABORT is recommended to use SCTP Error Cause
