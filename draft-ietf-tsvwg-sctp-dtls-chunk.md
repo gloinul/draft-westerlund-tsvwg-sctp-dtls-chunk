@@ -877,10 +877,10 @@ Every DTLS Key Management Method
   Management Method related user messages are processed by the relevant entity.
 * SHOULD ensure that the local receive keys are installed before the peer
   installs the corresponding send keys.
-* MUST include the DTLS Key Management Method Identifiers sent and received
+* MUST include the DTLS Key Management Method Parameter content sent and received
   during the SCTP handshake in the key derivation to mitigate downgrade attacks.
   Both sides MUST use the same byte ordering for the DTLS Key Management Method
-  Identifiers.
+  Identifiers. The defined role selection ensure that an order can be defined.
 
 # Abstract API  {#abstract-api}
 
@@ -896,6 +896,9 @@ vector (IV) is random material used to XOR with the sequence
 number to create the nonce per {{Section 5.3 of RFC8446}}.
 The sequence number key is used to encrypt the sequence number
 ({{Section 4.2.3 of RFC9147}}).
+
+This API uses the client and server role to reference which transmissions by
+which endpoint the API call refers to when relevant.
 
 ## Set Supported DTLS Key Management Methods
 
@@ -1135,8 +1138,10 @@ Parameters : true or false
 
 ## Require Protected SCTP Packets
 
-A function to configure an SCTP association to require that normal
-SCTP packets being received must be protected in a DTLS Chunk going forward.
+A function to configure an SCTP association to require that normal SCTP packets
+being received on this endpoint are required to be protected in a DTLS Chunk
+going forward. Any unprotected SCTP Packets to this SCTP association will be
+discarded.
 
 Parameters:
 
@@ -1206,8 +1211,8 @@ The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets is
-a combination of how delayed one packet may be compared to another
-times the actual packet rate this can grow for some applications and
+a combination of how delayed one packet may be compared to another,
+times the actual packet rate, this value can grow for some applications and
 may need to be tuned. Thus, having the potential for setting this a
 more suitable value depending on the use case should be considered.
 
@@ -1675,12 +1680,15 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 
 | Identifier | Key Management Method Name                                     | Reference | Contact       |
 | 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-To-Be | Draft Authors |
-| 1-4095     | Available for Assignment using Specification Required policy   |           |               |
-| 4096-65535 | Available for Assignment using First Come, First Served policy |           |               |
+| 1-191      | Available for Assignment using Specification Required policy   |           |               |
+| 192-254    | Available for Assignment using First Come, First Served policy |           |               |
+| 255        | Reserved for extension of the identifier space                 |           |               |
 {: #iana-psi title="DTLS Key Management Method Identifiers" cols="r l l l"}
 
-New entries in the range 0-4095 are registered following the Specification Required policy
-as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
+New entries in the range 1-191 are registered following the Specification Required policy
+as defined by {{RFC8126}}.  New entries in the range 192-254 are first come, first served with
+expert review. The expert reviewers primary purpose is to ensure that the registration is
+relevant and not performed to consume the number space.
 
 ## SCTP Chunk Type
 
@@ -1759,7 +1767,7 @@ DTLS replay protection MUST NOT be turned off.
 Use of the SCTP DTLS chunk provides privacy to SCTP by protecting user
 data and much of the SCTP control signaling. The SCTP association is
 identifiable based on the 5-tuple where the destination IP and
-port are fixed for each direction. Advanced privacy features such
+port and VTag are fixed for each direction. Advanced privacy features such
 as sequence number encryption might
 therefore have limited effect.
 
@@ -1781,24 +1789,19 @@ all offered DTLS Key Management Methods but the one desired. This is possible
 if the attacker is an on-path attacker that can modify packet
 because INIT and INIT ACK chunks are plain text.
 
-Preventing the downgrade attacks is implemented by using at the initiator
-the list of offered DTLS Key Management Method sent in the INIT chunk plus
-the selected DTLS Key Management Method received in the INIT ACK chunk from the responder
-for deriving the keys from the handshaked secrets obtained during
-DTLS initial handshake.
-At the responder, the list of offered DTLS Key Management Methods received in
-the INIT chunk plus the selected DTLS Key Management Method that is sent
-in the INIT ACK chunk will be used for deriving the keys from the handshaked
-secrets obtained during DTLS initial handshake.
+Preventing the downgrade attacks is implemented by using the content
+of the DTLS Key Management parameter sent in the INIT chunk plus the
+content of the DTLS Key Management parameter received in the INIT ACK
+chunk from the responder for deriving the keys from the handshaked
+secrets obtained during DTLS initial handshake. Using the whole
+content of the parameters ensures that the role selection and thus the
+method selection isn't possible to manipulate.
 
-If the attacker succeeds in changing the DTLS Key Management Methods in either
-INIT, INIT ACK or both chunks, the peers will not be able to derive the
-same keys and the Association will not be possible to proceed.
-
-Thus, as long as the DTLS Key Management Method includes the ordered list of protection
-solutions indicators present in the parameter part of the INIT chunk
-for the SCTP Association in its key-derivation the association will be
-protected from down-grade.
+If the attacker succeeds in changing the DTLS Key Management parameter
+in either INIT, INIT ACK or both chunks, the peers will not be able to
+derive the same keys and the Association will not be possible to
+proceed. Any modification will result in Association failure, thus
+preventing down-grade.
 
 In case any DTLS Key Management Method does not include the parameter content in
 its key-derivation down-grade might be possible if that DTLS Key Management Method
