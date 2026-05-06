@@ -1680,12 +1680,15 @@ Each entry will be assigned a 16-bit unsigned integer value from the suitable ra
 
 | Identifier | Key Management Method Name                                     | Reference | Contact       |
 | 0          | DTLS Chunk with Pre-shared cryptographic parameters            | RFC-To-Be | Draft Authors |
-| 1-4095     | Available for Assignment using Specification Required policy   |           |               |
-| 4096-65535 | Available for Assignment using First Come, First Served policy |           |               |
+| 1-191      | Available for Assignment using Specification Required policy   |           |               |
+| 192-254    | Available for Assignment using First Come, First Served policy |           |               |
+| 255        | Reserved for extension of the identifier space                 |           |               |
 {: #iana-psi title="DTLS Key Management Method Identifiers" cols="r l l l"}
 
-New entries in the range 0-4095 are registered following the Specification Required policy
-as defined by {{RFC8126}}.  New entries in the range 4096-65535 are first come, first served.
+New entries in the range 1-191 are registered following the Specification Required policy
+as defined by {{RFC8126}}.  New entries in the range 192-254 are first come, first served with
+expert review. The expert reviewers primary purpose is to ensure that the registration is
+relevant and not performed to consume the number space.
 
 ## SCTP Chunk Type
 
