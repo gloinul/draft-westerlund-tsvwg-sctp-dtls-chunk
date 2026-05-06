@@ -741,18 +741,22 @@ during an Association lifetime as described in {{Section 5.2 of RFC9260}}
 with the purpose of defining a protected restart procedure.
 
 When the upper layer protocols require support of SCTP Restart for associations
-using the DTLS chunk, as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}},
-the endpoint needs to support also the protected SCTP Restart procedure
-described below. Implementing the protected restart procedure is RECOMMENDED,
-however not required as persistent secure storage of the restart DTLS Key
-Context is needed.
+using the DTLS chunk, as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the
+endpoint needs to support also the protected SCTP Restart procedure described
+below. Implementing the protected restart procedure is RECOMMENDED, however not
+required as persistent secure storage of the restart DTLS Key Context is
+needed. An endpoint will know that its peer supports this protected SCTP restart
+procedure from the DTLS Key Management parameter's R bit
+{{key-management-parameter}}.
 
 The protected SCTP restart procedure keeps the security characteristics of
 an SCTP Association using DTLS chunks.
 
 In protected SCTP Restart, INIT and INIT ACK chunks are sent
-strictly according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
-are encrypted using DTLS chunks and the restart DTLS Key contexts.
+according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
+are encrypted using DTLS chunks and the restart DTLS Key contexts. The
+endpoints MUST include the DTLS Key Management Parameter in the INIT
+and INIT ACK, using the same method list, but with a new random Tie Breaker.
 
 In order to support protected SCTP Restart, the SCTP Endpoints need
 to allocate and maintain dedicated restart DTLS Key contexts, SCTP
@@ -769,22 +773,18 @@ replay window, i.e. initialized but never used. An SCTP endpoint MUST
 NOT use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
-An SCTP endpoint wanting to be able to initiate a protected SCTP
-restart needs to store securely and persistently the restart Keys,
-and related DTLS epoch, indexed so that when performing a restart with the
-peer node it had a protected SCTP association which can identify the right
-restart Key and DTLS epoch and initialize the restart DTLS Key Context for
-when restarting the SCTP association. The keys and epoch need to be stored
-securely and persistently so that they survive the events that are
-causing protected SCTP Restart procedure to be used, for instance a
-crash of the SCTP stack. The security considerations for persistent
-secure storage of keying materials is further discussed in
-{{sec-considertation-storage}}.
+An SCTP endpoint wanting to be able to initiate a protected SCTP restart needs
+to store securely and persistently the restart Keys, and related DTLS epoch,
+indexed so that when performing a restart with the peer node it had a protected
+SCTP association which can identify the right restart Key and DTLS epoch and
+initialize the restart DTLS Key Context for when restarting the SCTP
+association.
 
-The SCTP Restart handshakes INIT, INIT ACK, COOKIE ECHO, COOKIE ACK
-exactly as in legacy SCTP Restart case; INIT, INIT ACK MUST be
-sent plain as in the legacy, whereas COOKIE ECHO, COOKIE ACK
-Chunks MUST be sent as DTLS chunk protected using the restart DTLS key context.
+The keys and epoch need to be stored securely and persistently so that they
+survive the events that are causing the protected SCTP Restart procedure to be
+used, for instance a crash of the SCTP stack. The security considerations for
+persistent secure storage of keying materials is further discussed in
+{{sec-considertation-storage}}.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
