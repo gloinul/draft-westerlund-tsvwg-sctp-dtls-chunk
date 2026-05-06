@@ -330,9 +330,7 @@ Parameter Length: 16 bits (unsigned integer)
 
 Tie Breaker: 32 bits (unsigned integer)
 : This is a 32-bit random number to be used to determine the client and
-  server role for the key management method. The sending endpoint MUST
-  generate a new random number for each new SCTP association attempt where this
-  parameter is included in INIT or INIT ACK
+  server role for the key management method.
 
 Reserved: 5 bits (unsigned integer)
 : The reserved bits MUST be set to 0 by the sender and MUST be ignored by the
