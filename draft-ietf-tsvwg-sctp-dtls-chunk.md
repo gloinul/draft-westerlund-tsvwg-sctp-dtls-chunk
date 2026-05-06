@@ -184,13 +184,13 @@ packet containing control and/or DATA chunks, these SCTP chunks will be
 processed by the Chunk Protection Operator for protection.
 This results in a DTLS 1.3 record encapsulated in a DTLS chunk.
 
-The use of the DTLS 1.3 handshake for initial mutual authentication, key
-establishment, and periodic re-authentication and rekeying with
-Diffie-Hellman of the DTLS chunk protection is defined in separate documents,
-(see {{key-management-considerations}}).
-To prevent downgrade attacks affecting the DTLS Key Management negotiation
-the DTLS Key Management Method should implement specific procedures when
-deriving keys.
+The method of secure key-managment, e.g. based on DTLS 1.3, providing
+initial mutual authentication, key establishment, and periodic
+re-authentication and rekeying with Diffie-Hellman of the DTLS chunk
+protection is defined in separate documents, (see
+{{key-management-considerations}}).  To prevent downgrade attacks
+affecting the DTLS Key Management negotiation the DTLS Key Management
+Method should implement specific procedures when deriving keys.
 
 The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet.
@@ -224,32 +224,31 @@ SCTP and its extensions. However, the following limitations apply:
 
 ## DTLS Considerations {#DTLS-engines}
 
-Once the DTLS Key Management Method has established its context, it
-derives primary and restart keys and configures the Chunk Protection Operator
-via an API. This establishes the necessary DTLS key contexts for SCTP chunk
-encryption and decryption.
-A DTLS key context for normal operations use MUST be created, while a DTLS key
-context for SCTP association restart SHOULD be created.
+Once the DTLS Key Management Method has established its context, it derives
+primary and restart keys and configures the Chunk Protection Operator via an
+API. This establishes the necessary DTLS key contexts for SCTP chunk encryption
+and decryption.  A DTLS key context for primary operations use MUST be created,
+while a DTLS key context for SCTP association restart SHOULD be created.
 
-In this document we use the terms DTLS Key context for indicating a
-Key and IV, produced by the DTLS Key Management, and all relevant data
-that needs to be provided to the Chunk Protection Operator for DTLS
-encryption and decryption.  DTLS Key context includes Keys, sequence
-number protection key, and IV for sending and receiving, replay window
-for receiving, and last used sequence number for sending. Each DTLS
-key context is associated with a three-value tuple identifying the
-context, consisting of SCTP Association, the restart indicator, and
-the DTLS epoch.
+In this document we use the terms DTLS Key context for indicating a Keys and IV,
+produced by the DTLS Key Management, and all relevant data that needs to be
+provided to the Chunk Protection Operator for DTLS encryption and decryption.
+DTLS Key context includes a key, sequence number protection key, and IV each for
+sending and receiving, replay window for receiving, and last used sequence
+number for sending. Each DTLS key context is associated with a three-value tuple
+identifying the context, consisting of SCTP Association, the restart indicator,
+and the DTLS epoch.
 
-The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
-be used.
+The DTLS Connection ID in the DTLS Record layer MUST NOT be used in the DTLS
+Chunk.
 
-The first  DTLS key context established for any SCTP association MUST use epoch 3.
+The first DTLS key context established for any SCTP association MUST use epoch
+3.
 
 The replay window for the DTLS Sequence Number need to account for the
 concurrent transmission of packets on multiple paths in multihomed associations.
-In particular, this applies to packets containing HEARTBEAT chunks.
-The window size must be sufficiently large to accommodate these latency differences.
+In particular, this applies to packets containing HEARTBEAT chunks.  The window
+size must be sufficiently large to accommodate these latency differences.
 
 Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
 2<sup>14</sup> (16384) bytes of plain text.
@@ -326,12 +325,14 @@ Parameter Type: 16 bits (unsigned integer)
   the use of the upper bits of the parameter type.
 
 Parameter Length: 16 bits (unsigned integer)
-: This value holds the length of the parameter, which is the
+: This value holds the length of the parameter in bytes, which is the
   number of DTLS Key Management identifiers (N) plus 9.
 
 Tie Breaker: 32 bits (unsigned integer)
 : This is a 32-bit random number to be used to determine the client and
-  server role for the key management method.
+  server role for the key management method. The sending endpoint MUST
+  generate a new random number for each new SCTP association attempt where this
+  parameter is included in INIT or INIT ACK
 
 Reserved: 5 bits (unsigned integer)
 : The reserved bits MUST be set to 0 by the sender and MUST be ignored by the
@@ -348,7 +349,7 @@ C bit: 1 bit
 
 DTLS Key Management Identifier: 8 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
-  is a 16-bit unsigned integer value indicating a DTLS Key Management Method.
+  is a 8-bit unsigned integer value indicating a DTLS Key Management Method.
   In the INIT chunk the DTLS Key Management Methods are listed in descending order
   of preference, i.e. the first listed in the parameter is the most preferred one
   and the last listed one is the least preferred by the sender in the INIT chunk.
@@ -359,11 +360,12 @@ Padding: 0, 8, 16, or 24 bits (unsigned integer)
 : The padding MUST be set to 0 by the sender and MUST be ignored by the receiver.
 
 The DTLS Key Management Parameter MAY be included in the INIT and INIT ACK chunk
-and MUST NOT be included in any other chunk.
-When included in an INIT chunk, the DTLS Key Management Parameter MUST include
-at least one DTLS Key Management Identifier.
-When included in an INIT ACK chunk, it MUST include exactly one
-DTLS Key Management Identifier.
+and MUST NOT be included in any other chunk.  When included in an INIT chunk,
+the DTLS Key Management Parameter MUST include at least one DTLS Key Management
+Identifier.  When included in an INIT ACK chunk, MUST include at least one DTLS Key Management
+Identifier. Both Peers include their respective preference list and the procedure
+in {{sec-key-method-select}} will determine the selected roles and chosen
+method.
 
 ##  DTLS Chunk (DTLS) {#DTLS-chunk}
 
@@ -590,27 +592,22 @@ This parameter lists the supported DTLS Key Management Identifiers
 If an SCTP endpoint receives an SCTP packet containing an INIT chunk with a
 DTLS Key Management Parameter, it MUST reply with a packet containing an
 INIT ACK containing its own DTLS Key Management Parameter.
-This parameter MUST contains exactly one DTLS Key Management Method Identifier
-out of the list of received ones.
-If there is no DTLS Key Management Method supported by both endpoints,
-and the endpoints' policy requires requires the use of the DTLS chunk,
-the receiver MUST reply with an SCTP packet containing an ABORT chunk and MAY
-include the error cause "No Common DTLS Key Management Method"
-(see {{enocommonpsi}}).
-If the endpoints' policy does not require the use of the DTLS chunk, the receiver
-MAY reply with an SCTP packet containing an INIT ACK chunk without any
-DTLS Key Management Parameter to indicate that it is willing to setup an
-association without DTLS chunk support.
-Additionally, when an SCTP endpoint requiring DTLS chunk support receives an
-SCTP packet containing an INIT chunk without a DTLS Key Management Parameter,
-it MUST reply with an packet containing an ABORT chunk an MAY include the
-error cause indicating that the DTLS chunk support is missing (see {{enoprotected}}).
 
-If an SCTP endpoint, which has sent an SCTP packet with an INIT chunk containing
-DTLS Key Management Parameter receives a packet containing an INIT ACK chunk with
-a DTLS Key Management Parameter not containing exactly one of the DTLS Key
-Mangement Identifiers it sent, the endpoint MUST reply with an packet containing
-an ABORT chunk. The ABORT chunk MAY include the Protocol Violation error cause.
+The endpoint then executes the procedure in {{sec-key-method-select}} to select
+the DTLS Key Management Method and the role of the endpoints.  If there is no
+DTLS Key Management Method supported by both endpoints, and the endpoints'
+policy requires requires the use of the DTLS chunk, the receiver MUST reply with
+an SCTP packet containing an ABORT chunk and MAY include the error cause "No
+Common DTLS Key Management Method" (see {{enocommonpsi}}).  If the endpoints'
+policy does not require the use of the DTLS chunk, the receiver MAY reply with
+an SCTP packet containing an INIT ACK chunk without any DTLS Key Management
+Parameter to indicate that it is willing to setup an association without DTLS
+chunk support.  Additionally, when an SCTP endpoint requiring DTLS chunk support
+receives an SCTP packet containing an INIT chunk without a DTLS Key Management
+Parameter, it MUST reply with an packet containing an ABORT chunk an MAY include
+the error cause indicating that the DTLS chunk support is missing (see
+{{enoprotected}}).
+
 If the INIT ACK does not contain any DTLS Key Management Parameter and the
 endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
 an SCTP packet with an ABORT chunk. It MAY include the error cause indicating
@@ -621,6 +618,45 @@ continue with the handshake.
 When the SCTP association has been established the process defined by the
 selected DTLS Key Management Method MUST be followed for establishing
 DTLS Key Contexts and installing them.
+
+### Key Management Method Selection {#sec-key-method-select}
+
+To ensure that each endpoints key management method knows which role it has and
+both endpoints agree on which method that was chosen the below procedure MUST be
+executed by both endpoints after having either sent or received the INIT ACK
+with a DTLS Key Management method parameter.
+
+First the Key Management role of each endpoint is determined. This is
+done by evaluating the S and C bits in the two endpoint's
+parameter. This falls into the following cases:
+
+A. At least one end point indicate a single role, client or server and the peer
+   supports the other role. In this case the endpoint indicating a single role
+   takes that role, and the other endpoint takes the reverse role.
+
+B. Both endpoint indicate both roles, this is to be expected for endpoints
+   supporting simultanous open. In this case the role needs to be determined
+   using the parameter's Tie breaker. The endpoint with the larger value SHALL be
+   the server, and the other endpoint takes the client role. In case both
+   endpoints have the same tie breaker value, the selection has failed and the
+   assocations SHALL be ABORTED. The ABORT message SHOULD use SCTP Error Cause
+   "DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
+   attempt establishing a new SCTP assocation.
+
+C. Neither A or B applies, in this case both endpoints indicate the
+   same role and neither indicate both role. This is non viable case
+   and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
+   attempted. The ABORT is recommended to use SCTP Error Cause
+   "Incompatible DTLS Key Management Roles" {{IANA-Extra-Cause}}.
+
+With the key management roles selected the endpoints can now calculate which
+method that shall be used. Taking the prioritzed list of DTLS Key Management
+Idenfiers from the endpoint that was selected as server. Pick the first one
+in the list that is also supported by the other endpoint. If no common
+method exists this is indicated.
+
+The role and selected method is provided to the DTLS Key Management
+Functionality.
 
 ## DTLS Chunk Handling {#dtls-chunk-handling}
 
@@ -656,17 +692,18 @@ the structure of an unprotected SCTP packet as described in {{RFC9260}}.
 ~~~~~~~~~~~
 {: #sctp-DTLS-encrypt-chunk-states-2 title="Protected SCTP Packets" artwork-align="center"}
 
-The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes
-the structure of a protected SCTP packet being sent.
-Such packets contain only the SCTP common header and one DTLS chunk.
+The diagram shown in {{sctp-DTLS-encrypt-chunk-states-2}} describes the
+structure of a protected SCTP packet being sent.  Such packets contain only the
+SCTP common header and one DTLS chunk.
 
-Once the credentials for sending DTLS chunks have been configured by the
-application, all SCTP packets are sent with a DTLS chunk.
+Once the part of the DTLS Key Context for sending DTLS chunks have been
+configured by the application, all SCTP packets are sent with a DTLS chunk.
 
-When an SCTP packet needs to be sent, the sequence of chunks is used
-as `DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set to
-`application_data`. Then the `DTLSCiphertext` is computed and used as the
-payload of the DTLS chunk. Finally the SCTP common header is prepended.
+When an SCTP packet needs to be sent, the sequence of chunks is used as
+`DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set to
+`application_data` {{RFC9147}}. Then the `DTLSCiphertext` is computed per the
+DTLS 1.3 specification {{RFC9147}} and configured cipher suit and used as the payload of the
+DTLS chunk. Finally the SCTP common header is prepended.
 
 When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
@@ -681,13 +718,13 @@ silently discarded.
 
 When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
 the Restart flag in addition to the `unified_hdr` is used to find the keys for
-processing the `encrypted_record`.
+processing the `encrypted_record` following DTLS 1.3 {{RFC9147}}.
 
 After the `encrypted_record` has been verified and decrypted, the
 corresponding chunks (the `DTLSInnerPlaintext.content`) are processed as
 defined in the corresponding specifications.
 
-When the Chunk Protection Operator will experience a non-critical error,
+If the Chunk Protection Operator experience a non-critical error,
 it MUST NOT abort the association.
 
 ## Termination of a Protected Association {#termination-procedure}
@@ -704,18 +741,22 @@ during an Association lifetime as described in {{Section 5.2 of RFC9260}}
 with the purpose of defining a protected restart procedure.
 
 When the upper layer protocols require support of SCTP Restart for associations
-using the DTLS chunk, as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}},
-the endpoint needs to support also the protected SCTP Restart procedure
-described below. Implementing the protected restart procedure is RECOMMENDED,
-however not required as persistent secure storage of the restart DTLS Key
-Context is needed.
+using the DTLS chunk, as in case of 3GPP NG-C protocol {{ETSI-TS-38.413}}, the
+endpoint needs to support also the protected SCTP Restart procedure described
+below. Implementing the protected restart procedure is RECOMMENDED, however not
+required as persistent secure storage of the restart DTLS Key Context is
+needed. An endpoint will know that its peer supports this protected SCTP restart
+procedure from the DTLS Key Management parameter's R bit
+{{key-management-parameter}}.
 
 The protected SCTP restart procedure keeps the security characteristics of
 an SCTP Association using DTLS chunks.
 
 In protected SCTP Restart, INIT and INIT ACK chunks are sent
-strictly according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
-are encrypted using DTLS chunks and the restart DTLS Key contexts.
+according to {{RFC9260}}, but COOKIE ECHO and COOKIE ACK chunks
+are encrypted using DTLS chunks and the restart DTLS Key contexts. The
+endpoints MUST include the DTLS Key Management Parameter in the INIT
+and INIT ACK, using the same method list, but with a new random Tie Breaker.
 
 In order to support protected SCTP Restart, the SCTP Endpoints need
 to allocate and maintain dedicated restart DTLS Key contexts, SCTP
@@ -732,22 +773,18 @@ replay window, i.e. initialized but never used. An SCTP endpoint MUST
 NOT use the SCTP Restart DTLS Key for any other use case than SCTP
 association restart.
 
-An SCTP endpoint wanting to be able to initiate a protected SCTP
-restart needs to store securely and persistently the restart Keys,
-and related DTLS epoch, indexed so that when performing a restart with the
-peer node it had a protected SCTP association which can identify the right
-restart Key and DTLS epoch and initialize the restart DTLS Key Context for
-when restarting the SCTP association. The keys and epoch need to be stored
-securely and persistently so that they survive the events that are
-causing protected SCTP Restart procedure to be used, for instance a
-crash of the SCTP stack. The security considerations for persistent
-secure storage of keying materials is further discussed in
-{{sec-considertation-storage}}.
+An SCTP endpoint wanting to be able to initiate a protected SCTP restart needs
+to store securely and persistently the restart Keys, and related DTLS epoch,
+indexed so that when performing a restart with the peer node it had a protected
+SCTP association which can identify the right restart Key and DTLS epoch and
+initialize the restart DTLS Key Context for when restarting the SCTP
+association.
 
-The SCTP Restart handshakes INIT, INIT ACK, COOKIE ECHO, COOKIE ACK
-exactly as in legacy SCTP Restart case; INIT, INIT ACK MUST be
-sent plain as in the legacy, whereas COOKIE ECHO, COOKIE ACK
-Chunks MUST be sent as DTLS chunk protected using the restart DTLS key context.
+The keys and epoch need to be stored securely and persistently so that they
+survive the events that are causing the protected SCTP Restart procedure to be
+used, for instance a crash of the SCTP stack. The security considerations for
+persistent secure storage of keying materials is further discussed in
+{{sec-considertation-storage}}.
 
 A DTLS Chunk using the restart DTLS key context is identified by
 having the R bit (Restart Indicator) set in the DTLS Chunk (see
@@ -1689,9 +1726,11 @@ In the Stream Control Transmission Protocol (SCTP) Parameters group's
 entries depicted below in {{iana-error-cause-codes}} with a
 reference to this document.
 
-| ID Value     | Error Cause Codes                    | Reference |
-| 100 (TBC)    | Missing DTLS Chunk Support           | RFC-To-Be |
-| 101 (TBC)    | No Common DTLS Key Management Method | RFC-To-Be |
+| ID Value     | Error Cause Codes                         | Reference |
+| 100 (TBC)    | Missing DTLS Chunk Support                | RFC-To-Be |
+| 101 (TBC)    | No Common DTLS Key Management Method      | RFC-To-Be |
+| 102 (TBC)    | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
+| 103 (TBC)    | Incompatible DTLS Key Management Roles    | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
 
 The suggested cause code will need to be confirmed by IANA.
