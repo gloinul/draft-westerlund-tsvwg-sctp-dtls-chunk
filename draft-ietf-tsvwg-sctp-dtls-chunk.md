@@ -184,13 +184,13 @@ packet containing control and/or DATA chunks, these SCTP chunks will be
 processed by the Chunk Protection Operator for protection.
 This results in a DTLS 1.3 record encapsulated in a DTLS chunk.
 
-The use of the DTLS 1.3 handshake for initial mutual authentication, key
-establishment, and periodic re-authentication and rekeying with
-Diffie-Hellman of the DTLS chunk protection is defined in separate documents,
-(see {{key-management-considerations}}).
-To prevent downgrade attacks affecting the DTLS Key Management negotiation
-the DTLS Key Management Method should implement specific procedures when
-deriving keys.
+The method of secure key-managment, e.g. based on DTLS 1.3, providing
+initial mutual authentication, key establishment, and periodic
+re-authentication and rekeying with Diffie-Hellman of the DTLS chunk
+protection is defined in separate documents, (see
+{{key-management-considerations}}).  To prevent downgrade attacks
+affecting the DTLS Key Management negotiation the DTLS Key Management
+Method should implement specific procedures when deriving keys.
 
 The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet.
@@ -224,32 +224,31 @@ SCTP and its extensions. However, the following limitations apply:
 
 ## DTLS Considerations {#DTLS-engines}
 
-Once the DTLS Key Management Method has established its context, it
-derives primary and restart keys and configures the Chunk Protection Operator
-via an API. This establishes the necessary DTLS key contexts for SCTP chunk
-encryption and decryption.
-A DTLS key context for normal operations use MUST be created, while a DTLS key
-context for SCTP association restart SHOULD be created.
+Once the DTLS Key Management Method has established its context, it derives
+primary and restart keys and configures the Chunk Protection Operator via an
+API. This establishes the necessary DTLS key contexts for SCTP chunk encryption
+and decryption.  A DTLS key context for primary operations use MUST be created,
+while a DTLS key context for SCTP association restart SHOULD be created.
 
-In this document we use the terms DTLS Key context for indicating a
-Key and IV, produced by the DTLS Key Management, and all relevant data
-that needs to be provided to the Chunk Protection Operator for DTLS
-encryption and decryption.  DTLS Key context includes Keys, sequence
-number protection key, and IV for sending and receiving, replay window
-for receiving, and last used sequence number for sending. Each DTLS
-key context is associated with a three-value tuple identifying the
-context, consisting of SCTP Association, the restart indicator, and
-the DTLS epoch.
+In this document we use the terms DTLS Key context for indicating a Keys and IV,
+produced by the DTLS Key Management, and all relevant data that needs to be
+provided to the Chunk Protection Operator for DTLS encryption and decryption.
+DTLS Key context includes a key, sequence number protection key, and IV each for
+sending and receiving, replay window for receiving, and last used sequence
+number for sending. Each DTLS key context is associated with a three-value tuple
+identifying the context, consisting of SCTP Association, the restart indicator,
+and the DTLS epoch.
 
-The DTLS Connection ID in the DTLS Record layer used in the DTLS Chunk MUST NOT
-be used.
+The DTLS Connection ID in the DTLS Record layer MUST NOT be used in the DTLS
+Chunk.
 
-The first  DTLS key context established for any SCTP association MUST use epoch 3.
+The first DTLS key context established for any SCTP association MUST use epoch
+3.
 
 The replay window for the DTLS Sequence Number need to account for the
 concurrent transmission of packets on multiple paths in multihomed associations.
-In particular, this applies to packets containing HEARTBEAT chunks.
-The window size must be sufficiently large to accommodate these latency differences.
+In particular, this applies to packets containing HEARTBEAT chunks.  The window
+size must be sufficiently large to accommodate these latency differences.
 
 Endpoints implementing DTLS Chunk MUST support DTLS records containing up to
 2<sup>14</sup> (16384) bytes of plain text.
