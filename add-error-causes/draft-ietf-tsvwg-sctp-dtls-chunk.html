@@ -2644,8 +2644,7 @@ Parameter to indicate that it is willing to setup an association without DTLS
 chunk support.  Additionally, when an SCTP endpoint requiring DTLS chunk support
 receives an SCTP packet containing an INIT chunk without a DTLS Key Management
 Parameter, it MUST reply with an packet containing an ABORT chunk an MAY include
-the error cause indicating that the DTLS chunk support is missing (see
-<a href="#enoprotected" class="auto internal xref">Section 4.3.1</a>).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+the error cause "Missing DTLS Chunk Support" (see <a href="#enoprotected" class="auto internal xref">Section 4.3.1</a>).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">If the INIT ACK does not contain any DTLS Key Management Parameter and the
 endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
 an SCTP packet with an ABORT chunk. It MAY include the error cause indicating
@@ -2675,15 +2674,15 @@ parameter. This falls into the following cases:<a href="#section-5.1.1-2" class=
    using the parameter's Tie breaker. The endpoint with the larger value SHALL be
    the server, and the other endpoint takes the client role. In case both
    endpoints have the same tie breaker value, the selection has failed and the
-   assocation MUST be aborted.
-   The ABORT chunk MAY include the SCTP error cause indicating a tie breaker
-   collision <a href="#tiebreakercol" class="auto internal xref">Section 4.3.3</a>.
+   association MUST be aborted.
+   The ABORT chunk MAY include the SCTP error cause
+   "DTLS Key Management Tie Breaker Collision" (see <a href="#tiebreakercol" class="auto internal xref">Section 4.3.3</a>).
    Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-5">C. Neither A or B applies, in this case both endpoints indicate the
    same role and neither indicate both roles. This is non viable case
    and the SCTP Assocation MUST be aborted, no retry SHALL be
    attempted. The ABORT chunk MAY include the SCTP error cause
-   indicating incompatible DTLS Key Management roles <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
+   "Incompatible DTLS Key Management Roles" (see <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>).<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-6">With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
 Idenfiers from the endpoint that was selected as server. Pick the first one
