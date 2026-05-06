@@ -593,27 +593,21 @@ If an SCTP endpoint receives an SCTP packet containing an INIT chunk with a
 DTLS Key Management Parameter, it MUST reply with a packet containing an
 INIT ACK containing its own DTLS Key Management Parameter.
 
-The endpoint then executes the procedure in {{sec-key-method-select}} to
-select the DTLS Key Management Method and the role of the endpoints.
-If there is no DTLS Key Management Method supported by both endpoints,
-and the endpoints' policy requires requires the use of the DTLS chunk,
-the receiver MUST reply with an SCTP packet containing an ABORT chunk and MAY
-include the error cause "No Common DTLS Key Management Method"
-(see {{enocommonpsi}}).
-If the endpoints' policy does not require the use of the DTLS chunk, the receiver
-MAY reply with an SCTP packet containing an INIT ACK chunk without any
-DTLS Key Management Parameter to indicate that it is willing to setup an
-association without DTLS chunk support.
-Additionally, when an SCTP endpoint requiring DTLS chunk support receives an
-SCTP packet containing an INIT chunk without a DTLS Key Management Parameter,
-it MUST reply with an packet containing an ABORT chunk an MAY include the
-error cause indicating that the DTLS chunk support is missing (see {{enoprotected}}).
+The endpoint then executes the procedure in {{sec-key-method-select}} to select
+the DTLS Key Management Method and the role of the endpoints.  If there is no
+DTLS Key Management Method supported by both endpoints, and the endpoints'
+policy requires requires the use of the DTLS chunk, the receiver MUST reply with
+an SCTP packet containing an ABORT chunk and MAY include the error cause "No
+Common DTLS Key Management Method" (see {{enocommonpsi}}).  If the endpoints'
+policy does not require the use of the DTLS chunk, the receiver MAY reply with
+an SCTP packet containing an INIT ACK chunk without any DTLS Key Management
+Parameter to indicate that it is willing to setup an association without DTLS
+chunk support.  Additionally, when an SCTP endpoint requiring DTLS chunk support
+receives an SCTP packet containing an INIT chunk without a DTLS Key Management
+Parameter, it MUST reply with an packet containing an ABORT chunk an MAY include
+the error cause indicating that the DTLS chunk support is missing (see
+{{enoprotected}}).
 
-If an SCTP endpoint, which has sent an SCTP packet with an INIT chunk containing
-DTLS Key Management Parameter receives a packet containing an INIT ACK chunk with
-a DTLS Key Management Parameter not containing exactly one of the DTLS Key
-Mangement Identifiers it sent, the endpoint MUST reply with an packet containing
-an ABORT chunk. The ABORT chunk MAY include the Protocol Violation error cause.
 If the INIT ACK does not contain any DTLS Key Management Parameter and the
 endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
 an SCTP packet with an ABORT chunk. It MAY include the error cause indicating
@@ -632,18 +626,19 @@ both endpoints agree on which method that was chosen the below procedure MUST be
 executed by both endpoints after having either sent or received the INIT ACK
 with a DTLS Key Management method parameter.
 
-First the role of each endpoint is determined. This is done by evaluating the
-S and C bits in the two endpoint's parameter. This falls into the following cases:
+First the Key Management role of each endpoint is determined. This is
+done by evaluating the S and C bits in the two endpoint's
+parameter. This falls into the following cases:
 
 A. At least one end point indicate a single role, client or server and the peer
    supports the other role. In this case the endpoint indicating a single role
-   take that role, and the other endpoint takes the reverse.
+   takes that role, and the other endpoint takes the reverse role.
 
 B. Both endpoint indicate both roles, this is to be expected for endpoints
    supporting simultanous open. In this case the role needs to be determined
-   using the parameters Tie breaker. The endpoint with the larger value SHALL be
+   using the parameter's Tie breaker. The endpoint with the larger value SHALL be
    the server, and the other endpoint takes the client role. In case both
-   endpoints have the same tie breaker roll, the selection has failed and the
+   endpoints have the same tie breaker value, the selection has failed and the
    assocations SHALL be ABORTED. The ABORT message SHOULD use SCTP Error Cause
    "DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
    attempt establishing a new SCTP assocation.
@@ -658,8 +653,7 @@ With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
 Idenfiers from the endpoint that was selected as server. Pick the first one
 in the list that is also supported by the other endpoint. If no common
-method exists, then ABORT the SCTP Association and include the SCTP
-Error Cause "No Common DTLS Key Management Method" {{IANA-Extra-Cause}}.
+method exists this is indicated.
 
 The role and selected method is provided to the DTLS Key Management
 Functionality.
