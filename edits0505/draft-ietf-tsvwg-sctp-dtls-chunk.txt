@@ -96,6 +96,7 @@ Table of Contents
        4.3.2.  No Common DTLS Key Management Method
    5.  Procedures
      5.1.  Establishment of a Protected Association
+       5.1.1.  Key Management Method Selection
      5.2.  DTLS Chunk Handling
      5.3.  Termination of a Protected Association
      5.4.  SCTP Restart Considerations
@@ -380,12 +381,15 @@ Table of Contents
       of the upper bits of the parameter type.
 
    Parameter Length: 16 bits (unsigned integer)
-      This value holds the length of the parameter, which is the number
-      of DTLS Key Management identifiers (N) plus 9.
+      This value holds the length of the parameter in bytes, which is
+      the number of DTLS Key Management identifiers (N) plus 9.
 
    Tie Breaker: 32 bits (unsigned integer)
       This is a 32-bit random number to be used to determine the client
-      and server role for the key management method.
+      and server role for the key management method.  The sending
+      endpoint MUST generate a new random number for each new SCTP
+      association attempt where this parameter is included in INIT or
+      INIT ACK
 
    Reserved: 5 bits (unsigned integer)
       The reserved bits MUST be set to 0 by the sender and MUST be
@@ -401,7 +405,7 @@ Table of Contents
       The (C)lient role supported bit.
 
    DTLS Key Management Identifier: 8 bits (unsigned integer)
-      Each DTLS Key Management Identifier (Section 9.1) is a 16-bit
+      Each DTLS Key Management Identifier (Section 9.1) is a 8-bit
       unsigned integer value indicating a DTLS Key Management Method.
       In the INIT chunk the DTLS Key Management Methods are listed in
       descending order of preference, i.e. the first listed in the
@@ -418,8 +422,10 @@ Table of Contents
    INIT ACK chunk and MUST NOT be included in any other chunk.  When
    included in an INIT chunk, the DTLS Key Management Parameter MUST
    include at least one DTLS Key Management Identifier.  When included
-   in an INIT ACK chunk, it MUST include exactly one DTLS Key Management
-   Identifier.
+   in an INIT ACK chunk, MUST include at least one DTLS Key Management
+   Identifier.  Both Peers include their respective preference list and
+   the procedure in Section 5.1.1 will determine the selected roles and
+   chosen method.
 
 4.2.  DTLS Chunk (DTLS)
 
@@ -630,8 +636,10 @@ Table of Contents
    If an SCTP endpoint receives an SCTP packet containing an INIT chunk
    with a DTLS Key Management Parameter, it MUST reply with a packet
    containing an INIT ACK containing its own DTLS Key Management
-   Parameter.  This parameter MUST contains exactly one DTLS Key
-   Management Method Identifier out of the list of received ones.  If
+   Parameter.
+
+   The endpoint then executes the procedure in Section 5.1.1 to select
+   the DTLS Key Management Method and the role of the endpoints.  If
    there is no DTLS Key Management Method supported by both endpoints,
    and the endpoints' policy requires requires the use of the DTLS
    chunk, the receiver MUST reply with an SCTP packet containing an
@@ -663,6 +671,50 @@ Table of Contents
    When the SCTP association has been established the process defined by
    the selected DTLS Key Management Method MUST be followed for
    establishing DTLS Key Contexts and installing them.
+
+5.1.1.  Key Management Method Selection
+
+   To ensure that each endpoints key management method knows which role
+   it has and both endpoints agree on which method that was chosen the
+   below procedure MUST be executed by both endpoints after having
+   either sent or received the INIT ACK with a DTLS Key Management
+   method parameter.
+
+   First the role of each endpoint is determined.  This is done by
+   evaluating the S and C bits in the two endpoint's parameter.  This
+   falls into the following cases:
+
+   A.  At least one end point indicate a single role, client or server
+   and the peer supports the other role.  In this case the endpoint
+   indicating a single role take that role, and the other endpoint takes
+   the reverse.
+
+   B.  Both endpoint indicate both roles, this is to be expected for
+   endpoints supporting simultanous open.  In this case the role needs
+   to be determined using the parameters Tie breaker.  The endpoint with
+   the larger value SHALL be the server, and the other endpoint takes
+   the client role.  In case both endpoints have the same tie breaker
+   roll, the selection has failed and the assocations SHALL be ABORTED.
+   The ABORT message SHOULD use SCTP Error Cause "DTLS Key Management
+   Tie breaker Collision".  Endpoints are RECOMMENDED to attempt
+   establishing a new SCTP assocation.
+
+   C.  Neither A or C applies, in this case both endpoints indicate the
+   same role and neither indicate both role.  This is non viable case
+   and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
+   attempted.  The ABORT is recommended to use SCTP Error Cause
+   "Incompatible DTLS Key Management Roles" Section 9.4.
+
+   With the key management roles selected the endpoints can now
+   calculate which method that shall be used.  Taking the prioritzed
+   list of DTLS Key Management Idenfiers from the endpoint that was
+   selected as server.  Pick the first one in the list that is also
+   supported by the other endpoint.  If no common method exists, then
+   ABORT the SCTP Association and include the SCTP Error Cause "No
+   Common DTLS Key Management Method" Section 9.4.
+
+   The role and selected method is provided to the DTLS Key Management
+   Functionality.
 
 5.2.  DTLS Chunk Handling
 
@@ -1742,15 +1794,21 @@ Table of Contents
    "Error Cause Codes" registry, IANA is requested to add the new
    entries depicted below in Table 6 with a reference to this document.
 
-     +===========+======================================+===========+
-     |  ID Value | Error Cause Codes                    | Reference |
-     +===========+======================================+===========+
-     | 100 (TBC) | Missing DTLS Chunk Support           | RFC-To-Be |
-     +-----------+--------------------------------------+-----------+
-     | 101 (TBC) | No Common DTLS Key Management Method | RFC-To-Be |
-     +-----------+--------------------------------------+-----------+
+   +===========+===========================================+===========+
+   |  ID Value | Error Cause Codes                         | Reference |
+   +===========+===========================================+===========+
+   | 100 (TBC) | Missing DTLS Chunk Support                | RFC-To-Be |
+   +-----------+-------------------------------------------+-----------+
+   | 101 (TBC) | No Common DTLS Key Management Method      | RFC-To-Be |
+   +-----------+-------------------------------------------+-----------+
+   | 102 (TBC) | DTLS Key Management Tie Breaker           | RFC-To-Be |
+   |           | Collision                                 |           |
+   +-----------+-------------------------------------------+-----------+
+   | 103 (TBC) | Incompatible DTLS Key Management          | RFC-To-Be |
+   |           | Roles                                     |           |
+   +-----------+-------------------------------------------+-----------+
 
-                        Table 6: Error Cause Codes
+                         Table 6: Error Cause Codes
 
    The suggested cause code will need to be confirmed by IANA.
 
