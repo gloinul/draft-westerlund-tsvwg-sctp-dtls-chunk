@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 7 November 2026                                        M. Tüxen
+Expires: 8 November 2026                                        M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                              6 May 2026
+                                                              7 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 November 2026.
+   This Internet-Draft will expire on 8 November 2026.
 
 Copyright Notice
 
@@ -727,20 +727,21 @@ Table of Contents
    is done by evaluating the S and C bits in the two endpoint's
    parameter.  This falls into the following cases:
 
-   A.  At least one end point indicate a single role, client or server
-   and the peer supports the other role.  In this case the endpoint
-   indicating a single role takes that role, and the other endpoint
-   takes the reverse role.
+   1.  At least one end point indicate a single role, client or server
+       and the peer supports the other role.  In this case the endpoint
+       indicating a single role takes that role, and the other endpoint
+       takes the reverse role.
 
-   B.  Both endpoint indicate both roles, this is to be expected for
-   endpoints supporting simultanous open.  In this case the role needs
-   to be determined using the parameter's Tie breaker.  The endpoint
-   with the larger value SHALL be the server, and the other endpoint
-   takes the client role.  In case both endpoints have the same tie
-   breaker value, the selection has failed and the association MUST be
-   aborted.  The ABORT chunk MAY include the SCTP error cause "DTLS Key
-   Management Tie Breaker Collision" (see Section 4.3.3).  Endpoints are
-   RECOMMENDED to attempt establishing a new SCTP assocation.
+   2.  Both endpoint indicate both roles, this is to be expected for
+       endpoints supporting simultanous open.  In this case the role
+       needs to be determined using the parameter's Tie breaker.  The
+       endpoint with the larger value SHALL be the server, and the other
+       endpoint takes the client role.  In case both endpoints have the
+       same tie breaker value, the selection has failed and the
+       association MUST be aborted.  The ABORT chunk MAY include the
+       SCTP error cause "DTLS Key Management Tie Breaker Collision" (see
+       Section 4.3.3).  Endpoints are RECOMMENDED to attempt
+       establishing a new SCTP assocation.
 
    C.  Neither A or B applies, in this case both endpoints indicate the
    same role and neither indicate both roles.  This is non viable case
