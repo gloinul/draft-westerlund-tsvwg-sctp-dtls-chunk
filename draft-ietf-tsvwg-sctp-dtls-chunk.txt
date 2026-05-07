@@ -739,11 +739,12 @@ Table of Contents
        Section 4.3.3).  Endpoints are RECOMMENDED to attempt
        establishing a new SCTP assocation.
 
-   C.  Neither A or B applies, in this case both endpoints indicate the
-   same role and neither indicate both roles.  This is non viable case
-   and the SCTP Assocation MUST be aborted, no retry SHALL be attempted.
-   The ABORT chunk MAY include the SCTP error cause "Incompatible DTLS
-   Key Management Roles" (see Section 4.3.4).
+   3.  Neither of the above apply, in this case both endpoints indicate
+       the same role and neither indicate both roles.  This is non
+       viable case and the SCTP Assocation MUST be aborted, no retry
+       SHALL be attempted.  The ABORT chunk MAY include the SCTP error
+       cause "Incompatible DTLS Key Management Roles" (see
+       Section 4.3.4).
 
    With the key management roles selected the endpoints can now
    calculate which method that shall be used.  Taking the prioritzed

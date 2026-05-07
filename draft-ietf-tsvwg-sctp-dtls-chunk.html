@@ -2684,19 +2684,21 @@ The ABORT chunk MAY include the SCTP error cause
 "DTLS Key Management Tie Breaker Collision" (see <a href="#tiebreakercol" class="auto internal xref">Section 4.3.3</a>).
 Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.<a href="#section-5.1.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
+            <li id="section-5.1.1-3.3">
+              <p id="section-5.1.1-3.3.1">Neither of the above apply, in this case both endpoints indicate the
+same role and neither indicate both roles. This is non viable case
+and the SCTP Assocation MUST be aborted, no retry SHALL be
+attempted. The ABORT chunk MAY include the SCTP error cause
+"Incompatible DTLS Key Management Roles" (see <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>).<a href="#section-5.1.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
           </ol>
-<p id="section-5.1.1-4">C. Neither A or B applies, in this case both endpoints indicate the
-   same role and neither indicate both roles. This is non viable case
-   and the SCTP Assocation MUST be aborted, no retry SHALL be
-   attempted. The ABORT chunk MAY include the SCTP error cause
-   "Incompatible DTLS Key Management Roles" (see <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>).<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-5">With the key management roles selected the endpoints can now calculate which
+<p id="section-5.1.1-4">With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
 Idenfiers from the endpoint that was selected as server. Pick the first one
 in the list that is also supported by the other endpoint. If no common
-method exists this is indicated.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-6">The role and selected method is provided to the DTLS Key Management
-Functionality.<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
+method exists this is indicated.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-5">The role and selected method is provided to the DTLS Key Management
+Functionality.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
