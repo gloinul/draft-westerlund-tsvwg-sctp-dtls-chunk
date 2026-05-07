@@ -330,9 +330,7 @@ Parameter Length: 16 bits (unsigned integer)
 
 Tie Breaker: 32 bits (unsigned integer)
 : This is a 32-bit random number to be used to determine the client and
-  server role for the key management method. The sending endpoint MUST
-  generate a new random number for each new SCTP association attempt where this
-  parameter is included in INIT or INIT ACK
+  server role for the key management method.
 
 Reserved: 5 bits (unsigned integer)
 : The reserved bits MUST be set to 0 by the sender and MUST be ignored by the
@@ -350,20 +348,17 @@ C bit: 1 bit
 DTLS Key Management Identifier: 8 bits (unsigned integer)
 : Each DTLS Key Management Identifier ({{IANA-Protection-Solution-ID}})
   is a 8-bit unsigned integer value indicating a DTLS Key Management Method.
-  In the INIT chunk the DTLS Key Management Methods are listed in descending order
-  of preference, i.e. the first listed in the parameter is the most preferred one
-  and the last listed one is the least preferred by the sender in the INIT chunk.
-  In the INIT ACK chunk the endpoint chooses one of the DTLS Key Management Methods
-  supported by the peer.
+  The DTLS Key Management Methods are listed in descending order of preference,
+  i.e. the first listed in the parameter is the most preferred one and the last
+  listed one is the least preferred by the sender of the parameter.
+  The parameter MUST include at least one DTLS Key Management Identifier.
 
 Padding: 0, 8, 16, or 24 bits (unsigned integer)
 : The padding MUST be set to 0 by the sender and MUST be ignored by the receiver.
 
 The DTLS Key Management Parameter MAY be included in the INIT and INIT ACK chunk
-and MUST NOT be included in any other chunk.  When included in an INIT chunk,
-the DTLS Key Management Parameter MUST include at least one DTLS Key Management
-Identifier.  When included in an INIT ACK chunk, MUST include at least one DTLS Key Management
-Identifier. Both Peers include their respective preference list and the procedure
+and MUST NOT be included in any other chunk.
+Both Peers include their respective preference list and the procedure
 in {{sec-key-method-select}} will determine the selected roles and chosen
 method.
 
