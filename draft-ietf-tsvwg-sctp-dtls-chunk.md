@@ -929,10 +929,10 @@ Every DTLS Key Management Method
   Management Method related user messages are processed by the relevant entity.
 * SHOULD ensure that the local receive keys are installed before the peer
   installs the corresponding send keys.
-* MUST include the DTLS Key Management Method Parameter content sent and received
-  during the SCTP handshake in the key derivation to mitigate downgrade attacks.
-  Both sides MUST use the same byte ordering for the DTLS Key Management Method
-  Identifiers. The defined role selection ensure that an order can be defined.
+* MUST include the DTLS Key Management Method Parameter (including the parameter
+  header and excluding the optional padding) as the sequence of bytes being sent
+  and received over the network during the SCTP handshake in the key derivation
+  to mitigate downgrade attacks.
 
 # Abstract API  {#abstract-api}
 
