@@ -2933,10 +2933,19 @@ This can for example ensure that at key-changes signals to
 terminate the old DTLS Key Contexts (including the restart) is never
 sent until the new restart DTLS Key Context has been committed to
 storage.<a href="#section-5.4-9" class="pilcrow">¶</a></p>
+<p id="section-5.4-10">Implementations will also need to consider the risk for two time pads,
+i.e. the usage of the same nonce twice. An SCTP endpoint restarted and
+sent a number of packets using the restart key context thus using
+sequence number 1 to 8. If this endpoint restart again it is cruical
+that the restarted endpoint do not reuse sequence number 1 to 8 a second
+time. Ensuring that a sequence number never is resused in a context
+of a crash may be hard, thus the simpler solution is to remove a restart
+key context that is being used from the persistent storage to prevent
+reuse.<a href="#section-5.4-10" class="pilcrow">¶</a></p>
 <span id="name-handshake-of-sctp-restart-f"></span><div id="DTLS-chunk-restart">
 <figure id="figure-13">
-          <div id="section-5.4-10.1">
-            <div class="alignCenter art-svg artwork" id="section-5.4-10.1.1">
+          <div id="section-5.4-11.1">
+            <div class="alignCenter art-svg artwork" id="section-5.4-11.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="528" viewBox="0 0 528 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 40,48 L 40,208" fill="none" stroke="black"></path>
                 <path d="M 408,48 L 408,208" fill="none" stroke="black"></path>
@@ -2977,39 +2986,39 @@ storage.<a href="#section-5.4-9" class="pilcrow">¶</a></p>
                   <text x="212" y="180">CHUNK(COOKIE</text>
                   <text x="288" y="180">ACK)]</text>
                 </g>
-              </svg><a href="#section-5.4-10.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-5.4-11.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-handshake-of-sctp-restart-f" class="selfRef">Handshake of SCTP Restart for DTLS in SCTP</a>
           </figcaption></figure>
 </div>
-<p id="section-5.4-11">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 13</a> shows how the control chunks being
-used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-5.4-11" class="pilcrow">¶</a></p>
-<p id="section-5.4-12">A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
+<p id="section-5.4-12">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 13</a> shows how the control chunks being
+used for SCTP Association Restart are transported within DTLS in SCTP.<a href="#section-5.4-12" class="pilcrow">¶</a></p>
+<p id="section-5.4-13">A restarted SCTP Association MUST continue to use the Restart DTLS Key Context,
 for user traffic until a new primary DTLS Key Context will be available. The
 implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 Restart DTLS Key Context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS Key context
 for the new SCTP association will result in the endpoints being unable
-to restart the SCTP association.<a href="#section-5.4-12" class="pilcrow">¶</a></p>
-<p id="section-5.4-13">After restart the next primary DTLS key context MUST use epoch 3,
+to restart the SCTP association.<a href="#section-5.4-13" class="pilcrow">¶</a></p>
+<p id="section-5.4-14">After restart the next primary DTLS key context MUST use epoch 3,
 i.e. the epoch value is reset. After having derived new
 primary DTLS Key Context the endpoint installs the primary DTLS Key Context first,
 and start using it. The new restart DTLS Key Context is only installed
-after any old in-flight restart packets will have been received.<a href="#section-5.4-13" class="pilcrow">¶</a></p>
-<p id="section-5.4-14">An SCTP Endpoint supporting only normal SCTP Restart and involved in
+after any old in-flight restart packets will have been received.<a href="#section-5.4-14" class="pilcrow">¶</a></p>
+<p id="section-5.4-15">An SCTP Endpoint supporting only normal SCTP Restart and involved in
 an SCTP Association using DTLS Chunks SHOULD NOT attempt to restart
 the Association. The effect will be that the restart initiator will
 receive INIT ACK but then all sent packets with COOKIE ECHO will be
 dropped until the peer nodes times out the SCTP Association from lack
-of any response from the restarting node.<a href="#section-5.4-14" class="pilcrow">¶</a></p>
-<p id="section-5.4-15">An SCTP Endpoint supporting only legacy SCTP Restart and involved
+of any response from the restarting node.<a href="#section-5.4-15" class="pilcrow">¶</a></p>
+<p id="section-5.4-16">An SCTP Endpoint supporting only legacy SCTP Restart and involved
 in an SCTP Association using DTLS Chunks, when receiving a COOKIE ECHO
 chunk protected by DTLS chunk as described above, thus having the
  R bit (Restart Indicator) set in the DTLS Chunk (see
-<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>), MUST silently discard it.<a href="#section-5.4-15" class="pilcrow">¶</a></p>
+<a href="#sctp-DTLS-chunk-newchunk-crypt-struct" class="auto internal xref">Figure 3</a>), MUST silently discard it.<a href="#section-5.4-16" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

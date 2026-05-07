@@ -902,6 +902,16 @@ Table of Contents
    Contexts (including the restart) is never sent until the new restart
    DTLS Key Context has been committed to storage.
 
+   Implementations will also need to consider the risk for two time
+   pads, i.e. the usage of the same nonce twice.  An SCTP endpoint
+   restarted and sent a number of packets using the restart key context
+   thus using sequence number 1 to 8.  If this endpoint restart again it
+   is cruical that the restarted endpoint do not reuse sequence number 1
+   to 8 a second time.  Ensuring that a sequence number never is resused
+   in a context of a crash may be hard, thus the simpler solution is to
+   remove a restart key context that is being used from the persistent
+   storage to prevent reuse.
+
      Initiator                                     Responder
          |                                             | -.
          |                                             |   +-------
