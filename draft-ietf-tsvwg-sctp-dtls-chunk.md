@@ -690,7 +690,7 @@ parameter. This falls into the following cases:
    "DTLS Key Management Tie Breaker Collision" (see {{tiebreakercol}}).
    Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.
 
-C. Neither A or B applies, in this case both endpoints indicate the
+3. Neither of the above apply, in this case both endpoints indicate the
    same role and neither indicate both roles. This is non viable case
    and the SCTP Assocation MUST be aborted, no retry SHALL be
    attempted. The ABORT chunk MAY include the SCTP error cause
