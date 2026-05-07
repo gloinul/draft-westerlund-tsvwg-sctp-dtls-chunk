@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 7 November 2026                                        M. Tüxen
+Expires: 8 November 2026                                        M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                              6 May 2026
+                                                              7 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 November 2026.
+   This Internet-Draft will expire on 8 November 2026.
 
 Copyright Notice
 
@@ -94,6 +94,8 @@ Table of Contents
      4.3.  New Error Causes
        4.3.1.  Missing DTLS Chunk Support
        4.3.2.  No Common DTLS Key Management Method
+       4.3.3.  DTLS Key Management Tie Breaker Collision
+       4.3.4.  Incompatible DTLS Key Management Roles
    5.  Procedures
      5.1.  Establishment of a Protected Association
        5.1.1.  Key Management Method Selection
@@ -623,6 +625,54 @@ Table of Contents
    This error cause MAY be included in an ABORT chunk.  It MUST NOT be
    included in any other chunk.
 
+4.3.3.  DTLS Key Management Tie Breaker Collision
+
+   The DTLS Key Management Tie Breaker Collision error cause can be used
+   to indicate that both sides chose the same tie breaker.
+
+   The format of this error cause is depicted in Figure 9.
+
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Cause Code = 102 (TBC)     |       Cause Length = 4        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+      Figure 9: Error Cause DTLS Key Management Tie Breaker Collision
+
+   Cause Code: 16 bits (unsigned integer)
+      This value MUST be set to 102 (TBC).
+
+   Cause Length: 16 bits (unsigned integer)
+      This value MUST be set to 4.
+
+   This error cause MAY be included in an ABORT chunk.  It MUST NOT be
+   included in any other chunk.
+
+4.3.4.  Incompatible DTLS Key Management Roles
+
+   The Incompatible DTLS Key Management Roles error cause can be used to
+   indicate that the roles chosen are incompatible.
+
+   The format of this error cause is depicted in Figure 10.
+
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Cause Code = 103 (TBC)     |       Cause Length = 4        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+       Figure 10: Error Cause Incompatible DTLS Key Management Roles
+
+   Cause Code: 16 bits (unsigned integer)
+      This value MUST be set to 103 (TBC).
+
+   Cause Length: 16 bits (unsigned integer)
+      This value MUST be set to 4.
+
+   This error cause MAY be included in an ABORT chunk.  It MUST NOT be
+   included in any other chunk.
+
 5.  Procedures
 
 5.1.  Establishment of a Protected Association
@@ -631,7 +681,7 @@ Table of Contents
    DTLS chunk MUST send an SCTP packet with an INIT chunk containing the
    DTLS Key Management Parameter (see Section 4.1).  This parameter
    lists the supported DTLS Key Management Identifiers (see Figure 2) in
-   descending order or preference.
+   descending order of preference.
 
    If an SCTP endpoint receives an SCTP packet containing an INIT chunk
    with a DTLS Key Management Parameter, it MUST reply with a packet
@@ -652,8 +702,7 @@ Table of Contents
    endpoint requiring DTLS chunk support receives an SCTP packet
    containing an INIT chunk without a DTLS Key Management Parameter, it
    MUST reply with an packet containing an ABORT chunk an MAY include
-   the error cause indicating that the DTLS chunk support is missing
-   (see Section 4.3.1).
+   the error cause "Missing DTLS Chunk Support" (see Section 4.3.1).
 
    If the INIT ACK does not contain any DTLS Key Management Parameter
    and the endpoint's policy requires the use of the DTLS chunk, the
@@ -689,16 +738,16 @@ Table of Contents
        endpoint with the larger value SHALL be the server, and the other
        endpoint takes the client role.  In case both endpoints have the
        same tie breaker value, the selection has failed and the
-       assocations SHALL be ABORTED.  The ABORT message SHOULD use SCTP
-       Error Cause "DTLS Key Management Tie breaker Collision".
-       Endpoints are RECOMMENDED to attempt establishing a new SCTP
-       assocation.
+       association MUST be aborted.  The ABORT chunk MAY include the
+       SCTP error cause "DTLS Key Management Tie Breaker Collision" (see
+       Section 4.3.3).  Endpoints are RECOMMENDED to attempt
+       establishing a new SCTP assocation.
 
-   3.  Neither of the above apply, in this case both endpoints indicate
-       the same role and neither indicate both role.  This is non viable
-       case and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
-       attempted.  The ABORT is recommended to use SCTP Error Cause
-       "Incompatible DTLS Key Management Roles" Section 9.4.
+   C.  Neither A or B applies, in this case both endpoints indicate the
+   same role and neither indicate both roles.  This is non viable case
+   and the SCTP Assocation MUST be aborted, no retry SHALL be attempted.
+   The ABORT chunk MAY include the SCTP error cause "Incompatible DTLS
+   Key Management Roles" (see Section 4.3.4).
 
    With the key management roles selected the endpoints can now
    calculate which method that shall be used.  Taking the prioritzed
@@ -727,9 +776,9 @@ Table of Contents
      |                           Chunk #n                            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 9: Unprotected SCTP Packet
+                     Figure 11: Unprotected SCTP Packet
 
-   The diagram shown in Figure 9 describes the structure of an
+   The diagram shown in Figure 11 describes the structure of an
    unprotected SCTP packet as described in [RFC9260].
 
       0                   1                   2                   3
@@ -740,9 +789,9 @@ Table of Contents
      |                          DTLS Chunk                           |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 10: Protected SCTP Packets
+                     Figure 12: Protected SCTP Packets
 
-   The diagram shown in Figure 10 describes the structure of a protected
+   The diagram shown in Figure 12 describes the structure of a protected
    SCTP packet being sent.  Such packets contain only the SCTP common
    header and one DTLS chunk.
 
@@ -866,9 +915,9 @@ Table of Contents
          |                                             | -'
          |                                             |
 
-           Figure 11: Handshake of SCTP Restart for DTLS in SCTP
+           Figure 13: Handshake of SCTP Restart for DTLS in SCTP
 
-   The Figure 11 shows how the control chunks being used for SCTP
+   The Figure 13 shows how the control chunks being used for SCTP
    Association Restart are transported within DTLS in SCTP.
 
    A restarted SCTP Association MUST continue to use the Restart DTLS
