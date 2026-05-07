@@ -579,6 +579,58 @@ Cause Length: 16 bits (unsigned integer)
 This error cause MAY be included in an ABORT chunk.
 It MUST NOT be included in any other chunk.
 
+### DTLS Key Management Tie Breaker Collision {#tiebreakercol}
+
+The DTLS Key Management Tie Breaker Collision error cause can be used to
+indicate that both sides chose the same tie breaker.
+
+The format of this error cause is depicted in {{error-cause-tie-breaker-collision}}.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 102 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-tie-breaker-collision title="Error Cause DTLS Key Management Tie Breaker Collision" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 102 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
+
+### Incompatible DTLS Key Management Roles {#incompatroles}
+
+The Incompatible DTLS Key Management Roles error cause can be used to
+indicate that the roles chosen are incompatible.
+
+The format of this error cause is depicted in {{error-cause-incompat-roles}}.
+
+~~~~~~~~~~~ aasvg
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Cause Code = 103 (TBC)     |       Cause Length = 4        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~~~~~~~~
+{: #error-cause-incompat-roles title="Error Cause Incompatible DTLS Key Management Roles" artwork-align="center"}
+
+{: vspace="0"}
+Cause Code: 16 bits (unsigned integer)
+: This value MUST be set to 103 (TBC).
+
+Cause Length: 16 bits (unsigned integer)
+: This value MUST be set to 4.
+
+This error cause MAY be included in an ABORT chunk.
+It MUST NOT be included in any other chunk.
+
 # Procedures {#procedures}
 
 ## Establishment of a Protected Association {#establishment-procedure}
@@ -587,7 +639,7 @@ To initiate an SCTP association, an SCTP endpoint wanting to use the DTLS chunk
 MUST send an SCTP packet with an INIT chunk containing the DTLS Key Management
 Parameter (see {{protectedassoc-parameter}}).
 This parameter lists the supported DTLS Key Management Identifiers
-(see {{key-management-parameter}}) in descending order or preference.
+(see {{key-management-parameter}}) in descending order of preference.
 
 If an SCTP endpoint receives an SCTP packet containing an INIT chunk with a
 DTLS Key Management Parameter, it MUST reply with a packet containing an
@@ -605,8 +657,7 @@ Parameter to indicate that it is willing to setup an association without DTLS
 chunk support.  Additionally, when an SCTP endpoint requiring DTLS chunk support
 receives an SCTP packet containing an INIT chunk without a DTLS Key Management
 Parameter, it MUST reply with an packet containing an ABORT chunk an MAY include
-the error cause indicating that the DTLS chunk support is missing (see
-{{enoprotected}}).
+the error cause "Missing DTLS Chunk Support" (see {{enoprotected}}).
 
 If the INIT ACK does not contain any DTLS Key Management Parameter and the
 endpoint's policy requires the use of the DTLS chunk, the endpoint MUST send
@@ -639,15 +690,16 @@ parameter. This falls into the following cases:
    using the parameter's Tie breaker. The endpoint with the larger value SHALL be
    the server, and the other endpoint takes the client role. In case both
    endpoints have the same tie breaker value, the selection has failed and the
-   assocations SHALL be ABORTED. The ABORT message SHOULD use SCTP Error Cause
-   "DTLS Key Management Tie breaker Collision". Endpoints are RECOMMENDED to
-   attempt establishing a new SCTP assocation.
+   association MUST be aborted.
+   The ABORT chunk MAY include the SCTP error cause
+   "DTLS Key Management Tie Breaker Collision" (see {{tiebreakercol}}).
+   Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.
 
-3. Neither of the above apply, in this case both endpoints indicate the
-   same role and neither indicate both role. This is non viable case
-   and the SCTP Assocation SHALL be ABORTED, no retry SHALL be
-   attempted. The ABORT is recommended to use SCTP Error Cause
-   "Incompatible DTLS Key Management Roles" {{IANA-Extra-Cause}}.
+C. Neither A or B applies, in this case both endpoints indicate the
+   same role and neither indicate both roles. This is non viable case
+   and the SCTP Assocation MUST be aborted, no retry SHALL be
+   attempted. The ABORT chunk MAY include the SCTP error cause
+   "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
 
 With the key management roles selected the endpoints can now calculate which
 method that shall be used. Taking the prioritzed list of DTLS Key Management
