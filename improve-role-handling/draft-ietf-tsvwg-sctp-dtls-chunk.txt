@@ -741,7 +741,7 @@ Table of Contents
 
    3.  Neither of the above apply.  In this case both endpoints indicate
        the same role and neither indicates both roles.  The SCTP
-       Assocation MUST be aborted and ehe ABORT chunk MAY include the
+       Assocation MUST be aborted and the ABORT chunk MAY include the
        SCTP error cause "Incompatible DTLS Key Management Roles" (see
        Section 4.3.4).
 
