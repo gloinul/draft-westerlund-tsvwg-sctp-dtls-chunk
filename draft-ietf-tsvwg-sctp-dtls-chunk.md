@@ -1160,7 +1160,7 @@ Parameters :
 
 Reply: Destroyed
 
-Parameters : true or false
+Parameters : Success or Error
 
 ## Destroy Receive Key Material
 
@@ -1179,7 +1179,7 @@ Parameters:
 
 Reply: Destroyed
 
-Parameters: true or false
+Parameters: Success or Error
 
 ## Set Key to Use
 
