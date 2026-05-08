@@ -220,24 +220,42 @@ SCTP and its extensions. However, the following limitations apply:
 
 {::boilerplate bcp14}
 
+## Terminology
+
+DTLS Key Context:
+
+: DTLS Key context includes key material (record payload key, sequence
+  number protection key, and initilization vector (IV)) for sending
+  and receiving, replay window for receiving, and last used sequence
+  number for sending.
+
+Key Material:
+
+: Key material is all cryptographic information needed for protection
+  operation in one direction.
+
+
 # Protocol Considerations
 
 ## DTLS Considerations {#DTLS-engines}
 
-Once the DTLS Key Management Method has established its context, it derives
-primary and restart keys and configures the Chunk Protection Operator via an
-API. This establishes the necessary DTLS key contexts for SCTP chunk encryption
-and decryption.  A DTLS key context for primary operations use MUST be created,
-while a DTLS key context for SCTP association restart SHOULD be created.
+Once the DTLS Key Management Method has established its context, it
+derives primary and restart key material for sending and receiving and
+configures the Chunk Protection Operator via an API. This establishes
+the necessary DTLS key contexts for SCTP chunk encryption and
+decryption.  A DTLS key context for primary operations use MUST be
+created, while a DTLS key context for SCTP association restart SHOULD
+be created.
 
-In this document we use the terms DTLS Key context for indicating a Keys and IV,
-produced by the DTLS Key Management, and all relevant data that needs to be
-provided to the Chunk Protection Operator for DTLS encryption and decryption.
-DTLS Key context includes a key, sequence number protection key, and IV each for
-sending and receiving, replay window for receiving, and last used sequence
-number for sending. Each DTLS key context is associated with a three-value tuple
-identifying the context, consisting of SCTP Association, the restart indicator,
-and the DTLS epoch.
+In this document we use the terms DTLS Key context for indicating key
+material, produced by the DTLS Key Management, and all relevant data
+that needs to be provided to the Chunk Protection Operator for DTLS
+encryption and decryption.  DTLS Key context includes key material
+such as record payload key, sequence number protection key, and IV
+each for sending and receiving, replay window for receiving, and last
+used sequence number for sending. Each DTLS key context is associated
+with a three-value tuple identifying the context, consisting of SCTP
+Association, the restart indicator, and the DTLS epoch.
 
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in the DTLS
 Chunk.
@@ -945,25 +963,37 @@ DTLS Key Management Method and the DTLS Chunk. This is an
 example API and there are alternative implementations.
 
 This API enables the cryptographical protection operations by setting
-client/server write keys, sequence number keys, and IVs for primary and
-restart DTLS contexts. The write key is used by the cipher suite
-for DTLS record protection ({{Section 5.2 of RFC8446}}). The initialization
-vector (IV) is random material used to XOR with the sequence
-number to create the nonce per {{Section 5.3 of RFC8446}}.
-The sequence number key is used to encrypt the sequence number
-({{Section 4.2.3 of RFC9147}}).
+record payload key, sequence number keys, and initialization vector
+(IV) for primary and restart DTLS contexts in both send and receive
+direction. The record payload key is used by the cipher suite for DTLS
+record protection ({{Section 5.2 of RFC8446}}). The initialization
+vector (IV) is random material used to XOR with the sequence number to
+create the nonce per {{Section 5.3 of RFC8446}}.  The sequence number
+key is used to encrypt the sequence number ({{Section 4.2.3 of
+RFC9147}}).
 
-This API uses the client and server role to reference which transmissions by
-which endpoint the API call refers to when relevant.
+As this API reference the key material as for send or receive, it will
+be the responsibility of the key management method used to define how
+it maps the endpoint's role to which keys are for send and receive
+direction respectively.
 
-## Set Supported DTLS Key Management Methods
+## Set Supported DTLS Key Management Parameters
 
 Prior to attempting to establish an SCTP assocation an SCTP endpoint
-needs to configure which DTLS Key Management Methods it supports if
-establishing a SCTP association. This will be included in INIT if the
-endpoint initiated the SCTP association. Else it will be used to
-determine the selected DTLS Key Management method that is returned in
-the INIT ACK.
+needs to configure which DTLS Key Management Methods it supports, as
+well the roles and if restart is supported. This information is
+included in the DTLS Key Management Parameter which if these
+parameters are set will be included in either INIT or INIT ACK chunks.
+
+An endpoint can either support, client only, server only, or client
+and server. The last is for situation where both endpoints may attempt
+to establish an SCTP association towards each other, potentially
+causing a simultanous sending of INIT chunks. Depending on port
+configuration SCTP supports this happening during the association
+establishment, and results will be a single SCTP association. However,
+to select the same key management method on both sides, the SCTP stack
+will resolve the key management role for this association.
+
 
 Request: Set Supported DTLS Key Management Methods
 
@@ -973,62 +1003,37 @@ Parameters:
 : The handle to what may become an SCTP Association or a server port
 accepting association establishment.
 
-* List of Identifiers:
-: A prioritized list of DTLS Key Management identifiers that
-are supported, from the most preferred to the least preferred.
-
-Reply: Success or Error
-
-Parameters: None
-
-## Set Supported DTLS Key Management Roles
-
-Prior to attempting to establish an SCTP assocation an SCTP endpoint
-needs to configure which roles in the key-management it accepts and if
-the endpoint suopports SCTP restart with the DTLS Chunk.
-
-An endpoint can either support, client only, server only, or client or
-server. The last is for situation where both endpoints may attempt to
-establish an SCTP association towards each other causing a simultanous
-open situation. Depending on port configuration SCTP supports this
-happening during the association establishment, and results in a
-single SCTP association. However, to select the same key management
-method on both sides the SCTP stack will resolve the key management
-role for this association.
-
-Request: Set Supported DTLS Key Management Roles
-
-Parameters:
-* SCTP Association Handle:
-: The handle to what may become an SCTP Association or a server port
-accepting association establishment.
-
 * Key Management Roles Supported:
-: The endpoint indicates if it is client only, server only, or client or server.
+: The endpoint indicates if it can act as client only, server only,
+  or client and server.
 
 * Support SCTP Restart (boolean):
 : Indicate if the endpoint is capable of supporting SCTP restart when DTLS chunk
   has been negotiated.
 
+* List of Identifiers:
+: A prioritized list of DTLS Key Management identifiers
+  {{IANA-Protection-Solution-ID}} that are supported, from the most
+  preferred to the least preferred.
+
 Reply: Success or Error
 
 Parameters: None
+
 
 ## Get Agreed DTLS Key Management Method and Role
 
 After an SCTP association has been established the key management
 function needs to know which method was agreed on and which role this
-endpoint will have. The function also needs to get both peers actuall
-values in the DTLS Key Management Parameter to include it in its key
-derviation to prevent down-grade attacks.
+endpoint will have. The function provides both endpoints actuall
+values in the DTLS Key Management Parameter used in any key derviation
+to prevent down-grade attacks.
 
-Request: Set Supported DTLS Key Management Roles
+Request: Get Supported DTLS Key Management Roles
 
 Parameters:
 * SCTP Association Handle:
-: The handle to what may become an SCTP Association or a server port
-accepting association establishment.
-
+: The handle to an established SCTP Association.
 
 Reply: Success or Error
 
@@ -1042,9 +1047,9 @@ Parameters:
 
 * Down Grade Prevention Data:
 : In network bytes order the whole of the DTLS Key Management
-Parameter without padding that the endpoint with the client role
-offered, followed by the corresponding what the endpoint with the
-server role offered.
+  Parameter including header and excluding padding that the endpoint
+  with the client role offered, followed by the corresponding
+  parameter content of the endpoint with the server role.
 
 
 ## Cipher Suite Capabilities
@@ -1064,25 +1069,25 @@ Reply   : Cipher Suites
 
 Parameters : list of cipher suites
 
-## Establish Client Write Keying Material
+## Establish Send Keying Material
 
 The DTLS Chunk can use one out of multiple sets of cipher suite and
 corresponding key materials.
 
-The following information needs to be provided when setting Client Write (transmit) Keying material:
+The following information needs to be provided when setting send keying material:
 
-Request : Establish Client Write Key and IV
+Request : Establish Send Key Material
 
 Parameters :
 
 * SCTP Association:
-: Reference to the relevant SCTP association to set the keying material for.
+: Reference to the SCTP association to set the keying material for.
 
 * Restart indication:
-: A bit indicating whether the Key is for restart purposes
+: A bit indicating whether the key material is for restart purposes
 
 * DTLS Epoch:
-: The DTLS epoch these keys are valid for. Note that Epoch lower than
+: The DTLS epoch this key material is valid for. Note that Epoch lower than
   3 are not expected as they are used during DTLS handshake.
 
 * Cipher Suite:
@@ -1090,57 +1095,60 @@ Parameters :
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
-* Write Key, Sequence Number Key and IV:
+* Key Material:
 : The cipher suite specific binary object containing all necessary
-  information for protection operations. The secret will be used by
-  the DTLS 1.3 client to encrypt the record. Binary arbitrary long
-  object depending on the cipher suite used.
+  information for protection operations such as Record Payload Key,
+  Sequence Number Key and IV. The secret will be used by the DTLS 1.3
+  client to encrypt the record. Binary arbitrary long object depending
+  on the cipher suite used.
 
 
-Reply : Established or Failed
+Reply: Established or Failed
 
 
-## Establish Server Write Keying Material
+## Establish Receive Key Material
 
 The DTLS Chunk can use one out of multiple sets of cipher suite and
 corresponding key materials.
 
-The following information needs to be provided when setting Server Write (transmit) Keying material:
+The following information needs to be provided when setting receive key material:
 
-Request : Establish Server Write Key and IV
+Request : Establish Receive Key Material
 
 Parameters :
 
 * SCTP Association:
-: Reference to the relevant SCTP association to set the keying material for.
+: Reference to the SCTP association to set the key material for.
 
 * Restart indication:
-: A bit indicating whether the Key is for restart purposes
+: A bit indicating whether the key material is for restart purposes
 
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. Note that Epoch lower than
-  3 are not expected as they are used during DTLS handshake.
+  3 are not expected as they are used during DTLS handshake. The DTLS
+  epoch must be the next in turn.
 
 * Cipher Suite:
 : 2 bytes cipher suite identification for the DTLS 1.3 Cipher suite used
   to identify the DTLS AEAD algorithm to perform the DTLS record protection.
   The cipher suite is fixed for a (SCTP Association, Key) pair.
 
-* Write Key, Sequence Number Key and IV:
+* Key Material:
 : The cipher suite specific binary object containing all necessary
-information for protection operations. The secret will be used by the DTLS 1.3 client to
-encrypt the record. Binary arbitrary long object depending on the
-cipher suite used.
+  information for protection operations such as Record Payload Key,
+  Sequence Number Key and IV. The secret will be used by the DTLS 1.3
+  client to encrypt the record. Binary arbitrary long object depending
+  on the cipher suite used.
 
 Reply : Established or Failed
 
 
-## Destroy Client Write Keying Material
+## Destroy Send Key  Material
 
-A function to destroy the Client Write (transmit) keying material for a given epoch for a given
-Key for a given SCTP Association.
+A function to destroy the send key material for a given epoch for the
+Primary or Restart DTLS Key Context for a given SCTP Association.
 
-Request : Destroy client write key and IV
+Request : Destroy Send Key Material
 
 Parameters :
 
@@ -1152,16 +1160,16 @@ Parameters :
 
 Reply: Destroyed
 
-Parameters : true or false
+Parameters : Success or Error
 
-## Destroy Server Write Keying Material
+## Destroy Receive Key Material
 
-A function to destroy the Server Write (transmit) keying material for a given epoch for a given
-Key for a given SCTP Association.
+A function to destroy the receive key material for a given epoch for
+the Primary or Restart DTLS key context for a given SCTP Association.
 
-Request : Destroy server write key and IV
+Request: Destroy Receive Key Material
 
-Parameters :
+Parameters:
 
 * SCTP Association
 
@@ -1171,16 +1179,16 @@ Parameters :
 
 Reply: Destroyed
 
-Parameters : true or false
+Parameters: Success or Error
 
 ## Set Key to Use
 
 Set which key to use to protect the future SCTP packets sent by the
 SCTP Association.
 
-Request : Set Key used
+Request: Set Key used
 
-Parameters :
+Parameters:
 
 * SCTP Association
 
@@ -1190,13 +1198,14 @@ Parameters :
 
 Reply: Key set
 
-Parameters : true or false
+Parameters: true or false
 
 ## Require Protected SCTP Packets
 
-A function to configure an SCTP association to require that normal SCTP packets
-being received on this endpoint are required to be protected in a DTLS Chunk
-going forward. Any unprotected SCTP Packets to this SCTP association will be
+A function to configure an SCTP association to require that all SCTP
+packets, excepts those with INIT or INIT ACK chunks, being received on
+this endpoint are required to be protected in a DTLS Chunk going
+forward. Any unprotected SCTP Packets to this SCTP association will be
 discarded.
 
 Parameters:
@@ -1208,8 +1217,8 @@ Reply: Acknowledgement
 
 ## Get AEAD Encryption Invocations
 
-Get the number of AEAD encryption invocations (protected messages) for
-a given epoch.
+Get the number of AEAD encryption invocations (protected SCTP Packets)
+for a given epoch.
 
 Request : Get AEAD Encryption Invocations
 
@@ -1268,12 +1277,13 @@ robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets is
 a combination of how delayed one packet may be compared to another,
-times the actual packet rate, this value can grow for some applications and
-may need to be tuned. Thus, having the potential for setting this a
-more suitable value depending on the use case should be considered.
+times the actual packet rate. This value may become larger for some
+applications and may need to be tuned. Thus, having the potential for
+setting this a more suitable value depending on the use case should be
+supported.
 
-Note this sets this configuration to be used across any DTLS key
-context for a given SCTP Association and primary/restart usages.
+Note this sets the configuration across any DTLS key context for a
+given SCTP Association and both primary and restart usages.
 
 Request : Configure Replay Protection
 
