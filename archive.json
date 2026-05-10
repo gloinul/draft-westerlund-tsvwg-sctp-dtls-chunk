@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-07T02:23:20.682464+00:00",
+  "timestamp": "2026-05-10T02:26:20.018982+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -662,7 +662,7 @@
       "id": "I_kwDOKszxDc651f_I",
       "title": "Update Initilization procedure and state machine.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/29",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -672,8 +672,8 @@
       "labels": [],
       "body": "The description of how the DTLS chunk initilization was agreed to be generalized and thus the interaction with the API functions needs to be updated.\n\nReception Key set: Can receive DTLS chunk from peer will also accept unprotected. \nSend Key set: Will send SCTP packets protected, but still accepts unprotected.\nProtection Established: Protection sending and reception verified, only protected packets established. \n\nThis will interact with the exchange of user level validation data that can only be sent after Send Key Set. Likely this will need to be addressed in combination with #22 update. ",
       "createdAt": "2025-06-04T13:17:24Z",
-      "updatedAt": "2025-09-04T11:12:37Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-08T08:11:19Z",
+      "closedAt": "2026-05-08T08:11:19Z",
       "comments": [
         {
           "author": "teiclap",
@@ -681,6 +681,13 @@
           "body": "I am going to do some work in this, limited to the procedural part, by specifying what kind of traffic is expected during Association's lifetime. ",
           "createdAt": "2025-09-04T11:12:37Z",
           "updatedAt": "2025-09-04T11:12:37Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This issue is no longer relevant as the solution and API has moved on. ",
+          "createdAt": "2026-05-08T08:11:19Z",
+          "updatedAt": "2026-05-08T08:11:19Z"
         }
       ]
     },
@@ -1319,7 +1326,7 @@
       "id": "I_kwDOKszxDc7SZZYA",
       "title": "Should require protected packets be direcitonal in the API?",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/79",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
@@ -1328,8 +1335,8 @@
       ],
       "body": "(D)TLS based key-managements specifications will result in that some endpoint have the keys in one direction and not the other. Thus, should we expand the API to enable setting REQUIRE protected packets per direction, or are we fine to have it on global level so that one will have to wait until one have keys in both direction in place? ",
       "createdAt": "2025-10-19T09:25:45Z",
-      "updatedAt": "2025-11-01T20:38:45Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-07T13:07:45Z",
+      "closedAt": "2026-05-07T13:07:44Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1337,6 +1344,13 @@
           "body": "Realize that this just may need clarifications. Because I think there are not immediately obvious interactions in the API that likely should be spelled out.\n\nSo setting Require Protected Packets is affecting the receiver direction only. While setting a write key and set it to be used, the endpoint's outgoing packet will hence be protected. ",
           "createdAt": "2025-10-19T09:38:51Z",
           "updatedAt": "2025-10-19T09:38:51Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Reviewing what is in the main branch today I think this is clear in the API now. ",
+          "createdAt": "2026-05-07T13:07:45Z",
+          "updatedAt": "2026-05-07T13:07:45Z"
         }
       ]
     },
@@ -1422,7 +1436,7 @@
       "id": "I_kwDOKszxDc7SnuQF",
       "title": "Abstract API need to clarify direction for client vs Server.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/82",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
@@ -1431,8 +1445,8 @@
       ],
       "body": "As the API exists in one endpoint it is not clear from an API point of view what is client and server. I think the API needs to talk about sending and receive keys. And the key-management will have to map its client and server role to the right direction in each endpoint. ",
       "createdAt": "2025-10-20T19:19:23Z",
-      "updatedAt": "2025-11-01T20:38:57Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-08T08:09:19Z",
+      "closedAt": "2026-05-08T08:09:19Z",
       "comments": []
     },
     {
@@ -1644,15 +1658,15 @@
       "id": "I_kwDOKszxDc7y5vj8",
       "title": "Clarify who has the DTLS Client role when SCTP Simultanous open happens",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/113",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "When setting the DTLS Key Context it is very important that both side agrees which endpoint that has the DTLS Client Role and who has the server role so the right set of keys are installed. \n\nAs SCTP do support simultanous open, i.e. when both sides sends INIT at the same time there need to be clarified who gets the DTLS client/server role in this case. ",
       "createdAt": "2026-03-14T09:01:49Z",
-      "updatedAt": "2026-04-09T13:56:36Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-07T12:47:57Z",
+      "closedAt": "2026-05-07T12:47:56Z",
       "comments": [
         {
           "author": "teiclap",
@@ -1814,6 +1828,13 @@
           "body": "Part of the issue is that we have both cases here:\n\nClient Server application where a server would never initiated the SCTP association so a simultaneous open will never occur. Also in these cases I would also expect that the server has a well defined identity used in the key-management. The client may practice mutual authentication in this application, but there can also be application that do not need to have an identity. \n\nThen we have applications like the Xn Interface where we have nodes that need PtP associations between each other where either side can open a new association when need arise. In these simultanous open may occur. On the key-management level these likely are performing mutual authentication. So they can likely do either role when it comes to key-management but they would need to know to avoid additional complexities with both sides opening key-management. The above assuming that both endpoints agree on the method, i.e. SCTP API should deliver one common result for both endpoints, both for initiating the right method and secondly provide the same key-deriviation string. \n\n",
           "createdAt": "2026-04-09T13:56:36Z",
           "updatedAt": "2026-04-09T13:56:36Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This issue has now been resolved now that we have updated the DTLS Key Management Parameter and specified how the role is decided from it. Relevant PRs are: #118 #119 #122 ",
+          "createdAt": "2026-05-07T12:47:57Z",
+          "updatedAt": "2026-05-07T12:47:57Z"
         }
       ]
     },
@@ -1822,15 +1843,15 @@
       "id": "I_kwDOKszxDc7y5517",
       "title": "Define which DTLS Sequence Number the restart DTLS Key Context is initiated to",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/114",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Part of the known state necessary for SCTP Restart with DTLS Chunk to work is what is the first DTLS sequence number will be used when sedning restart DTLS key context protected data. This appear to be currently missing, but should be defined.\n\n- A never used restart context starts from a given sequence number. \n- When a restart context have been used, even if the restart failed the restart DTLS Key Context needs to be invalidated as it can't be resused for a second attempt without resulting in using the same nonce twice.",
       "createdAt": "2026-03-14T09:18:17Z",
-      "updatedAt": "2026-04-23T13:57:25Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-07T13:16:22Z",
+      "closedAt": "2026-05-07T13:16:21Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1853,7 +1874,7 @@
       "labels": [],
       "body": "The primary and restart DTLS key context have independent state for DTLS record sequence numbers as well as replay window. While concurrent sets of the DTLS Key Contexts for primary context interact with the same sequence number and replay window. This should be made clearer in the draft to avoid confusion. ",
       "createdAt": "2026-03-14T10:36:47Z",
-      "updatedAt": "2026-03-14T10:41:48Z",
+      "updatedAt": "2026-05-07T14:30:53Z",
       "closedAt": null,
       "comments": [
         {
@@ -1862,6 +1883,13 @@
           "body": "Realize that I mispoke about the sequence number. The sequence number is per Epoch, thus being reset for each new epoch. So the replay window is independent. However, the difference here between primary and restart might need some improvement. ",
           "createdAt": "2026-03-14T10:41:48Z",
           "updatedAt": "2026-03-14T10:41:48Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Review if resolved.",
+          "createdAt": "2026-05-07T14:30:53Z",
+          "updatedAt": "2026-05-07T14:30:53Z"
         }
       ]
     },
@@ -1870,15 +1898,15 @@
       "id": "I_kwDOKszxDc8AAAABBTERXQ",
       "title": "How to deal with attacks on Restart",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/120",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The current assumption is that as soon as INIT/INIT-ACK COOKIE-ECHO/COOKIE-ACK for Restart purposes is completed, the Endpoint  will start sending DATA by using the Restart DTLS Key Context. Restart Key Context is assumed to be persistently and securely stored somewhere.\n\nA malicious attacker that has succeeded getting a copy of Restart DTLS Key Context MAY succeed hijacking the secure Association by issuing a protected SCTP Restart, and since we permit DATA to use the Restart DTLS Key Context, he would be able encrypting and decrypting data until the Endpoints will not rekey. Since the malicious user misses the other secrets (Certificates), he won't succeed rekeying, still the Association will continue with the Restart DTLS Key Context as we didn't specify how to deal with this case.\n\nIn my opinion, we SHOULD prohibit using Restart DTLS Key Context for DATA, limiting the use for new key negotiation. That SHOULD lead the Association to be closed in some ways when rekey would fail for bad Authoring.",
       "createdAt": "2026-05-05T06:36:52Z",
-      "updatedAt": "2026-05-06T12:05:35Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-07T14:33:46Z",
+      "closedAt": "2026-05-07T14:33:45Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1886,6 +1914,13 @@
           "body": "@teiclap and I had some discussion of this issue.\n\nFirst of all the DTLS Chunk draft is very clear on that if one does not keep the restart security context as secure one can be subject to association hijacking attacks. Assuming the proposed key management methods one have similar need to persistently securely store certificates used in authenticating the endpoint to the peer. If the secret part is lost to an attacker equally the attacker can establish secure associations inpersonating the endpoint. \n\nThus this attack needs to be taken as a mitigation if one have been subject to an attack. Depending on the application one might find the proposed solution of not allowing sending any ULP payloads before a new handshake has taken place. But, that means that one accept additional delay after restart. If one do not accept delay then the proposed mitigation might be problematic. \n\nThe next aspect of this is that as we have defined the DTLS Chunk and its API it will be the functionality on top of the API that implements the key management methods that will be responsible for blocking any data to the ULP. Thus, any actual implementation of the proposed mitigation here would fall onto that implemenation. \n\nThis leads to the conclusion that at most we should consider strengthening the security consideration. However, persoanally I am hesitant to spend security consideration on something that attempts to mitigate a case where security has already failed due to another implementation error. It is more important that the implementors spend time securing the restart keys properly.",
           "createdAt": "2026-05-06T12:05:35Z",
           "updatedAt": "2026-05-06T12:05:35Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Discussed at Design Team meeting. No need to document in chunk.",
+          "createdAt": "2026-05-07T14:33:45Z",
+          "updatedAt": "2026-05-07T14:33:45Z"
         }
       ]
     },
@@ -1894,16 +1929,24 @@
       "id": "I_kwDOKszxDc8AAAABBbw49Q",
       "title": "Clarify Negotiate meaning here.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/121",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "SCTP Considerations currently states:\n\nThe SCTP authentication extension (SCTP-AUTH) defined in [[RFC4895](file:///Users/eramswd/ietf/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#RFC4895)] is incompatible with the extension defined in this document. Therefore, its support MUST NOT be negotiated in combination with the support of the DTLS chunk.\n\nReading this a possible interpretation is that one is not allowed to offer SCTP-AUTH parameters in an INIT. I think this would be the wrong interpretation. What is required is that the INIT-ACK need to have chosen between SCTP-AUTH or DTLS Key Management Parameters. \n\nDo you agree and should this paragraph be reformulated?\n",
       "createdAt": "2026-05-06T12:08:33Z",
-      "updatedAt": "2026-05-06T12:08:33Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-05-07T14:38:22Z",
+      "closedAt": "2026-05-07T14:38:22Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Design team discussed and agreed to keep it simple and not do any changes. If 3GPP can't find a way of resolving the choice before sending INIT, then we may revisit. ",
+          "createdAt": "2026-05-07T14:38:22Z",
+          "updatedAt": "2026-05-07T14:38:22Z"
+        }
+      ]
     },
     {
       "number": 124,
@@ -1913,13 +1956,108 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "The current text suggests that we should send new parameter with new Tie Breaker value at restart. This can result in a change of the roles for the key-management performed after restart. Does that work?\n\nWe should likely update the Abstract API to set keys for sending and receiving and not talk about client and server? ",
       "createdAt": "2026-05-06T15:45:32Z",
-      "updatedAt": "2026-05-06T15:45:32Z",
+      "updatedAt": "2026-05-07T14:10:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "We need a general specification on when new random number values are to be generated. ",
+          "createdAt": "2026-05-07T14:08:51Z",
+          "updatedAt": "2026-05-07T14:08:51Z"
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "I_kwDOKszxDc8AAAABBjpcWA",
+      "title": "Fix same role case",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/130",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "Update \"no retry SHALL be attempted.\" to explain that one can change roles and retry.",
+      "createdAt": "2026-05-07T14:16:23Z",
+      "updatedAt": "2026-05-08T09:22:22Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "While working on this issue, I came to the conclusion that it might not be a good idea to write something like \"MUST NOT retry unless condition\". An on-path attacker could just intercept the initial handshake, enforce such a role conflict by changing a single packet, and as a consequence block the communication for a long time.\nSo I think we should not make such a statement. See #134.",
+          "createdAt": "2026-05-08T08:19:30Z",
+          "updatedAt": "2026-05-08T08:19:30Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Good catch. Thus an implementation should likely have a limited number of retries, but it is up to the implementation. Do we need to state anything of this in the security consideration?",
+          "createdAt": "2026-05-08T08:22:07Z",
+          "updatedAt": "2026-05-08T08:22:07Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Most likely it is a configuration error. Something similar to configure both sides a servers. If it is an attacker, the impact is limited. Somewhere to dropping packets or modifying them. There are plenty of ways to get the same result. So I think we don't need some explicit description of this case.\nIf we want a description, we should cover the general possibility to modify the packets in a way that the SCTP association setup succeeds, but the DTLS chunk support fails due to the attacker.\nBut again: The cause can always be a mis-configuration or an attacker.",
+          "createdAt": "2026-05-08T09:22:22Z",
+          "updatedAt": "2026-05-08T09:22:22Z"
+        }
+      ]
+    },
+    {
+      "number": 133,
+      "id": "I_kwDOKszxDc8AAAABBnpyiA",
+      "title": "How does this interact with WARP/SNAP?",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/133",
+      "state": "CLOSED",
+      "author": "ValorZard",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "From what I can tell, this proposal implements embedding DTLS in SCTP (probably for WebRTC purposes if I had to guess)\n\nHowever, there is a separate proposal, SNAP, being implemented that also does the same thing?\n\nhttps://datatracker.ietf.org/doc/draft-hancke-tsvwg-snap/\n\nThis is part of the WARP effort:\n\nhttps://github.com/fippo/warp-snap-sped\nhttps://github.com/pion/webrtc/issues/3335\n\nAre these two complementary, or do they do completely different things.",
+      "createdAt": "2026-05-08T03:54:39Z",
+      "updatedAt": "2026-05-08T08:17:15Z",
+      "closedAt": "2026-05-08T08:17:15Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@ValorZard first of all this is not at all for WebRTC. WebRTC uses SCTP over DTLS over UDP/IP. This draft is for securing SCTP over IP. The primary target for this is 3GPP's use of SCTP as transport protocol for its control plane signalling. Clearly also usable for any other SCTP usage as the security solution is integrated into SCTP.\n\nThus, SNAP will not be relevant at all as the layering that SNAP tries to accelerate does not exist in this protocol. However, I do note that where SNAP tries to parallelize the SCTP handshake with DTLS, DTLS Chunk requires a key management handshake after the SCTP handshake.  \n\nIn fact adopting a DTLS Chunk based security solution into WebRTC would mean that one would need to run IP/UDP/SCTP instead of IP/UDP/DTLS/SCTP. Which would mean that one would attempt to multiple STUN, RTP, DTLS-SRTP, and SCTP on the first byte of the UDP payload. That would mean that one would be forced to select SCTP source port numbers such that it could multiplex with the other protocols. Clearly possible but I would think such a large change for really no gain is of no ones interest.\n\n",
+          "createdAt": "2026-05-08T07:39:30Z",
+          "updatedAt": "2026-05-08T07:39:30Z"
+        },
+        {
+          "author": "ValorZard",
+          "authorAssociation": "NONE",
+          "body": "Ah i see.\n\nSo, this almost feels like there will be two diverging forms of SCTP at some point.\n\nNative SCTP (that would implement this proposal)\n\nAnd WebRTC SCTP (that would implement SNAP)\n\nI feel like this could get unwieldy fast, is there any solution for this divergence or is that just the way these standards work over time?",
+          "createdAt": "2026-05-08T07:49:42Z",
+          "updatedAt": "2026-05-08T07:49:42Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "SCTP has a fair number of extensions. Some of them are not applicable in the WebRTC context, like for example (RFC 5061 - Stream Control Transmission Protocol (SCTP) Dynamic Address Reconfiguration) [https://datatracker.ietf.org/doc/rfc5061/]. \n\nAt the same time the mobile network signalling use cases has other set of constraints when it comes to deploying solutions and extensions. Resulting in that DTLS Chunk is the most appropriate solution we have found after several years of working on a solution that resolved the user message size limitation of RFC 6083 and fixes the security issues found e.g. with SCTP-AUTH.\n\nYes, there are some divergence, most to me related to how one deploys SCTP. So I don't think there are real divergence within a particular application/use case. Also I don't think it is happening fast, please remember that it has been over 25 years since SCTP first was published as an RFC. It is more that WebRTC is a very special use case where one have been willing to do some particular choices to make things work and then optimize them in the SNAP and SPED proposals.\n\n",
+          "createdAt": "2026-05-08T08:08:58Z",
+          "updatedAt": "2026-05-08T08:08:58Z"
+        },
+        {
+          "author": "ValorZard",
+          "authorAssociation": "NONE",
+          "body": "Thank you so much for answering all of my questions!\nI have one more question for you, but it\u2019s not relevant to this repository, so I\u2019ll just email it to you  or something later",
+          "createdAt": "2026-05-08T08:17:15Z",
+          "updatedAt": "2026-05-08T08:17:15Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -3013,7 +3151,7 @@
       "labels": [],
       "body": "I think thread safety is not specific to this extension. It applies to an SCTP implementation in general and also seem implementation specific to me.",
       "createdAt": "2025-07-03T20:02:37Z",
-      "updatedAt": "2025-07-04T06:52:22Z",
+      "updatedAt": "2026-05-07T19:00:42Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "247b28f30813cc78c51ddb114916a5087b43ad22",
@@ -3068,7 +3206,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-06T20:14:18Z",
-      "updatedAt": "2025-07-07T08:38:45Z",
+      "updatedAt": "2026-05-07T19:00:41Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "f0b3bc2329a9cc9eff276472389bb4aea47d4cc1",
@@ -3123,7 +3261,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-06T21:04:39Z",
-      "updatedAt": "2025-07-07T08:38:56Z",
+      "updatedAt": "2026-05-07T19:00:38Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "f0b3bc2329a9cc9eff276472389bb4aea47d4cc1",
@@ -3178,7 +3316,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-07T00:12:39Z",
-      "updatedAt": "2025-07-07T08:39:09Z",
+      "updatedAt": "2026-05-07T19:01:10Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "f0b3bc2329a9cc9eff276472389bb4aea47d4cc1",
@@ -3390,7 +3528,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-07T12:19:45Z",
-      "updatedAt": "2025-07-07T12:29:34Z",
+      "updatedAt": "2026-05-07T19:00:35Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "c320ba20892c191af5be758bf1c94f741d7777f4",
@@ -3445,7 +3583,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-07T12:42:38Z",
-      "updatedAt": "2025-07-07T13:09:36Z",
+      "updatedAt": "2026-05-07T19:00:32Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "ce837f62f2c29fcd477fc1b1b5e770b209d8ea44",
@@ -3918,7 +4056,7 @@
       "labels": [],
       "body": "Fix for issue #41 ",
       "createdAt": "2025-09-19T10:55:12Z",
-      "updatedAt": "2025-10-17T10:45:33Z",
+      "updatedAt": "2026-05-07T19:01:07Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "450fb22a49e916d9e250ccf6dc9dd5f299b19947",
@@ -4239,7 +4377,7 @@
       "labels": [],
       "body": "This fixes #72.",
       "createdAt": "2025-10-17T07:56:04Z",
-      "updatedAt": "2025-10-17T10:33:37Z",
+      "updatedAt": "2026-05-07T19:00:30Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "b77bf73416e058e437af79df31d0f537ea3a48d3",
@@ -4294,7 +4432,7 @@
       "labels": [],
       "body": "Don't include the length of padding.\r\nThis fixes #74.",
       "createdAt": "2025-10-17T08:04:20Z",
-      "updatedAt": "2025-10-17T10:34:35Z",
+      "updatedAt": "2026-05-07T19:00:16Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "b77bf73416e058e437af79df31d0f537ea3a48d3",
@@ -4336,7 +4474,7 @@
       "labels": [],
       "body": "This fixes #75.",
       "createdAt": "2025-10-17T08:07:28Z",
-      "updatedAt": "2025-10-17T10:41:21Z",
+      "updatedAt": "2026-05-07T19:01:09Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "9269a85c8b4d0b3d4bcac6e4ca73d61662f87ff2",
@@ -4391,7 +4529,7 @@
       "labels": [],
       "body": "This is still missing the handling of AEAD limits.",
       "createdAt": "2025-10-18T22:37:56Z",
-      "updatedAt": "2025-10-20T07:42:25Z",
+      "updatedAt": "2026-05-07T18:59:44Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "fbe8b15a6d2d27cd835bf7055a40d8fa6382ce11",
@@ -4758,7 +4896,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-11-18T09:43:30Z",
-      "updatedAt": "2026-02-22T11:04:01Z",
+      "updatedAt": "2026-05-07T18:59:42Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "221db330e82265cf3c50c29ccde7baeed1467174",
@@ -5919,7 +6057,7 @@
       "labels": [],
       "body": "Just put the text where we discussed it today. Also fix names of chunks.",
       "createdAt": "2026-02-26T20:47:00Z",
-      "updatedAt": "2026-02-27T08:46:43Z",
+      "updatedAt": "2026-05-07T18:59:31Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "5a9910e3fc0d0e9eae3265f5f56908cdd9d9b29e",
@@ -6002,7 +6140,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-02-28T17:42:09Z",
-      "updatedAt": "2026-03-02T10:52:50Z",
+      "updatedAt": "2026-05-07T18:59:19Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0f2e02f801a804dd4d36b90082e0c55703abaf8d",
@@ -6112,7 +6250,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-03-02T10:12:38Z",
-      "updatedAt": "2026-03-02T10:57:03Z",
+      "updatedAt": "2026-05-07T18:59:14Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "8b32859d1b6cae78303cf20d574c483181ff2db0",
@@ -6197,21 +6335,21 @@
       "id": "PR_kwDOKszxDc7Klo3E",
       "title": "Clarifying direction and restart variant usage of the API. ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/116",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Atempting to be using more consistent language.\r\n\r\nFixes #82 and will help to improve #112 ",
       "createdAt": "2026-03-14T10:54:54Z",
-      "updatedAt": "2026-04-01T09:57:17Z",
+      "updatedAt": "2026-05-07T13:33:34Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "43b6f0249be38be637373cc1643382ebedf8f5f2",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "api-fixes",
       "headRefOid": "34e993c52e0193837c652a0eac18c51f8ef1a40e",
-      "closedAt": null,
+      "closedAt": "2026-05-07T13:33:34Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -6236,6 +6374,13 @@
           "body": "This PR is on hold until we have a plan for how to deal with Simultanous open (#113) and what impact that might have anyway on the API and what signal on roles will be provided. ",
           "createdAt": "2026-04-01T09:57:17Z",
           "updatedAt": "2026-04-01T09:57:17Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "It will be simpler to address the API directional issues by a new PR. ",
+          "createdAt": "2026-05-07T13:33:34Z",
+          "updatedAt": "2026-05-07T13:33:34Z"
         }
       ],
       "reviews": [
@@ -6409,7 +6554,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-04-24T07:21:33Z",
-      "updatedAt": "2026-04-24T07:24:01Z",
+      "updatedAt": "2026-05-07T18:58:58Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "ad2e696491ad20c4a4fce9fddb28c4cb5bee7f1d",
@@ -6644,104 +6789,465 @@
       "id": "PR_kwDOKszxDc7Y5qcJ",
       "title": "Update km parameter",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/125",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-05-06T19:52:10Z",
-      "updatedAt": "2026-05-06T19:52:11Z",
+      "updatedAt": "2026-05-07T18:58:56Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "9cfce2585e0de73c6e6b41bc253bc771f0ee364a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "update-km-parameter",
       "headRefOid": "7cd0668196b01e8128e6c06cf565e018d3769185",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-07T14:08:10Z",
+      "mergedAt": "2026-05-07T14:08:09Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "342f52aaa4c651f495d04b21ff8f5d93fc9e8a38"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc78zoeU",
+          "commit": {
+            "abbreviatedOid": "7cd0668"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T05:39:28Z",
+          "updatedAt": "2026-05-07T05:39:28Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc789xWt",
+          "commit": {
+            "abbreviatedOid": "7cd0668"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "I think these changes are mostly fine. What I wonder is about if there does not need to be guidance on when to generate a new tie breaker value. We also have the question in #124 that relate to this. ",
+          "createdAt": "2026-05-07T12:43:13Z",
+          "updatedAt": "2026-05-07T12:43:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc79AMbc",
+          "commit": {
+            "abbreviatedOid": "7cd0668"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T14:08:01Z",
+          "updatedAt": "2026-05-07T14:08:01Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 126,
       "id": "PR_kwDOKszxDc7Y50kd",
       "title": "Use the KM parameter as it was on the wire in key derivation",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/126",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-05-06T20:00:13Z",
-      "updatedAt": "2026-05-06T20:00:14Z",
+      "updatedAt": "2026-05-07T18:58:54Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "9cfce2585e0de73c6e6b41bc253bc771f0ee364a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-key-derivation",
       "headRefOid": "ee2e700299227170a0b7bfa4720ef7cf72a8493c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-07T12:43:48Z",
+      "mergedAt": "2026-05-07T12:43:48Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "3c64417ec5e7190a9d918cd7d1e76644b504485c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc78zqlx",
+          "commit": {
+            "abbreviatedOid": "ee2e700"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T05:42:46Z",
+          "updatedAt": "2026-05-07T05:42:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc789yHp",
+          "commit": {
+            "abbreviatedOid": "ee2e700"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T12:43:42Z",
+          "updatedAt": "2026-05-07T12:43:42Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 127,
       "id": "PR_kwDOKszxDc7Y74Rn",
       "title": "Update socket api",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/127",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-05-06T21:51:01Z",
-      "updatedAt": "2026-05-06T21:51:02Z",
+      "updatedAt": "2026-05-07T18:58:53Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "9cfce2585e0de73c6e6b41bc253bc771f0ee364a",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "update-socket-api",
       "headRefOid": "341f2fd4656a36d0c040c82c8838698cd40f707b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-07T14:28:47Z",
+      "mergedAt": "2026-05-07T14:28:47Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "650a843c6f5dd8bf72bc52fe3a05376843bcce5f"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc78zuOO",
+          "commit": {
+            "abbreviatedOid": "341f2fd"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T05:48:04Z",
+          "updatedAt": "2026-05-07T05:48:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc789s9B",
+          "commit": {
+            "abbreviatedOid": "341f2fd"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T12:40:17Z",
+          "updatedAt": "2026-05-07T12:40:17Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 128,
       "id": "PR_kwDOKszxDc7Y8Qka",
       "title": "Add error causes in a consistent way.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/128",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Also use consistent text.",
       "createdAt": "2026-05-06T22:15:18Z",
-      "updatedAt": "2026-05-06T22:20:20Z",
+      "updatedAt": "2026-05-07T18:58:51Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "9cfce2585e0de73c6e6b41bc253bc771f0ee364a",
+      "baseRefOid": "68d1972432d226ab53a08a57d50047cd0dddcb05",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "add-error-causes",
-      "headRefOid": "9947b23e161869b1e6f65b8d82389e1fd4a64377",
+      "headRefOid": "6120b86adf5ee3eb2a93bae392e4326efd21ca34",
+      "closedAt": "2026-05-07T12:37:20Z",
+      "mergedAt": "2026-05-07T12:37:20Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "5c74cff0adbe8bc8bd401eb7285d388cf5a80445"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc78zwCM",
+          "commit": {
+            "abbreviatedOid": "9947b23"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T05:50:39Z",
+          "updatedAt": "2026-05-07T05:50:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc789oTt",
+          "commit": {
+            "abbreviatedOid": "6120b86"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T12:37:13Z",
+          "updatedAt": "2026-05-07T12:37:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDOKszxDc7ZJrA-",
+      "title": "Added paragraph on restart key reuse.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/129",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This resolves issue #114 ",
+      "createdAt": "2026-05-07T12:58:50Z",
+      "updatedAt": "2026-05-07T13:14:30Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "3c64417ec5e7190a9d918cd7d1e76644b504485c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "restart-sec-114",
+      "headRefOid": "4d2a7d1308cfadfbdb75564f84ac96f57384afaf",
+      "closedAt": "2026-05-07T13:14:29Z",
+      "mergedAt": "2026-05-07T13:14:29Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "778ebf210c5e30a051955df14694d66047b22646"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc78-Q6p",
+          "commit": {
+            "abbreviatedOid": "4d2a7d1"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T13:02:09Z",
+          "updatedAt": "2026-05-07T13:02:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc78-WXh",
+          "commit": {
+            "abbreviatedOid": "4d2a7d1"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-07T13:05:03Z",
+          "updatedAt": "2026-05-07T13:05:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 131,
+      "id": "PR_kwDOKszxDc7ZN-en",
+      "title": "Updated Abstract API with Send And Receive",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/131",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Replacing client and server Key Material with Send and Receive. Added Definitions of Key Material and DTLS Key Context in conventions section.\r\n\r\nFixes #82  ",
+      "createdAt": "2026-05-07T16:12:16Z",
+      "updatedAt": "2026-05-08T08:09:18Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "650a843c6f5dd8bf72bc52fe3a05376843bcce5f",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "api-direction",
+      "headRefOid": "78405b198dc647a494d8796aa7edc444d925d481",
+      "closedAt": "2026-05-08T08:09:18Z",
+      "mergedAt": "2026-05-08T08:09:17Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "23c95b4f545acb8eb5b7a20fcf882ae54b1b6b0e"
+      },
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This PR also consolidates the setting of the DTLS Key Management Parameter into one function.",
+          "createdAt": "2026-05-07T16:13:08Z",
+          "updatedAt": "2026-05-07T16:13:08Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc79VKEn",
+          "commit": {
+            "abbreviatedOid": "1b42c87"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T06:55:23Z",
+          "updatedAt": "2026-05-08T06:55:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc79Vt_f",
+          "commit": {
+            "abbreviatedOid": "1b42c87"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T07:17:32Z",
+          "updatedAt": "2026-05-08T07:17:32Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDOKszxDc7ZRuJ_",
+      "title": "Improve naming in socket API",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/132",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think config is a better name than parameter.",
+      "createdAt": "2026-05-07T19:16:46Z",
+      "updatedAt": "2026-05-08T08:10:03Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "23eb512c3b28080af96a25cd790dcbb58cfd85fd",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-socket-api",
+      "headRefOid": "5fcef4185af0e07602cf949f7fc02a24ded6ac19",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@lxin Could you take a look? I think `config` is more appropriate than `parameters`.",
+          "createdAt": "2026-05-07T19:19:05Z",
+          "updatedAt": "2026-05-07T19:19:05Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc79VMy3",
+          "commit": {
+            "abbreviatedOid": "5fcef41"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T06:57:07Z",
+          "updatedAt": "2026-05-08T06:57:07Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc79XBVM",
+          "commit": {
+            "abbreviatedOid": "5fcef41"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T08:10:03Z",
+          "updatedAt": "2026-05-08T08:10:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 134,
+      "id": "PR_kwDOKszxDc7ZdFXy",
+      "title": "Improve handling of role mismatch",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/134",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes #130.",
+      "createdAt": "2026-05-08T08:18:31Z",
+      "updatedAt": "2026-05-08T09:03:53Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "23c95b4f545acb8eb5b7a20fcf882ae54b1b6b0e",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-role-handling",
+      "headRefOid": "d8bc36dc2b7735c1450957a372c612b825039c55",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc79XONx",
+          "commit": {
+            "abbreviatedOid": "d8bc36d"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T08:19:57Z",
+          "updatedAt": "2026-05-08T08:19:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc79YKB1",
+          "commit": {
+            "abbreviatedOid": "d8bc36d"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-08T09:03:53Z",
+          "updatedAt": "2026-05-08T09:03:53Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
