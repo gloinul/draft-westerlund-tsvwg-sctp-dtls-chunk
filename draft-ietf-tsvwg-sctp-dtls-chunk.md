@@ -708,11 +708,11 @@ parameter. This falls into the following cases:
    "DTLS Key Management Tie Breaker Collision" (see {{tiebreakercol}}).
    Endpoints are RECOMMENDED to attempt establishing a new SCTP assocation.
 
-3. Neither of the above apply, in this case both endpoints indicate the
-   same role and neither indicate both roles. This is non viable case
-   and the SCTP Assocation MUST be aborted, no retry SHALL be
-   attempted. The ABORT chunk MAY include the SCTP error cause
-   "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
+3. Neither of the above apply.
+   In this case both endpoints indicate the same role and neither indicates
+   both roles.
+   The SCTP Assocation MUST be aborted and the ABORT chunk MAY include the
+   SCTP error cause "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
 
 Once the key management roles have been established, the endpoints
 determine the method to be used. The prioritized list of DTLS Key
