@@ -1381,8 +1381,8 @@ The following table provides an overview of the ``IPPROTO_SCTP``-level socket
 options defined by this section.
 
 | Option Name                          | Data Type                    | Set | Get |
-| ``SCTP_DTLS_SET_LOCAL_PARAMETERS``   | ``struct sctp_dtls_param``   | X   |     |
-| ``SCTP_DTLS_GET_PARAMETERS``         | ``struct sctp_dtls_kmids``   |     | X   |
+| ``SCTP_DTLS_SET_LOCAL_CONFIG``       | ``struct sctp_dtls_config``  | X   |     |
+| ``SCTP_DTLS_GET_CONFIG``             | ``struct sctp_dtls_config``  |     | X   |
 | ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER`` | ``struct sctp_dtls_kmp``     |     | X   |
 | ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``| ``struct sctp_dtls_kmp``     |     | X   |
 | ``SCTP_DTLS_SET_SEND_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
@@ -1395,14 +1395,14 @@ options defined by this section.
 
 ``sctp_opt_info()`` needs to be extended to support:
 
-* ``SCTP_DTLS_GET_PARAMETERS``,
+* ``SCTP_DTLS_GET_CONFIG``,
 * ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER``,
 * ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``,
 * ``SCTP_DTLS_ENFORCE_PROTECTION``,
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_STATS``.
 
-### Set the Local DTLS Key Management Parameters (``SCTP_DTLS_SET_LOCAL_PARAMETERS``)
+### Set the Local DTLS Key Management Configuration (``SCTP_DTLS_SET_LOCAL_CONFIG``)
 
 This socket option sets the DTLS Key Management identifiers which will be sent
 to the peer during the handshake, the supported DTLS roles, and whether the
@@ -1411,43 +1411,43 @@ restart operation is supported.
 The following structure is used as the ``option_value``:
 
 ~~~ c
-struct sctp_dtls_params {
-        sctp_assoc_t sdp_assoc_id;
-        uint16_t sdp_flags;
-        uint16_t sdp_nr_kmids;
-        uint8_t sdp_kmids[];
+struct sctp_dtls_config {
+        sctp_assoc_t sdc_assoc_id;
+        uint16_t sdc_flags;
+        uint16_t sdc_nr_kmids;
+        uint8_t sdc_kmids[];
 };
 ~~~
 
-``sdp_assoc_id``:
+``sdc_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
   For ``setsockopt()``, only ``SCTP_FUTURE_ASSOC`` can be used.
 
-``sdp_flags``:
+``sdc_flags``:
 : This field may contain any of the following flags and is composed of a
   bitwise OR of these values.
   ``SCTP_DTLS_CLIENT``:
-  : All key management methods in `sdp_kmids` can operate as a DTLS client.
+  : All key management methods in `sdc_kmids` can operate as a DTLS client.
 
   ``SCTP_DTLS_SERVER``:
-  : All key management methods in `sdp_kmids` can operate as a DTLS server.
+  : All key management methods in `sdc_kmids` can operate as a DTLS server.
 
   ``SCTP_DTLS_RESTART``:
-  : All key management methods in `sdp_kmids` support the restart operation.
+  : All key management methods in `sdc_kmids` support the restart operation.
 
-``sdp_nr_kmids``:
-: The number of entries in ``sdp_kmids``.
+``sdc_nr_kmids``:
+: The number of entries in ``sdc_kmids``.
 
-``sdp_kmids``:
+``sdc_kmids``:
 : The DTLS Key Management identifiers which will be sent to the peer
   in the DTLS Key Management Parameter in the sequence provided.
 
 This socket option can be used with ``setsockopt()`` only for SCTP endpoints in
 the ``SCTP_CLOSED`` state for configuration.
 
-### Get the DTLS Key Management Parameters (``SCTP_DTLS_GET_PARAMETERS``)
+### Get the DTLS Key Management Configuration (``SCTP_DTLS_GET_CONFIG``)
 
 This socket option reports the DTLS Key Management parameters negotiated during
 the the handshake.
@@ -1455,39 +1455,39 @@ the the handshake.
 The following structure is used as the ``option_value``:
 
 ~~~ c
-struct sctp_dtls_params {
-        sctp_assoc_t sdp_assoc_id;
-        uint16_t sdp_flags;
-        uint16_t sdp_nr_kmids;
-        uint8_t sdp_kmids[];
+struct sctp_dtls_config {
+        sctp_assoc_t sdc_assoc_id;
+        uint16_t sdc_flags;
+        uint16_t sdc_nr_kmids;
+        uint8_t sdc_kmids[];
 };
 ~~~
 
-``sdp_assoc_id``:
+``sdc_assoc_id``:
 : This parameter is ignored for one-to-one style sockets.
   For one-to-many style sockets, this parameter indicates upon which
   SCTP association the caller is performing the action.
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
-``sdp_flags``:
+``sdc_flags``:
 : This field contains any of the following flags and is composed of a bitwise
   OR of these values.
   ``SCTP_DTLS_CLIENT``:
-  : Indicates that the Key Management Method provided in `sdp_kmids` acts as
+  : Indicates that the Key Management Method provided in `sdc_kmids` acts as
     a client.
 
   ``SCTP_DTLS_SERVER``:
-  : Indicates that the Key Management Method provided in `sdp_kmids` acts as
+  : Indicates that the Key Management Method provided in `sdc_kmids` acts as
     a server.
 
   ``SCTP_DTLS_RESTART``:
-  : Indicates that the Key Management Method provided in `sdp_kmids` supports
+  : Indicates that the Key Management Method provided in `sdc_kmids` supports
     the restart operation.
 
-``sdp_nr_kmids``:
-: The number of entries in ``sdp_kmids``, which is 1.
+``sdc_nr_kmids``:
+: The number of entries in ``sdc_kmids``, which is 1.
 
-``sdp_kmids``:
+``sdc_kmids``:
 : The DTLS Key Management identifier which was negotiated.
 
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
