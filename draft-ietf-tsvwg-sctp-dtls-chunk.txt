@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 20 November 2026                                       M. Tüxen
+Expires: 21 November 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                             19 May 2026
+                                                             20 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 November 2026.
+   This Internet-Draft will expire on 21 November 2026.
 
 Copyright Notice
 
@@ -752,11 +752,10 @@ Table of Contents
        Section 4.3.3).  Endpoints are RECOMMENDED to attempt
        establishing a new SCTP assocation.
 
-   3.  Neither of the above apply, in this case both endpoints indicate
-       the same role and neither indicate both roles.  This is non
-       viable case and the SCTP Assocation MUST be aborted, no retry
-       SHALL be attempted.  The ABORT chunk MAY include the SCTP error
-       cause "Incompatible DTLS Key Management Roles" (see
+   3.  Neither of the above apply.  In this case both endpoints indicate
+       the same role and neither indicates both roles.  The SCTP
+       Assocation MUST be aborted and the ABORT chunk MAY include the
+       SCTP error cause "Incompatible DTLS Key Management Roles" (see
        Section 4.3.4).
 
    Once the key management roles have been established, the endpoints
