@@ -971,7 +971,7 @@ create the nonce per {{Section 5.3 of RFC8446}}.  The sequence number
 key is used to encrypt the sequence number ({{Section 4.2.3 of
 RFC9147}}).
 
-As this API reference the key material as for send or receive, it will
+As this API references the key material as for send or receive, it will
 be the responsibility of the key management method used to define how
 it maps the endpoint's role to which keys are for send and receive
 direction respectively.
@@ -980,16 +980,16 @@ direction respectively.
 
 Prior to attempting to establish an SCTP association an SCTP endpoint
 needs to configure which DTLS Key Management Methods it supports, as
-well the roles and if restart is supported. This information is
-included in the DTLS Key Management Parameter which if these
-parameters are set will be included in either INIT or INIT ACK chunks.
+well as the roles and if restart is supported. This information is
+included in the DTLS Key Management Parameter, which, when these
+parameters are set, will be included in either INIT or INIT ACK chunks.
 
 An endpoint can either support, client only, server only, or client
-and server. The last is for situation where both endpoints may attempt
+and server. The latter is for situations where both endpoints may attempt
 to establish an SCTP association towards each other, potentially
-causing a simultanous sending of INIT chunks. Depending on port
+causing a simultaneous sending of INIT chunks. Depending on port
 configuration SCTP supports this happening during the association
-establishment, and results will be a single SCTP association. However,
+establishment, and the result will be a single SCTP association. However,
 to select the same key management method on both sides, the SCTP stack
 will resolve the key management role for this association.
 
@@ -1007,7 +1007,8 @@ accepting association establishment.
 
 * Support SCTP Restart (boolean):
 : Indicate if the endpoint is capable of supporting SCTP restart when DTLS chunk
-  has been negotiated.
+  has been negotiated. If both endpoints indicate flag then a restart has the
+  potential to succeed.
 
 * Requires DTLS Chunk security (boolean):
 : SCTP association is only established if both endpoints support DTLS
@@ -1026,11 +1027,11 @@ Parameters: None
 
 After an SCTP association has been established the key management
 function needs to know which method was agreed on and which role this
-endpoint will have. The function provides both endpoints actuall
-values in the DTLS Key Management Parameter used in any key derviation
-to prevent down-grade attacks.
+endpoint will have. The function provides both endpoints' actual
+values from the DTLS Key Management Parameter, used in key derivation
+to prevent downgrade attacks.
 
-Request: Get Supported DTLS Key Management Roles
+Request: Get Agreed DTLS Key Management Method and Role
 
 Parameters:
 * SCTP Association Handle:
@@ -1047,7 +1048,7 @@ Parameters:
 : The selected Key Management Method as a DTLS Key Management Identifier.
 
 * Down Grade Prevention Data:
-: In network bytes order the whole of the DTLS Key Management
+: In network byte order the whole of the DTLS Key Management
   Parameter including header and excluding padding that the endpoint
   with the client role offered, followed by the corresponding
   parameter content of the endpoint with the server role.
@@ -1056,7 +1057,7 @@ Parameters:
 ## Cipher Suite Capabilities
 
 The DTLS Key Management Method needs to know which cipher suites defined
-for usage with DTLS 1.3 that are supported by the DTLS chunk and its
+for use with DTLS 1.3 that are supported by the DTLS chunk and its
 protection operations block. All TLS cipher suites that are defined are
 listed in the TLS cipher suite registry {{TLS-CIPHER-SUITES}} at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
@@ -1144,7 +1145,7 @@ Parameters :
 Reply : Established or Failed
 
 
-## Destroy Send Key  Material
+## Destroy Send Key Material
 
 A function to destroy the send key material for a given epoch for the
 Primary or Restart DTLS Key Context for a given SCTP Association.
