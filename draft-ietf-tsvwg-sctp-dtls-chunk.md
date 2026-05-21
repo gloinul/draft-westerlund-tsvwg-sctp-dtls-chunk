@@ -993,7 +993,6 @@ establishment, and results will be a single SCTP association. However,
 to select the same key management method on both sides, the SCTP stack
 will resolve the key management role for this association.
 
-
 Request: Set Supported DTLS Key Management Methods
 
 Parameters:
@@ -1010,6 +1009,10 @@ accepting association establishment.
 : Indicate if the endpoint is capable of supporting SCTP restart when DTLS chunk
   has been negotiated.
 
+* Requires DTLS Chunk security (boolean):
+: SCTP association is only established if both endpoints support DTLS
+  Chunk and have included the DTLS Key Management Parameter.
+
 * List of Identifiers:
 : A prioritized list of DTLS Key Management identifiers
   {{IANA-Protection-Solution-ID}} that are supported, from the most
@@ -1018,7 +1021,6 @@ accepting association establishment.
 Reply: Success or Error
 
 Parameters: None
-
 
 ## Get Agreed DTLS Key Management Method and Role
 
