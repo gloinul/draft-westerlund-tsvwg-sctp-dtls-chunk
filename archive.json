@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-10T02:26:20.018982+00:00",
+  "timestamp": "2026-05-21T02:44:33.032662+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1979,7 +1979,7 @@
       "id": "I_kwDOKszxDc8AAAABBjpcWA",
       "title": "Fix same role case",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/130",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1988,8 +1988,8 @@
       "labels": [],
       "body": "Update \"no retry SHALL be attempted.\" to explain that one can change roles and retry.",
       "createdAt": "2026-05-07T14:16:23Z",
-      "updatedAt": "2026-05-08T09:22:22Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-20T05:59:58Z",
+      "closedAt": "2026-05-20T05:59:58Z",
       "comments": [
         {
           "author": "tuexen",
@@ -2058,6 +2058,22 @@
           "updatedAt": "2026-05-08T08:17:15Z"
         }
       ]
+    },
+    {
+      "number": 135,
+      "id": "I_kwDOKszxDc8AAAABCtwQIg",
+      "title": "Clarify what it means to not support Restart",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/135",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "When it comes to restart I think we might clarify that not supporting restart still means that one should/shall restart if the peer restarts. Which means that one should have derived restart keys for ones side. It is only the permanent storage aspect that one does not need to support.\n",
+      "createdAt": "2026-05-19T12:03:22Z",
+      "updatedAt": "2026-05-19T12:03:22Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -7147,7 +7163,7 @@
       "labels": [],
       "body": "I think config is a better name than parameter.",
       "createdAt": "2026-05-07T19:16:46Z",
-      "updatedAt": "2026-05-08T08:10:03Z",
+      "updatedAt": "2026-05-20T22:06:27Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "23eb512c3b28080af96a25cd790dcbb58cfd85fd",
@@ -7165,6 +7181,13 @@
           "body": "@lxin Could you take a look? I think `config` is more appropriate than `parameters`.",
           "createdAt": "2026-05-07T19:19:05Z",
           "updatedAt": "2026-05-07T19:19:05Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> @lxin Could you take a look? I think `config` is more appropriate than `parameters`.\r\n\r\n@tuexen sorry for late, it's been hectic here. I just got a chance to implement it today.\r\n\r\n1.\r\n'config' looks good to me. But as it will be used for key management parameter in INIT/INIT_ACK, is it better to add '_KM_':\r\n\r\nSCTP_DTLS_SET_LOCAL_KM_CONFIG?\r\n\r\nfor the getter, will it be more clear to use:\r\n\r\nSCTP_DTLS_GET_AGREED_KM_CONFIG / SCTP_DTLS_GET_NEGOTIATED_KM_CONFIG / SCTP_DTLS_GET_CHOSEN_KM_CONFIG ?\r\n\r\n2.\r\nin Section [8.4.4.](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.4):\r\n\r\nstruct sctp_dtls_kmids -> struct sctp_dtls_kmp \r\n\r\n3.\r\n\r\nin Section [8.4.3. ](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.3)[Get the Local DTLS Key Management Parameter (SCTP_DTLS_GET_LOCAL_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-local-dtls-key-mana)\r\n```\r\nstruct sctp_dtls_kmp {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint16_t sdk_nr_bytes;\r\n        uint8_t sdk_bytes[];\r\n};\r\n```\r\n\r\nWhen coding, I feel a bit unconvenient with a memory hole in this struct. like when I want to check the minimal length or offset, I can't use sizeof(struct sctp_dtls_kmp), but has to use offsetof(struct sctp_dtls_kmp, sdk_bytes).\r\n\r\n4.\r\n\r\nabout [SCTP_DTLS_GET_REMOTE_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-remote-dtls-key-man), it seems `_PEER_` is more like a standard terminology in SCTP than `_REMOTE_`.\r\n\r\nThanks.",
+          "createdAt": "2026-05-20T21:41:13Z",
+          "updatedAt": "2026-05-20T22:06:27Z"
         }
       ],
       "reviews": [
@@ -7201,24 +7224,26 @@
       "id": "PR_kwDOKszxDc7ZdFXy",
       "title": "Improve handling of role mismatch",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/134",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This fixes #130.",
       "createdAt": "2026-05-08T08:18:31Z",
-      "updatedAt": "2026-05-08T09:03:53Z",
+      "updatedAt": "2026-05-20T05:59:57Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "23c95b4f545acb8eb5b7a20fcf882ae54b1b6b0e",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-role-handling",
       "headRefOid": "d8bc36dc2b7735c1450957a372c612b825039c55",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-20T05:59:57Z",
+      "mergedAt": "2026-05-20T05:59:57Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "f498280409bd8346e65300c82d813015075adb68"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7248,6 +7273,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 136,
+      "id": "PR_kwDOKszxDc7dr-OQ",
+      "title": "Provide unified text for the handshake.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/136",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is one point we need to discuss in the VC:\r\n\r\nWhen is the role and the method being determined. The text says \"after the INIT ACK has been sent or received\" but wouldn't it be better to state something like \"when the association enters the ESTABLISHED state?\r\n\r\nDepending on this, I need to update the selection of tie-breakers.",
+      "createdAt": "2026-05-20T20:20:11Z",
+      "updatedAt": "2026-05-20T20:20:12Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "f498280409bd8346e65300c82d813015075adb68",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup",
+      "headRefOid": "a9a16e281f1f7f75202bca0b9166d19b77199a10",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
