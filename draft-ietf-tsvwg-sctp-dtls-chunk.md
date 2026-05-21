@@ -1523,7 +1523,7 @@ endpoint during the handshake.
 The following structure is used as the ``option_value``:
 
 ~~~ c
-struct sctp_dtls_kmids {
+struct sctp_dtls_kmp {
         sctp_assoc_t sdk_assoc_id;
         uint16_t sdk_nr_bytes;
         uint8_t sdk_bytes[];
