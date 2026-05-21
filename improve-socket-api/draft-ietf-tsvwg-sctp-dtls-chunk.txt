@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 8 November 2026                                        M. Tüxen
+Expires: 22 November 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                              7 May 2026
+                                                             21 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 November 2026.
+   This Internet-Draft will expire on 22 November 2026.
 
 Copyright Notice
 
@@ -1595,7 +1595,7 @@ Table of Contents
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_kmids {
+   struct sctp_dtls_kmp {
            sctp_assoc_t sdk_assoc_id;
            uint16_t sdk_nr_bytes;
            uint8_t sdk_bytes[];
