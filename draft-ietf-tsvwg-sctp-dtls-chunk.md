@@ -1380,7 +1380,7 @@ options defined by this section.
 | ``SCTP_DTLS_DEL_RECV_KEYS``          | ``struct sctp_dtls_keys_id`` | X   |     |
 | ``SCTP_DTLS_ENFORCE_PROTECTION``     | ``struct sctp_assoc_value``  | X   | X   |
 | ``SCTP_DTLS_REPLAY_WINDOW``          | ``struct sctp_assoc_value``  | X   | X   |
-| ``SCTP_DTLS_STATS``                  | ``struct sctp_dtls_stats``   |     | X   |
+| ``SCTP_DTLS_GET_STATS``              | ``struct sctp_dtls_stats``   |     | X   |
 {: #socket-options-table title="Socket Options" cols="l l l l"}
 
 ``sctp_opt_info()`` needs to be extended to support:
@@ -1390,7 +1390,7 @@ options defined by this section.
 * ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``,
 * ``SCTP_DTLS_ENFORCE_PROTECTION``,
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
-* ``SCTP_DTLS_STATS``.
+* ``SCTP_DTLS_GET_STATS``.
 
 ### Set the Local DTLS Key Management Configuration (``SCTP_DTLS_SET_LOCAL_CONFIG``)
 
@@ -1730,7 +1730,7 @@ in any state other than ``SCTP_CLOSED``.
 Protection can be enforced in any state other than ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
-### Get Statistic Counters (``SCTP_DTLS_STATS``)
+### Get Statistic Counters (``SCTP_DTLS_GET_STATS``)
 
 This socket options allows to get various statistic counters for a
 specific SCTP endpoint.
