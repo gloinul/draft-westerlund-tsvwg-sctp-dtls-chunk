@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-21T02:44:33.032662+00:00",
+  "timestamp": "2026-05-24T02:41:07.389050+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1953,7 +1953,7 @@
       "id": "I_kwDOKszxDc8AAAABBdLvBA",
       "title": "Role change at restart",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/124",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -1962,8 +1962,8 @@
       "labels": [],
       "body": "The current text suggests that we should send new parameter with new Tie Breaker value at restart. This can result in a change of the roles for the key-management performed after restart. Does that work?\n\nWe should likely update the Abstract API to set keys for sending and receiving and not talk about client and server? ",
       "createdAt": "2026-05-06T15:45:32Z",
-      "updatedAt": "2026-05-07T14:10:38Z",
-      "closedAt": null,
+      "updatedAt": "2026-05-21T14:53:28Z",
+      "closedAt": "2026-05-21T14:53:28Z",
       "comments": [
         {
           "author": "gloinul",
@@ -1971,6 +1971,13 @@
           "body": "We need a general specification on when new random number values are to be generated. ",
           "createdAt": "2026-05-07T14:08:51Z",
           "updatedAt": "2026-05-07T14:08:51Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Discussed it and it doesn't matter if one have a role change for the restarted association as this is a new association. The restarted endpoints just need to remember the restart keys and which is write and receiver for itself.",
+          "createdAt": "2026-05-21T14:53:28Z",
+          "updatedAt": "2026-05-21T14:53:28Z"
         }
       ]
     },
@@ -2072,6 +2079,22 @@
       "body": "When it comes to restart I think we might clarify that not supporting restart still means that one should/shall restart if the peer restarts. Which means that one should have derived restart keys for ones side. It is only the permanent storage aspect that one does not need to support.\n",
       "createdAt": "2026-05-19T12:03:22Z",
       "updatedAt": "2026-05-19T12:03:22Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 137,
+      "id": "I_kwDOKszxDc8AAAABC8x8ew",
+      "title": "API requires indicating that any association requires DTLS Chunk.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/137",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The specification currently requires the SCTP stack to take the endpoint policy if it requires DTLS Chunk security being negotiated to establish an SCTP Association. This is missing from the API. \n\nI think this becomes one more setting boolean in the [Set Supported DTLS Key Management Parameters](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-set-supported-dtls-key-mana) call.  ",
+      "createdAt": "2026-05-21T08:15:57Z",
+      "updatedAt": "2026-05-21T08:15:57Z",
       "closedAt": null,
       "comments": []
     }
@@ -7163,13 +7186,13 @@
       "labels": [],
       "body": "I think config is a better name than parameter.",
       "createdAt": "2026-05-07T19:16:46Z",
-      "updatedAt": "2026-05-20T22:06:27Z",
+      "updatedAt": "2026-05-21T19:18:43Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "23eb512c3b28080af96a25cd790dcbb58cfd85fd",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-socket-api",
-      "headRefOid": "5fcef4185af0e07602cf949f7fc02a24ded6ac19",
+      "headRefOid": "e539966a87ce23f80d99169d8b52025d11c7e0e7",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7188,6 +7211,20 @@
           "body": "> @lxin Could you take a look? I think `config` is more appropriate than `parameters`.\r\n\r\n@tuexen sorry for late, it's been hectic here. I just got a chance to implement it today.\r\n\r\n1.\r\n'config' looks good to me. But as it will be used for key management parameter in INIT/INIT_ACK, is it better to add '_KM_':\r\n\r\nSCTP_DTLS_SET_LOCAL_KM_CONFIG?\r\n\r\nfor the getter, will it be more clear to use:\r\n\r\nSCTP_DTLS_GET_AGREED_KM_CONFIG / SCTP_DTLS_GET_NEGOTIATED_KM_CONFIG / SCTP_DTLS_GET_CHOSEN_KM_CONFIG ?\r\n\r\n2.\r\nin Section [8.4.4.](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.4):\r\n\r\nstruct sctp_dtls_kmids -> struct sctp_dtls_kmp \r\n\r\n3.\r\n\r\nin Section [8.4.3. ](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.3)[Get the Local DTLS Key Management Parameter (SCTP_DTLS_GET_LOCAL_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-local-dtls-key-mana)\r\n```\r\nstruct sctp_dtls_kmp {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint16_t sdk_nr_bytes;\r\n        uint8_t sdk_bytes[];\r\n};\r\n```\r\n\r\nWhen coding, I feel a bit unconvenient with a memory hole in this struct. like when I want to check the minimal length or offset, I can't use sizeof(struct sctp_dtls_kmp), but has to use offsetof(struct sctp_dtls_kmp, sdk_bytes).\r\n\r\n4.\r\n\r\nabout [SCTP_DTLS_GET_REMOTE_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-remote-dtls-key-man), it seems `_PEER_` is more like a standard terminology in SCTP than `_REMOTE_`.\r\n\r\nThanks.",
           "createdAt": "2026-05-20T21:41:13Z",
           "updatedAt": "2026-05-20T22:06:27Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > @lxin Could you take a look? I think `config` is more appropriate than `parameters`.\r\n> \r\n> @tuexen sorry for late, it's been hectic here. I just got a chance to implement it today.\r\n> \r\n> \r\n> 'config' looks good to me. But as it will be used for key management parameter in INIT/INIT_ACK, is it better to add '_KM_':\r\n> \r\n> SCTP_DTLS_SET_LOCAL_KM_CONFIG?\r\n> \r\n> for the getter, will it be more clear to use:\r\n> \r\n> SCTP_DTLS_GET_AGREED_KM_CONFIG / SCTP_DTLS_GET_NEGOTIATED_KM_CONFIG / SCTP_DTLS_GET_CHOSEN_KM_CONFIG ?\r\n\r\nLet us discuss this at the VC.\r\n> \r\n> \r\n> in Section [8.4.4.](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.4):\r\n> \r\n> struct sctp_dtls_kmids -> struct sctp_dtls_kmp\r\n\r\nThanks for catching. It is fixed now.\r\n> \r\n> \r\n> in Section [8.4.3. ](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#section-8.4.3)[Get the Local DTLS Key Management Parameter (SCTP_DTLS_GET_LOCAL_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-local-dtls-key-mana)\r\n> \r\n> ```\r\n> struct sctp_dtls_kmp {\r\n>         sctp_assoc_t sdk_assoc_id;\r\n>         uint16_t sdk_nr_bytes;\r\n>         uint8_t sdk_bytes[];\r\n> };\r\n> ```\r\n> \r\n> When coding, I feel a bit unconvenient with a memory hole in this struct. like when I want to check the minimal length or offset, I can't use sizeof(struct sctp_dtls_kmp), but has to use offsetof(struct sctp_dtls_kmp, sdk_bytes).\r\n\r\nWould adding a 16-bit padding before or after sdk_nr_bytes  make you happy?\r\n> \r\n> \r\n> about [SCTP_DTLS_GET_REMOTE_KM_PARAMETER)](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/improve-socket-api/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-get-the-remote-dtls-key-man), it seems `_PEER_` is more like a standard terminology in SCTP than `_REMOTE_`.\r\n\r\nLet us discuss this in the VC.\r\n> \r\n> Thanks.\r\n\r\n",
+          "createdAt": "2026-05-21T13:45:45Z",
+          "updatedAt": "2026-05-21T13:45:45Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@tuexen \r\n\r\nThere's another struct that needs padding:\r\n\r\n```\r\nstruct sctp_dtls_keys {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint8_t sdk_cipher_suite[2];\r\n        uint8_t sdk_restart;\r\n        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */\r\n        uint64_t sdk_epoch;\r\n        uint16_t sdk_key_len;\r\n        uint16_t sdk_iv_len;\r\n        uint16_t sdk_sn_key_len;\r\n        uint8_t sdk_keys[];\r\n};\r\n```\r\nlike:\r\n```\r\nstruct sctp_dtls_keys {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint8_t sdk_cipher_suite[2];\r\n        uint16_t sdk_restart;  ?\r\n        uint64_t sdk_epoch;\r\n        uint16_t sdk_key_len;\r\n        uint16_t sdk_iv_len;\r\n        uint16_t sdk_sn_key_len;\r\n        uint16_t sdk_unused;  ?\r\n        uint8_t sdk_keys[];\r\n};\r\n```",
+          "createdAt": "2026-05-21T19:04:51Z",
+          "updatedAt": "2026-05-21T19:18:43Z"
         }
       ],
       "reviews": [
@@ -7216,6 +7253,106 @@
           "createdAt": "2026-05-08T08:10:03Z",
           "updatedAt": "2026-05-08T08:10:03Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAo-37w",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-21T14:45:22Z",
+          "updatedAt": "2026-05-21T14:45:22Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "SCTP_DTLS_GET_STATS",
+              "createdAt": "2026-05-21T14:45:22Z",
+              "updatedAt": "2026-05-21T14:45:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAo_Vzw",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-21T14:46:21Z",
+          "updatedAt": "2026-05-21T14:46:21Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "SCTP_DTLS_GET_PEER_KM_PARAMETER",
+              "createdAt": "2026-05-21T14:46:21Z",
+              "updatedAt": "2026-05-21T14:46:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAo_rCg",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-21T14:47:04Z",
+          "updatedAt": "2026-05-21T14:47:04Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "SCTP_DTLS_LOCAL_CONFIG (Both get and Set)",
+              "createdAt": "2026-05-21T14:47:04Z",
+              "updatedAt": "2026-05-21T14:47:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAo__2g",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-21T14:47:47Z",
+          "updatedAt": "2026-05-21T14:47:47Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "SCTP_DTLS_GET_PEER_KM_PARAMETER",
+              "createdAt": "2026-05-21T14:47:47Z",
+              "updatedAt": "2026-05-21T14:47:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABApBGXQ",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-21T14:49:51Z",
+          "updatedAt": "2026-05-21T14:49:52Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "PARAMETER -> PARAM",
+              "createdAt": "2026-05-21T14:49:52Z",
+              "updatedAt": "2026-05-21T14:49:52Z"
+            }
+          ]
         }
       ]
     },
@@ -7286,7 +7423,7 @@
       "labels": [],
       "body": "There is one point we need to discuss in the VC:\r\n\r\nWhen is the role and the method being determined. The text says \"after the INIT ACK has been sent or received\" but wouldn't it be better to state something like \"when the association enters the ESTABLISHED state?\r\n\r\nDepending on this, I need to update the selection of tie-breakers.",
       "createdAt": "2026-05-20T20:20:11Z",
-      "updatedAt": "2026-05-20T20:20:12Z",
+      "updatedAt": "2026-05-21T13:48:41Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "f498280409bd8346e65300c82d813015075adb68",
@@ -7297,8 +7434,90 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Regarding the question if the selection procedure should be run after the init ack been sent and received, or use when established. I think the current is actually unoptimal and should be addressed in either direction.\r\n\r\nWhen Established: Running the determination when entering established state have the advantage of being clear and is a good point in time for the key-management implementation on top of the SCTP stack. The down side is that in some of the failure cases one will establish an SCTP association that will then be aborted by the determination process. These cases are:\r\n  1. Incompatible roles\r\n  2. No common key methods\r\n  3. Tie breaker collision\r\n\r\nThus, if one want to avoid establishing the association before tearing it down then SCTP responder should in fact analyze this prior to sending the INIT-ACK. And if any of these occur send a ABORT instead of the INIT-ACK. This is the same that will happen if the responder requires DTLS key-management parameter and the INIT does not contain one. Thus avoiding that endpoint holding any state at all. \r\n\r\nI will also note that in the case of the Initiator receiving a INIT-ACK without the DTLS key-management parameter and requiring support then it will abort the connection prior to sending the COOKIE-ECHO. Which basically just means not sending it and terminating the establishment procedure?\r\n\r\n\r\n\r\n",
+          "createdAt": "2026-05-21T08:12:55Z",
+          "updatedAt": "2026-05-21T08:12:55Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Regarding the question if the selection procedure should be run after the init ack been sent and received, or use when established. I think the current is actually unoptimal and should be addressed in either direction.\r\n> \r\n> When Established: Running the determination when entering established state have the advantage of being clear and is a good point in time for the key-management implementation on top of the SCTP stack. The down side is that in some of the failure cases one will establish an SCTP association that will then be aborted by the determination process. These cases are:\r\n> \r\n> 1. Incompatible roles\r\n> 2. No common key methods\r\n> 3. Tie breaker collision\r\n> \r\n> Thus, if one want to avoid establishing the association before tearing it down then SCTP responder should in fact analyze this prior to sending the INIT-ACK. And if any of these occur send a ABORT instead of the INIT-ACK. This is the same that will happen if the responder requires DTLS key-management parameter and the INIT does not contain one. Thus avoiding that endpoint holding any state at all.\r\n> \r\n> I will also note that in the case of the Initiator receiving a INIT-ACK without the DTLS key-management parameter and requiring support then it will abort the connection prior to sending the COOKIE-ECHO. Which basically just means not sending it and terminating the establishment procedure?\r\n\r\nOK. Makes sense. What about doing the checks on reception of the INIT and INIT ACK. The final computation when moving to the ESTABLISHED state (with checking it again).",
+          "createdAt": "2026-05-21T13:48:41Z",
+          "updatedAt": "2026-05-21T13:48:41Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAlbRRw",
+          "commit": {
+            "abbreviatedOid": "a9a16e2"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-21T05:32:32Z",
+          "updatedAt": "2026-05-21T05:32:32Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAmMvXA",
+          "commit": {
+            "abbreviatedOid": "a9a16e2"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-21T07:56:15Z",
+          "updatedAt": "2026-05-21T07:56:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 138,
+      "id": "PR_kwDOKszxDc7d_6Ey",
+      "title": "Abstract API: Adding require DTLS chunk security, editorial fixes",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/138",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-05-21T15:27:35Z",
+      "updatedAt": "2026-05-22T05:54:37Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "f498280409bd8346e65300c82d813015075adb68",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "api-260521",
+      "headRefOid": "02e73a7d348dd609b80b8386122e875ca4906ad3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABAtrdxg",
+          "commit": {
+            "abbreviatedOid": "02e73a7"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-22T05:54:37Z",
+          "updatedAt": "2026-05-22T05:54:37Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
