@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 22 November 2026                                       M. Tüxen
+Expires: 26 November 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                             21 May 2026
+                                                             25 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 November 2026.
+   This Internet-Draft will expire on 26 November 2026.
 
 Copyright Notice
 
@@ -138,7 +138,7 @@ Table of Contents
        8.4.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
        8.4.8.  Get or Set Protection Enforcement
                (SCTP_DTLS_ENFORCE_PROTECTION)
-       8.4.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+       8.4.9.  Get Statistic Counters (SCTP_DTLS_GET_STATS)
        8.4.10. Get or Set the Replay Protection Window Size
                (SCTP_DTLS_REPLAY_WINDOW)
    9.  IANA Considerations
@@ -1455,7 +1455,7 @@ Table of Contents
     | SCTP_DTLS_REPLAY_WINDOW           | struct            |X  | X   |
     |                                   | sctp_assoc_value  |   |     |
     +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_STATS                   | struct            |   | X   |
+    | SCTP_DTLS_GET_STATS               | struct            |   | X   |
     |                                   | sctp_dtls_stats   |   |     |
     +-----------------------------------+-------------------+---+-----+
 
@@ -1473,14 +1473,15 @@ Table of Contents
 
    *  SCTP_DTLS_REPLAY_WINDOW, and
 
-   *  SCTP_DTLS_STATS.
+   *  SCTP_DTLS_GET_STATS.
 
 8.4.1.  Set the Local DTLS Key Management Configuration
         (SCTP_DTLS_SET_LOCAL_CONFIG)
 
-   This socket option sets the DTLS Key Management identifiers which
-   will be sent to the peer during the handshake, the supported DTLS
-   roles, and whether the restart operation is supported.
+   This socket option allows to set the DTLS Key Management identifiers
+   being sent to the peer during the handshake, the supported DTLS
+   roles, and determines whether the restart operation is supported and
+   the use of the DTLS chunk is required.
 
    The following structure is used as the option_value:
 
@@ -1509,6 +1510,9 @@ Table of Contents
 
                SCTP_DTLS_RESTART:  All key management methods in
          sdc_kmids support the restart operation.
+
+               SCTP_DTLS_REQUIRED:  The endpoint requires the use of the
+         DTLS chunk.
 
    sdc_nr_kmids:  The number of entries in sdc_kmids.
 
@@ -1771,7 +1775,7 @@ Table of Contents
    than SCTP_CLOSED.  Protection can be enforced in any state other than
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-8.4.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+8.4.9.  Get Statistic Counters (SCTP_DTLS_GET_STATS)
 
    This socket options allows to get various statistic counters for a
    specific SCTP endpoint.
