@@ -1333,16 +1333,16 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
                 <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-socket-options" class="internal xref">Socket Options</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.1">
-                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="auto internal xref">8.4.1</a>.  <a href="#name-set-the-local-dtls-key-mana" class="internal xref">Set the Local DTLS Key Management Configuration (<code>SCTP_DTLS_SET_LOCAL_CONFIG</code>)</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="auto internal xref">8.4.1</a>.  <a href="#name-get-or-set-the-local-dtls-k" class="internal xref">Get or Set the Local DTLS Key Management Configuration (<code>SCTP_DTLS_LOCAL_CONFIG</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.2">
                     <p id="section-toc.1-1.8.2.4.2.2.1"><a href="#section-8.4.2" class="auto internal xref">8.4.2</a>.  <a href="#name-get-the-dtls-key-management" class="internal xref">Get the DTLS Key Management Configuration (<code>SCTP_DTLS_GET_CONFIG</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.3">
-                    <p id="section-toc.1-1.8.2.4.2.3.1"><a href="#section-8.4.3" class="auto internal xref">8.4.3</a>.  <a href="#name-get-the-local-dtls-key-mana" class="internal xref">Get the Local DTLS Key Management Parameter (<code>SCTP_DTLS_GET_LOCAL_KM_PARAMETER</code>)</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.3.1"><a href="#section-8.4.3" class="auto internal xref">8.4.3</a>.  <a href="#name-get-the-local-dtls-key-mana" class="internal xref">Get the Local DTLS Key Management Parameter (<code>SCTP_DTLS_GET_LOCAL_KM_PARAM</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.4">
-                    <p id="section-toc.1-1.8.2.4.2.4.1"><a href="#section-8.4.4" class="auto internal xref">8.4.4</a>.  <a href="#name-get-the-remote-dtls-key-man" class="internal xref">Get the Remote DTLS Key Management Parameter (<code>SCTP_DTLS_GET_REMOTE_KM_PARAMETER</code>)</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.4.1"><a href="#section-8.4.4" class="auto internal xref">8.4.4</a>.  <a href="#name-get-the-peer-dtls-key-manag" class="internal xref">Get the Peer DTLS Key Management Parameter (<code>SCTP_DTLS_GET_PEER_KM_PARAM</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.5">
                     <p id="section-toc.1-1.8.2.4.2.5.1"><a href="#section-8.4.5" class="auto internal xref">8.4.5</a>.  <a href="#name-set-send-keys-sctp_dtls_set" class="internal xref">Set Send Keys (<code>SCTP_DTLS_SET_SEND_KEYS</code>)</a></p>
@@ -3719,13 +3719,13 @@ options defined by this section.<a href="#section-8.4-1" class="pilcrow">¶</a><
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
-                <code>SCTP_DTLS_SET_LOCAL_CONFIG</code>
+                <code>SCTP_DTLS_LOCAL_CONFIG</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>struct sctp_dtls_config</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">X</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">X</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
@@ -3739,7 +3739,7 @@ options defined by this section.<a href="#section-8.4-1" class="pilcrow">¶</a><
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
-                <code>SCTP_DTLS_GET_LOCAL_KM_PARAMETER</code>
+                <code>SCTP_DTLS_GET_LOCAL_KM_PARAM</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>struct sctp_dtls_kmp</code>
@@ -3749,7 +3749,7 @@ options defined by this section.<a href="#section-8.4-1" class="pilcrow">¶</a><
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
-                <code>SCTP_DTLS_GET_REMOTE_KM_PARAMETER</code>
+                <code>SCTP_DTLS_GET_PEER_KM_PARAM</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>struct sctp_dtls_kmp</code>
@@ -3823,30 +3823,33 @@ options defined by this section.<a href="#section-8.4-1" class="pilcrow">¶</a><
 <p id="section-8.4-3"><code>sctp_opt_info()</code> needs to be extended to support:<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.4-4.1">
-            <p id="section-8.4-4.1.1"><code>SCTP_DTLS_GET_CONFIG</code>,<a href="#section-8.4-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.1.1"><code>SCTP_DTLS_LOCAL_CONFIG</code>,<a href="#section-8.4-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-4.2">
-            <p id="section-8.4-4.2.1"><code>SCTP_DTLS_GET_LOCAL_KM_PARAMETER</code>,<a href="#section-8.4-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.2.1"><code>SCTP_DTLS_GET_CONFIG</code>,<a href="#section-8.4-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-4.3">
-            <p id="section-8.4-4.3.1"><code>SCTP_DTLS_GET_REMOTE_KM_PARAMETER</code>,<a href="#section-8.4-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.3.1"><code>SCTP_DTLS_GET_LOCAL_KM_PARAM</code>,<a href="#section-8.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-4.4">
-            <p id="section-8.4-4.4.1"><code>SCTP_DTLS_ENFORCE_PROTECTION</code>,<a href="#section-8.4-4.4.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.4.1"><code>SCTP_DTLS_GET_PEER_KM_PARAM</code>,<a href="#section-8.4-4.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-4.5">
-            <p id="section-8.4-4.5.1"><code>SCTP_DTLS_REPLAY_WINDOW</code>, and<a href="#section-8.4-4.5.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.5.1"><code>SCTP_DTLS_ENFORCE_PROTECTION</code>,<a href="#section-8.4-4.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-4.6">
-            <p id="section-8.4-4.6.1"><code>SCTP_DTLS_GET_STATS</code>.<a href="#section-8.4-4.6.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-4.6.1"><code>SCTP_DTLS_REPLAY_WINDOW</code>, and<a href="#section-8.4-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-4.7">
+            <p id="section-8.4-4.7.1"><code>SCTP_DTLS_GET_STATS</code>.<a href="#section-8.4-4.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<div id="set-the-local-dtls-key-management-configuration-sctpdtlssetlocalconfig">
+<div id="get-or-set-the-local-dtls-key-management-configuration-sctpdtlslocalconfig">
 <section id="section-8.4.1">
-          <h4 id="name-set-the-local-dtls-key-mana">
-<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-set-the-local-dtls-key-mana" class="section-name selfRef">Set the Local DTLS Key Management Configuration (<code>SCTP_DTLS_SET_LOCAL_CONFIG</code>)</a>
+          <h4 id="name-get-or-set-the-local-dtls-k">
+<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-get-or-set-the-local-dtls-k" class="section-name selfRef">Get or Set the Local DTLS Key Management Configuration (<code>SCTP_DTLS_LOCAL_CONFIG</code>)</a>
           </h4>
-<p id="section-8.4.1-1">This socket option allows to set the DTLS Key Management identifiers being
+<p id="section-8.4.1-1">This socket option allows to get and set the DTLS Key Management identifiers being
 sent to the peer during the handshake, the supported DTLS roles, and determines
 whether the restart operation is supported and the use of the DTLS chunk is
 required.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
@@ -3927,7 +3930,8 @@ in the DTLS Key Management Parameter in the sequence provided.<a href="#section-
           <dd class="break"></dd>
 </dl>
 <p id="section-8.4.1-5">This socket option can be used with <code>setsockopt()</code> only for SCTP endpoints in
-the <code>SCTP_CLOSED</code> state for configuration.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
+the <code>SCTP_CLOSED</code> state for configuration.
+It can be used with <code>getsockopt()</code> in any state.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="get-the-dtls-key-management-configuration-sctpdtlsgetconfig">
@@ -3999,7 +4003,9 @@ the restart operation.<a href="#section-8.4.2-4.4.1.10.1" class="pilcrow">¶</a>
 <dt id="section-8.4.2-4.5">
 <code>sdc_nr_kmids</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.2-4.6">
-              <p id="section-8.4.2-4.6.1">The number of entries in <code>sdc_kmids</code>, which is 1.<a href="#section-8.4.2-4.6.1" class="pilcrow">¶</a></p>
+              <p id="section-8.4.2-4.6.1">The number of entries in <code>sdc_kmids</code>.
+A value of 1 indicates that DTLS chunk support was successfully negotiated,
+while a value of 0 indicates negotiation failed.<a href="#section-8.4.2-4.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-8.4.2-4.7">
@@ -4013,10 +4019,10 @@ the restart operation.<a href="#section-8.4.2-4.4.1.10.1" class="pilcrow">¶</a>
 <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-8.4.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-the-local-dtls-key-management-parameter-sctpdtlsgetlocalkmparameter">
+<div id="get-the-local-dtls-key-management-parameter-sctpdtlsgetlocalkmparam">
 <section id="section-8.4.3">
           <h4 id="name-get-the-local-dtls-key-mana">
-<a href="#section-8.4.3" class="section-number selfRef">8.4.3. </a><a href="#name-get-the-local-dtls-key-mana" class="section-name selfRef">Get the Local DTLS Key Management Parameter (<code>SCTP_DTLS_GET_LOCAL_KM_PARAMETER</code>)</a>
+<a href="#section-8.4.3" class="section-number selfRef">8.4.3. </a><a href="#name-get-the-local-dtls-key-mana" class="section-name selfRef">Get the Local DTLS Key Management Parameter (<code>SCTP_DTLS_GET_LOCAL_KM_PARAM</code>)</a>
           </h4>
 <p id="section-8.4.3-1">This socket option provides the DTLS Key Management Parameter sent by the
 endpoint during the handshake.<a href="#section-8.4.3-1" class="pilcrow">¶</a></p>
@@ -4025,7 +4031,7 @@ endpoint during the handshake.<a href="#section-8.4.3-1" class="pilcrow">¶</a><
 <pre>
 struct sctp_dtls_kmp {
         sctp_assoc_t sdk_assoc_id;
-        uint16_t sdk_nr_bytes;
+        uint32_t sdk_nr_bytes;
         uint8_t sdk_bytes[];
 };
 </pre><a href="#section-8.4.3-3" class="pilcrow">¶</a>
@@ -4059,10 +4065,10 @@ excludes the optional parameter padding.<a href="#section-8.4.3-4.6.1" class="pi
 <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.<a href="#section-8.4.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-the-remote-dtls-key-management-parameter-sctpdtlsgetremotekmparameter">
+<div id="get-the-peer-dtls-key-management-parameter-sctpdtlsgetpeerkmparam">
 <section id="section-8.4.4">
-          <h4 id="name-get-the-remote-dtls-key-man">
-<a href="#section-8.4.4" class="section-number selfRef">8.4.4. </a><a href="#name-get-the-remote-dtls-key-man" class="section-name selfRef">Get the Remote DTLS Key Management Parameter (<code>SCTP_DTLS_GET_REMOTE_KM_PARAMETER</code>)</a>
+          <h4 id="name-get-the-peer-dtls-key-manag">
+<a href="#section-8.4.4" class="section-number selfRef">8.4.4. </a><a href="#name-get-the-peer-dtls-key-manag" class="section-name selfRef">Get the Peer DTLS Key Management Parameter (<code>SCTP_DTLS_GET_PEER_KM_PARAM</code>)</a>
           </h4>
 <p id="section-8.4.4-1">This socket option provides the DTLS Key Management Parameter received by the
 endpoint during the handshake.<a href="#section-8.4.4-1" class="pilcrow">¶</a></p>
@@ -4071,7 +4077,7 @@ endpoint during the handshake.<a href="#section-8.4.4-1" class="pilcrow">¶</a><
 <pre>
 struct sctp_dtls_kmp {
         sctp_assoc_t sdk_assoc_id;
-        uint16_t sdk_nr_bytes;
+        uint32_t sdk_nr_bytes;
         uint8_t sdk_bytes[];
 };
 </pre><a href="#section-8.4.4-3" class="pilcrow">¶</a>
@@ -4118,12 +4124,12 @@ sending DTLS chunks.<a href="#section-8.4.5-1" class="pilcrow">¶</a></p>
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
-        uint8_t sdk_restart;
-        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+        uint16_t sdk_restart;
         uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
         uint8_t sdk_keys[];
 };
 </pre><a href="#section-8.4.5-3" class="pilcrow">¶</a>
@@ -4210,12 +4216,12 @@ receiving DTLS chunks.<a href="#section-8.4.6-1" class="pilcrow">¶</a></p>
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
-        uint8_t sdk_restart;
-        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+        uint16_t sdk_restart;
         uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
         uint8_t sdk_keys[];
 };
 </pre><a href="#section-8.4.6-3" class="pilcrow">¶</a>
