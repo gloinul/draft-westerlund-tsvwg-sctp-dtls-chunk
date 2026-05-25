@@ -1394,9 +1394,10 @@ options defined by this section.
 
 ### Set the Local DTLS Key Management Configuration (``SCTP_DTLS_SET_LOCAL_CONFIG``)
 
-This socket option sets the DTLS Key Management identifiers which will be sent
-to the peer during the handshake, the supported DTLS roles, and whether the
-restart operation is supported.
+This socket option allows to set the DTLS Key Management identifiers being
+sent to the peer during the handshake, the supported DTLS roles, and determines
+whether the restart operation is supported and the use of the DTLS chunk is
+required.
 
 The following structure is used as the ``option_value``:
 
@@ -1426,6 +1427,9 @@ struct sctp_dtls_config {
 
   ``SCTP_DTLS_RESTART``:
   : All key management methods in `sdc_kmids` support the restart operation.
+
+  ``SCTP_DTLS_REQUIRED``:
+  : The endpoint requires the use of the DTLS chunk.
 
 ``sdc_nr_kmids``:
 : The number of entries in ``sdc_kmids``.
