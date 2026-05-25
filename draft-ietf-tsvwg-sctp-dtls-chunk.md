@@ -1481,7 +1481,9 @@ struct sctp_dtls_config {
     the restart operation.
 
 ``sdc_nr_kmids``:
-: The number of entries in ``sdc_kmids``, which is 1.
+: The number of entries in ``sdc_kmids``.
+  A value of 1 indicates that DTLS chunk support was successfully negotiated,
+  while a value of 0 indicates negotiation failed.
 
 ``sdc_kmids``:
 : The DTLS Key Management identifier which was negotiated.
