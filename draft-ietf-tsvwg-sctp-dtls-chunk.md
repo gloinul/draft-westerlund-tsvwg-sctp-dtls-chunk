@@ -1566,12 +1566,12 @@ The following structure is used as the ``option_value``:
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
-        uint8_t sdk_restart;
-        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+        uint16_t sdk_restart;
         uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
         uint8_t sdk_keys[];
 };
 ~~~
@@ -1626,12 +1626,12 @@ The following structure is used as the ``option_value``:
 struct sctp_dtls_keys {
         sctp_assoc_t sdk_assoc_id;
         uint8_t sdk_cipher_suite[2];
-        uint8_t sdk_restart;
-        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+        uint16_t sdk_restart;
         uint64_t sdk_epoch;
         uint16_t sdk_key_len;
         uint16_t sdk_iv_len;
         uint16_t sdk_sn_key_len;
+        uint16_t sdk_unused;
         uint8_t sdk_keys[];
 };
 ~~~
