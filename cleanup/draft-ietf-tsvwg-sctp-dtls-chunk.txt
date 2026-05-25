@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 21 November 2026                                       M. Tüxen
+Expires: 26 November 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                             20 May 2026
+                                                             25 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 November 2026.
+   This Internet-Draft will expire on 26 November 2026.
 
 Copyright Notice
 
@@ -1008,7 +1008,7 @@ Table of Contents
    The sequence number key is used to encrypt the sequence number
    (Section 4.2.3 of [RFC9147]).
 
-   As this API reference the key material as for send or receive, it
+   As this API references the key material as for send or receive, it
    will be the responsibility of the key management method used to
    define how it maps the endpoint's role to which keys are for send and
    receive direction respectively.
@@ -1017,17 +1017,17 @@ Table of Contents
 
    Prior to attempting to establish an SCTP association an SCTP endpoint
    needs to configure which DTLS Key Management Methods it supports, as
-   well the roles and if restart is supported.  This information is
-   included in the DTLS Key Management Parameter which if these
-   parameters are set will be included in either INIT or INIT ACK
+   well as the roles and if restart is supported.  This information is
+   included in the DTLS Key Management Parameter, which, when these
+   parameters are set, will be included in either INIT or INIT ACK
    chunks.
 
    An endpoint can either support, client only, server only, or client
-   and server.  The last is for situation where both endpoints may
+   and server.  The latter is for situations where both endpoints may
    attempt to establish an SCTP association towards each other,
-   potentially causing a simultanous sending of INIT chunks.  Depending
+   potentially causing a simultaneous sending of INIT chunks.  Depending
    on port configuration SCTP supports this happening during the
-   association establishment, and results will be a single SCTP
+   association establishment, and the result will be a single SCTP
    association.  However, to select the same key management method on
    both sides, the SCTP stack will resolve the key management role for
    this association.
@@ -1045,7 +1045,12 @@ Table of Contents
 
    *  Support SCTP Restart (boolean):  Indicate if the endpoint is
          capable of supporting SCTP restart when DTLS chunk has been
-         negotiated.
+         negotiated.  If both endpoints indicate flag then a restart has
+         the potential to succeed.
+
+   *  Requires DTLS Chunk security (boolean):  SCTP association is only
+         established if both endpoints support DTLS Chunk and have
+         included the DTLS Key Management Parameter.
 
    *  List of Identifiers:  A prioritized list of DTLS Key Management
          identifiers Section 9.1 that are supported, from the most
@@ -1059,11 +1064,11 @@ Table of Contents
 
    After an SCTP association has been established the key management
    function needs to know which method was agreed on and which role this
-   endpoint will have.  The function provides both endpoints actuall
-   values in the DTLS Key Management Parameter used in any key
-   derviation to prevent down-grade attacks.
+   endpoint will have.  The function provides both endpoints' actual
+   values from the DTLS Key Management Parameter, used in key derivation
+   to prevent downgrade attacks.
 
-   Request: Get Supported DTLS Key Management Roles
+   Request: Get Agreed DTLS Key Management Method and Role
 
    Parameters:
 
@@ -1080,7 +1085,7 @@ Table of Contents
    *  Key Management Method:  The selected Key Management Method as a
          DTLS Key Management Identifier.
 
-   *  Down Grade Prevention Data:  In network bytes order the whole of
+   *  Down Grade Prevention Data:  In network byte order the whole of
          the DTLS Key Management Parameter including header and
          excluding padding that the endpoint with the client role
          offered, followed by the corresponding parameter content of the
@@ -1089,7 +1094,7 @@ Table of Contents
 7.3.  Cipher Suite Capabilities
 
    The DTLS Key Management Method needs to know which cipher suites
-   defined for usage with DTLS 1.3 that are supported by the DTLS chunk
+   defined for use with DTLS 1.3 that are supported by the DTLS chunk
    and its protection operations block.  All TLS cipher suites that are
    defined are listed in the TLS cipher suite registry
    [TLS-CIPHER-SUITES] at IANA and are identified by a 2-byte value.

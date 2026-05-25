@@ -1066,7 +1066,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 21 November 2026</td>
+<td class="center">Expires 26 November 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1082,12 +1082,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfcRFC5061" class="eref">RFC5061</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-20" class="published">20 May 2026</time>
+<time datetime="2026-05-25" class="published">25 May 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-21">21 November 2026</time></dd>
+<dd class="expires"><time datetime="2026-11-26">26 November 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1163,7 +1163,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1281,7 +1281,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
                 <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="auto internal xref">7.5</a>.  <a href="#name-establish-receive-key-mater" class="internal xref">Establish Receive Key Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.6">
-                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="auto internal xref">7.6</a>.  <a href="#name-destroy-send-key-material" class="internal xref">Destroy Send Key  Material</a></p>
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="auto internal xref">7.6</a>.  <a href="#name-destroy-send-key-material" class="internal xref">Destroy Send Key Material</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.7">
                 <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="auto internal xref">7.7</a>.  <a href="#name-destroy-receive-key-materia" class="internal xref">Destroy Receive Key Material</a></p>
@@ -3095,7 +3095,7 @@ record protection (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.2
 vector (IV) is random material used to XOR with the sequence number to
 create the nonce per <span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.  The sequence number
 key is used to encrypt the sequence number (<span><a href="https://rfc-editor.org/rfc/rfc9147#section-4.2.3" class="relref">Section 4.2.3</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>).<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">As this API reference the key material as for send or receive, it will
+<p id="section-7-3">As this API references the key material as for send or receive, it will
 be the responsibility of the key management method used to define how
 it maps the endpoint's role to which keys are for send and receive
 direction respectively.<a href="#section-7-3" class="pilcrow">¶</a></p>
@@ -3106,15 +3106,15 @@ direction respectively.<a href="#section-7-3" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-7.1-1">Prior to attempting to establish an SCTP association an SCTP endpoint
 needs to configure which DTLS Key Management Methods it supports, as
-well the roles and if restart is supported. This information is
-included in the DTLS Key Management Parameter which if these
-parameters are set will be included in either INIT or INIT ACK chunks.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+well as the roles and if restart is supported. This information is
+included in the DTLS Key Management Parameter, which, when these
+parameters are set, will be included in either INIT or INIT ACK chunks.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">An endpoint can either support, client only, server only, or client
-and server. The last is for situation where both endpoints may attempt
+and server. The latter is for situations where both endpoints may attempt
 to establish an SCTP association towards each other, potentially
-causing a simultanous sending of INIT chunks. Depending on port
+causing a simultaneous sending of INIT chunks. Depending on port
 configuration SCTP supports this happening during the association
-establishment, and results will be a single SCTP association. However,
+establishment, and the result will be a single SCTP association. However,
 to select the same key management method on both sides, the SCTP stack
 will resolve the key management role for this association.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Request: Set Supported DTLS Key Management Methods<a href="#section-7.1-3" class="pilcrow">¶</a></p>
@@ -3145,18 +3145,29 @@ or client and server.<a href="#section-7.1-5.2.1.2.1" class="pilcrow">¶</a></p>
               <dt id="section-7.1-5.3.1.1">Support SCTP Restart (boolean):</dt>
               <dd style="margin-left: 1.5em" id="section-7.1-5.3.1.2">
                 <p id="section-7.1-5.3.1.2.1">Indicate if the endpoint is capable of supporting SCTP restart when DTLS chunk
-has been negotiated.<a href="#section-7.1-5.3.1.2.1" class="pilcrow">¶</a></p>
+has been negotiated. If both endpoints indicate flag then a restart has the
+potential to succeed.<a href="#section-7.1-5.3.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
 </li>
           <li class="normal" id="section-7.1-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-7.1-5.4.1">
-              <dt id="section-7.1-5.4.1.1">List of Identifiers:</dt>
+              <dt id="section-7.1-5.4.1.1">Requires DTLS Chunk security (boolean):</dt>
               <dd style="margin-left: 1.5em" id="section-7.1-5.4.1.2">
-                <p id="section-7.1-5.4.1.2.1">A prioritized list of DTLS Key Management identifiers
+                <p id="section-7.1-5.4.1.2.1">SCTP association is only established if both endpoints support DTLS
+Chunk and have included the DTLS Key Management Parameter.<a href="#section-7.1-5.4.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</li>
+          <li class="normal" id="section-7.1-5.5">
+            <span class="break"></span><dl class="dlParallel" id="section-7.1-5.5.1">
+              <dt id="section-7.1-5.5.1.1">List of Identifiers:</dt>
+              <dd style="margin-left: 1.5em" id="section-7.1-5.5.1.2">
+                <p id="section-7.1-5.5.1.2.1">A prioritized list of DTLS Key Management identifiers
 <a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 9.1</a> that are supported, from the most
-preferred to the least preferred.<a href="#section-7.1-5.4.1.2.1" class="pilcrow">¶</a></p>
+preferred to the least preferred.<a href="#section-7.1-5.5.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
@@ -3173,10 +3184,10 @@ preferred to the least preferred.<a href="#section-7.1-5.4.1.2.1" class="pilcrow
         </h3>
 <p id="section-7.2-1">After an SCTP association has been established the key management
 function needs to know which method was agreed on and which role this
-endpoint will have. The function provides both endpoints actuall
-values in the DTLS Key Management Parameter used in any key derviation
-to prevent down-grade attacks.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">Request: Get Supported DTLS Key Management Roles<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+endpoint will have. The function provides both endpoints' actual
+values from the DTLS Key Management Parameter, used in key derivation
+to prevent downgrade attacks.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">Request: Get Agreed DTLS Key Management Method and Role<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-7.2-3">
           <dt id="section-7.2-3.1">Parameters:</dt>
           <dd style="margin-left: 1.5em" id="section-7.2-3.2">
@@ -3214,7 +3225,7 @@ to prevent down-grade attacks.<a href="#section-7.2-1" class="pilcrow">¶</a></p
             <span class="break"></span><dl class="dlParallel" id="section-7.2-6.3.1">
               <dt id="section-7.2-6.3.1.1">Down Grade Prevention Data:</dt>
               <dd style="margin-left: 1.5em" id="section-7.2-6.3.1.2">
-                <p id="section-7.2-6.3.1.2.1">In network bytes order the whole of the DTLS Key Management
+                <p id="section-7.2-6.3.1.2.1">In network byte order the whole of the DTLS Key Management
 Parameter including header and excluding padding that the endpoint
 with the client role offered, followed by the corresponding
 parameter content of the endpoint with the server role.<a href="#section-7.2-6.3.1.2.1" class="pilcrow">¶</a></p>
@@ -3231,7 +3242,7 @@ parameter content of the endpoint with the server role.<a href="#section-7.2-6.3
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-cipher-suite-capabilities" class="section-name selfRef">Cipher Suite Capabilities</a>
         </h3>
 <p id="section-7.3-1">The DTLS Key Management Method needs to know which cipher suites defined
-for usage with DTLS 1.3 that are supported by the DTLS chunk and its
+for use with DTLS 1.3 that are supported by the DTLS chunk and its
 protection operations block. All TLS cipher suites that are defined are
 listed in the TLS cipher suite registry <span>[<a href="#TLS-CIPHER-SUITES" class="cite xref">TLS-CIPHER-SUITES</a>]</span> at IANA
 and are identified by a 2-byte value. Thus this needs to return a list
@@ -3380,7 +3391,7 @@ on the cipher suite used.<a href="#section-7.5-5.5.1.2.1" class="pilcrow">¶</a>
 <div id="destroy-send-key-material">
 <section id="section-7.6">
         <h3 id="name-destroy-send-key-material">
-<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-destroy-send-key-material" class="section-name selfRef">Destroy Send Key  Material</a>
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-destroy-send-key-material" class="section-name selfRef">Destroy Send Key Material</a>
         </h3>
 <p id="section-7.6-1">A function to destroy the send key material for a given epoch for the
 Primary or Restart DTLS Key Context for a given SCTP Association.<a href="#section-7.6-1" class="pilcrow">¶</a></p>
