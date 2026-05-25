@@ -1370,25 +1370,25 @@ cipher suites is returned.
 The following table provides an overview of the ``IPPROTO_SCTP``-level socket
 options defined by this section.
 
-| Option Name                          | Data Type                    | Set | Get |
-| ``SCTP_DTLS_LOCAL_CONFIG``           | ``struct sctp_dtls_config``  | X   | X   |
-| ``SCTP_DTLS_GET_CONFIG``             | ``struct sctp_dtls_config``  |     | X   |
-| ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER`` | ``struct sctp_dtls_kmp``     |     | X   |
-| ``SCTP_DTLS_GET_PEER_KM_PARAMETER``  | ``struct sctp_dtls_kmp``     |     | X   |
-| ``SCTP_DTLS_SET_SEND_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
-| ``SCTP_DTLS_ADD_RECV_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
-| ``SCTP_DTLS_DEL_RECV_KEYS``          | ``struct sctp_dtls_keys_id`` | X   |     |
-| ``SCTP_DTLS_ENFORCE_PROTECTION``     | ``struct sctp_assoc_value``  | X   | X   |
-| ``SCTP_DTLS_REPLAY_WINDOW``          | ``struct sctp_assoc_value``  | X   | X   |
-| ``SCTP_DTLS_GET_STATS``              | ``struct sctp_dtls_stats``   |     | X   |
+| Option Name                      | Data Type                    | Set | Get |
+| ``SCTP_DTLS_LOCAL_CONFIG``       | ``struct sctp_dtls_config``  | X   | X   |
+| ``SCTP_DTLS_GET_CONFIG``         | ``struct sctp_dtls_config``  |     | X   |
+| ``SCTP_DTLS_GET_LOCAL_KM_PARAM`` | ``struct sctp_dtls_kmp``     |     | X   |
+| ``SCTP_DTLS_GET_PEER_KM_PARAM``  | ``struct sctp_dtls_kmp``     |     | X   |
+| ``SCTP_DTLS_SET_SEND_KEYS``      | ``struct sctp_dtls_keys``    | X   |     |
+| ``SCTP_DTLS_ADD_RECV_KEYS``      | ``struct sctp_dtls_keys``    | X   |     |
+| ``SCTP_DTLS_DEL_RECV_KEYS``      | ``struct sctp_dtls_keys_id`` | X   |     |
+| ``SCTP_DTLS_ENFORCE_PROTECTION`` | ``struct sctp_assoc_value``  | X   | X   |
+| ``SCTP_DTLS_REPLAY_WINDOW``      | ``struct sctp_assoc_value``  | X   | X   |
+| ``SCTP_DTLS_GET_STATS``          | ``struct sctp_dtls_stats``   |     | X   |
 {: #socket-options-table title="Socket Options" cols="l l l l"}
 
 ``sctp_opt_info()`` needs to be extended to support:
 
 * ``SCTP_DTLS_LOCAL_CONFIG``,
 * ``SCTP_DTLS_GET_CONFIG``,
-* ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER``,
-* ``SCTP_DTLS_GET_PEER_KM_PARAMETER``,
+* ``SCTP_DTLS_GET_LOCAL_KM_PARAM``,
+* ``SCTP_DTLS_GET_PEER_KM_PARAM``,
 * ``SCTP_DTLS_ENFORCE_PROTECTION``,
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_GET_STATS``.
@@ -1491,7 +1491,7 @@ struct sctp_dtls_config {
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
-### Get the Local DTLS Key Management Parameter (``SCTP_DTLS_GET_LOCAL_KM_PARAMETER``)
+### Get the Local DTLS Key Management Parameter (``SCTP_DTLS_GET_LOCAL_KM_PARAM``)
 
 This socket option provides the DTLS Key Management Parameter sent by the
 endpoint during the handshake.
@@ -1523,7 +1523,7 @@ struct sctp_dtls_kmp {
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
-### Get the Peer DTLS Key Management Parameter (``SCTP_DTLS_GET_PEER_KM_PARAMETER``)
+### Get the Peer DTLS Key Management Parameter (``SCTP_DTLS_GET_PEER_KM_PARAM``)
 
 This socket option provides the DTLS Key Management Parameter received by the
 endpoint during the handshake.
