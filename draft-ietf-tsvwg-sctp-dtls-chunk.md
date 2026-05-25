@@ -1374,7 +1374,7 @@ options defined by this section.
 | ``SCTP_DTLS_LOCAL_CONFIG``           | ``struct sctp_dtls_config``  | X   | X   |
 | ``SCTP_DTLS_GET_CONFIG``             | ``struct sctp_dtls_config``  |     | X   |
 | ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER`` | ``struct sctp_dtls_kmp``     |     | X   |
-| ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``| ``struct sctp_dtls_kmp``     |     | X   |
+| ``SCTP_DTLS_GET_PEER_KM_PARAMETER``  | ``struct sctp_dtls_kmp``     |     | X   |
 | ``SCTP_DTLS_SET_SEND_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
 | ``SCTP_DTLS_ADD_RECV_KEYS``          | ``struct sctp_dtls_keys``    | X   |     |
 | ``SCTP_DTLS_DEL_RECV_KEYS``          | ``struct sctp_dtls_keys_id`` | X   |     |
@@ -1388,7 +1388,7 @@ options defined by this section.
 * ``SCTP_DTLS_LOCAL_CONFIG``,
 * ``SCTP_DTLS_GET_CONFIG``,
 * ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER``,
-* ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``,
+* ``SCTP_DTLS_GET_PEER_KM_PARAMETER``,
 * ``SCTP_DTLS_ENFORCE_PROTECTION``,
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_GET_STATS``.
@@ -1521,7 +1521,7 @@ struct sctp_dtls_kmp {
 This socket option will fail on any SCTP endpoint in state ``SCTP_CLOSED``,
 ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
 
-### Get the Remote DTLS Key Management Parameter (``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``)
+### Get the Peer DTLS Key Management Parameter (``SCTP_DTLS_GET_PEER_KM_PARAMETER``)
 
 This socket option provides the DTLS Key Management Parameter received by the
 endpoint during the handshake.
