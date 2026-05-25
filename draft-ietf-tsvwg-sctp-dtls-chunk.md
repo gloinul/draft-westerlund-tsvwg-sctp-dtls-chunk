@@ -1371,7 +1371,7 @@ The following table provides an overview of the ``IPPROTO_SCTP``-level socket
 options defined by this section.
 
 | Option Name                          | Data Type                    | Set | Get |
-| ``SCTP_DTLS_SET_LOCAL_CONFIG``       | ``struct sctp_dtls_config``  | X   |     |
+| ``SCTP_DTLS_LOCAL_CONFIG``           | ``struct sctp_dtls_config``  | X   | X   |
 | ``SCTP_DTLS_GET_CONFIG``             | ``struct sctp_dtls_config``  |     | X   |
 | ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER`` | ``struct sctp_dtls_kmp``     |     | X   |
 | ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``| ``struct sctp_dtls_kmp``     |     | X   |
@@ -1385,6 +1385,7 @@ options defined by this section.
 
 ``sctp_opt_info()`` needs to be extended to support:
 
+* ``SCTP_DTLS_LOCAL_CONFIG``,
 * ``SCTP_DTLS_GET_CONFIG``,
 * ``SCTP_DTLS_GET_LOCAL_KM_PARAMETER``,
 * ``SCTP_DTLS_GET_REMOTE_KM_PARAMETER``,
@@ -1392,9 +1393,9 @@ options defined by this section.
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_GET_STATS``.
 
-### Set the Local DTLS Key Management Configuration (``SCTP_DTLS_SET_LOCAL_CONFIG``)
+### Get or Set the Local DTLS Key Management Configuration (``SCTP_DTLS_LOCAL_CONFIG``)
 
-This socket option allows to set the DTLS Key Management identifiers being
+This socket option allows to get and set the DTLS Key Management identifiers being
 sent to the peer during the handshake, the supported DTLS roles, and determines
 whether the restart operation is supported and the use of the DTLS chunk is
 required.
@@ -1440,6 +1441,7 @@ struct sctp_dtls_config {
 
 This socket option can be used with ``setsockopt()`` only for SCTP endpoints in
 the ``SCTP_CLOSED`` state for configuration.
+It can be used with ``getsockopt()`` in any state.
 
 ### Get the DTLS Key Management Configuration (``SCTP_DTLS_GET_CONFIG``)
 
