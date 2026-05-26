@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-24T02:41:07.389050+00:00",
+  "timestamp": "2026-05-26T02:38:07.521101+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -7177,7 +7177,7 @@
     {
       "number": 132,
       "id": "PR_kwDOKszxDc7ZRuJ_",
-      "title": "Improve naming in socket API",
+      "title": "Improve socket API",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/132",
       "state": "OPEN",
       "author": "tuexen",
@@ -7186,13 +7186,13 @@
       "labels": [],
       "body": "I think config is a better name than parameter.",
       "createdAt": "2026-05-07T19:16:46Z",
-      "updatedAt": "2026-05-21T19:18:43Z",
+      "updatedAt": "2026-05-25T21:42:58Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "23eb512c3b28080af96a25cd790dcbb58cfd85fd",
+      "baseRefOid": "9098da932edb653a59eea4fee9624c2548dd298d",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-socket-api",
-      "headRefOid": "e539966a87ce23f80d99169d8b52025d11c7e0e7",
+      "headRefOid": "6b5ba3645fbe98ce871d3b350f0127e9b43c0f8f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7225,6 +7225,55 @@
           "body": "@tuexen \r\n\r\nThere's another struct that needs padding:\r\n\r\n```\r\nstruct sctp_dtls_keys {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint8_t sdk_cipher_suite[2];\r\n        uint8_t sdk_restart;\r\n        uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */\r\n        uint64_t sdk_epoch;\r\n        uint16_t sdk_key_len;\r\n        uint16_t sdk_iv_len;\r\n        uint16_t sdk_sn_key_len;\r\n        uint8_t sdk_keys[];\r\n};\r\n```\r\nlike:\r\n```\r\nstruct sctp_dtls_keys {\r\n        sctp_assoc_t sdk_assoc_id;\r\n        uint8_t sdk_cipher_suite[2];\r\n        uint16_t sdk_restart;  ?\r\n        uint64_t sdk_epoch;\r\n        uint16_t sdk_key_len;\r\n        uint16_t sdk_iv_len;\r\n        uint16_t sdk_sn_key_len;\r\n        uint16_t sdk_unused;  ?\r\n        uint8_t sdk_keys[];\r\n};\r\n```",
           "createdAt": "2026-05-21T19:04:51Z",
           "updatedAt": "2026-05-21T19:18:43Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @tuexen\r\n> \r\n> There's another struct that needs padding:\r\n> \r\n> ```\r\n> struct sctp_dtls_keys {\r\n>         sctp_assoc_t sdk_assoc_id;\r\n>         uint8_t sdk_cipher_suite[2];\r\n>         uint8_t sdk_restart;\r\n>         uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */\r\n>         uint64_t sdk_epoch;\r\n>         uint16_t sdk_key_len;\r\n>         uint16_t sdk_iv_len;\r\n>         uint16_t sdk_sn_key_len;\r\n>         uint8_t sdk_keys[];\r\n> };\r\n> ```\r\n> \r\n> like:\r\n> \r\n> ```\r\n> struct sctp_dtls_keys {\r\n>         sctp_assoc_t sdk_assoc_id;\r\n>         uint8_t sdk_cipher_suite[2];\r\n>         uint16_t sdk_restart;  ?\r\n>         uint64_t sdk_epoch;\r\n>         uint16_t sdk_key_len;\r\n>         uint16_t sdk_iv_len;\r\n>         uint16_t sdk_sn_key_len;\r\n>         uint16_t sdk_unused;  ?\r\n>         uint8_t sdk_keys[];\r\n> };\r\n> ```\r\n\r\nFixed.",
+          "createdAt": "2026-05-25T09:44:13Z",
+          "updatedAt": "2026-05-25T09:44:13Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think I addressed all issues related to the socket API from our discussion last Thursday.\r\n@lxin : Can you double check, please?",
+          "createdAt": "2026-05-25T10:33:22Z",
+          "updatedAt": "2026-05-25T10:33:53Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I think I addressed all issues related to the socket API from our discussion last Thursday. @lxin : Can you double check, please?\r\n\r\nYes, all are addressed. LGTM.\r\n\r\nAnother thing, while aligning the code with the doc, I noticed `SCTP_DTLS_SUPPORTED_CIPHER_SUITS` was removed, we no longer need it, right?",
+          "createdAt": "2026-05-25T13:57:19Z",
+          "updatedAt": "2026-05-25T13:57:19Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I think [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) has replaced SCTP_DTLS_SUPPORTED_CIPHER_SUITS. ",
+          "createdAt": "2026-05-25T14:08:46Z",
+          "updatedAt": "2026-05-25T14:08:46Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "But [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) must be implemented with a syscall like getsockopt() to get what SUITS are supported in kernel.",
+          "createdAt": "2026-05-25T14:33:14Z",
+          "updatedAt": "2026-05-25T14:33:14Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> But [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) must be implemented with a syscall like getsockopt() to get what SUITS are supported in kernel.\r\n\r\nYou don't need to implement it as a syscall. You can implement a socket option and some wrapper function in libc...\r\n\r\nIf you prefer, we can remove the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` and replace it by a `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`. \r\n@lxin Would you prefer that?",
+          "createdAt": "2026-05-25T16:45:39Z",
+          "updatedAt": "2026-05-25T16:45:39Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > But [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) must be implemented with a syscall like getsockopt() to get what SUITS are supported in kernel.\r\n> \r\n> You don't need to implement it as a syscall. You can implement a socket option and some wrapper function in libc...\r\n> \r\n> If you prefer, we can remove the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` and replace it by a `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`. @lxin Would you prefer that?\r\n\r\nYes, LGTM, getsockopt(SOL_SCTP, SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES, ...).\r\n\r\nWhat is data format for it: uint8_t buf[][2], right ? or uint16_t buf[] ?\r\n\r\nThanks.\r\n",
+          "createdAt": "2026-05-25T21:16:59Z",
+          "updatedAt": "2026-05-25T21:42:58Z"
         }
       ],
       "reviews": [
@@ -7353,6 +7402,86 @@
               "updatedAt": "2026-05-21T14:49:52Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABA549Lw",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-25T09:34:15Z",
+          "updatedAt": "2026-05-25T09:34:15Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Fixed.",
+              "createdAt": "2026-05-25T09:34:15Z",
+              "updatedAt": "2026-05-25T09:34:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABA55ZIQ",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-25T09:35:19Z",
+          "updatedAt": "2026-05-25T09:35:20Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Fixed.",
+              "createdAt": "2026-05-25T09:35:19Z",
+              "updatedAt": "2026-05-25T09:35:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABA56oXw",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-25T09:38:15Z",
+          "updatedAt": "2026-05-25T09:38:15Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Fixed.",
+              "createdAt": "2026-05-25T09:38:15Z",
+              "updatedAt": "2026-05-25T09:38:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABA6BYOg",
+          "commit": {
+            "abbreviatedOid": "e539966"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-25T09:57:05Z",
+          "updatedAt": "2026-05-25T09:57:05Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Fixed.",
+              "createdAt": "2026-05-25T09:57:05Z",
+              "updatedAt": "2026-05-25T09:57:05Z"
+            }
+          ]
         }
       ]
     },
@@ -7416,24 +7545,26 @@
       "id": "PR_kwDOKszxDc7dr-OQ",
       "title": "Provide unified text for the handshake.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/136",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "There is one point we need to discuss in the VC:\r\n\r\nWhen is the role and the method being determined. The text says \"after the INIT ACK has been sent or received\" but wouldn't it be better to state something like \"when the association enters the ESTABLISHED state?\r\n\r\nDepending on this, I need to update the selection of tie-breakers.",
       "createdAt": "2026-05-20T20:20:11Z",
-      "updatedAt": "2026-05-21T13:48:41Z",
+      "updatedAt": "2026-05-25T13:07:47Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "f498280409bd8346e65300c82d813015075adb68",
+      "baseRefOid": "648356cb233ddd5062a525b93b3420fe4423b7b1",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "cleanup",
-      "headRefOid": "a9a16e281f1f7f75202bca0b9166d19b77199a10",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6e592bbc162d90458342142929586f425f1c0f78",
+      "closedAt": "2026-05-25T13:05:32Z",
+      "mergedAt": "2026-05-25T13:05:32Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "9098da932edb653a59eea4fee9624c2548dd298d"
+      },
       "comments": [
         {
           "author": "gloinul",
@@ -7448,33 +7579,61 @@
           "body": "> Regarding the question if the selection procedure should be run after the init ack been sent and received, or use when established. I think the current is actually unoptimal and should be addressed in either direction.\r\n> \r\n> When Established: Running the determination when entering established state have the advantage of being clear and is a good point in time for the key-management implementation on top of the SCTP stack. The down side is that in some of the failure cases one will establish an SCTP association that will then be aborted by the determination process. These cases are:\r\n> \r\n> 1. Incompatible roles\r\n> 2. No common key methods\r\n> 3. Tie breaker collision\r\n> \r\n> Thus, if one want to avoid establishing the association before tearing it down then SCTP responder should in fact analyze this prior to sending the INIT-ACK. And if any of these occur send a ABORT instead of the INIT-ACK. This is the same that will happen if the responder requires DTLS key-management parameter and the INIT does not contain one. Thus avoiding that endpoint holding any state at all.\r\n> \r\n> I will also note that in the case of the Initiator receiving a INIT-ACK without the DTLS key-management parameter and requiring support then it will abort the connection prior to sending the COOKIE-ECHO. Which basically just means not sending it and terminating the establishment procedure?\r\n\r\nOK. Makes sense. What about doing the checks on reception of the INIT and INIT ACK. The final computation when moving to the ESTABLISHED state (with checking it again).",
           "createdAt": "2026-05-21T13:48:41Z",
           "updatedAt": "2026-05-21T13:48:41Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Did a new review looks good, ready to merge.",
+          "createdAt": "2026-05-25T11:16:56Z",
+          "updatedAt": "2026-05-25T11:16:56Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Did a new review looks good, ready to merge.\r\n\r\nI did not integrate the changes to address the discussion from last Thursday, just rebased it.\r\nI get merge this now and provide the changes for the discussion from last Thursday as a separate PR or integrate it into this one. What do you prefer?",
+          "createdAt": "2026-05-25T12:49:01Z",
+          "updatedAt": "2026-05-25T12:49:01Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen if you plan to to the changes today, then I think go ahead do the changes in this PR. If you plan to wait then I think merge and new PR makes sense ",
+          "createdAt": "2026-05-25T12:55:19Z",
+          "updatedAt": "2026-05-25T12:55:19Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @tuexen if you plan to to the changes today, then I think go ahead do the changes in this PR. If you plan to wait then I think merge and new PR makes sense\r\n\r\nI doubt that I finish that today (public Holiday in Germany, 27 degree, sunshine) and I still have to do some prep work for tomorrow's lectures. So I merged it and will provide a new PR. I guess that is even simpler to capture the results of the discussion.",
+          "createdAt": "2026-05-25T13:07:44Z",
+          "updatedAt": "2026-05-25T13:07:44Z"
         }
       ],
       "reviews": [
         {
           "id": "PRR_kwDOKszxDc8AAAABAlbRRw",
           "commit": {
-            "abbreviatedOid": "a9a16e2"
+            "abbreviatedOid": "6e592bb"
           },
           "author": "teiclap",
           "authorAssociation": "COLLABORATOR",
           "state": "APPROVED",
           "body": "",
           "createdAt": "2026-05-21T05:32:32Z",
-          "updatedAt": "2026-05-21T05:32:32Z",
+          "updatedAt": "2026-05-25T10:19:04Z",
           "comments": []
         },
         {
           "id": "PRR_kwDOKszxDc8AAAABAmMvXA",
           "commit": {
-            "abbreviatedOid": "a9a16e2"
+            "abbreviatedOid": "6e592bb"
           },
           "author": "gloinul",
           "authorAssociation": "OWNER",
           "state": "APPROVED",
           "body": "",
           "createdAt": "2026-05-21T07:56:15Z",
-          "updatedAt": "2026-05-21T07:56:15Z",
+          "updatedAt": "2026-05-25T10:19:03Z",
           "comments": []
         }
       ]
@@ -7484,24 +7643,26 @@
       "id": "PR_kwDOKszxDc7d_6Ey",
       "title": "Abstract API: Adding require DTLS chunk security, editorial fixes",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/138",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-05-21T15:27:35Z",
-      "updatedAt": "2026-05-22T05:54:37Z",
+      "updatedAt": "2026-05-25T10:08:58Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "f498280409bd8346e65300c82d813015075adb68",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "api-260521",
       "headRefOid": "02e73a7d348dd609b80b8386122e875ca4906ad3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-25T10:08:58Z",
+      "mergedAt": "2026-05-25T10:08:58Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "648356cb233ddd5062a525b93b3420fe4423b7b1"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7515,6 +7676,19 @@
           "body": "",
           "createdAt": "2026-05-22T05:54:37Z",
           "updatedAt": "2026-05-22T05:54:37Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABA6FC3w",
+          "commit": {
+            "abbreviatedOid": "02e73a7"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-05-25T10:08:46Z",
+          "updatedAt": "2026-05-25T10:08:46Z",
           "comments": []
         }
       ]
