@@ -6,9 +6,9 @@ TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Updates: RFC5061 (if approved)                                C. Porfiri
 Intended status: Standards Track                                Ericsson
-Expires: 26 November 2026                                       M. Tüxen
+Expires: 27 November 2026                                       M. Tüxen
                                          Münster Univ. of Appl. Sciences
-                                                             25 May 2026
+                                                             26 May 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 November 2026.
+   This Internet-Draft will expire on 27 November 2026.
 
 Copyright Notice
 
@@ -124,20 +124,20 @@ Table of Contents
        8.3.1.  sctp_dtls_nr_cipher_suites()
        8.3.2.  sctp_dtls_cipher_suites()
      8.4.  Socket Options
-       8.4.1.  Set the Local DTLS Key Management Parameters
-               (SCTP_DTLS_SET_LOCAL_PARAMETERS)
-       8.4.2.  Get the DTLS Key Management Parameters
-               (SCTP_DTLS_GET_PARAMETERS)
+       8.4.1.  Get or Set the Local DTLS Key Management Configuration
+               (SCTP_DTLS_LOCAL_CONFIG)
+       8.4.2.  Get the DTLS Key Management Configuration
+               (SCTP_DTLS_GET_CONFIG)
        8.4.3.  Get the Local DTLS Key Management Parameter
-               (SCTP_DTLS_GET_LOCAL_KM_PARAMETER)
-       8.4.4.  Get the Remote DTLS Key Management Parameter
-               (SCTP_DTLS_GET_REMOTE_KM_PARAMETER)
+               (SCTP_DTLS_GET_LOCAL_KM_PARAM)
+       8.4.4.  Get the Peer DTLS Key Management Parameter
+               (SCTP_DTLS_GET_PEER_KM_PARAM)
        8.4.5.  Set Send Keys (SCTP_DTLS_SET_SEND_KEYS)
        8.4.6.  Add Receive Keys (SCTP_DTLS_ADD_RECV_KEYS)
        8.4.7.  Delete Receive Keys (SCTP_DTLS_DEL_RECV_KEYS)
        8.4.8.  Get or Set Protection Enforcement
                (SCTP_DTLS_ENFORCE_PROTECTION)
-       8.4.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+       8.4.9.  Get Statistic Counters (SCTP_DTLS_GET_STATS)
        8.4.10. Get or Set the Replay Protection Window Size
                (SCTP_DTLS_REPLAY_WINDOW)
    9.  IANA Considerations
@@ -1418,143 +1418,151 @@ Table of Contents
    The following table provides an overview of the IPPROTO_SCTP-level
    socket options defined by this section.
 
-    +===================================+===================+===+=====+
-    | Option Name                       | Data Type         |Set| Get |
-    +===================================+===================+===+=====+
-    | SCTP_DTLS_SET_LOCAL_PARAMETERS    | struct            |X  |     |
-    |                                   | sctp_dtls_param   |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_GET_PARAMETERS          | struct            |   | X   |
-    |                                   | sctp_dtls_kmids   |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_GET_LOCAL_KM_PARAMETER  | struct            |   | X   |
-    |                                   | sctp_dtls_kmp     |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_GET_REMOTE_KM_PARAMETER | struct            |   | X   |
-    |                                   | sctp_dtls_kmp     |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_SET_SEND_KEYS           | struct            |X  |     |
-    |                                   | sctp_dtls_keys    |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_ADD_RECV_KEYS           | struct            |X  |     |
-    |                                   | sctp_dtls_keys    |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_DEL_RECV_KEYS           | struct            |X  |     |
-    |                                   | sctp_dtls_keys_id |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_ENFORCE_PROTECTION      | struct            |X  | X   |
-    |                                   | sctp_assoc_value  |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_REPLAY_WINDOW           | struct            |X  | X   |
-    |                                   | sctp_assoc_value  |   |     |
-    +-----------------------------------+-------------------+---+-----+
-    | SCTP_DTLS_STATS                   | struct            |   | X   |
-    |                                   | sctp_dtls_stats   |   |     |
-    +-----------------------------------+-------------------+---+-----+
+     +==============================+===================+=====+=====+
+     | Option Name                  | Data Type         | Set | Get |
+     +==============================+===================+=====+=====+
+     | SCTP_DTLS_LOCAL_CONFIG       | struct            | X   | X   |
+     |                              | sctp_dtls_config  |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_GET_CONFIG         | struct            |     | X   |
+     |                              | sctp_dtls_config  |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_GET_LOCAL_KM_PARAM | struct            |     | X   |
+     |                              | sctp_dtls_kmp     |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_GET_PEER_KM_PARAM  | struct            |     | X   |
+     |                              | sctp_dtls_kmp     |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_SET_SEND_KEYS      | struct            | X   |     |
+     |                              | sctp_dtls_keys    |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_ADD_RECV_KEYS      | struct            | X   |     |
+     |                              | sctp_dtls_keys    |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_DEL_RECV_KEYS      | struct            | X   |     |
+     |                              | sctp_dtls_keys_id |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_ENFORCE_PROTECTION | struct            | X   | X   |
+     |                              | sctp_assoc_value  |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_REPLAY_WINDOW      | struct            | X   | X   |
+     |                              | sctp_assoc_value  |     |     |
+     +------------------------------+-------------------+-----+-----+
+     | SCTP_DTLS_GET_STATS          | struct            |     | X   |
+     |                              | sctp_dtls_stats   |     |     |
+     +------------------------------+-------------------+-----+-----+
 
-                          Table 1: Socket Options
+                         Table 1: Socket Options
 
    sctp_opt_info() needs to be extended to support:
 
-   *  SCTP_DTLS_GET_PARAMETERS,
+   *  SCTP_DTLS_LOCAL_CONFIG,
 
-   *  SCTP_DTLS_GET_LOCAL_KM_PARAMETER,
+   *  SCTP_DTLS_GET_CONFIG,
 
-   *  SCTP_DTLS_GET_REMOTE_KM_PARAMETER,
+   *  SCTP_DTLS_GET_LOCAL_KM_PARAM,
+
+   *  SCTP_DTLS_GET_PEER_KM_PARAM,
 
    *  SCTP_DTLS_ENFORCE_PROTECTION,
 
    *  SCTP_DTLS_REPLAY_WINDOW, and
 
-   *  SCTP_DTLS_STATS.
+   *  SCTP_DTLS_GET_STATS.
 
-8.4.1.  Set the Local DTLS Key Management Parameters
-        (SCTP_DTLS_SET_LOCAL_PARAMETERS)
+8.4.1.  Get or Set the Local DTLS Key Management Configuration
+        (SCTP_DTLS_LOCAL_CONFIG)
 
-   This socket option sets the DTLS Key Management identifiers which
-   will be sent to the peer during the handshake, the supported DTLS
-   roles, and whether the restart operation is supported.
+   This socket option allows to get and set the DTLS Key Management
+   identifiers being sent to the peer during the handshake, the
+   supported DTLS roles, and determines whether the restart operation is
+   supported and the use of the DTLS chunk is required.
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_params {
-           sctp_assoc_t sdp_assoc_id;
-           uint16_t sdp_flags;
-           uint16_t sdp_nr_kmids;
-           uint8_t sdp_kmids[];
+   struct sctp_dtls_config {
+           sctp_assoc_t sdc_assoc_id;
+           uint16_t sdc_flags;
+           uint16_t sdc_nr_kmids;
+           uint8_t sdc_kmids[];
    };
 
-   sdp_assoc_id:  This parameter is ignored for one-to-one style
+   sdc_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       For setsockopt(), only SCTP_FUTURE_ASSOC can be used.
 
-   sdp_flags:  This field may contain any of the following flags and
+   sdc_flags:  This field may contain any of the following flags and
       is composed of a
 
                bitwise OR of these values.
 
                SCTP_DTLS_CLIENT:  All key management methods in
-         sdp_kmids can operate as a DTLS client.
+         sdc_kmids can operate as a DTLS client.
 
                SCTP_DTLS_SERVER:  All key management methods in
-         sdp_kmids can operate as a DTLS server.
+         sdc_kmids can operate as a DTLS server.
 
                SCTP_DTLS_RESTART:  All key management methods in
-         sdp_kmids support the restart operation.
+         sdc_kmids support the restart operation.
 
-   sdp_nr_kmids:  The number of entries in sdp_kmids.
+               SCTP_DTLS_REQUIRED:  The endpoint requires the use of the
+         DTLS chunk.
 
-   sdp_kmids:  The DTLS Key Management identifiers which will be sent to
+   sdc_nr_kmids:  The number of entries in sdc_kmids.
+
+   sdc_kmids:  The DTLS Key Management identifiers which will be sent to
       the peer in the DTLS Key Management Parameter in the sequence
       provided.
 
    This socket option can be used with setsockopt() only for SCTP
-   endpoints in the SCTP_CLOSED state for configuration.
+   endpoints in the SCTP_CLOSED state for configuration.  It can be used
+   with getsockopt() in any state.
 
-8.4.2.  Get the DTLS Key Management Parameters
-        (SCTP_DTLS_GET_PARAMETERS)
+8.4.2.  Get the DTLS Key Management Configuration (SCTP_DTLS_GET_CONFIG)
 
    This socket option reports the DTLS Key Management parameters
    negotiated during the the handshake.
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_params {
-           sctp_assoc_t sdp_assoc_id;
-           uint16_t sdp_flags;
-           uint16_t sdp_nr_kmids;
-           uint8_t sdp_kmids[];
+   struct sctp_dtls_config {
+           sctp_assoc_t sdc_assoc_id;
+           uint16_t sdc_flags;
+           uint16_t sdc_nr_kmids;
+           uint8_t sdc_kmids[];
    };
 
-   sdp_assoc_id:  This parameter is ignored for one-to-one style
+   sdc_assoc_id:  This parameter is ignored for one-to-one style
       sockets.  For one-to-many style sockets, this parameter indicates
       upon which SCTP association the caller is performing the action.
       It is an error to use SCTP_{FUTURE|CURRENT|ALL}_ASSOC.
 
-   sdp_flags:  This field contains any of the following flags and is
+   sdc_flags:  This field contains any of the following flags and is
       composed of a bitwise
 
                OR of these values.
 
                SCTP_DTLS_CLIENT:  Indicates that the Key Management
-         Method provided in sdp_kmids acts as a client.
+         Method provided in sdc_kmids acts as a client.
 
                SCTP_DTLS_SERVER:  Indicates that the Key Management
-         Method provided in sdp_kmids acts as a server.
+         Method provided in sdc_kmids acts as a server.
 
                SCTP_DTLS_RESTART:  Indicates that the Key Management
-         Method provided in sdp_kmids supports the restart operation.
+         Method provided in sdc_kmids supports the restart operation.
 
-   sdp_nr_kmids:  The number of entries in sdp_kmids, which is 1.
+   sdc_nr_kmids:  The number of entries in sdc_kmids.  A value of 1
+      indicates that DTLS chunk support was successfully negotiated,
+      while a value of 0 indicates negotiation failed.
 
-   sdp_kmids:  The DTLS Key Management identifier which was negotiated.
+   sdc_kmids:  The DTLS Key Management identifier which was negotiated.
 
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
 8.4.3.  Get the Local DTLS Key Management Parameter
-        (SCTP_DTLS_GET_LOCAL_KM_PARAMETER)
+        (SCTP_DTLS_GET_LOCAL_KM_PARAM)
 
    This socket option provides the DTLS Key Management Parameter sent by
    the endpoint during the handshake.
@@ -1563,7 +1571,7 @@ Table of Contents
 
    struct sctp_dtls_kmp {
            sctp_assoc_t sdk_assoc_id;
-           uint16_t sdk_nr_bytes;
+           uint32_t sdk_nr_bytes;
            uint8_t sdk_bytes[];
    };
 
@@ -1581,17 +1589,17 @@ Table of Contents
    This socket option will fail on any SCTP endpoint in state
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-8.4.4.  Get the Remote DTLS Key Management Parameter
-        (SCTP_DTLS_GET_REMOTE_KM_PARAMETER)
+8.4.4.  Get the Peer DTLS Key Management Parameter
+        (SCTP_DTLS_GET_PEER_KM_PARAM)
 
    This socket option provides the DTLS Key Management Parameter
    received by the endpoint during the handshake.
 
    The following structure is used as the option_value:
 
-   struct sctp_dtls_kmids {
+   struct sctp_dtls_kmp {
            sctp_assoc_t sdk_assoc_id;
-           uint16_t sdk_nr_bytes;
+           uint32_t sdk_nr_bytes;
            uint8_t sdk_bytes[];
    };
 
@@ -1620,12 +1628,12 @@ Table of Contents
    struct sctp_dtls_keys {
            sctp_assoc_t sdk_assoc_id;
            uint8_t sdk_cipher_suite[2];
-           uint8_t sdk_restart;
-           uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+           uint16_t sdk_restart;
            uint64_t sdk_epoch;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
            uint16_t sdk_sn_key_len;
+           uint16_t sdk_unused;
            uint8_t sdk_keys[];
    };
 
@@ -1671,12 +1679,12 @@ Table of Contents
    struct sctp_dtls_keys {
            sctp_assoc_t sdk_assoc_id;
            uint8_t sdk_cipher_suite[2];
-           uint8_t sdk_restart;
-           uint8_t sdk_unused; /* if sizeof(sctp_assoc_t) == 4 */
+           uint16_t sdk_restart;
            uint64_t sdk_epoch;
            uint16_t sdk_key_len;
            uint16_t sdk_iv_len;
            uint16_t sdk_sn_key_len;
+           uint16_t sdk_unused;
            uint8_t sdk_keys[];
    };
 
@@ -1765,7 +1773,7 @@ Table of Contents
    than SCTP_CLOSED.  Protection can be enforced in any state other than
    SCTP_CLOSED, SCTP_COOKIE_WAIT and SCTP_COOKIE_ECHOED.
 
-8.4.9.  Get Statistic Counters (SCTP_DTLS_STATS)
+8.4.9.  Get Statistic Counters (SCTP_DTLS_GET_STATS)
 
    This socket options allows to get various statistic counters for a
    specific SCTP endpoint.
