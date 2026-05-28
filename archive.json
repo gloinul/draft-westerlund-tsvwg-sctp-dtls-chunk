@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-26T02:38:07.521101+00:00",
+  "timestamp": "2026-05-28T02:36:01.485129+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2071,30 +2071,89 @@
       "id": "I_kwDOKszxDc8AAAABCtwQIg",
       "title": "Clarify what it means to not support Restart",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/135",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "When it comes to restart I think we might clarify that not supporting restart still means that one should/shall restart if the peer restarts. Which means that one should have derived restart keys for ones side. It is only the permanent storage aspect that one does not need to support.\n",
       "createdAt": "2026-05-19T12:03:22Z",
-      "updatedAt": "2026-05-19T12:03:22Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-05-26T09:43:16Z",
+      "closedAt": "2026-05-26T09:43:16Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Was discussed and this do indicate that if both endpoints indicate the flag then restart has a chance of succeeding. Text clarification merged.",
+          "createdAt": "2026-05-26T09:43:16Z",
+          "updatedAt": "2026-05-26T09:43:16Z"
+        }
+      ]
     },
     {
       "number": 137,
       "id": "I_kwDOKszxDc8AAAABC8x8ew",
       "title": "API requires indicating that any association requires DTLS Chunk.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/137",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "The specification currently requires the SCTP stack to take the endpoint policy if it requires DTLS Chunk security being negotiated to establish an SCTP Association. This is missing from the API. \n\nI think this becomes one more setting boolean in the [Set Supported DTLS Key Management Parameters](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-set-supported-dtls-key-mana) call.  ",
       "createdAt": "2026-05-21T08:15:57Z",
-      "updatedAt": "2026-05-21T08:15:57Z",
+      "updatedAt": "2026-05-26T10:01:26Z",
+      "closedAt": "2026-05-26T10:01:26Z",
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The abstract API has support for this merged. Waiting for Socket API to consider this issue @tuexen .",
+          "createdAt": "2026-05-26T09:39:02Z",
+          "updatedAt": "2026-05-26T09:39:02Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> The abstract API has support for this merged. Waiting for Socket API to consider this issue [@tuexen](https://github.com/tuexen) .\n\nThis is addressed in #132.",
+          "createdAt": "2026-05-26T10:01:26Z",
+          "updatedAt": "2026-05-26T10:01:26Z"
+        }
+      ]
+    },
+    {
+      "number": 139,
+      "id": "I_kwDOKszxDc8AAAABDZudiw",
+      "title": "Add SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/139",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "Replace the two functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` by the `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`.",
+      "createdAt": "2026-05-26T09:58:53Z",
+      "updatedAt": "2026-05-26T09:58:53Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 140,
+      "id": "I_kwDOKszxDc8AAAABDZvvyA",
+      "title": "Update handshake to latest VC",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/140",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "This is about improving the text, not changing it technically.",
+      "createdAt": "2026-05-26T10:02:10Z",
+      "updatedAt": "2026-05-26T10:02:57Z",
       "closedAt": null,
       "comments": []
     }
@@ -7179,24 +7238,26 @@
       "id": "PR_kwDOKszxDc7ZRuJ_",
       "title": "Improve socket API",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/132",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I think config is a better name than parameter.",
       "createdAt": "2026-05-07T19:16:46Z",
-      "updatedAt": "2026-05-25T21:42:58Z",
+      "updatedAt": "2026-05-26T10:00:39Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "9098da932edb653a59eea4fee9624c2548dd298d",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "improve-socket-api",
       "headRefOid": "6b5ba3645fbe98ce871d3b350f0127e9b43c0f8f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-05-26T10:00:13Z",
+      "mergedAt": "2026-05-26T10:00:13Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "11e82b5a5305782c5082dca0c7d847e0262da58c"
+      },
       "comments": [
         {
           "author": "tuexen",
@@ -7274,6 +7335,13 @@
           "body": "> > But [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) must be implemented with a syscall like getsockopt() to get what SUITS are supported in kernel.\r\n> \r\n> You don't need to implement it as a syscall. You can implement a socket option and some wrapper function in libc...\r\n> \r\n> If you prefer, we can remove the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` and replace it by a `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`. @lxin Would you prefer that?\r\n\r\nYes, LGTM, getsockopt(SOL_SCTP, SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES, ...).\r\n\r\nWhat is data format for it: uint8_t buf[][2], right ? or uint16_t buf[] ?\r\n\r\nThanks.\r\n",
           "createdAt": "2026-05-25T21:16:59Z",
           "updatedAt": "2026-05-25T21:42:58Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > > But [sctp_dtls_cipher_suites()](https://gloinul.github.io/draft-westerlund-tsvwg-sctp-dtls-chunk/draft-ietf-tsvwg-sctp-dtls-chunk.html#name-sctp_dtls_cipher_suites) must be implemented with a syscall like getsockopt() to get what SUITS are supported in kernel.\r\n> > \r\n> > \r\n> > You don't need to implement it as a syscall. You can implement a socket option and some wrapper function in libc...\r\n> > If you prefer, we can remove the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` and replace it by a `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`. @lxin Would you prefer that?\r\n> \r\n> Yes, LGTM, getsockopt(SOL_SCTP, SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES, ...).\r\n> \r\n> What is data format for it: uint8_t buf[][2], right ? or uint16_t buf[] ?\r\n> \r\n> Thanks.\r\n\r\nI would vote for uint8_t buf[][2].\r\nThis is now tracked in #139. The rest is merged.",
+          "createdAt": "2026-05-26T10:00:03Z",
+          "updatedAt": "2026-05-26T10:00:39Z"
         }
       ],
       "reviews": [
