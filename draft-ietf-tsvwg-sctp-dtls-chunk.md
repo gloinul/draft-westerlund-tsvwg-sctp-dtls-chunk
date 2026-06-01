@@ -1322,55 +1322,13 @@ for which all DATA chunks were received in protected SCTP packets.
 This also means that if ``sctp_recvv()`` is used, ``MSG_PROTECTED`` is returned
 in the ``*flags`` argument.
 
-## Functions
-
-### ``sctp_dtls_nr_cipher_suites()``
-
-``sctp_dtls_nr_cipher_suites()`` returns the number of cipher suites supported
-by the SCTP implementation.
-
-The function prototype is:
-
-~~~ c
-unsigned int
-sctp_dtls_nr_cipher_suites(void);
-~~~
-
-This function can be used in combination with ``sctp_dtls_cipher_suites()``.
-
-### ``sctp_dtls_cipher_suites()``
-
-``sctp_dtls_cipher_suites()`` returns the cipher suites supported by the
-SCTP implementation.
-
-The function prototype is:
-
-~~~ c
-int
-sctp_dtls_cipher_suites(uint8_t cipher_suites[][2], unsigned int n);
-~~~
-
-and the arguments are
-``cipher_suites``:
-: An array where the supported cipher suites are stored. A cipher suite is
-  represented by two ``uint8_t`` using the IANA assigned values in the
-  TLS cipher suite registry {{TLS-CIPHER-SUITES}}.
-
-``n``:
-: The number of cipher suites which can be stored in ``cipher_suites``.
-
-``sctp_dtls_cipher_suites`` returns ``-1``, if ``n`` is smaller than the number
-of cipher suites supported by the stack. If ``n`` is equal to or larger than
-the number of cipher suites supported by the SCTP implementation, the
-cipher suites are stored in ``cipher_suites`` and the number of supported
-cipher suites is returned.
-
 ## Socket Options
 
 The following table provides an overview of the ``IPPROTO_SCTP``-level socket
 options defined by this section.
 
 | Option Name                      | Data Type                    | Set | Get |
+| ``SCTP_DTLS_GET_CIPHER_SUITES``  | ``struct sctp_cipher_suites``|     | X   |
 | ``SCTP_DTLS_LOCAL_CONFIG``       | ``struct sctp_dtls_config``  | X   | X   |
 | ``SCTP_DTLS_GET_CONFIG``         | ``struct sctp_dtls_config``  |     | X   |
 | ``SCTP_DTLS_GET_LOCAL_KM_PARAM`` | ``struct sctp_dtls_kmp``     |     | X   |
@@ -1385,6 +1343,7 @@ options defined by this section.
 
 ``sctp_opt_info()`` needs to be extended to support:
 
+* ``SCTP_DTLS_GET_CIPHER_SUITES``,
 * ``SCTP_DTLS_LOCAL_CONFIG``,
 * ``SCTP_DTLS_GET_CONFIG``,
 * ``SCTP_DTLS_GET_LOCAL_KM_PARAM``,
@@ -1392,6 +1351,32 @@ options defined by this section.
 * ``SCTP_DTLS_ENFORCE_PROTECTION``,
 * ``SCTP_DTLS_REPLAY_WINDOW``, and
 * ``SCTP_DTLS_GET_STATS``.
+
+### Get Supported Cipher Suites (``SCTP_DTLS_GET_CIPHER_SUITES``)
+
+This socket option allows to get the cipher suites supported by the SCTP
+implementation.
+
+The following structure is used as the ``option_value``:
+
+~~~ c
+struct sctp_cipher_suites {
+        uint16_t scs_nr_cipher_suites;
+        uint8_t scs_cipher_suites[][2];
+};
+~~~
+
+``scs_nr_cipher_suites``:
+: The number of cipher suites supported by the SCTP implementation.
+  If the size of the ``option_value`` is large enough, this corresponds to the
+  number of entries in ``scs_cipher_suites``.
+
+``scs_cipher_suites``:
+: An array where the supported cipher suites are stored. A cipher suite is
+  represented by two ``uint8_t`` using the IANA assigned values in the
+  TLS cipher suite registry {{TLS-CIPHER-SUITES}}.
+
+This socket option can be used for SCTP endpoints in any state.
 
 ### Get or Set the Local DTLS Key Management Configuration (``SCTP_DTLS_LOCAL_CONFIG``)
 
