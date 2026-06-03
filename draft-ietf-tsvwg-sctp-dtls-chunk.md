@@ -537,7 +537,16 @@ The format of unified_hdr is depicted in {{DTLSCiphertext-header-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-header-struct title="DTLS unified_hdr" artwork-align="center"}
 
-Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
+
+The recommended DTLSCiphertext configuration uses a 16-bit sequence
+number (S=1), no length field (L=0), and no Connection ID (C=0). This
+results in a 3-byte unified_hdr (1 byte fixed header plus 2 bytes
+sequence number) and consequently 1 byte of Pre-Padding (P=1) to
+achieve 32-bit alignment of the encrypted_record. The length field is
+unnecessary because the DTLS chunk's Chunk Length field already
+provides framing. The Connection ID MUST NOT be used as specified in
+{{DTLS-engines}}. Examples of preferred DTLSCiphertext are shown in
+{{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
 
@@ -559,6 +568,7 @@ Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}
   (recommended)          (minimal)
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
+
 
 Thus the size of the DTLSCiphertext header is computed from the `first_byte` as follows:
 
