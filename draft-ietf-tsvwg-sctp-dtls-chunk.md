@@ -756,6 +756,9 @@ When an SCTP packet needs to be sent, the sequence of chunks is used as
 `application_data` {{RFC9147}}. Then the `DTLSCiphertext` is computed per the
 DTLS 1.3 specification {{RFC9147}} and configured cipher suit and used as the payload of the
 DTLS chunk. Finally the SCTP common header is prepended.
+The CRC32c checksum in the common header, as defined in {{RFC9260}}, is
+computed over the complete SCTP packet including the DTLS chunk with its
+already encrypted payload.
 
 When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
@@ -769,7 +772,9 @@ SCTP packets only, a SCTP packet not containing a DTLS chunk MUST be
 silently discarded.
 
 When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
-the Restart flag in addition to the `unified_hdr` is used to find the keys for
+the CRC32c checksum has already been verified as part of normal SCTP packet
+reception per {{RFC9260}} prior to chunk processing.
+The Restart flag in addition to the `unified_hdr` is used to find the keys for
 processing the `encrypted_record` following DTLS 1.3 {{RFC9147}}.
 
 After the `encrypted_record` has been verified and decrypted, the
