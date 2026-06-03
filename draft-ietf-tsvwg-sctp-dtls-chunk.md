@@ -221,12 +221,41 @@ SCTP and its extensions. However, the following limitations apply:
 
 ## Terminology
 
+Chunk Protection Operator:
+
+: The component within the SCTP implementation that performs DTLS record
+  protection (encryption and authentication) on outgoing SCTP chunks and
+  the corresponding verification and decryption on incoming DTLS chunks.
+
 DTLS Key Context:
 
 : DTLS key context includes key material (record payload key, sequence
   number protection key, and initialization vector (IV)) for sending
   and receiving, replay window for receiving, and last used sequence
   number for sending.
+
+Primary DTLS Key Context:
+
+: The DTLS key context used for normal SCTP association traffic, as
+  distinguished from the restart DTLS key context.
+
+Restart DTLS Key Context:
+
+: A dedicated DTLS key context maintained for the sole purpose of
+  protecting SCTP restart procedure.
+
+DTLS Key Management Method:
+
+: A protocol or procedure, external to this specification, that performs
+  mutual authentication, key establishment, and periodic rekeying for
+  the DTLS chunk. Each method is identified by a DTLS Key Management
+  Identifier.
+
+DTLS Key Management Identifier:
+
+: An 8-bit unsigned integer assigned by IANA that uniquely identifies a
+  DTLS Key Management Method, enabling negotiation during the SCTP
+  handshake via the DTLS Key Management Parameter.
 
 Key Material:
 
