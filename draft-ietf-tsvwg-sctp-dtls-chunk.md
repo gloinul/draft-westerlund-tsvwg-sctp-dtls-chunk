@@ -211,7 +211,6 @@ Methods.
 Applications using the DTLS chunk can leverage most transport features provided by
 SCTP and its extensions. However, the following limitations apply:
 
-* The handling of INIT collisions is not supported.
 * Performing an SCTP restart without knowing the restart key material is not supported.
 * The use of the lookup address in the Dynamic Address Reconfiguration
   extension as specified in {{RFC5061}} is not supported.
@@ -260,8 +259,10 @@ Association, the restart indicator, and the DTLS epoch.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in the DTLS
 Chunk.
 
-The first DTLS key context established for any SCTP association MUST use epoch
-3.
+The first DTLS key context established for any SCTP association MUST
+use epoch 3. Next subsequent DTLS key context will use the next
+consecutive epoch value. Following the DTLS 1.3 specification {{RFC9147}} the
+first DTLS record for each epoch will use sequence number 0.
 
 The replay window for the DTLS Sequence Number need to account for the
 concurrent transmission of packets on multiple paths in multihomed associations.
@@ -536,7 +537,7 @@ boundary.
 
 ## New Error Causes
 
-This specification defines two new error causes.
+This specification defines four new error causes.
 
 ### Missing DTLS Chunk Support {#enoprotected}
 
