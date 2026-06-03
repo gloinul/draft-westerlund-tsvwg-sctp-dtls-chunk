@@ -316,6 +316,12 @@ use epoch 3. Each subsequent DTLS key context will use the next
 consecutive epoch value. Following the DTLS 1.3 specification {{RFC9147}} the
 first DTLS record for each epoch will use sequence number 0.
 
+Note that the epoch is a 64-bit value in the DTLS 1.3 specification
+{{RFC9147}}, but only the two least significant bits are carried in
+the DTLS record header (the EE bits in the unified_hdr). The receiver
+uses these two bits together with its knowledge of the current active
+epoch(s) to identify the correct DTLS key context for decryption.
+
 The replay window for the DTLS Sequence Number needs to account for the
 concurrent transmission of packets on multiple paths in multihomed associations.
 In particular, this applies to packets containing HEARTBEAT chunks.  The window
