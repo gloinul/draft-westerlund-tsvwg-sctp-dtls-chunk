@@ -2,7 +2,7 @@
 docname: draft-ietf-tsvwg-sctp-dtls-chunk-latest
 title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
 abbrev: SCTP DTLS Chunk
-obsoletes:
+obsoletes: 6083
 cat: std
 ipr: trust200902
 wg: TSVWG
@@ -42,6 +42,7 @@ author:
    email: tuexen@fh-muenster.de
 
 informative:
+  RFC6083:
   RFC6458:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
@@ -76,7 +77,6 @@ normative:
   RFC4820:
   RFC4895:
   RFC5061:
-  RFC6083:
   RFC8126:
   RFC9147:
   RFC9260:
@@ -109,6 +109,8 @@ with the extension defined in this document but would not provide any
 additional service.
 This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
 can only be used as described in this document.
+
+This document obsoletes RFC 6083 and updates RFC 5061.
 
 --- middle
 
@@ -214,6 +216,27 @@ SCTP and its extensions. However, the following limitations apply:
 * Performing an SCTP restart without knowing the restart key material is not supported.
 * The use of the lookup address in the Dynamic Address Reconfiguration
   extension as specified in {{RFC5061}} is not supported.
+
+## Relationship to RFC 6083 and RFC 5061
+
+This document obsoletes {{RFC6083}}, which defined the use of DTLS
+over SCTP by encapsulating DTLS records as SCTP user data using the
+SCTP-AUTH extension ({{RFC4895}}) for integrity protection of the SCTP
+headers.  That approach suffered from several limitations: it could
+not support SCTP user messages above 16384 bytes, it could not protect
+SCTP control chunks, and it exposed significant SCTP metadata in clear
+text.  The mechanism defined in this document replaces {{RFC6083}} by
+integrating DTLS 1.3 record protection directly at the chunk level,
+providing confidentiality and integrity for both user data and SCTP
+control chunks without dependency on SCTP-AUTH.
+
+This document updates {{RFC5061}} by restricting the use of the Dynamic
+Address Reconfiguration extension when the DTLS chunk is in use.
+Specifically, the lookup address feature of {{RFC5061}} MUST NOT be used,
+and the dynamic address reconfiguration extension MUST NOT be used unless
+DTLS chunk handling is enabled in both directions. These restrictions
+are necessary because SCTP-AUTH, which {{RFC5061}} relies on for
+authenticating ASCONF chunks, is incompatible with this extension.
 
 # Conventions
 
