@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-02T02:56:10.052077+00:00",
+  "timestamp": "2026-06-04T03:26:08.531511+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -1867,15 +1867,15 @@
       "id": "I_kwDOKszxDc7y6oNi",
       "title": "Clarify how primary and restart key context interact with DTLS sequence number and replay window",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/115",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "The primary and restart DTLS key context have independent state for DTLS record sequence numbers as well as replay window. While concurrent sets of the DTLS Key Contexts for primary context interact with the same sequence number and replay window. This should be made clearer in the draft to avoid confusion. ",
       "createdAt": "2026-03-14T10:36:47Z",
-      "updatedAt": "2026-05-07T14:30:53Z",
-      "closedAt": null,
+      "updatedAt": "2026-06-03T14:13:49Z",
+      "closedAt": "2026-06-03T14:13:49Z",
       "comments": [
         {
           "author": "gloinul",
@@ -2126,7 +2126,7 @@
       "id": "I_kwDOKszxDc8AAAABDZudiw",
       "title": "Add SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/139",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -2135,9 +2135,17 @@
       "labels": [],
       "body": "Replace the two functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` by the `IPPROTO_SCTP`-level socket option `SCTP_DTLS_GET_SUPPORTED_CIPHER_SUITES`.",
       "createdAt": "2026-05-26T09:58:53Z",
-      "updatedAt": "2026-05-26T09:58:53Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-06-02T20:12:56Z",
+      "closedAt": "2026-06-02T20:12:56Z",
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Based on a discussion with @lxin it was decided to keep the two functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()`.",
+          "createdAt": "2026-06-02T20:12:56Z",
+          "updatedAt": "2026-06-02T20:12:56Z"
+        }
+      ]
     },
     {
       "number": 140,
@@ -2154,6 +2162,22 @@
       "body": "This is about improving the text, not changing it technically.",
       "createdAt": "2026-05-26T10:02:10Z",
       "updatedAt": "2026-05-26T10:02:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 143,
+      "id": "I_kwDOKszxDc8AAAABEQM8nA",
+      "title": "Clarify that restart keys using epoch=3 may be overwritten",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/143",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "We have observed that it might be good to clarify that when restarting one need to be careful and use a particular procedure when overwriting old restart keys with epoch=3 with new ones after restart. \n\nBoth endpoint have restart keys with epoch = 3 installed (R3-O).\n\nA restarts: and send init\nB sends INIT-ACK\nA sends Cookie ECHO (R3-O)\nB Send Cookie ACK (R3-O)\nNew Keymanagement\nDerive Keys (P3-N) and (R3-N)\nInstall P3-N\nVerify bi-direcitonal communication with P3-N\nInstall R3-N, thus deleting R3-O\n\nIt would be good to clarify this.",
+      "createdAt": "2026-06-03T13:42:52Z",
+      "updatedAt": "2026-06-03T13:42:52Z",
       "closedAt": null,
       "comments": []
     }
@@ -7766,21 +7790,21 @@
       "id": "PR_kwDOKszxDc7hcDAK",
       "title": "SCTP_DTLS_GET_CIPHER_SUITES",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/141",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Use the SCTP_DTLS_GET_CIPHER_SUITES socket option instead of the functions sctp_dtls_nr_cipher_suites() and sctp_dtls_cipher_suites().\r\n\r\nThis provides the same functionality. The reason I used the two functions is that the result of the operation does not depend on the socket, just on the SCTP implementation.\r\n\r\nThis addresses #139 ",
       "createdAt": "2026-06-01T16:13:43Z",
-      "updatedAt": "2026-06-01T19:24:21Z",
+      "updatedAt": "2026-06-02T20:11:14Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "add-socket-option",
       "headRefOid": "d05f3a7daf7fdfca64020385660cd77644e983a2",
-      "closedAt": null,
+      "closedAt": "2026-06-02T20:11:14Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -7840,9 +7864,294 @@
           "body": "> > > > > > Do we really need a new struct for it? We can pass a buf to getsockopt, both userspace and kernel will parse it as uint8_t (*)[2], and the optlen pointer in getsockopt() will tell userspace how many SUITES the optval contains.\r\n> > > > > \r\n> > > > > \r\n> > > > > This only works if you know how much cipher suites are there. Having a number in the struct, you can provide a 2 byte buffer, get the number and call a second time with a correctly sized buffer. Without that you would have to retry until `*opt_len` on return is smaller than `*opt_len` on call.\r\n> > > > \r\n> > > > \r\n> > > > *opt_len can also do this trick, return err with *opt_len set to the real buffer size required when the optval is too small.\r\n> > > \r\n> > > \r\n> > > That is Linux specific and not described in by [Posix](https://pubs.opengroup.org/onlinepubs/9799919799/functions/getsockopt.html). Therefore I would like to avoid using that.\r\n> > > > If there's assoc_id needed, I think it will be good to have a new struct, like others. Or do you know any similar existing case without assoc_id needed?\r\n> > > \r\n> > > \r\n> > > The point is that we even don't need a socket here. The cipher suites available are a property of the SCTP stack, not the particular endpoint. That is the reason I changed the interface to the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()`. They did not use a file descriptor argument... So using a socket option is already not a perfect fit...\r\n> > \r\n> > \r\n> > OK. If so, maybe we should leave it to a sysctl option? like TCP's congestion available algos in linux:\r\n> > ```\r\n> > # sysctl net.ipv4.tcp_available_congestion_control\r\n> > net.ipv4.tcp_available_congestion_control = reno cubic bbr\r\n> > ```\r\n> \r\n> We can do that, but that might not be portable. I think the paths are different and we might use different encodings... My goal was to have an API, which allows portable applications. For example, the above would use `net.inet.tcp.cc.available` in FreeBSD and `bbr` would not be a CC, but a TCP function block:\r\n> \r\n> ```\r\n> net.inet.tcp.functions_available: \r\n> Stack                           D Alias                            PCB count\r\n> freebsd                         * freebsd                          5\r\n> bbr                               bbr                              0\r\n> rack                              rack                             0\r\n> ```\r\n> \r\n> Just to be crystal clear: I never said that `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` need to be system calls. They can be wrapper around the `sysctl`-interface. Or around an unspecified socket option. Or something else... In FreeBSD this would go into libc, on Linux I think you have an SCTP specific library you can link against.\r\n\r\nNow it makes sense. For linux, `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` will be implemented in the userspace library lksctp-tools.\r\n\r\nThanks.",
           "createdAt": "2026-06-01T19:23:47Z",
           "updatedAt": "2026-06-01T19:24:21Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > > > > > > Do we really need a new struct for it? We can pass a buf to getsockopt, both userspace and kernel will parse it as uint8_t (*)[2], and the optlen pointer in getsockopt() will tell userspace how many SUITES the optval contains.\r\n> > > > > > \r\n> > > > > > \r\n> > > > > > This only works if you know how much cipher suites are there. Having a number in the struct, you can provide a 2 byte buffer, get the number and call a second time with a correctly sized buffer. Without that you would have to retry until `*opt_len` on return is smaller than `*opt_len` on call.\r\n> > > > > \r\n> > > > > \r\n> > > > > *opt_len can also do this trick, return err with *opt_len set to the real buffer size required when the optval is too small.\r\n> > > > \r\n> > > > \r\n> > > > That is Linux specific and not described in by [Posix](https://pubs.opengroup.org/onlinepubs/9799919799/functions/getsockopt.html). Therefore I would like to avoid using that.\r\n> > > > > If there's assoc_id needed, I think it will be good to have a new struct, like others. Or do you know any similar existing case without assoc_id needed?\r\n> > > > \r\n> > > > \r\n> > > > The point is that we even don't need a socket here. The cipher suites available are a property of the SCTP stack, not the particular endpoint. That is the reason I changed the interface to the functions `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()`. They did not use a file descriptor argument... So using a socket option is already not a perfect fit...\r\n> > > \r\n> > > \r\n> > > OK. If so, maybe we should leave it to a sysctl option? like TCP's congestion available algos in linux:\r\n> > > ```\r\n> > > # sysctl net.ipv4.tcp_available_congestion_control\r\n> > > net.ipv4.tcp_available_congestion_control = reno cubic bbr\r\n> > > ```\r\n> > \r\n> > \r\n> > We can do that, but that might not be portable. I think the paths are different and we might use different encodings... My goal was to have an API, which allows portable applications. For example, the above would use `net.inet.tcp.cc.available` in FreeBSD and `bbr` would not be a CC, but a TCP function block:\r\n> > ```\r\n> > net.inet.tcp.functions_available: \r\n> > Stack                           D Alias                            PCB count\r\n> > freebsd                         * freebsd                          5\r\n> > bbr                               bbr                              0\r\n> > rack                              rack                             0\r\n> > ```\r\n> > \r\n> > \r\n> >     \r\n> >       \r\n> >     \r\n> > \r\n> >       \r\n> >     \r\n> > \r\n> >     \r\n> >   \r\n> > Just to be crystal clear: I never said that `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` need to be system calls. They can be wrapper around the `sysctl`-interface. Or around an unspecified socket option. Or something else... In FreeBSD this would go into libc, on Linux I think you have an SCTP specific library you can link against.\r\n> \r\n> Now it makes sense. For linux, `sctp_dtls_nr_cipher_suites()` and `sctp_dtls_cipher_suites()` will be implemented in the userspace library lksctp-tools.\r\n> \r\n> Thanks.\r\n\r\nOK, Great. This means I will abandon this PR. Are you fine with this?",
+          "createdAt": "2026-06-02T06:53:30Z",
+          "updatedAt": "2026-06-02T06:53:30Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> OK, Great. This means I will abandon this PR. Are you fine with this?\r\n\r\nYes.",
+          "createdAt": "2026-06-02T12:59:14Z",
+          "updatedAt": "2026-06-02T12:59:14Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABBq963Q",
+          "commit": {
+            "abbreviatedOid": "d05f3a7"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-02T06:31:20Z",
+          "updatedAt": "2026-06-02T06:31:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 142,
+      "id": "PR_kwDOKszxDc7iPGaC",
+      "title": "Fixed #115 and a lot of language errors",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/142",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR first of all makes one small addition to resolve #115 in the DTLS consideration section. \r\n\r\nIn addition it fixes a large number of spelling, grammer and consistency issues. Most found by AI. ",
+      "createdAt": "2026-06-03T13:19:01Z",
+      "updatedAt": "2026-06-03T14:13:48Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "more-edits",
+      "headRefOid": "aa0fa7b4fa7bba91478d52a1578fdd32a3168408",
+      "closedAt": "2026-06-03T14:13:48Z",
+      "mergedAt": "2026-06-03T14:13:48Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "9039729a118ef5819a1b49221adab377b5d3e023"
+      },
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen and @teiclap it would be good if you could check this one. It contains a lot of all over the places minor edits and make it hard to do further PRs unless it is merged.",
+          "createdAt": "2026-06-03T13:32:18Z",
+          "updatedAt": "2026-06-03T13:32:18Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB2oOGg",
+          "commit": {
+            "abbreviatedOid": "aa0fa7b"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-03T14:11:05Z",
+          "updatedAt": "2026-06-03T14:11:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 144,
+      "id": "PR_kwDOKszxDc7iQTgm",
+      "title": "Proposed text for updates and obsoletes.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/144",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-03T14:02:03Z",
+      "updatedAt": "2026-06-03T14:18:45Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "updates-obsoletes",
+      "headRefOid": "a3b8a827bfec1ca957a1029c1817ca93b95adec9",
+      "closedAt": "2026-06-03T14:18:45Z",
+      "mergedAt": "2026-06-03T14:18:45Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "0a33138efd24184e2215fbe1d2363bcccdabcce0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB2qJFQ",
+          "commit": {
+            "abbreviatedOid": "a3b8a82"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-03T14:15:08Z",
+          "updatedAt": "2026-06-03T14:15:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 145,
+      "id": "PR_kwDOKszxDc7iQkm1",
+      "title": "Proposing to clarify relation to CRC32c",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/145",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-03T14:12:12Z",
+      "updatedAt": "2026-06-03T15:03:39Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "crc",
+      "headRefOid": "d959e4823b49c7c95556bd7946c0cf86142726f8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Why do we need to state this? How does this specification change the handling of the SCTP checksum?",
+          "createdAt": "2026-06-03T14:16:49Z",
+          "updatedAt": "2026-06-03T14:16:49Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I agree it doesn't change anything in regards to the processing. It should be obvious that CRC is done on the formed packets. Lets discuss tomorrow if we just abandon.",
+          "createdAt": "2026-06-03T14:20:24Z",
+          "updatedAt": "2026-06-03T14:20:24Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I agree it doesn't change anything in regards to the processing. It should be obvious that CRC is done on the formed packets. Lets discuss tomorrow if we just abandon.\r\n\r\nYes, let us discuss this tomorrow. Working on a PR for #140.",
+          "createdAt": "2026-06-03T14:30:44Z",
+          "updatedAt": "2026-06-03T14:30:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB3Gqxg",
+          "commit": {
+            "abbreviatedOid": "d959e48"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-03T15:03:39Z",
+          "updatedAt": "2026-06-03T15:03:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 146,
+      "id": "PR_kwDOKszxDc7iRFJ5",
+      "title": "Added note regarding DTLS epoch ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/146",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This is to clarify that Epoch is 64-bits, but only two bits are in record. ",
+      "createdAt": "2026-06-03T14:30:59Z",
+      "updatedAt": "2026-06-03T15:04:56Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0a33138efd24184e2215fbe1d2363bcccdabcce0",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "epoch",
+      "headRefOid": "13a14d1f20e44db51b556f12cc67714e90ae66d2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Isn't this clear? I think it has some value to keep the specification as short as possible.",
+          "createdAt": "2026-06-03T14:33:39Z",
+          "updatedAt": "2026-06-03T14:33:39Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The reasons I was proposing this is that we have API interfaces etc where the value should be 64-bit, but then we have the actual record where it is only two bits. It also motivates why one need to increment the DTLS epoch with one each time. ",
+          "createdAt": "2026-06-03T14:44:51Z",
+          "updatedAt": "2026-06-03T14:44:51Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB3HWGw",
+          "commit": {
+            "abbreviatedOid": "13a14d1"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-03T15:04:56Z",
+          "updatedAt": "2026-06-03T15:04:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 147,
+      "id": "PR_kwDOKszxDc7iRZan",
+      "title": "Clarified recommended DTLSCipherText configuration",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/147",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-03T14:42:13Z",
+      "updatedAt": "2026-06-03T15:06:47Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0a33138efd24184e2215fbe1d2363bcccdabcce0",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "rec-rec",
+      "headRefOid": "1d254dc897dde2d3bf682141a8b6c1fa7a3456d8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let us discuss this also tomorrow... We need to see what new information is provided.",
+          "createdAt": "2026-06-03T14:54:53Z",
+          "updatedAt": "2026-06-03T14:54:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB3IT9A",
+          "commit": {
+            "abbreviatedOid": "1d254dc"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-03T15:06:47Z",
+          "updatedAt": "2026-06-03T15:06:47Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
