@@ -2756,22 +2756,23 @@ ABORT chunk.
 It MAY include the appropriate error cause
 "Missing DTLS Chunk Support" (see <a href="#enoprotected" class="auto internal xref">Section 4.3.1</a>),
 "No Common DTLS Key Management Method" (see <a href="#enocommonpsi" class="auto internal xref">Section 4.3.2</a>),
-or "No Common DTLS Key Management Method" (see <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>).
-If the endpoint operates in loose DTLS mode, it MAY continue with the handshake.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
-<p id="section-5.1-8">To ensure that each endpoint's Key Management Method knows which role it has and
+or "No Common DTLS Key Management Method" (see <a href="#incompatroles" class="auto internal xref">Section 4.3.4</a>).<a href="#section-5.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.1-8">If an SCTP endpoint operates in loose DTLS mode, it MAY continue with the
+handshake in any case.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
+<p id="section-5.1-9">To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
-executed by both endpoints before entering the ESTABLISHED state.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
-<p id="section-5.1-9">First the Key Management role of each endpoint is determined. This is
+executed by both endpoints before entering the ESTABLISHED state.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">First the Key Management role of each endpoint is determined. This is
 done by evaluating the S and C bits in the two endpoint's
-parameter. This falls into the following cases:<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-5.1-10">
-<li id="section-5.1-10.1">
-            <p id="section-5.1-10.1.1">At least one endpoint indicates a single role (client or server) and the peer
+parameter. This falls into the following cases:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.1-11">
+<li id="section-5.1-11.1">
+            <p id="section-5.1-11.1.1">At least one endpoint indicates a single role (client or server) and the peer
 supports the other role. In this case the endpoint indicating a single role
-takes that role, and the other endpoint takes the reverse role.<a href="#section-5.1-10.1.1" class="pilcrow">¶</a></p>
+takes that role, and the other endpoint takes the reverse role.<a href="#section-5.1-11.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-5.1-10.2">
-            <p id="section-5.1-10.2.1">Both endpoints indicate both roles, this is to be expected for endpoints
+          <li id="section-5.1-11.2">
+            <p id="section-5.1-11.2.1">Both endpoints indicate both roles, this is to be expected for endpoints
 supporting simultaneous open. In this case the role needs to be determined
 using the parameter's Tie breaker. The endpoint with the larger value SHALL be
 the server, and the other endpoint takes the client role. In case both
@@ -2779,17 +2780,17 @@ endpoints have the same tie breaker value, the selection has failed and the
 association MUST be aborted.
 The ABORT chunk MAY include the SCTP error cause
 "DTLS Key Management Tie Breaker Collision" (see <a href="#tiebreakercol" class="auto internal xref">Section 4.3.3</a>).
-Endpoints are RECOMMENDED to attempt establishing a new SCTP association.<a href="#section-5.1-10.2.1" class="pilcrow">¶</a></p>
+Endpoints are RECOMMENDED to attempt establishing a new SCTP association.<a href="#section-5.1-11.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.1-11">Once the key management roles have been established, the endpoints
+<p id="section-5.1-12">Once the key management roles have been established, the endpoints
 determine the method to be used. The prioritized list of DTLS Key
 Management Identifiers provided by the endpoint acting as the server
 is evaluated, and the first identifier also supported by the peer
-endpoint is selected.<a href="#section-5.1-11" class="pilcrow">¶</a></p>
-<p id="section-5.1-12">When the SCTP association has been established the process defined by the
+endpoint is selected.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
+<p id="section-5.1-13">When the SCTP association has been established the process defined by the
 selected DTLS Key Management Method MUST be followed for establishing
-DTLS key contexts and installing them.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
+DTLS key contexts and installing them.<a href="#section-5.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dtls-chunk-handling">
