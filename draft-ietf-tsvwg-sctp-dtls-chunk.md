@@ -739,7 +739,9 @@ It MAY include the appropriate error cause
 "Missing DTLS Chunk Support" (see {{enoprotected}}),
 "No Common DTLS Key Management Method" (see {{enocommonpsi}),
 or "No Common DTLS Key Management Method" (see {{incompatroles}}).
-If the endpoint operates in loose DTLS mode, it MAY continue with the handshake.
+
+If an SCTP endpoint operates in loose DTLS mode, it MAY continue with the
+handshake in any case.
 
 To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
