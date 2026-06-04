@@ -701,29 +701,49 @@ It MUST NOT be included in any other chunk.
 
 ## Establishment of a Protected Association {#establishment-procedure}
 
+An SCTP endpoint wanting to use the DTLS chunk can operate in one of two modes:
+
+Strict DTLS mode:
+: The SCTP endpoint wants to use the DTLS chunk and is not willing to operate
+  without DTLS chunk protection.
+
+Loose DTLS mode:
+: The SCTP endpoint want to use the DTLS chunk but is willing to operate without
+  DTLS chunk protection.
+
+A received DTLS Key Management Parameter is compatible, if the following two
+conditions are satisfied:
+
+1. At least one of the DTLS Key Management Identifiers listed in the parameter
+   matches a locally supported one.
+
+2. At least one of the roles (client or server) indicated in the parameter
+   complements a local role.
+
 To initiate an SCTP association, an SCTP endpoint wanting to use the DTLS chunk
 MUST send an SCTP packet with an INIT chunk containing the DTLS Key Management
 Parameter (see {{protectedassoc-parameter}}).
 This parameter lists the supported DTLS Key Management Identifiers
 (see {{key-management-parameter}}) in descending order of preference.
 
-If an SCTP endpoint wanting to use the DTLS chunk receives an SCTP packet
-containing an INIT chunk with a DTLS Key Management Parameter, it MUST reply
-with a packet containing an INIT ACK containing its own DTLS Key Management
-Parameters.
+If an SCTP endpoint operating in strict DTLS mode receives an SCTP packet
+containing an INIT chunk with a compatible DTLS Key Management Parameter,
+it MUST reply with a packet containing an INIT ACK containing its own DTLS Key
+Management Parameters.
 
-If the INIT or INIT ACK chunk does not contain any DTLS Key Management Parameter
-and the endpoint's policy requires the use of the DTLS chunk, the endpoint MUST
-send an SCTP packet with an ABORT chunk.
-It MAY include the error cause indicating that DTLS chunk support is missing
-(see {{enoprotected}}).
-If the endpoint's policy does not require the use of the DTLS chunk, it MAY
-continue with the handshake.
+If an SCTP endpoint operates in strict DTLS mode and receives an SCTP packet
+with an INIT or INIT ACK chunk does not contain any DTLS Key Management Parameter
+or only an incompatible one, the endpoint MUST send an SCTP packet with an
+ABORT chunk.
+It MAY include the appropriate error cause
+"Missing DTLS Chunk Support" (see {{enoprotected}}),
+"No Common DTLS Key Management Method" (see {{enocommonpsi}),
+or "No Common DTLS Key Management Method" (see {{incompatroles}}).
+If the endpoint operates in loose DTLS mode, it MAY continue with the handshake.
 
 To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
-executed by both endpoints after having either sent or received the INIT ACK
-with a DTLS Key Management method parameter.
+executed by both endpoints before entering the ESTABLISHED state.
 
 First the Key Management role of each endpoint is determined. This is
 done by evaluating the S and C bits in the two endpoint's
@@ -743,21 +763,11 @@ parameter. This falls into the following cases:
    "DTLS Key Management Tie Breaker Collision" (see {{tiebreakercol}}).
    Endpoints are RECOMMENDED to attempt establishing a new SCTP association.
 
-3. Neither of the above apply.
-   In this case both endpoints indicate the same role and neither indicates
-   both roles.
-   The SCTP association MUST be aborted and the ABORT chunk MAY include the
-   SCTP error cause "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
-
 Once the key management roles have been established, the endpoints
 determine the method to be used. The prioritized list of DTLS Key
 Management Identifiers provided by the endpoint acting as the server
 is evaluated, and the first identifier also supported by the peer
-endpoint is selected. If no common method exists, this is indicated accordingly.
-If there is no DTLS Key Management Method supported by both endpoints, and the
-endpoints' policy requires the use of the DTLS chunk, the receiver MUST
-reply with an SCTP packet containing an ABORT chunk and MAY include the error
-cause "No Common DTLS Key Management Method" (see {{enocommonpsi}}).
+endpoint is selected.
 
 When the SCTP association has been established the process defined by the
 selected DTLS Key Management Method MUST be followed for establishing
