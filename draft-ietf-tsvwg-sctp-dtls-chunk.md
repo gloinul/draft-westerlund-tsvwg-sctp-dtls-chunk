@@ -305,8 +305,14 @@ sending. Each DTLS key context is associated with a three-value tuple
 identifying the context, consisting of SCTP Association, the restart
 indicator, and the DTLS epoch.
 
+The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
-the DTLS chunk.
+the DTLS Chunk as the full DTLS connection state is not used in the
+DTLS Chunk and the DTLS key context anyway can be identified. The
+length field MUST NOT be used as the DTLS chunk provides record length
+information. Finally 16-bit Sequence Numbers are used as they give
+maximum support for reordering and there are no byte savings possible
+to ensure the 32-bit alignment for the encrypted record.
 
 The first DTLS key context established for any SCTP association MUST
 use epoch 3. Each subsequent DTLS key context will use the next
@@ -463,7 +469,7 @@ Type: 8 bits (unsigned integer)
   This is accomplished (as described in {{Section 3.2 of RFC9260}}) by the use
   of the upper bits of the chunk type.
 
-reserved: 5 bits
+reserved: 7 bits
 : Reserved bits for future use. These bits MUST be set to 0 by
   the sender and MUST be ignored by the receiver.
 
@@ -472,19 +478,13 @@ R: 1 bit (boolean)
 : Restart indicator. If this bit is set this DTLS chunk is protected
   with a restart DTLS key context.
 
-P: 2 bits (unsigned integer)
-
-: Payload Pre-Padding length. It indicates how many bytes
-  are inserted for padding before the DTLSCiphertext.
-  See the text below for computing P.
 
 Chunk Length: 16 bits (unsigned integer)
 : This value holds the length of the Payload in bytes plus 4 plus the Payload
   Pre-Padding length.
 
-Pre-Padding: 0, 8, 16, or 24 bits
-: The length of the padding is given by the Payload Pre-Padding length P.
-  The sender MUST pad with zero bytes and the receiver MUST ignore the
+Pre-Padding: 8 bits
+: The sender MUST pad with one zero byte and the receiver MUST ignore the
   padding bytes.
 
 Payload: variable length
@@ -505,84 +505,47 @@ is depicted in {{DTLSCiphertext-record-struct}}.
         opaque unified_hdr[variable];
         opaque encrypted_record[length];
     } DTLSCiphertext;
-
 ~~~~~~~~~~~
 {: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
 
-The DTLSCiphertext contains the unified_hdr followed by the encrypted_record,
-where unified_hdr has variable format.
-The encrypted_record MUST be 32-bit aligned in relation to the start of the
-DTLS chunk. The Pre-Padding MUST be used to achieve this.
-The format of unified_hdr is depicted in {{DTLSCiphertext-header-struct}}.
+The DTLSCiphertext contains the unified_hdr followed by the
+encrypted_record, where unified_hdr has variable format but a single
+selected configuration is used in the DTLS Chunk. The use of one byte
+of Pre-Padding ensures 32-bit alignment of the encrypted_record in
+relation to the start of the DTLS chunk, which allows a receiver to
+perform an in-place decryption and then process the sequence of
+chunks.  SCTP as specified in {{RFC9260}} guarantees that chunks start
+on a 32-bit boundary.
+
+The used DTLSCiphertext configuration contains the unified_hdr with
+flags and the two least significant bits of the DTLS Epoch, a 16-bit
+sequence number (S=1), no length field (L=0), and no Connection ID
+(C=0). This results in a 3-byte unified_hdr (1 byte fixed header plus
+2 bytes sequence number) and consequently 1 byte of Pre-Padding to
+achieve 32-bit alignment of the encrypted_record. The used
+DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
+
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
-|0|0|1|C|S|L|E E|
+|0|0|1|0|1|0|E E|
 +-+-+-+-+-+-+-+-+
-| Connection ID |   Legend:
-| (if any,      |
-/  length as    /   C   - Connection ID (CID) present
-|  negotiated)  |   S   - Sequence number length
-+-+-+-+-+-+-+-+-+   L   - Length present
-|  8 or 16 bit  |   E   - Epoch
+|    16 bit     |
 |Sequence Number|
 +-+-+-+-+-+-+-+-+
-| 16 bit Length |
-| (if present)  |
-+-+-+-+-+-+-+-+-+
-~~~~~~~~~~~
-{: #DTLSCiphertext-header-struct title="DTLS unified_hdr" artwork-align="center"}
-
-Examples of preferred DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
-
-~~~~~~~~~~~ aasvg
-
- 0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
-+-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-|0|0|1|0|1|0|E E|     |0|0|1|0|0|0|E E|
-+-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-|    16 bit     |     |Sequence Number|
-|Sequence Number|     +-+-+-+-+-+-+-+-+
-+-+-+-+-+-+-+-+-+     |               |
-|               |     |   Encrypted   |
-|  Encrypted    |     /   Record      /
-/  Record       /     |               |
-|               |     +-+-+-+-+-+-+-+-+
+|               |
+|  Encrypted    |
+/  Record       /
+|               |
 +-+-+-+-+-+-+-+-+
 
-  DTLSCiphertext       DTLSCiphertext
-    Structure            Structure
-  (recommended)          (minimal)
+  DTLSCiphertext
+    Structure
+  (Used Configuration)
 ~~~~~~~~~~~
-{: #DTLSCiphertext-recommended title="DTLSCiphertext recommended structure" artwork-align="center"}
+{: #DTLSCiphertext-recommended title="DTLSCiphertext used structure" artwork-align="center"}
 
-Thus the size of the DTLSCiphertext header is computed from the `first_byte` as follows:
-
-~~~ c
-#define S_BIT 0x08
-#define L_BIT 0x04
-
-size = 1;
-/* Add in the size of the sequence number. */
-if ((first_byte & S_BIT) != 0)
-    size += 2;
-else
-    size += 1;
-/* Add in the size of the length field, if present. */
-if ((first_byte & L_BIT) != 0)
-    size += 2;
-~~~
-Then the Payload Pre-Padding length P can be computed by
-
-~~~ c
-P = (4 - (size & 0x3)) & 0x03;
-~~~
-
-The use of the Pre-Padding allows a receiver to perform an in-place decryption
-and then process the sequence of chunks.
-SCTP as specified in {{RFC9260}} guarantees that chunks start on a 32-bit
-boundary.
 
 ## New Error Causes
 
@@ -1918,8 +1881,8 @@ flags of the DTLS chunk with the initial contents shown in {{iana-chunk-flags}}:
 
 | Chunk Flag Value | Chunk Flag Name  | Reference |
 | 0x01             | R bit            | RFC-To-Be |
-| 0x02             | P low order bit  | RFC-To-Be |
-| 0x04             | P high order bit | RFC-To-Be |
+| 0x02             | Unassigned       |           |
+| 0x04             | Unassigned       |           |
 | 0x08             | Unassigned       |           |
 | 0x10             | Unassigned       |           |
 | 0x20             | Unassigned       |           |
