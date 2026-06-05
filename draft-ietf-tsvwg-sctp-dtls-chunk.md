@@ -439,10 +439,10 @@ payload of a plain text SCTP packet without the SCTP common header.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Type = 0x41   | reserved| P |R|         Chunk Length          |
+| Type = 0x41   | reserved    |R|         Chunk Length          |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Pre-Padding   :               :               :               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               |
+| Pre-Padding   |                                               |
++-+-+-+-+-+-+-+-+                                               |
 |                                                               |
 |                            Payload                            |
 |                                                               |
