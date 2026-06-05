@@ -2007,4 +2007,5 @@ ULP State if that is sufficiently secure.
 
 The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
 participation in the design team and their contributions to this document.
-We also like to thank Amanda Baber with IANA for feedback on our IANA registry.
+We also like to thank Xin Long for his contributions to this document and
+Amanda Baber with IANA for feedback on our IANA registry.
