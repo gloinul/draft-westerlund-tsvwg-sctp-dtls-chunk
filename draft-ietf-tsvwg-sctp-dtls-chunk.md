@@ -315,7 +315,7 @@ DTLS Chunk and the DTLS key context anyway can be identified. The
 length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
-to ensure the 32-bit aligenment for the encrypted record.
+to ensure the 32-bit alignment for the encrypted record.
 
 The first DTLS key context established for any SCTP association MUST
 use epoch 3. Each subsequent DTLS key context will use the next
@@ -472,7 +472,7 @@ Type: 8 bits (unsigned integer)
   This is accomplished (as described in {{Section 3.2 of RFC9260}}) by the use
   of the upper bits of the chunk type.
 
-reserved: 5 bits
+reserved: 7 bits
 : Reserved bits for future use. These bits MUST be set to 0 by
   the sender and MUST be ignored by the receiver.
 
@@ -1871,8 +1871,8 @@ flags of the DTLS chunk with the initial contents shown in {{iana-chunk-flags}}:
 
 | Chunk Flag Value | Chunk Flag Name  | Reference |
 | 0x01             | R bit            | RFC-To-Be |
-| 0x02             | P low order bit  | RFC-To-Be |
-| 0x04             | P high order bit | RFC-To-Be |
+| 0x02             | Unassigned       |           |
+| 0x04             | Unassigned       |           |
 | 0x08             | Unassigned       |           |
 | 0x10             | Unassigned       |           |
 | 0x20             | Unassigned       |           |
