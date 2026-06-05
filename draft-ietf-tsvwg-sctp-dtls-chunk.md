@@ -778,10 +778,12 @@ has been configured by the application, all SCTP packets SHALL be sent using a D
 
 When an SCTP packet needs to be sent, the sequence of chunks is used
 as `DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set
-to `application_data` {{RFC9147}}. Then the `DTLSCiphertext` is
-computed per the DTLS 1.3 specification {{RFC9147}} and the configured
-cipher suite, and the result is used as the payload. Finally the SCTP
-common header is prepended.
+to `application_data` {{RFC9147}}.
+Then the `DTLSCiphertext` is computed per the DTLS 1.3 specification {{RFC9147}}.
+The cipher suite from the Primary DTLS Key Context is used, if configured.
+Otherwise, the cipher suite from the Restart DTLS Key Context is used.
+The resulting `DTLSCiphertext` is the chunk value of the DTLS chunk.
+Finally the SCTP common header is prepended.
 
 When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
