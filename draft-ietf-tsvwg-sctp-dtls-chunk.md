@@ -1458,7 +1458,8 @@ struct sctp_dtls_config {
   : All Key Management Methods in `sdc_kmids` support the restart operation.
 
   ``SCTP_DTLS_REQUIRED``:
-  : The endpoint requires the use of the DTLS chunk.
+  : If this flag is set, the SCTP endpoint operates in strict DTLS mode.
+    Otherwise, it operates in loose DTLS mode.
 
 ``sdc_nr_kmids``:
 : The number of entries in ``sdc_kmids``.
