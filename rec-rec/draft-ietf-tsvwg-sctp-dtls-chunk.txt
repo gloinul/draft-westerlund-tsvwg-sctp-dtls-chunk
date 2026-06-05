@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 5 December 2026                 Münster Univ. of Appl. Sciences
-                                                             3 June 2026
+Expires: 7 December 2026                 Münster Univ. of Appl. Sciences
+                                                             5 June 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2026.
+   This Internet-Draft will expire on 7 December 2026.
 
 Copyright Notice
 
@@ -356,8 +356,14 @@ Table of Contents
    consisting of SCTP Association, the restart indicator, and the DTLS
    epoch.
 
+   The DTLS Chunk uses a single configuration of the DTLS record format.
    The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
-   the DTLS Chunk.
+   the DTLS Chunk as the full DTLS connection state is not used in the
+   DTLS Chunk and the DTLS key context anyway can be identified.  The
+   length field MUST NOT be used as the DTLS chunk provides record
+   length information.  Finally 16-bit Sequence Numbers are used as they
+   give maximum support for reordering and there are no byte savings
+   possible to ensure the 32-bit alignment for the encrypted record.
 
    The first DTLS key context established for any SCTP association MUST
    use epoch 3.  Each subsequent DTLS key context will use the next
@@ -493,10 +499,10 @@ Table of Contents
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     | Type = 0x41   | reserved| P |R|         Chunk Length          |
+     | Type = 0x41   | reserved    |R|         Chunk Length          |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |        Pre-Padding            |                               |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
+     | Pre-Padding   |                                               |
+     +-+-+-+-+-+-+-+-+                                               |
      |                                                               |
      |                            Payload                            |
      |                                                               |
@@ -515,7 +521,7 @@ Table of Contents
       chunk type.  This is accomplished (as described in Section 3.2 of
       [RFC9260]) by the use of the upper bits of the chunk type.
 
-   reserved: 5 bits
+   reserved: 7 bits
       Reserved bits for future use.  These bits MUST be set to 0 by the
       sender and MUST be ignored by the receiver.
 
@@ -523,19 +529,13 @@ Table of Contents
       Restart indicator.  If this bit is set this DTLS chunk is
       protected with a restart DTLS key context.
 
-   P: 2 bits (unsigned integer)
-      Payload Pre-Padding length.  It indicates how many bytes are
-      inserted for padding before the DTLSCiphertext.  See the text
-      below for computing P.
-
    Chunk Length: 16 bits (unsigned integer)
       This value holds the length of the Payload in bytes plus 4 plus
       the Payload Pre-Padding length.
 
-   Pre-Padding: 0, 8, 16, or 24 bits
-      The length of the padding is given by the Payload Pre-Padding
-      length P.  The sender MUST pad with zero bytes and the receiver
-      MUST ignore the padding bytes.
+   Pre-Padding: 8 bits
+      The sender MUST pad with one zero byte and the receiver MUST
+      ignore the padding bytes.
 
    Payload: variable length
       This MUST contain exactly one DTLSCiphertext as specified in DTLS
@@ -558,82 +558,40 @@ Table of Contents
                        Figure 4: DTLS DTLSCiphertext
 
    The DTLSCiphertext contains the unified_hdr followed by the
-   encrypted_record, where unified_hdr has variable format.  The
-   encrypted_record MUST be 32-bit aligned in relation to the start of
-   the DTLS chunk.  The Pre-Padding MUST be used to achieve this.  The
-   format of unified_hdr is depicted in Figure 5.
+   encrypted_record, where unified_hdr has variable format but a single
+   selected configuration is used in the DTLS Chunk.  The use of one
+   byte of Pre-Padding ensures 32-bit alignment of the encrypted_record
+   in relation to the start of the DTLS chunk, which allows a receiver
+   to perform an in-place decryption and then process the sequence of
+   chunks.  SCTP as specified in [RFC9260] guarantees that chunks start
+   on a 32-bit boundary.
 
-            0 1 2 3 4 5 6 7
-           +-+-+-+-+-+-+-+-+
-           |0|0|1|C|S|L|E E|
-           +-+-+-+-+-+-+-+-+
-           | Connection ID |   Legend:
-           | (if any,      |
-           /  length as    /   C   - Connection ID (CID) present
-           |  negotiated)  |   S   - Sequence number length
-           +-+-+-+-+-+-+-+-+   L   - Length present
-           |  8 or 16 bit  |   E   - Epoch
-           |Sequence Number|
-           +-+-+-+-+-+-+-+-+
-           | 16 bit Length |
-           | (if present)  |
-           +-+-+-+-+-+-+-+-+
+   The used DTLSCiphertext configuration contains the unified_hdr with
+   flags and the two least significant bits of the DTLS Epoch, a 16-bit
+   sequence number (S=1), no length field (L=0), and no Connection ID
+   (C=0).  This results in a 3-byte unified_hdr (1 byte fixed header
+   plus 2 bytes sequence number) and consequently 1 byte of Pre-Padding
+   to achieve 32-bit alignment of the encrypted_record.  The used
+   DTLSCiphertext are shown in Figure 5.
 
-                         Figure 5: DTLS unified_hdr
+                           0 1 2 3 4 5 6 7
+                          +-+-+-+-+-+-+-+-+
+                          |0|0|1|0|1|0|E E|
+                          +-+-+-+-+-+-+-+-+
+                          |    16 bit     |
+                          |Sequence Number|
+                          +-+-+-+-+-+-+-+-+
+                          |               |
+                          |  Encrypted    |
+                          /  Record       /
+                          |               |
+                          +-+-+-+-+-+-+-+-+
 
-   The recommended DTLSCiphertext configuration uses a 16-bit sequence
-   number (S=1), no length field (L=0), and no Connection ID (C=0).
-   This results in a 3-byte unified_hdr (1 byte fixed header plus 2
-   bytes sequence number) and consequently 1 byte of Pre-Padding (P=1)
-   to achieve 32-bit alignment of the encrypted_record.  The length
-   field is unnecessary because the DTLS chunk's Chunk Length field
-   already provides framing.  The Connection ID MUST NOT be used as
-   specified in Section 3.1.  Examples of preferred DTLSCiphertext are
-   shown in Figure 6.
+                            DTLSCiphertext
+                              Structure
+                            (Used Configuration)
 
-                   0 1 2 3 4 5 6 7       0 1 2 3 4 5 6 7
-                  +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-                  |0|0|1|0|1|0|E E|     |0|0|1|0|0|0|E E|
-                  +-+-+-+-+-+-+-+-+     +-+-+-+-+-+-+-+-+
-                  |    16 bit     |     |Sequence Number|
-                  |Sequence Number|     +-+-+-+-+-+-+-+-+
-                  +-+-+-+-+-+-+-+-+     |               |
-                  |               |     |   Encrypted   |
-                  |  Encrypted    |     /   Record      /
-                  /  Record       /     |               |
-                  |               |     +-+-+-+-+-+-+-+-+
-                  +-+-+-+-+-+-+-+-+
-
-                    DTLSCiphertext       DTLSCiphertext
-                      Structure            Structure
-                    (recommended)          (minimal)
-
-               Figure 6: DTLSCiphertext recommended structure
-
-   Thus the size of the DTLSCiphertext header is computed from the
-   first_byte as follows:
-
-   #define S_BIT 0x08
-   #define L_BIT 0x04
-
-   size = 1;
-   /* Add in the size of the sequence number. */
-   if ((first_byte & S_BIT) != 0)
-       size += 2;
-   else
-       size += 1;
-   /* Add in the size of the length field, if present. */
-   if ((first_byte & L_BIT) != 0)
-       size += 2;
-
-   Then the Payload Pre-Padding length P can be computed by
-
-   P = (4 - (size & 0x3)) & 0x03;
-
-   The use of the Pre-Padding allows a receiver to perform an in-place
-   decryption and then process the sequence of chunks.  SCTP as
-   specified in [RFC9260] guarantees that chunks start on a 32-bit
-   boundary.
+                  Figure 5: DTLSCiphertext used structure
 
 4.3.  New Error Causes
 
@@ -652,7 +610,7 @@ Table of Contents
      |    Cause Code = 100 (TBC)     |       Cause Length = 4        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 7: Error Missing DTLS Chunk Support
+                 Figure 6: Error Missing DTLS Chunk Support
 
    Cause Code: 16 bits (unsigned integer)
       This value MUST be set to 100 (TBC).
@@ -670,7 +628,7 @@ Table of Contents
    receiver does not support any of DTLS Key Management Methods offered
    by the sender of packet containing the INIT chunk.
 
-   The format of this error cause is depicted in Figure 8.
+   The format of this error cause is depicted in Figure 7.
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -678,7 +636,7 @@ Table of Contents
      |    Cause Code = 101 (TBC)     |       Cause Length = 4        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-         Figure 8: Error Cause No Common DTLS Key Management Method
+         Figure 7: Error Cause No Common DTLS Key Management Method
 
    Cause Code: 16 bits (unsigned integer)
       This value MUST be set to 101 (TBC).
@@ -694,7 +652,7 @@ Table of Contents
    The DTLS Key Management Tie Breaker Collision error cause can be used
    to indicate that both sides chose the same tie breaker.
 
-   The format of this error cause is depicted in Figure 9.
+   The format of this error cause is depicted in Figure 8.
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -702,7 +660,7 @@ Table of Contents
      |    Cause Code = 102 (TBC)     |       Cause Length = 4        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-      Figure 9: Error Cause DTLS Key Management Tie Breaker Collision
+      Figure 8: Error Cause DTLS Key Management Tie Breaker Collision
 
    Cause Code: 16 bits (unsigned integer)
       This value MUST be set to 102 (TBC).
@@ -718,7 +676,7 @@ Table of Contents
    The Incompatible DTLS Key Management Roles error cause can be used to
    indicate that the roles chosen are incompatible.
 
-   The format of this error cause is depicted in Figure 10.
+   The format of this error cause is depicted in Figure 9.
 
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -726,7 +684,7 @@ Table of Contents
      |    Cause Code = 103 (TBC)     |       Cause Length = 4        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-       Figure 10: Error Cause Incompatible DTLS Key Management Roles
+        Figure 9: Error Cause Incompatible DTLS Key Management Roles
 
    Cause Code: 16 bits (unsigned integer)
       This value MUST be set to 103 (TBC).
@@ -825,9 +783,9 @@ Table of Contents
      |                           Chunk #n                            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 11: Unprotected SCTP Packet
+                     Figure 10: Unprotected SCTP Packet
 
-   The diagram shown in Figure 11 describes the structure of an
+   The diagram shown in Figure 10 describes the structure of an
    unprotected SCTP packet as described in [RFC9260].
 
       0                   1                   2                   3
@@ -838,9 +796,9 @@ Table of Contents
      |                          DTLS Chunk                           |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 12: Protected SCTP Packets
+                     Figure 11: Protected SCTP Packets
 
-   The diagram shown in Figure 12 describes the structure of a protected
+   The diagram shown in Figure 11 describes the structure of a protected
    SCTP packet being sent.  Such packets contain only the SCTP common
    header and one DTLS chunk.
 
@@ -975,9 +933,9 @@ Table of Contents
          |                                             | -'
          |                                             |
 
-           Figure 13: Handshake of SCTP Restart for DTLS in SCTP
+           Figure 12: Handshake of SCTP Restart for DTLS in SCTP
 
-   The Figure 13 shows how the control chunks being used for SCTP
+   The Figure 12 shows how the control chunks being used for SCTP
    association restart are transported within DTLS in SCTP.
 
    A restarted SCTP association MUST continue to use the restart DTLS
@@ -1960,27 +1918,27 @@ Table of Contents
    chunk flags of the DTLS chunk with the initial contents shown in
    Table 4:
 
-            +==================+==================+===========+
-            | Chunk Flag Value | Chunk Flag Name  | Reference |
-            +==================+==================+===========+
-            |             0x01 | R bit            | RFC-To-Be |
-            +------------------+------------------+-----------+
-            |             0x02 | P low order bit  | RFC-To-Be |
-            +------------------+------------------+-----------+
-            |             0x04 | P high order bit | RFC-To-Be |
-            +------------------+------------------+-----------+
-            |             0x08 | Unassigned       |           |
-            +------------------+------------------+-----------+
-            |             0x10 | Unassigned       |           |
-            +------------------+------------------+-----------+
-            |             0x20 | Unassigned       |           |
-            +------------------+------------------+-----------+
-            |             0x40 | Unassigned       |           |
-            +------------------+------------------+-----------+
-            |             0x80 | Unassigned       |           |
-            +------------------+------------------+-----------+
+            +==================+=================+===========+
+            | Chunk Flag Value | Chunk Flag Name | Reference |
+            +==================+=================+===========+
+            |             0x01 | R bit           | RFC-To-Be |
+            +------------------+-----------------+-----------+
+            |             0x02 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x04 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x08 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x10 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x20 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x40 | Unassigned      |           |
+            +------------------+-----------------+-----------+
+            |             0x80 | Unassigned      |           |
+            +------------------+-----------------+-----------+
 
-                         Table 4: DTLS Chunk Flags
+                        Table 4: DTLS Chunk Flags
 
 9.3.  SCTP Chunk Parameter Types
 
