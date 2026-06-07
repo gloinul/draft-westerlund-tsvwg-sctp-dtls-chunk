@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-04T03:26:08.531511+00:00",
+  "timestamp": "2026-06-07T02:54:23.043073+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2152,7 +2152,7 @@
       "id": "I_kwDOKszxDc8AAAABDZvvyA",
       "title": "Update handshake to latest VC",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/140",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -2161,9 +2161,17 @@
       "labels": [],
       "body": "This is about improving the text, not changing it technically.",
       "createdAt": "2026-05-26T10:02:10Z",
-      "updatedAt": "2026-05-26T10:02:57Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-06-05T17:14:07Z",
+      "closedAt": "2026-06-05T17:14:07Z",
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Change committed.",
+          "createdAt": "2026-06-05T17:14:07Z",
+          "updatedAt": "2026-06-05T17:14:07Z"
+        }
+      ]
     },
     {
       "number": 143,
@@ -2173,13 +2181,23 @@
       "state": "OPEN",
       "author": "gloinul",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "We have observed that it might be good to clarify that when restarting one need to be careful and use a particular procedure when overwriting old restart keys with epoch=3 with new ones after restart. \n\nBoth endpoint have restart keys with epoch = 3 installed (R3-O).\n\nA restarts: and send init\nB sends INIT-ACK\nA sends Cookie ECHO (R3-O)\nB Send Cookie ACK (R3-O)\nNew Keymanagement\nDerive Keys (P3-N) and (R3-N)\nInstall P3-N\nVerify bi-direcitonal communication with P3-N\nInstall R3-N, thus deleting R3-O\n\nIt would be good to clarify this.",
       "createdAt": "2026-06-03T13:42:52Z",
-      "updatedAt": "2026-06-03T13:42:52Z",
+      "updatedAt": "2026-06-04T14:39:24Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Discussed in DT:\n* Procedure order defined in the key-management\n* Restart procedure have similar timings like initial establishment\n* DTLS Chunk needs clarification that if primary key exists it SHALL be used instead of restart key.",
+          "createdAt": "2026-06-04T14:39:12Z",
+          "updatedAt": "2026-06-04T14:39:12Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -7797,7 +7815,7 @@
       "labels": [],
       "body": "Use the SCTP_DTLS_GET_CIPHER_SUITES socket option instead of the functions sctp_dtls_nr_cipher_suites() and sctp_dtls_cipher_suites().\r\n\r\nThis provides the same functionality. The reason I used the two functions is that the result of the operation does not depend on the socket, just on the SCTP implementation.\r\n\r\nThis addresses #139 ",
       "createdAt": "2026-06-01T16:13:43Z",
-      "updatedAt": "2026-06-02T20:11:14Z",
+      "updatedAt": "2026-06-05T16:18:06Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
@@ -7993,21 +8011,21 @@
       "id": "PR_kwDOKszxDc7iQkm1",
       "title": "Proposing to clarify relation to CRC32c",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/145",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-06-03T14:12:12Z",
-      "updatedAt": "2026-06-03T15:03:39Z",
+      "updatedAt": "2026-06-04T14:06:08Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "11e82b5a5305782c5082dca0c7d847e0262da58c",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "crc",
       "headRefOid": "d959e4823b49c7c95556bd7946c0cf86142726f8",
-      "closedAt": null,
+      "closedAt": "2026-06-04T14:06:08Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -8055,21 +8073,21 @@
       "id": "PR_kwDOKszxDc7iRFJ5",
       "title": "Added note regarding DTLS epoch ",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/146",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This is to clarify that Epoch is 64-bits, but only two bits are in record. ",
       "createdAt": "2026-06-03T14:30:59Z",
-      "updatedAt": "2026-06-03T15:04:56Z",
+      "updatedAt": "2026-06-04T14:17:15Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0a33138efd24184e2215fbe1d2363bcccdabcce0",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "epoch",
       "headRefOid": "13a14d1f20e44db51b556f12cc67714e90ae66d2",
-      "closedAt": null,
+      "closedAt": "2026-06-04T14:17:14Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -8087,6 +8105,13 @@
           "body": "The reasons I was proposing this is that we have API interfaces etc where the value should be 64-bit, but then we have the actual record where it is only two bits. It also motivates why one need to increment the DTLS epoch with one each time. ",
           "createdAt": "2026-06-03T14:44:51Z",
           "updatedAt": "2026-06-03T14:44:51Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Design team discussed. Clarification of relation between ee and full epoch will be improved in other PR. ",
+          "createdAt": "2026-06-04T14:17:14Z",
+          "updatedAt": "2026-06-04T14:17:14Z"
         }
       ],
       "reviews": [
@@ -8110,24 +8135,26 @@
       "id": "PR_kwDOKszxDc7iRZan",
       "title": "Clarified recommended DTLSCipherText configuration",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/147",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-06-03T14:42:13Z",
-      "updatedAt": "2026-06-03T15:06:47Z",
+      "updatedAt": "2026-06-05T15:54:37Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "0a33138efd24184e2215fbe1d2363bcccdabcce0",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "rec-rec",
-      "headRefOid": "1d254dc897dde2d3bf682141a8b6c1fa7a3456d8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "b7088091feb1a2945ee824feb850f818baafb74e",
+      "closedAt": "2026-06-05T15:54:37Z",
+      "mergedAt": "2026-06-05T15:54:37Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "f98c3b0857517b207a0b1665e9389a4ef7629137"
+      },
       "comments": [
         {
           "author": "tuexen",
@@ -8135,6 +8162,20 @@
           "body": "Let us discuss this also tomorrow... We need to see what new information is provided.",
           "createdAt": "2026-06-03T14:54:53Z",
           "updatedAt": "2026-06-03T14:54:53Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "DT discussed this and agreed on using a single configuration of the DTLS record. Magnus to update PR that fixes the DTLS header to 16-bit sequence, No Length, No CID,  EE two lower bits,\r\nRemove Pre-padding make it fixed to 1 byte. ",
+          "createdAt": "2026-06-04T14:16:31Z",
+          "updatedAt": "2026-06-04T14:16:31Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen and @teiclap I have now updated the text to use a single DTLS Record configuration. Please review. \r\n",
+          "createdAt": "2026-06-05T14:33:18Z",
+          "updatedAt": "2026-06-05T14:33:18Z"
         }
       ],
       "reviews": [
@@ -8150,8 +8191,260 @@
           "createdAt": "2026-06-03T15:06:47Z",
           "updatedAt": "2026-06-03T15:06:47Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCIEUgQ",
+          "commit": {
+            "abbreviatedOid": "b708809"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T15:54:25Z",
+          "updatedAt": "2026-06-05T15:54:25Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 148,
+      "id": "PR_kwDOKszxDc7iqCLC",
+      "title": "Cleanup procedures",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/148",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This addresses #140.",
+      "createdAt": "2026-06-04T11:34:47Z",
+      "updatedAt": "2026-06-05T16:18:07Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "0a33138efd24184e2215fbe1d2363bcccdabcce0",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup-handshake",
+      "headRefOid": "1f8b683de87367b51bf87edf61325fa5b197d981",
+      "closedAt": "2026-06-04T14:04:41Z",
+      "mergedAt": "2026-06-04T14:04:41Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "da1461fef4c1e471b11206186360e440dae13410"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB-W6fA",
+          "commit": {
+            "abbreviatedOid": "3bc28a2"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-04T11:40:02Z",
+          "updatedAt": "2026-06-04T11:40:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABB_F3EA",
+          "commit": {
+            "abbreviatedOid": "1f8b683"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-04T13:31:35Z",
+          "updatedAt": "2026-06-04T13:31:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 149,
+      "id": "PR_kwDOKszxDc7jJM0q",
+      "title": "Even more edits",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/149",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "A number of small language fixes. This should be merged after #147 and might need some minor conflict handling. ",
+      "createdAt": "2026-06-05T14:47:37Z",
+      "updatedAt": "2026-06-05T16:18:08Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "f98c3b0857517b207a0b1665e9389a4ef7629137",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "even-more-edits",
+      "headRefOid": "520d08acdb973990365bb3dad77865386dcea383",
+      "closedAt": "2026-06-05T16:03:32Z",
+      "mergedAt": "2026-06-05T16:03:31Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "c783fe6774137ce8f4868a0214e5040078c63174"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCH2aTA",
+          "commit": {
+            "abbreviatedOid": "3dafeb6"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T15:18:10Z",
+          "updatedAt": "2026-06-05T15:18:10Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCIFzaQ",
+          "commit": {
+            "abbreviatedOid": "3dafeb6"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T15:57:38Z",
+          "updatedAt": "2026-06-05T15:57:38Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 150,
+      "id": "PR_kwDOKszxDc7jLXWi",
+      "title": "Use strict/loose mode",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/150",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-05T16:32:16Z",
+      "updatedAt": "2026-06-05T18:31:37Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "c783fe6774137ce8f4868a0214e5040078c63174",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "improve-SCTP_DTLS_LOCAL_CONFIG",
+      "headRefOid": "53ad4b778963903c01cef36a9dcd264d1c1f6bfc",
+      "closedAt": "2026-06-05T18:31:23Z",
+      "mergedAt": "2026-06-05T18:31:23Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "2ae154facd27a0374818965c55eb68df693ad273"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCIXe0A",
+          "commit": {
+            "abbreviatedOid": "53ad4b7"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T16:42:32Z",
+          "updatedAt": "2026-06-05T16:42:32Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCI5cEg",
+          "commit": {
+            "abbreviatedOid": "53ad4b7"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T18:03:42Z",
+          "updatedAt": "2026-06-05T18:03:42Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 151,
+      "id": "PR_kwDOKszxDc7jML7D",
+      "title": "Specify send key handling",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/151",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-05T17:12:40Z",
+      "updatedAt": "2026-06-05T18:04:41Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "c783fe6774137ce8f4868a0214e5040078c63174",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "describe-send-key-handling",
+      "headRefOid": "6646726ed9d6289fc7328aa63a27ed21827c97ed",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This resolves #143.",
+          "createdAt": "2026-06-05T17:13:45Z",
+          "updatedAt": "2026-06-05T17:13:45Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCI56BA",
+          "commit": {
+            "abbreviatedOid": "6646726"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-05T18:04:41Z",
+          "updatedAt": "2026-06-05T18:04:41Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 152,
+      "id": "PR_kwDOKszxDc7jN8oY",
+      "title": "Add Xin Long to ack section",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/152",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-05T18:38:06Z",
+      "updatedAt": "2026-06-05T18:38:06Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "2ae154facd27a0374818965c55eb68df693ad273",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "add-ack-xin-long",
+      "headRefOid": "036ddd2d6b23523abd56237d1797da1f3e2d0e8c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
