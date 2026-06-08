@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 7 December 2026                 Münster Univ. of Appl. Sciences
-                                                             5 June 2026
+Expires: 10 December 2026                Münster Univ. of Appl. Sciences
+                                                             8 June 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 December 2026.
+   This Internet-Draft will expire on 10 December 2026.
 
 Copyright Notice
 
@@ -2076,8 +2076,9 @@ Table of Contents
 
    The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
    participation in the design team and their contributions to this
-   document.  We also like to thank Amanda Baber with IANA for feedback
-   on our IANA registry.
+   document.  We also like to thank Xin Long for his contributions to
+   this document and Amanda Baber with IANA for feedback on our IANA
+   registry.
 
 12.  References
 
