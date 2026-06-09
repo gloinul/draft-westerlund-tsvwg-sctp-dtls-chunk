@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-07T02:54:23.043073+00:00",
+  "timestamp": "2026-06-09T02:34:49.285011+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -8384,13 +8384,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-05T17:12:40Z",
-      "updatedAt": "2026-06-05T18:04:41Z",
+      "updatedAt": "2026-06-08T11:46:41Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "c783fe6774137ce8f4868a0214e5040078c63174",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "describe-send-key-handling",
-      "headRefOid": "6646726ed9d6289fc7328aa63a27ed21827c97ed",
+      "headRefOid": "8c758ee1b92d63be788da5fdd49f511187be4328",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -8417,6 +8417,66 @@
           "createdAt": "2026-06-05T18:04:41Z",
           "updatedAt": "2026-06-05T18:04:41Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCRdffw",
+          "commit": {
+            "abbreviatedOid": "6646726"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-08T07:53:24Z",
+          "updatedAt": "2026-06-08T07:53:24Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I think this overly simplified and can result in that the restart key are used when it shouldn't be used. Thus potentially resulting in two-time pad if the sending endpoint do restart. I also think it might not actually work as a rule when responding to restarting endpoints as you will have the primary key and the restart key. \n\nSo for the non-restarting endpoint. It has both installed, should use the primary when it exist except:\n- When responding to cookie-echo with cookie-ack => results in it creating a new association with the restart DTLS Key context copied over. \n\nIn an assocation resulting from the above restart the above rule will work as it will have a restart context being used until a new primary is being set. \n\nOn the restarting side, it needs to set the restart keys prior to call \"connect\" in the API. \n\nIf I interpret this correctly what we should maybe introduce is a rule that in the API the only time one can set the restart keys without first having set primary keys (for that epoch?) is when the association doesn't exist. ",
+              "createdAt": "2026-06-08T07:53:24Z",
+              "updatedAt": "2026-06-08T07:53:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCS4o7Q",
+          "commit": {
+            "abbreviatedOid": "6646726"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-08T11:22:00Z",
+          "updatedAt": "2026-06-08T11:22:01Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "You are correct, when an endpoint detects that the peer has restarted (when processing the COOKIE chunk) the restart key has to be transferred. Let me double check the text describing the restart if it already contains this or provide some tweaks.\r\nFor the API restriction, I would limit that to the send keys.",
+              "createdAt": "2026-06-08T11:22:00Z",
+              "updatedAt": "2026-06-08T11:22:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCTC9Hw",
+          "commit": {
+            "abbreviatedOid": "6646726"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-08T11:46:41Z",
+          "updatedAt": "2026-06-08T11:46:41Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "Agree, only sends keys would need restrictions to help ensure that the restart key are not wrongly used.",
+              "createdAt": "2026-06-08T11:46:41Z",
+              "updatedAt": "2026-06-08T11:46:42Z"
+            }
+          ]
         }
       ]
     },
@@ -8425,26 +8485,55 @@
       "id": "PR_kwDOKszxDc7jN8oY",
       "title": "Add Xin Long to ack section",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/152",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-06-05T18:38:06Z",
-      "updatedAt": "2026-06-05T18:38:06Z",
+      "updatedAt": "2026-06-08T09:40:20Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "2ae154facd27a0374818965c55eb68df693ad273",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "add-ack-xin-long",
       "headRefOid": "036ddd2d6b23523abd56237d1797da1f3e2d0e8c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-06-08T09:40:19Z",
+      "mergedAt": "2026-06-08T09:40:19Z",
+      "mergedBy": "tuexen",
+      "mergeCommit": {
+        "oid": "df7400f1cfaebff514bb64763841a04d5d694891"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCPAzAw",
+          "commit": {
+            "abbreviatedOid": "036ddd2"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-07T11:00:41Z",
+          "updatedAt": "2026-06-07T11:00:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABCRZ_YQ",
+          "commit": {
+            "abbreviatedOid": "036ddd2"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-08T07:43:37Z",
+          "updatedAt": "2026-06-08T07:43:37Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
