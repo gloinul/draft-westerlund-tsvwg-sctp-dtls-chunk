@@ -910,9 +910,11 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP association restart are transported within DTLS in SCTP.
 
-A restarted SCTP association MUST continue to use the restart DTLS key context,
-for user traffic until a new primary DTLS key context will be available. The
-implementors SHOULD initiate a rekeying as soon as possible,
+A restarted SCTP association MUST continue to use the restart DTLS key context
+and MUST remove all primary DTLS key contexts.
+Therefore, the restart DTLS key context is used for user traffic until a new
+primary DTLS key context will be available.
+The implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 restart DTLS key context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS key context
