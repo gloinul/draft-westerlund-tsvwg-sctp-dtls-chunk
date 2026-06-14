@@ -4088,7 +4088,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.5-4.5">
 <code>sdk_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.5-4.6">
-              <p id="section-8.4.5-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+              <p id="section-8.4.5-4.6.1">If the value is <code>0</code>, the primary keys are added, if a value different
 from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.5-4.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
@@ -4131,8 +4131,13 @@ of length <code>sdk_sn_key_len</code>.<a href="#section-8.4.5-4.18.1" class="pil
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-8.4.5-5">This socket option can only be used on SCTP endpoints in states other than
-<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.
+<p id="section-8.4.5-5">This socket option can only be used to set a primary key on SCTP endpoints in
+states other than <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code>, and
+<code>SCTP_COOKIE_ECHOED</code>.
+A restart key can always be set on SCTP endpoints in the <code>SCTP_CLOSED</code> state.
+Only if a primary key is set on an SCTP endpoint, a restart key can be set in
+states other than <code>SCTP_CLOSED</code>, <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code>,
+and <code>SCTP_COOKIE_ECHOED</code>.
 If the socket option is successful, all affected DTLS chunks sent will use the
 specified keys until the keys are changed again by another call of this
 socket option.<a href="#section-8.4.5-5" class="pilcrow">¶</a></p>
@@ -4180,7 +4185,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.6-4.5">
 <code>sdk_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.6-4.6">
-              <p id="section-8.4.6-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+              <p id="section-8.4.6-4.6.1">If the value is <code>0</code>, the primary keys are added, if a value different
 from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.6-4.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
@@ -4257,7 +4262,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.7-4.3">
 <code>sdki_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.7-4.4">
-              <p id="section-8.4.7-4.4.1">If the value is <code>0</code>, the regular keys are removed, if a value different
+              <p id="section-8.4.7-4.4.1">If the value is <code>0</code>, the primary keys are removed, if a value different
 from <code>0</code> is used, the restart keys are removed.<a href="#section-8.4.7-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
