@@ -2942,9 +2942,11 @@ reuse.<a href="#section-5.4-10" class="pilcrow">¶</a></p>
 </div>
 <p id="section-5.4-12">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 12</a> shows how the control chunks being
 used for SCTP association restart are transported within DTLS in SCTP.<a href="#section-5.4-12" class="pilcrow">¶</a></p>
-<p id="section-5.4-13">A restarted SCTP association MUST continue to use the restart DTLS key context,
-for user traffic until a new primary DTLS key context will be available. The
-implementors SHOULD initiate a rekeying as soon as possible,
+<p id="section-5.4-13">A restarted SCTP association MUST continue to use the restart DTLS key context
+and MUST remove all primary DTLS key contexts.
+Therefore, the restart DTLS key context is used for user traffic until a new
+primary DTLS key context will be available.
+The implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 restart DTLS key context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS key context
