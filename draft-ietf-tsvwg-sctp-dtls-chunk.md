@@ -1615,7 +1615,7 @@ struct sctp_dtls_keys {
 : The cipher suite for which the keys are used.
 
 ``sdk_restart``:
-: If the value is ``0``, the regular keys are added, if a value different
+: If the value is ``0``, the primary keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
 ``sdk_unused``:
@@ -1638,8 +1638,13 @@ struct sctp_dtls_keys {
   vector of length ``sdk_iv_len`` directly followed by the sequence number key
   of length ``sdk_sn_key_len``.
 
-This socket option can only be used on SCTP endpoints in states other than
-``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+This socket option can only be used to set a primary key on SCTP endpoints in
+states other than ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT``, and
+``SCTP_COOKIE_ECHOED``.
+A restart key can always be set on SCTP endpoints in the ``SCTP_CLOSED`` state.
+Only if a primary key is set on an SCTP endpoint, a restart key can be set in
+states other than ``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT``,
+and ``SCTP_COOKIE_ECHOED``.
 If the socket option is successful, all affected DTLS chunks sent will use the
 specified keys until the keys are changed again by another call of this
 socket option.
@@ -1675,7 +1680,7 @@ struct sctp_dtls_keys {
 : The cipher suite for which the keys are used.
 
 ``sdk_restart``:
-: If the value is ``0``, the regular keys are added, if a value different
+: If the value is ``0``, the primary keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
 ``sdk_unused``:
@@ -1723,7 +1728,7 @@ struct sctp_dtls_keys_id {
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
 ``sdki_restart``:
-: If the value is ``0``, the regular keys are removed, if a value different
+: If the value is ``0``, the primary keys are removed, if a value different
   from ``0`` is used, the restart keys are removed.
 
 ``sdki_epoch``:
