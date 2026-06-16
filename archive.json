@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-09T02:34:49.285011+00:00",
+  "timestamp": "2026-06-16T03:29:28.484616+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2198,6 +2198,22 @@
           "updatedAt": "2026-06-04T14:39:12Z"
         }
       ]
+    },
+    {
+      "number": 153,
+      "id": "I_kwDOKszxDc8AAAABFimxhA",
+      "title": "1-byte Pre-padding Always Results in 3-byte Post-padding",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/153",
+      "state": "OPEN",
+      "author": "lxin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current DTLS chunk layout is:\n\n```\nDTLS chunk header (4 bytes) |\nPre-padding | unified_hdr | seq_num (1 + 1 + 2 bytes) |\nCentent_type (1 bytes) |\nSCTP Common chunks (4 * n bytes) |\nTag_length (16 bytes) |\nPost-padding (3 bytes) <---\n```\n\nIs this 'fixed' 3-byte Post-padding expected in DTLS chunk? It appears to introduce unnecessary bandwidth overhead.",
+      "createdAt": "2026-06-15T16:07:13Z",
+      "updatedAt": "2026-06-15T16:07:13Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -8384,13 +8400,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-05T17:12:40Z",
-      "updatedAt": "2026-06-08T11:46:41Z",
+      "updatedAt": "2026-06-15T08:44:26Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
-      "baseRefOid": "c783fe6774137ce8f4868a0214e5040078c63174",
+      "baseRefOid": "df7400f1cfaebff514bb64763841a04d5d694891",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "describe-send-key-handling",
-      "headRefOid": "8c758ee1b92d63be788da5fdd49f511187be4328",
+      "headRefOid": "967de04a53c84961ad1ac9ae7a206b593021972e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -8408,14 +8424,14 @@
         {
           "id": "PRR_kwDOKszxDc8AAAABCI56BA",
           "commit": {
-            "abbreviatedOid": "6646726"
+            "abbreviatedOid": "f99b607"
           },
           "author": "teiclap",
           "authorAssociation": "COLLABORATOR",
           "state": "APPROVED",
           "body": "",
           "createdAt": "2026-06-05T18:04:41Z",
-          "updatedAt": "2026-06-05T18:04:41Z",
+          "updatedAt": "2026-06-14T18:50:29Z",
           "comments": []
         },
         {
@@ -8477,6 +8493,59 @@
               "updatedAt": "2026-06-08T11:46:42Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABC9Z6lQ",
+          "commit": {
+            "abbreviatedOid": "6646726"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-14T20:59:54Z",
+          "updatedAt": "2026-06-14T20:59:55Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "Added clarifications. OK?",
+              "createdAt": "2026-06-14T20:59:55Z",
+              "updatedAt": "2026-06-14T20:59:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABC_hcWA",
+          "commit": {
+            "abbreviatedOid": "967de04"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-15T08:43:13Z",
+          "updatedAt": "2026-06-15T08:43:14Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "Yes",
+              "createdAt": "2026-06-15T08:43:14Z",
+              "updatedAt": "2026-06-15T08:43:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABC_h-pQ",
+          "commit": {
+            "abbreviatedOid": "967de04"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-15T08:44:26Z",
+          "updatedAt": "2026-06-15T08:44:26Z",
+          "comments": []
         }
       ]
     },
