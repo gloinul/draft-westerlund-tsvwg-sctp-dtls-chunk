@@ -778,10 +778,12 @@ has been configured by the application, all SCTP packets SHALL be sent using a D
 
 When an SCTP packet needs to be sent, the sequence of chunks is used
 as `DTLSInnerPlaintext.content` and `DTLSInnerPlaintext.type` is set
-to `application_data` {{RFC9147}}. Then the `DTLSCiphertext` is
-computed per the DTLS 1.3 specification {{RFC9147}} and the configured
-cipher suite, and the result is used as the payload. Finally the SCTP
-common header is prepended.
+to `application_data` {{RFC9147}}.
+Then the `DTLSCiphertext` is computed per the DTLS 1.3 specification {{RFC9147}}.
+The cipher suite from the Primary DTLS Key Context is used, if configured.
+Otherwise, the cipher suite from the Restart DTLS Key Context is used.
+The resulting `DTLSCiphertext` is the chunk value of the DTLS chunk.
+Finally the SCTP common header is prepended.
 
 When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
@@ -908,9 +910,11 @@ Initiator                                     Responder
 The {{DTLS-chunk-restart}} shows how the control chunks being
 used for SCTP association restart are transported within DTLS in SCTP.
 
-A restarted SCTP association MUST continue to use the restart DTLS key context,
-for user traffic until a new primary DTLS key context will be available. The
-implementors SHOULD initiate a rekeying as soon as possible,
+A restarted SCTP association MUST continue to use the restart DTLS key context
+and MUST remove all primary DTLS key contexts.
+Therefore, the restart DTLS key context is used for user traffic until a new
+primary DTLS key context will be available.
+The implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 restart DTLS key context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS key context
@@ -1613,7 +1617,7 @@ struct sctp_dtls_keys {
 : The cipher suite for which the keys are used.
 
 ``sdk_restart``:
-: If the value is ``0``, the regular keys are added, if a value different
+: If the value is ``0``, the primary keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
 ``sdk_unused``:
@@ -1636,8 +1640,13 @@ struct sctp_dtls_keys {
   vector of length ``sdk_iv_len`` directly followed by the sequence number key
   of length ``sdk_sn_key_len``.
 
-This socket option can only be used on SCTP endpoints in states other than
-``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT`` and ``SCTP_COOKIE_ECHOED``.
+This socket option can only be used to set a primary key on SCTP endpoints in
+states other than ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT``, and
+``SCTP_COOKIE_ECHOED``.
+A restart key can always be set on SCTP endpoints in the ``SCTP_CLOSED`` state.
+Only if a primary key is set on an SCTP endpoint, a restart key can be set in
+states other than ``SCTP_CLOSED``, ``SCTP_LISTEN``, ``SCTP_COOKIE_WAIT``,
+and ``SCTP_COOKIE_ECHOED``.
 If the socket option is successful, all affected DTLS chunks sent will use the
 specified keys until the keys are changed again by another call of this
 socket option.
@@ -1673,7 +1682,7 @@ struct sctp_dtls_keys {
 : The cipher suite for which the keys are used.
 
 ``sdk_restart``:
-: If the value is ``0``, the regular keys are added, if a value different
+: If the value is ``0``, the primary keys are added, if a value different
   from ``0`` is used, the restart keys are added.
 
 ``sdk_unused``:
@@ -1721,7 +1730,7 @@ struct sctp_dtls_keys_id {
   It is an error to use ``SCTP_{FUTURE|CURRENT|ALL}_ASSOC``.
 
 ``sdki_restart``:
-: If the value is ``0``, the regular keys are removed, if a value different
+: If the value is ``0``, the primary keys are removed, if a value different
   from ``0`` is used, the restart keys are removed.
 
 ``sdki_epoch``:
