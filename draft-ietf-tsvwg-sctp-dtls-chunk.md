@@ -1091,9 +1091,9 @@ Key Material to avoid issues:
 * Primary Keys  MUST be installed prior to Restart Keys for each epoch to avoid
   them being used unless this endpoint is attempting a restart.
 
-* With the exception any Restart Keys when attempting restart of the
-  SCTP association the first DTLS epoch MUST be 3. Any subsequent Epoch must
-  be the next consencutive number compared to the previously used.
+* With the exception any restart keys when attempting restart of the
+  SCTP association, the first DTLS epoch MUST be 3. Any subsequent epoch must
+  be the next consecutive number compared to the previously used.
 
 The following information needs to be provided when setting send key material:
 
@@ -1206,12 +1206,8 @@ SCTP Association. This function can be replace by Establish Send Key
 Material which immediately enables the primary key for the next epoch
 when installed.
 
-Restart Keys SHALL only be indicated when attempting to perform a
-restart of the SCTP Association. If the peer is attempting a restart
-of the SCTP association and this endpoint have restart keys installed
-they will be used to respond to restart handshake messages when
-required, and set as default in the new SCTP association created by
-the restart.
+Setting the restart keys to be used instead of primary keys SHALL only
+be done when attempting to perform a restart of the SCTP association.
 
 Request: Set Key used
 
