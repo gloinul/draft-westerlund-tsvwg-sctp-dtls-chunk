@@ -1091,9 +1091,10 @@ Key Material to avoid issues:
 * Primary Keys  MUST be installed prior to Restart Keys for each epoch to avoid
   them being used unless this endpoint is attempting a restart.
 
-* With the exception any restart keys when attempting restart of the
-  SCTP association, the first DTLS epoch MUST be 3. Any subsequent epoch must
-  be the next consecutive number compared to the previously used.
+* With the exception of restart keys when this endpoint attempts
+  restart of the SCTP association, the first DTLS epoch set in an
+  association MUST be 3. Any subsequent epoch must be the next
+  consecutive number compared to the previously used.
 
 The following information needs to be provided when setting send key material:
 
