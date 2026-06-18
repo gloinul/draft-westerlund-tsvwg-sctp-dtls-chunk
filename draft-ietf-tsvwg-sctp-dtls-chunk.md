@@ -436,7 +436,7 @@ Both peers include their respective preference list and the procedure
 in {{establishment-procedure}} will determine the selected roles and chosen
 method.
 
-##  DTLS Chunk (DTLS) {#DTLS-chunk}
+## DTLS Chunk (DTLS) {#DTLS-chunk}
 
 The DTLS chunk is used to hold the DTLS 1.3 record with the protected
 payload of a plain text SCTP packet without the SCTP common header.
@@ -1001,7 +1001,7 @@ well as the roles and if restart is supported. This information is
 included in the DTLS Key Management Parameter, which, when these
 parameters are set, will be included in either INIT or INIT ACK chunks.
 
-An endpoint can either support, client only, server only, or client
+An endpoint can either support: client only, server only, or client
 and server. The latter is for situations where both endpoints may attempt
 to establish an SCTP association towards each other, potentially
 causing a simultaneous sending of INIT chunks. Depending on port
@@ -1013,7 +1013,6 @@ will resolve the key management role for this association.
 Request: Set Supported DTLS Key Management Methods
 
 Parameters:
-
 * SCTP Association Handle:
 : The handle to what may become an SCTP Association or a server port
 accepting association establishment.
@@ -1065,11 +1064,10 @@ Parameters:
 : The selected Key Management Method as a DTLS Key Management Identifier.
 
 * Down Grade Prevention Data:
-: In network byte order the whole of the DTLS Key Management
-  Parameter including header and excluding padding that the endpoint
-  with the client role offered, followed by the corresponding
-  parameter content of the endpoint with the server role.
-
+: In network byte order the whole of the DTLS Key Management Parameter
+  including header and excluding padding that the endpoint with the
+  client role offered, followed by the corresponding parameter content
+  of the endpoint with the server role in seperable records.
 
 ## Cipher Suite Capabilities
 
@@ -1091,7 +1089,16 @@ Parameters : list of cipher suites
 ## Establish Send Key Material
 
 The DTLS chunk can use one out of multiple sets of cipher suite and
-corresponding key materials.
+corresponding key materials. Some limitations do exists when establishing
+Key Material to avoid issues:
+
+* Primary Keys  MUST be installed prior to Restart Keys for each epoch to avoid
+  them being used unless this endpoint is attempting a restart.
+
+* With the exception of restart keys when this endpoint attempts
+  restart of the SCTP association, the first DTLS epoch set in an
+  association MUST be 3. Any subsequent epoch must be the next
+  consecutive number compared to the previously used.
 
 The following information needs to be provided when setting send key material:
 
@@ -1121,9 +1128,7 @@ Parameters :
   client to encrypt the record. Binary arbitrary long object depending
   on the cipher suite used.
 
-
 Reply: Established or Failed
-
 
 ## Establish Receive Key Material
 
@@ -1160,7 +1165,6 @@ Parameters :
   on the cipher suite used.
 
 Reply : Established or Failed
-
 
 ## Destroy Send Key Material
 
@@ -1203,7 +1207,12 @@ Parameters: Success or Error
 ## Set Key to Use
 
 Set which key to use to protect the future SCTP packets sent by the
-SCTP Association.
+SCTP Association. This function can be replace by Establish Send Key
+Material which immediately enables the primary key for the next epoch
+when installed.
+
+Setting the restart keys to be used instead of primary keys SHALL only
+be done when attempting to perform a restart of the SCTP association.
 
 Request: Set Key used
 
@@ -1232,7 +1241,6 @@ Parameters:
 * SCTP Association
 
 Reply: Acknowledgement
-
 
 ## Get AEAD Encryption Invocations
 
@@ -1339,6 +1347,7 @@ several new ``IPPROTO_SCTP``-level socket options and a new flag for
 ``recvmsg()``.
 
 ## ``SCTP_ASSOC_CHANGE`` Notification
+
 When an ``SCTP_ASSOC_CHANGE`` notification (specified in {{Section 6.1.1 of
 RFC6458}}) is delivered indicating a ``sac_state`` of ``SCTP_COMM_UP`` or
 ``SCTP_RESTART`` for an SCTP association where both peers support the
@@ -1911,7 +1920,6 @@ reference to this document.
 | 0x8006   | DTLS Key Management  | RFC-To-Be |
 {: #iana-chunk-parameter-types title="DTLS Key Management Chunk Parameter" cols="r l l"}
 
-
 ## SCTP Error Cause Codes {#IANA-Extra-Cause}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
@@ -1938,7 +1946,6 @@ reference to this document.
 | ID Value | SCTP Payload Protocol Identifier | Reference |
 | 4242     | DTLS Key Management Messages     | RFC-To-Be |
 {: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
-
 
 # Security Considerations {#Security-Considerations}
 
@@ -2008,7 +2015,6 @@ an actual secure persistent storage solution accessible to the
 endpoint. In other use cases the persistence part might be
 accomplished by keeping the current restart DTLS key context with the
 ULP State if that is sufficiently secure.
-
 
 # Acknowledgments
 
