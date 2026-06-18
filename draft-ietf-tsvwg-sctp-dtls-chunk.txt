@@ -1047,7 +1047,7 @@ Table of Contents
    parameters are set, will be included in either INIT or INIT ACK
    chunks.
 
-   An endpoint can either support, client only, server only, or client
+   An endpoint can either support: client only, server only, or client
    and server.  The latter is for situations where both endpoints may
    attempt to establish an SCTP association towards each other,
    potentially causing a simultaneous sending of INIT chunks.  Depending
@@ -1061,9 +1061,8 @@ Table of Contents
 
    Parameters:
 
-   *  SCTP Association Handle:  The handle to what may become an SCTP
-         Association or a server port accepting association
-         establishment.
+   * SCTP Association Handle:  The handle to what may become an SCTP
+      Association or a server port accepting association establishment.
 
    *  Key Management Roles Supported:  The endpoint indicates if it can
          act as client only, server only, or client and server.
@@ -1114,7 +1113,7 @@ Table of Contents
          the DTLS Key Management Parameter including header and
          excluding padding that the endpoint with the client role
          offered, followed by the corresponding parameter content of the
-         endpoint with the server role.
+         endpoint with the server role in seperable records.
 
 7.3.  Cipher Suite Capabilities
 
@@ -1137,7 +1136,17 @@ Table of Contents
 7.4.  Establish Send Key Material
 
    The DTLS chunk can use one out of multiple sets of cipher suite and
-   corresponding key materials.
+   corresponding key materials.  Some limitations do exists when
+   establishing Key Material to avoid issues:
+
+   *  Primary Keys MUST be installed prior to Restart Keys for each
+      epoch to avoid them being used unless this endpoint is attempting
+      a restart.
+
+   *  With the exception of restart keys when this endpoint attempts
+      restart of the SCTP association, the first DTLS epoch set in an
+      association MUST be 3.  Any subsequent epoch must be the next
+      consecutive number compared to the previously used.
 
    The following information needs to be provided when setting send key
    material:
@@ -1247,7 +1256,13 @@ Table of Contents
 7.8.  Set Key to Use
 
    Set which key to use to protect the future SCTP packets sent by the
-   SCTP Association.
+   SCTP Association.  This function can be replace by Establish Send Key
+   Material which immediately enables the primary key for the next epoch
+   when installed.
+
+   Setting the restart keys to be used instead of primary keys SHALL
+   only be done when attempting to perform a restart of the SCTP
+   association.
 
    Request: Set Key used
 
