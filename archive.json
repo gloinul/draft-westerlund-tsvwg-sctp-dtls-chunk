@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-16T03:29:28.484616+00:00",
+  "timestamp": "2026-06-18T02:56:07.970922+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2211,7 +2211,31 @@
       "labels": [],
       "body": "The current DTLS chunk layout is:\n\n```\nDTLS chunk header (4 bytes) |\nPre-padding | unified_hdr | seq_num (1 + 1 + 2 bytes) |\nCentent_type (1 bytes) |\nSCTP Common chunks (4 * n bytes) |\nTag_length (16 bytes) |\nPost-padding (3 bytes) <---\n```\n\nIs this 'fixed' 3-byte Post-padding expected in DTLS chunk? It appears to introduce unnecessary bandwidth overhead.",
       "createdAt": "2026-06-15T16:07:13Z",
-      "updatedAt": "2026-06-15T16:07:13Z",
+      "updatedAt": "2026-06-17T16:12:36Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "So not all cipher algorithms have 16 bytes long long authentication tag lengths. But with any multiple of 4 of four bytes I guess this is unfortunate consequence of providing 32-bit aligned start location for the cipher text.",
+          "createdAt": "2026-06-17T16:12:36Z",
+          "updatedAt": "2026-06-17T16:12:36Z"
+        }
+      ]
+    },
+    {
+      "number": 154,
+      "id": "I_kwDOKszxDc8AAAABF0CSwQ",
+      "title": "Abstract API needs clear rules regarding restart keys",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/154",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "To the restart keys being used we will need clearer rules around when one may set restart keys in relation to the primary key. ",
+      "createdAt": "2026-06-17T16:17:48Z",
+      "updatedAt": "2026-06-17T16:17:48Z",
       "closedAt": null,
       "comments": []
     }
@@ -8400,7 +8424,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-05T17:12:40Z",
-      "updatedAt": "2026-06-15T08:44:26Z",
+      "updatedAt": "2026-06-17T14:28:58Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "df7400f1cfaebff514bb64763841a04d5d694891",
@@ -8546,6 +8570,26 @@
           "createdAt": "2026-06-15T08:44:26Z",
           "updatedAt": "2026-06-15T08:44:26Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABDTWkHg",
+          "commit": {
+            "abbreviatedOid": "967de04"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-17T14:28:58Z",
+          "updatedAt": "2026-06-17T14:28:58Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "How can one set a restart key on socket in SCTP_LISTEN state? Isn't that a general server socket that accept new associations? I don't see how one can associate the key with any restarting endpoint? ",
+              "createdAt": "2026-06-17T14:28:58Z",
+              "updatedAt": "2026-06-17T14:28:58Z"
+            }
+          ]
         }
       ]
     },
