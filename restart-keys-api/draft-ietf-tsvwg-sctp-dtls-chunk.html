@@ -3206,9 +3206,9 @@ Key Material to avoid issues:<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 them being used unless this endpoint is attempting a restart.<a href="#section-7.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-2.2">
-            <p id="section-7.4-2.2.1">With the exception any Restart Keys when attempting restart of the
-SCTP association the first DTLS epoch MUST be 3. Any subsequent Epoch must
-be the next consencutive number compared to the previously used.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.2.1">With the exception any restart keys when attempting restart of the
+SCTP association, the first DTLS epoch MUST be 3. Any subsequent epoch must
+be the next consecutive number compared to the previously used.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-7.4-3">The following information needs to be provided when setting send key material:<a href="#section-7.4-3" class="pilcrow">¶</a></p>
@@ -3396,12 +3396,8 @@ the Primary or Restart DTLS Key Context for a given SCTP Association.<a href="#s
 SCTP Association. This function can be replace by Establish Send Key
 Material which immediately enables the primary key for the next epoch
 when installed.<a href="#section-7.8-1" class="pilcrow">¶</a></p>
-<p id="section-7.8-2">Restart Keys SHALL only be indicated when attempting to perform a
-restart of the SCTP Association. If the peer is attempting a restart
-of the SCTP association and this endpoint have restart keys installed
-they will be used to respond to restart handshake messages when
-required, and set as default in the new SCTP association created by
-the restart.<a href="#section-7.8-2" class="pilcrow">¶</a></p>
+<p id="section-7.8-2">Setting the restart keys to be used instead of primary keys SHALL only
+be done when attempting to perform a restart of the SCTP association.<a href="#section-7.8-2" class="pilcrow">¶</a></p>
 <p id="section-7.8-3">Request: Set Key used<a href="#section-7.8-3" class="pilcrow">¶</a></p>
 <p id="section-7.8-4">Parameters:<a href="#section-7.8-4" class="pilcrow">¶</a></p>
 <ul class="normal">
