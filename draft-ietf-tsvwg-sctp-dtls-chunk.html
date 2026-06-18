@@ -28,21 +28,22 @@ This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
 can only be used as described in this document. 
        This document obsoletes RFC 6083 and updates RFC 5061. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="draft-ietf-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.7.0
+    wcwidth 0.8.1
 -->
 <link href="draft-ietf-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1065,7 +1066,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 10 December 2026</td>
+<td class="center">Expires 20 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1084,12 +1085,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfcRFC5061" class="eref">RFC5061</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-08" class="published">8 June 2026</time>
+<time datetime="2026-06-18" class="published">18 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-10">10 December 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-20">20 December 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1166,7 +1167,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2786,10 +2787,12 @@ SCTP common header and one DTLS chunk.<a href="#section-5.2-5" class="pilcrow">�
 has been configured by the application, all SCTP packets SHALL be sent using a DTLS chunk.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
 <p id="section-5.2-7">When an SCTP packet needs to be sent, the sequence of chunks is used
 as <code>DTLSInnerPlaintext.content</code> and <code>DTLSInnerPlaintext.type</code> is set
-to <code>application_data</code> <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Then the <code>DTLSCiphertext</code> is
-computed per the DTLS 1.3 specification <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> and the configured
-cipher suite, and the result is used as the payload. Finally the SCTP
-common header is prepended.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+to <code>application_data</code> <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.
+Then the <code>DTLSCiphertext</code> is computed per the DTLS 1.3 specification <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.
+The cipher suite from the Primary DTLS Key Context is used, if configured.
+Otherwise, the cipher suite from the Restart DTLS Key Context is used.
+The resulting <code>DTLSCiphertext</code> is the chunk value of the DTLS chunk.
+Finally the SCTP common header is prepended.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
 <p id="section-5.2-8">When the DTLS chunk is used, the endpoint MUST consider the DTLS chunk header
 and the overhead of DTLS to ensure that the final SCTP packet does not exceed
 the PMTU.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
@@ -2940,9 +2943,11 @@ reuse.<a href="#section-5.4-10" class="pilcrow">¶</a></p>
 </div>
 <p id="section-5.4-12">The <a href="#DTLS-chunk-restart" class="auto internal xref">Figure 12</a> shows how the control chunks being
 used for SCTP association restart are transported within DTLS in SCTP.<a href="#section-5.4-12" class="pilcrow">¶</a></p>
-<p id="section-5.4-13">A restarted SCTP association MUST continue to use the restart DTLS key context,
-for user traffic until a new primary DTLS key context will be available. The
-implementors SHOULD initiate a rekeying as soon as possible,
+<p id="section-5.4-13">A restarted SCTP association MUST continue to use the restart DTLS key context
+and MUST remove all primary DTLS key contexts.
+Therefore, the restart DTLS key context is used for user traffic until a new
+primary DTLS key context will be available.
+The implementors SHOULD initiate a rekeying as soon as possible,
 and derive the primary and restart keys so that the time when no
 restart DTLS key context is available is kept to a minimum. Note that another
 restart attempt prior to having created new restart DTLS key context
@@ -4086,7 +4091,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.5-4.5">
 <code>sdk_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.5-4.6">
-              <p id="section-8.4.5-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+              <p id="section-8.4.5-4.6.1">If the value is <code>0</code>, the primary keys are added, if a value different
 from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.5-4.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
@@ -4129,8 +4134,13 @@ of length <code>sdk_sn_key_len</code>.<a href="#section-8.4.5-4.18.1" class="pil
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-8.4.5-5">This socket option can only be used on SCTP endpoints in states other than
-<code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code> and <code>SCTP_COOKIE_ECHOED</code>.
+<p id="section-8.4.5-5">This socket option can only be used to set a primary key on SCTP endpoints in
+states other than <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code>, and
+<code>SCTP_COOKIE_ECHOED</code>.
+A restart key can always be set on SCTP endpoints in the <code>SCTP_CLOSED</code> state.
+Only if a primary key is set on an SCTP endpoint, a restart key can be set in
+states other than <code>SCTP_CLOSED</code>, <code>SCTP_LISTEN</code>, <code>SCTP_COOKIE_WAIT</code>,
+and <code>SCTP_COOKIE_ECHOED</code>.
 If the socket option is successful, all affected DTLS chunks sent will use the
 specified keys until the keys are changed again by another call of this
 socket option.<a href="#section-8.4.5-5" class="pilcrow">¶</a></p>
@@ -4178,7 +4188,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.6-4.5">
 <code>sdk_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.6-4.6">
-              <p id="section-8.4.6-4.6.1">If the value is <code>0</code>, the regular keys are added, if a value different
+              <p id="section-8.4.6-4.6.1">If the value is <code>0</code>, the primary keys are added, if a value different
 from <code>0</code> is used, the restart keys are added.<a href="#section-8.4.6-4.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
@@ -4255,7 +4265,7 @@ It is an error to use <code>SCTP_{FUTURE|CURRENT|ALL}_ASSOC</code>.<a href="#sec
 <dt id="section-8.4.7-4.3">
 <code>sdki_restart</code>:</dt>
             <dd style="margin-left: 1.5em" id="section-8.4.7-4.4">
-              <p id="section-8.4.7-4.4.1">If the value is <code>0</code>, the regular keys are removed, if a value different
+              <p id="section-8.4.7-4.4.1">If the value is <code>0</code>, the primary keys are removed, if a value different
 from <code>0</code> is used, the restart keys are removed.<a href="#section-8.4.7-4.4.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
