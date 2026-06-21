@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-18T02:56:07.970922+00:00",
+  "timestamp": "2026-06-21T03:28:59.225356+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2178,7 +2178,7 @@
       "id": "I_kwDOKszxDc8AAAABEQM8nA",
       "title": "Clarify that restart keys using epoch=3 may be overwritten",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/143",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -2187,8 +2187,8 @@
       "labels": [],
       "body": "We have observed that it might be good to clarify that when restarting one need to be careful and use a particular procedure when overwriting old restart keys with epoch=3 with new ones after restart. \n\nBoth endpoint have restart keys with epoch = 3 installed (R3-O).\n\nA restarts: and send init\nB sends INIT-ACK\nA sends Cookie ECHO (R3-O)\nB Send Cookie ACK (R3-O)\nNew Keymanagement\nDerive Keys (P3-N) and (R3-N)\nInstall P3-N\nVerify bi-direcitonal communication with P3-N\nInstall R3-N, thus deleting R3-O\n\nIt would be good to clarify this.",
       "createdAt": "2026-06-03T13:42:52Z",
-      "updatedAt": "2026-06-04T14:39:24Z",
-      "closedAt": null,
+      "updatedAt": "2026-06-18T16:40:57Z",
+      "closedAt": "2026-06-18T16:40:57Z",
       "comments": [
         {
           "author": "gloinul",
@@ -2196,6 +2196,13 @@
           "body": "Discussed in DT:\n* Procedure order defined in the key-management\n* Restart procedure have similar timings like initial establishment\n* DTLS Chunk needs clarification that if primary key exists it SHALL be used instead of restart key.",
           "createdAt": "2026-06-04T14:39:12Z",
           "updatedAt": "2026-06-04T14:39:12Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "With #155 and #151 I do wonder if the language to use the primary key needs to be move into a more central place like Section 5.2. And that might need to cover also the fact that if an endpoint receives a handshake and the cookie ECHO is using a restart key, the corresponding send key SHALL be used to send the reply COOKIE ACK.",
+          "createdAt": "2026-06-18T13:45:41Z",
+          "updatedAt": "2026-06-18T13:45:41Z"
         }
       ]
     },
@@ -2204,15 +2211,15 @@
       "id": "I_kwDOKszxDc8AAAABFimxhA",
       "title": "1-byte Pre-padding Always Results in 3-byte Post-padding",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/153",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "lxin",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "The current DTLS chunk layout is:\n\n```\nDTLS chunk header (4 bytes) |\nPre-padding | unified_hdr | seq_num (1 + 1 + 2 bytes) |\nCentent_type (1 bytes) |\nSCTP Common chunks (4 * n bytes) |\nTag_length (16 bytes) |\nPost-padding (3 bytes) <---\n```\n\nIs this 'fixed' 3-byte Post-padding expected in DTLS chunk? It appears to introduce unnecessary bandwidth overhead.",
+      "body": "The current DTLS chunk layout is:\n\n```\nDTLS chunk header (4 bytes) |\nPre-padding | unified_hdr | seq_num (1 + 1 + 2 bytes) |\nSCTP Common chunks (4 * n bytes) |\nCentent_type (1 bytes) |\nTag_length (16 bytes) |\nPost-padding (3 bytes) <---\n```\n\nIs this 'fixed' 3-byte Post-padding expected in DTLS chunk? It appears to introduce unnecessary bandwidth overhead.",
       "createdAt": "2026-06-15T16:07:13Z",
-      "updatedAt": "2026-06-17T16:12:36Z",
-      "closedAt": null,
+      "updatedAt": "2026-06-18T14:16:42Z",
+      "closedAt": "2026-06-18T14:16:42Z",
       "comments": [
         {
           "author": "gloinul",
@@ -2220,6 +2227,27 @@
           "body": "So not all cipher algorithms have 16 bytes long long authentication tag lengths. But with any multiple of 4 of four bytes I guess this is unfortunate consequence of providing 32-bit aligned start location for the cipher text.",
           "createdAt": "2026-06-17T16:12:36Z",
           "updatedAt": "2026-06-17T16:12:36Z"
+        },
+        {
+          "author": "lxin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> So not all cipher algorithms have 16 bytes long long authentication tag lengths. But with any multiple of 4 of four bytes I guess this is unfortunate consequence of providing 32-bit aligned start location for the cipher text.\n\nJust let you know, the tag length of all the ciphers in TLS 1.3 are 4-bytes aligned:\n\nhttps://datatracker.ietf.org/doc/html/rfc8446#appendix-B.4\n\nand if we delete the 1-byte pre-padding, we will not need 3-byte post-padding, and it saves 4 bytes in DTLS payload for user data. :-)",
+          "createdAt": "2026-06-18T13:44:31Z",
+          "updatedAt": "2026-06-18T13:44:31Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "But then the DTLS records start of the cipher text will not be 32-byte aligned. Which will force BSD to do something here to handle the ciphering efficiently. So which is more important here, saving 4 bytes or having 32-bit alignment for in place ciphering I guess we have to discuss. ",
+          "createdAt": "2026-06-18T13:47:42Z",
+          "updatedAt": "2026-06-18T13:47:42Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "The implementation performance impact of not having the SCTP 32-bit alignment is significant, and can on some CPU architectures cause crashes. Thus we will have to accept the 4-byte overhead. ",
+          "createdAt": "2026-06-18T14:16:42Z",
+          "updatedAt": "2026-06-18T14:16:42Z"
         }
       ]
     },
@@ -2228,14 +2256,30 @@
       "id": "I_kwDOKszxDc8AAAABF0CSwQ",
       "title": "Abstract API needs clear rules regarding restart keys",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/154",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "To the restart keys being used we will need clearer rules around when one may set restart keys in relation to the primary key. ",
       "createdAt": "2026-06-17T16:17:48Z",
-      "updatedAt": "2026-06-17T16:17:48Z",
+      "updatedAt": "2026-06-18T15:25:16Z",
+      "closedAt": "2026-06-18T15:25:16Z",
+      "comments": []
+    },
+    {
+      "number": 156,
+      "id": "I_kwDOKszxDc8AAAABF78C2Q",
+      "title": "How to reference which cipher suits are recommended and/or mandatory to implement",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/156",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-18T14:36:40Z",
+      "updatedAt": "2026-06-18T14:36:40Z",
       "closedAt": null,
       "comments": []
     }
@@ -8417,24 +8461,26 @@
       "id": "PR_kwDOKszxDc7jML7D",
       "title": "Specify send key handling",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/151",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-06-05T17:12:40Z",
-      "updatedAt": "2026-06-17T14:28:58Z",
+      "updatedAt": "2026-06-18T14:22:43Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "df7400f1cfaebff514bb64763841a04d5d694891",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "describe-send-key-handling",
       "headRefOid": "967de04a53c84961ad1ac9ae7a206b593021972e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-06-18T14:22:43Z",
+      "mergedAt": "2026-06-18T14:22:43Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "89313531a37459d1a9a797e5ee88676435a7787f"
+      },
       "comments": [
         {
           "author": "tuexen",
@@ -8570,26 +8616,6 @@
           "createdAt": "2026-06-15T08:44:26Z",
           "updatedAt": "2026-06-15T08:44:26Z",
           "comments": []
-        },
-        {
-          "id": "PRR_kwDOKszxDc8AAAABDTWkHg",
-          "commit": {
-            "abbreviatedOid": "967de04"
-          },
-          "author": "gloinul",
-          "authorAssociation": "OWNER",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2026-06-17T14:28:58Z",
-          "updatedAt": "2026-06-17T14:28:58Z",
-          "comments": [
-            {
-              "originalPosition": 52,
-              "body": "How can one set a restart key on socket in SCTP_LISTEN state? Isn't that a general server socket that accept new associations? I don't see how one can associate the key with any restarting endpoint? ",
-              "createdAt": "2026-06-17T14:28:58Z",
-              "updatedAt": "2026-06-17T14:28:58Z"
-            }
-          ]
         }
       ]
     },
@@ -8644,6 +8670,48 @@
           "body": "",
           "createdAt": "2026-06-08T07:43:37Z",
           "updatedAt": "2026-06-08T07:43:37Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 155,
+      "id": "PR_kwDOKszxDc7n94g-",
+      "title": "Adding language around restart keys and when to use them.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/155",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This attempts to resolve #154 ",
+      "createdAt": "2026-06-18T13:40:49Z",
+      "updatedAt": "2026-06-18T15:25:15Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "df7400f1cfaebff514bb64763841a04d5d694891",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "restart-keys-api",
+      "headRefOid": "5cf72dbe8e379b782dfb3d3006c3607ec05f5fee",
+      "closedAt": "2026-06-18T15:25:14Z",
+      "mergedAt": "2026-06-18T15:25:14Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "e9d2779e3649e8cd8edfcd6108109ee54a85f93b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABDb1BeA",
+          "commit": {
+            "abbreviatedOid": "9c9ea7a"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "L1094 : It's not clear for me.\n\nL1209 : this poses quite some problems as it cannot be KM to decide when using R Keys. At reception of R-protected COOKIE-ECHO, that doesn't arrive to  KM, the Association must automatically switch to encoding output traffic, thus COOKIE-ACK, as R-protected. KM will only know that there's a need for new handshake when receiving clientHello from the restarting peer.",
+          "createdAt": "2026-06-18T13:49:23Z",
+          "updatedAt": "2026-06-18T13:49:23Z",
           "comments": []
         }
       ]
