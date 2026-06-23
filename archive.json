@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-21T03:28:59.225356+00:00",
+  "timestamp": "2026-06-23T02:40:04.283269+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2279,9 +2279,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-18T14:36:40Z",
-      "updatedAt": "2026-06-18T14:36:40Z",
+      "updatedAt": "2026-06-21T13:57:08Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "https://datatracker.ietf.org/doc/html/rfc8446#section-9.1 provides the information we were looking for.",
+          "createdAt": "2026-06-21T13:57:08Z",
+          "updatedAt": "2026-06-21T13:57:08Z"
+        }
+      ]
     }
   ],
   "pulls": [
