@@ -827,7 +827,7 @@ below. Implementation of the protected restart procedure is RECOMMENDED; however
 it is not required, as it relies on the availability of persistent secure storage
 for the restart DTLS key context. An endpoint will know that its peer supports
 this protected SCTP restart procedure from the DTLS Key Management Parameter's R bit
-{{key-management-parameter}}.
+({{protectedassoc-parameter}}).
 
 The protected SCTP restart procedure keeps the security characteristics of
 an SCTP association using DTLS chunks.
@@ -925,7 +925,7 @@ After restart, the next primary DTLS key context MUST use epoch 3,
 i.e. the epoch value is reset. After having derived a new
 primary DTLS key context, the endpoint installs it
 and starts using it. The new restart DTLS key context is only installed
-after all old in-flight restart packets have been received.
+after all old in-flight restart packets are expected to have been received.
 
 An SCTP endpoint supporting only normal SCTP restart and involved in
 an SCTP association using DTLS chunks SHOULD NOT attempt to restart
@@ -934,10 +934,11 @@ receive INIT ACK but then all sent packets with COOKIE ECHO will be
 dropped until the peer endpoint times out the SCTP association from lack
 of any response from the restarting node.
 
-An SCTP endpoint supporting only legacy SCTP restart and involved
-in an SCTP association using DTLS chunks, when receiving a COOKIE ECHO
-chunk protected by DTLS chunk as described above, thus having the
-R bit (Restart Indicator) set in the DTLS chunk (see
+An SCTP endpoint supporting only legacy SCTP restart and involved in
+an SCTP association using DTLS chunks, when receiving what is expected
+to be an COOKIE ECHO chunk protected by DTLS chunk as described above,
+in other words if it receives a SCTP packet with a DTLS chunk having
+the R bit (Restart Indicator) set in the DTLS chunk (see
 {{sctp-DTLS-chunk-newchunk-crypt-struct}}), MUST silently discard it.
 
 # DTLS Key Management Method Considerations {#key-management-considerations}
