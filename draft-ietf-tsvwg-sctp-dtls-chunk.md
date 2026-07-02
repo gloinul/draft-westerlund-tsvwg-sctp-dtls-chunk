@@ -809,8 +809,8 @@ it MUST NOT abort the association.
 
 ## Termination of a Protected Association {#termination-procedure}
 
-Note that the closure of any DTLS Key Management Method doesn't
-compromise the capability of terminating the SCTP association gracefully as
+Note that the state of any DTLS Key Management Method doesn't
+impact the capability of terminating the SCTP association gracefully as
 that capability only relies on the Key Context and not on the DTLS Key
 Management Method from where it has been derived.
 
