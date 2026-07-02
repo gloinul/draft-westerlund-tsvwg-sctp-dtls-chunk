@@ -122,20 +122,21 @@ for negotiating and managing its usage.
 DTLS chunk support is integrated into the SCTP implementation, enabling the
 secure transfer of SCTP packets (including both control and DATA chunks).
 
-The DTLS chunk protects a sequence of SCTP chunks by encapsulating their
-DTLS-based ciphertext. This processing is based on DTLS 1.3, as specified in
+The DTLS chunk protects a sequence of SCTP chunks by encrypting the
+plain text into encrypted ciphertext using the DTLS record format and
+its processing. This processing is based on DTLS 1.3, as specified in
 {{RFC9147}}.
 
 Key management is performed outside of the SCTP implementation and is out of scope
 of this document. This process is referred to as the DTLS Key Management Method.
 While these methods can also be based on DTLS 1.3, it is not a requirement.
 
-The DTLS chunk in combination with the DTLS Key Management Method provides
-mutual authentication, confidentiality, DTLS based data origin authentication,
-integrity, and replay protection for SCTP packets.
+The DTLS chunk in combination with the DTLS Key Management Method can
+provide mutual authentication, confidentiality, DTLS based data origin
+authentication, integrity, and replay protection for SCTP packets.
 The DTLS Key Management Method utilizes an API to provision the SCTP
-association's DTLS chunk protection with key material to enable and rekey the
-protection operations.
+association's DTLS chunk protection with key material to enable and
+rekey the protection operations.
 
 {{sctp-DTLS-chunk-layering}} is an example illustrating the DTLS chunk
 processing in regard to SCTP and the Upper Layer Protocol (ULP) using
@@ -144,33 +145,36 @@ Here the DTLS Key Management Method provides validation, i.e. using certificates
 handshaking, updating policies etc.
 
 ~~~~~~~~~~~ aasvg
-+---------------+ +-------------------------------+
-|      ULP      | |            DTLS 1.3           |
-|               | |    +---------------------+    |
-|               | | +->+    Key Exporter     +--+ |
-|               | | |  +---------------------+  | |
-|               | | |                           | |
-|               | | |  +---------------------+  | |
-|               | | +--+    Key Management   +  | |
-|               | | |  +----------+----------+  | |
-|               | | |             |             | |
-|               | | | ContentType |             | |
-|               | | |  +----------+----------+  | |
-|               | | +->|        Record       |  | |
-|               | |    | Protection Operator |  | |
-|               | |    +----------+----------+  | |
-+-------+-------+ +-----------------------------+-+
-        ^                         ^             |
-        |                         |             |
-        +--+----------------------+             | keys
-      PPID |                                    |
-           V                                    V
-+-----------------------------------------------+-+
-|                    +---------------------+    | |
-|        SCTP        |         Chunk       |<---+ |
-|                    | Protection Operator |      |
-|                    +---------------------+      |
-+-------------------------------------------------+
++---------------+ +-----------------------------------+
+|      ULP      | |        Key Management Method      |
+|               | | +-------------------------------+ |
+|               | | |             DTLS 1.3          | |
+|               | | |    +---------------------+    | |
+|               | | | +->+    Key Exporter     +--+ | |
+|               | | | |  +---------------------+  | | |
+|               | | | |                           | | |
+|               | | | |  +---------------------+  | | |
+|               | | | +--+    Key Management   +  | | |
+|               | | | |  +----------+----------+  | | |
+|               | | | |             |             | | |
+|               | | | | ContentType |             | | |
+|               | | | |  +----------+----------+  | | |
+|               | | | +->|        Record       |  | | |
+|               | | |    | Protection Operator |  | | |
+|               | | |    +----------+----------+  | | |
+|               | | +-----------------------------+-+ |
++-------+-------+ +-------------------------------+---+
+        ^                         ^               |
+        |                         |               |
+        +--+----------------------+               | keys
+      PPID |                                      |
+           V                                      V
++-------------------------------------------------+-+
+|                      +---------------------+    | |
+|        SCTP          |         Chunk       |<---+ |
+|                      | Protection Operator |      |
+|                      +---------------------+      |
++-------------------..------------------------------+
 ~~~~~~~~~~~
 {: #sctp-DTLS-chunk-layering title="DTLS Chunk Layering
 in Regard to SCTP and ULP" artwork-align="center"}
