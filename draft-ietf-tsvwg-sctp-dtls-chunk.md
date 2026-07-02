@@ -224,15 +224,16 @@ SCTP and its extensions. However, the following limitations apply:
 ## Relationship to RFC 6083 and RFC 5061
 
 This document obsoletes {{RFC6083}}, which defined the use of DTLS
-over SCTP by encapsulating DTLS records as SCTP user data using the
-SCTP-AUTH extension ({{RFC4895}}) for integrity protection of the SCTP
-headers.  That approach suffered from several limitations: it could
-not support SCTP user messages above 16384 bytes, it could not protect
-SCTP control chunks, and it exposed significant SCTP metadata in clear
-text.  The mechanism defined in this document replaces {{RFC6083}} by
-integrating DTLS 1.3 record protection directly at the chunk level,
-providing confidentiality and integrity for both user data and SCTP
-control chunks without dependency on SCTP-AUTH.
+over SCTP by encapsulating user data in DTLS records and sending the
+DTLS records as SCTP user data using the SCTP-AUTH extension
+({{RFC4895}}) for integrity protection of the SCTP packets.  That
+approach suffered from several limitations: it could not support SCTP
+user messages above 16384 bytes, it could not encrypt SCTP control
+chunks, and it exposed significant SCTP metadata in clear text.  The
+mechanism defined in this document replaces {{RFC6083}} by integrating
+DTLS 1.3 record protection directly at the chunk level, providing
+confidentiality and integrity for both user data and SCTP control
+chunks without dependency on SCTP-AUTH.
 
 This document updates {{RFC5061}} by restricting the use of the Dynamic
 Address Reconfiguration extension when the DTLS chunk is in use.
