@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 20 December 2026                Münster Univ. of Appl. Sciences
-                                                            18 June 2026
+Expires: 3 January 2027                  Münster Univ. of Appl. Sciences
+                                                             2 July 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 December 2026.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -994,7 +994,7 @@ Table of Contents
 
    *  [I-D.ietf-tsvwg-dtls-chunk-key-management]
 
-   *  [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
+   *  [I-D.porfiri-tsvwg-sctp-dtls-handshake]
 
    An SCTP endpoint MAY support multiple DTLS Key Management Methods
    subject to implementation requirements and local security policies.
@@ -2186,12 +2186,14 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-tsvwg-
               dtls-chunk-key-management-01>.
 
-   [I-D.westerlund-tsvwg-sctp-DTLS-handshake]
-              Westerlund, M., Preuß Mattsson, J., and C. Porfiri,
-              "Datagram Transport Layer Security (DTLS) in the Stream
-              Control Transmission Protocol (SCTP) DTLS Chunk", July
-              2025, <https://datatracker.ietf.org/doc/draft-westerlund-
-              tsvwg-sctp-dtls-handshake/>.
+   [I-D.porfiri-tsvwg-sctp-dtls-handshake]
+              Westerlund, M., Mattsson, J. P., and C. Porfiri,
+              "Transport Layer Security (TLS) based key-management of
+              the Stream Control Transmission Protocol (SCTP) DTLS
+              Chunk", Work in Progress, Internet-Draft, draft-porfiri-
+              tsvwg-sctp-dtls-handshake-00, 18 June 2026,
+              <https://datatracker.ietf.org/doc/html/draft-porfiri-
+              tsvwg-sctp-dtls-handshake-00>.
 
    [ETSI-TS-38.413]
               "NG Application Protocol (NGAP) version 18.5.0 Release
