@@ -698,7 +698,7 @@ ABORT chunk.
 It MAY include the appropriate error cause
 "Missing DTLS Chunk Support" (see {{enoprotected}}),
 "No Common DTLS Key Management Method" (see {{enocommonpsi}),
-or "No Common DTLS Key Management Method" (see {{incompatroles}}).
+or "Incompatible DTLS Key Management Roles" (see {{incompatroles}}).
 
 If an SCTP endpoint operates in loose DTLS mode, it MAY continue with the
 handshake in any case.
