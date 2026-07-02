@@ -792,9 +792,9 @@ the PMTU.
 Upon receipt of an SCTP packet in which a DTLS chunk is bundled with any
 other chunk, the entire packet MUST be silently discarded.
 
-After the application has restricted the SCTP packet handling to protected
-SCTP packets only, an SCTP packet not containing a DTLS chunk MUST be
-silently discarded.
+After the application or key managment method has restricted the SCTP
+packet handling to protected SCTP packets only, an SCTP packet not
+containing a DTLS chunk MUST be silently discarded.
 
 When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
 the Restart flag in addition to the `unified_hdr` is used to find the keys for
