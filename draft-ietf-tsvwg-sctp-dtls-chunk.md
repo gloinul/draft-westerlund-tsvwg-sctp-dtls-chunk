@@ -47,27 +47,7 @@ informative:
   RFC8446:
   I-D.ietf-tsvwg-rfc4895-bis:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
-  I-D.westerlund-tsvwg-sctp-DTLS-handshake:
-    target: "https://datatracker.ietf.org/doc/draft-westerlund-tsvwg-sctp-dtls-handshake/"
-    title: "Datagram Transport Layer Security (DTLS) in the Stream Control Transmission Protocol (SCTP) DTLS Chunk"
-    author:
-      -
-       ins:  M. Westerlund
-       name: Magnus Westerlund
-       org: Ericsson
-       email: magnus.westerlund@ericsson.com
-      -
-       ins: J. Preuß Mattsson
-       name: John Preuß Mattsson
-       org: Ericsson
-       email: john.mattsson@ericsson.com
-      -
-       ins: C. Porfiri
-       name: Claudio Porfiri
-       org: Ericsson
-       email: claudio.porfiri@ericsson.com
-    date: Jul 2025
-
+  I-D.porfiri-tsvwg-sctp-dtls-handshake:
   ETSI-TS-38.413:
     target: "https://www.etsi.org/deliver/etsi_ts/138400_138499/138413/18.05.00_60/ts_138413v180500p.pdf"
     title: "NG Application Protocol (NGAP) version 18.5.0 Release 18"
@@ -697,7 +677,7 @@ or only an incompatible one, the endpoint MUST send an SCTP packet with an
 ABORT chunk.
 It MAY include the appropriate error cause
 "Missing DTLS Chunk Support" (see {{enoprotected}}),
-"No Common DTLS Key Management Method" (see {{enocommonpsi}),
+"No Common DTLS Key Management Method" (see {{enocommonpsi}}),
 or "No Common DTLS Key Management Method" (see {{incompatroles}}).
 
 If an SCTP endpoint operates in loose DTLS mode, it MAY continue with the
@@ -954,7 +934,7 @@ Currently two DTLS Key Management Methods with different properties (such as
 mutual authentication and rekeying) are defined:
 
 * {{I-D.ietf-tsvwg-dtls-chunk-key-management}}
-* {{I-D.westerlund-tsvwg-sctp-DTLS-handshake}}
+* {{I-D.porfiri-tsvwg-sctp-dtls-handshake}}
 
 An SCTP endpoint MAY support multiple DTLS Key Management Methods subject to
 implementation requirements and local security policies.
