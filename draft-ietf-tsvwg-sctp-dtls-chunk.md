@@ -794,7 +794,8 @@ other chunk, the entire packet MUST be silently discarded.
 
 After the application has restricted the SCTP packet handling to protected
 SCTP packets only, an SCTP packet not containing a DTLS chunk MUST be
-silently discarded.
+silently discarded unless they contain an INIT or INIT-ACK chunk. The later
+may be received during a SCTP restart procedure, see {{sec-restart}}.
 
 When processing the payload of the DTLS chunk (i.e. the `DTLSCiphertext`),
 the Restart flag in addition to the `unified_hdr` is used to find the keys for
@@ -1086,7 +1087,7 @@ Reply   : Cipher Suites
 
 Parameters : list of cipher suites
 
-## Establish Send Key Material
+## Establish Send Key Material {#sec-api-send-key}
 
 The DTLS chunk can use one out of multiple sets of cipher suite and
 corresponding key materials. Some limitations do exists when establishing
@@ -1133,7 +1134,8 @@ Reply: Established or Failed
 ## Establish Receive Key Material
 
 The DTLS chunk can use one out of multiple sets of cipher suite and
-corresponding key materials.
+corresponding key materials. Note that the same restrictions as applies to
+send keys, see {{sec-api-send-key}}, also applies to setting receive keys.
 
 The following information needs to be provided when setting receive key material:
 
@@ -1148,9 +1150,7 @@ Parameters :
 : A bit indicating whether the key material is for restart purposes
 
 * DTLS Epoch:
-: The DTLS epoch these keys are valid for. Note that Epoch lower than
-  3 are not expected as they are used during DTLS handshake. The DTLS
-  epoch must be the next in turn.
+: The DTLS epoch these keys are valid for.
 
 * Cipher Suite:
 : 2 bytes cipher suite identification for the DTLS 1.3 cipher suite used
