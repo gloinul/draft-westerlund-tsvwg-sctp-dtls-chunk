@@ -312,6 +312,14 @@ size must be sufficiently large to accommodate these latency differences.
 Endpoints implementing DTLS chunk MUST support DTLS records containing up to
 2<sup>14</sup> (16384) bytes of plain text.
 
+### Mandatory-to-Implement Cipher Suites
+
+A DTLS chunk implementation MUST implement the TLS_AES_128_GCM_SHA256
+cipher suite and SHOULD implement the TLS_AES_256_GCM_SHA384 and
+TLS_CHACHA20_POLY1305_SHA256 cipher suites using the identifiers
+defined by {{TLS-CIPHER-SUITES}}.
+
+
 ## SCTP Considerations
 
 The SCTP authentication extension (SCTP-AUTH) defined in {{RFC4895}} is incompatible
