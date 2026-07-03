@@ -314,14 +314,16 @@ Endpoints implementing DTLS chunk MUST support DTLS records containing up to
 
 ### Mandatory-to-Implement Cipher Suites
 
+In the absence of an application profile standard specifying otherwise:
+
 A SCTP DTLS chunk implementation MUST implement the TLS_AES_128_GCM_SHA256
 cipher suite and SHOULD implement the TLS_AES_256_GCM_SHA384 and
-TLS_CHACHA20_POLY1305_SHA256 cipher suites using the identifiers
+TLS_CHACHA20_P,OLY1305_SHA256 cipher suites, using the identifiers
 defined by {{TLS-CIPHER-SUITES}}.
 
-In general any TLS cipher suit that is marked as DTLS-OK in the TLS
-cipher suit table {{TLS-CIPHER-SUITES}} is expected to be possible to
-use taking into account there inherent security properties.
+In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the TLS
+cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable, taking
+into account its inherent security properties.
 
 
 ## SCTP Considerations
