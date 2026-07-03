@@ -1093,12 +1093,12 @@ The DTLS chunk can use one out of multiple sets of cipher suite and
 corresponding key materials. Some limitations do exists when establishing
 Key Material to avoid issues:
 
-* Primary Keys  MUST be installed prior to Restart Keys for each epoch to avoid
+* Primary Keys have to be installed prior to Restart Keys for each epoch to avoid
   them being used unless this endpoint is attempting a restart.
 
 * With the exception of restart keys when this endpoint attempts
   restart of the SCTP association, the first DTLS epoch set in an
-  association MUST be 3. Any subsequent epoch must be the next
+  association needs to be 3. Any subsequent epoch uses the next
   consecutive number compared to the previously used.
 
 The following information needs to be provided when setting send key material:
@@ -1134,8 +1134,7 @@ Reply: Established or Failed
 ## Establish Receive Key Material
 
 The DTLS chunk can use one out of multiple sets of cipher suite and
-corresponding key materials. Note that the same restrictions as applies to
-send keys, see {{sec-api-send-key}}, also applies to setting receive keys.
+corresponding key materials.
 
 The following information needs to be provided when setting receive key material:
 
@@ -1150,7 +1149,12 @@ Parameters :
 : A bit indicating whether the key material is for restart purposes
 
 * DTLS Epoch:
-: The DTLS epoch these keys are valid for.
+: The DTLS epoch these keys are valid for. With the exception of
+  restart keys when this endpoint attempts restart of the SCTP
+  association, the first DTLS epoch set in an association needs to be
+  3. Any subsequent epoch uses the next consecutive number compared
+  to the previously used.
+
 
 * Cipher Suite:
 : 2 bytes cipher suite identification for the DTLS 1.3 cipher suite used
@@ -1211,7 +1215,7 @@ SCTP Association. This function can be replace by Establish Send Key
 Material which immediately enables the primary key for the next epoch
 when installed.
 
-Setting the restart keys to be used instead of primary keys SHALL only
+Setting the restart keys to be used instead of primary keys can only
 be done when attempting to perform a restart of the SCTP association.
 
 Request: Set Key used
