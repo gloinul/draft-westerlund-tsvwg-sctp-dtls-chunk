@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 19 January 2027                 Münster Univ. of Appl. Sciences
-                                                            18 July 2026
+Expires: 24 January 2027                 Münster Univ. of Appl. Sciences
+                                                            23 July 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 January 2027.
+   This Internet-Draft will expire on 24 January 2027.
 
 Copyright Notice
 
