@@ -1307,16 +1307,19 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
                 <p id="section-toc.1-1.7.2.9.1"><a href="#section-7.9" class="auto internal xref">7.9</a>.  <a href="#name-require-protected-sctp-pack" class="internal xref">Require Protected SCTP Packets</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.10">
-                <p id="section-toc.1-1.7.2.10.1"><a href="#section-7.10" class="auto internal xref">7.10</a>. <a href="#name-get-aead-encryption-invocat" class="internal xref">Get AEAD Encryption Invocations</a></p>
+                <p id="section-toc.1-1.7.2.10.1"><a href="#section-7.10" class="auto internal xref">7.10</a>. <a href="#name-read-indication-of-protecti" class="internal xref">Read Indication of Protection</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.11">
-                <p id="section-toc.1-1.7.2.11.1"><a href="#section-7.11" class="auto internal xref">7.11</a>. <a href="#name-get-aead-decryption-invocat" class="internal xref">Get AEAD Decryption Invocations</a></p>
+                <p id="section-toc.1-1.7.2.11.1"><a href="#section-7.11" class="auto internal xref">7.11</a>. <a href="#name-get-aead-encryption-invocat" class="internal xref">Get AEAD Encryption Invocations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.12">
-                <p id="section-toc.1-1.7.2.12.1"><a href="#section-7.12" class="auto internal xref">7.12</a>. <a href="#name-get-failed-aead-decryption-" class="internal xref">Get Failed AEAD Decryption Invocations</a></p>
+                <p id="section-toc.1-1.7.2.12.1"><a href="#section-7.12" class="auto internal xref">7.12</a>. <a href="#name-get-aead-decryption-invocat" class="internal xref">Get AEAD Decryption Invocations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.13">
-                <p id="section-toc.1-1.7.2.13.1"><a href="#section-7.13" class="auto internal xref">7.13</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
+                <p id="section-toc.1-1.7.2.13.1"><a href="#section-7.13" class="auto internal xref">7.13</a>. <a href="#name-get-failed-aead-decryption-" class="internal xref">Get Failed AEAD Decryption Invocations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.14">
+                <p id="section-toc.1-1.7.2.14.1"><a href="#section-7.14" class="auto internal xref">7.14</a>. <a href="#name-configure-replay-protection" class="internal xref">Configure Replay Protection</a></p>
 </li>
             </ul>
 </li>
@@ -3483,37 +3486,24 @@ discarded.<a href="#section-7.9-1" class="pilcrow">¶</a></p>
 <p id="section-7.9-4">Reply: Acknowledgement<a href="#section-7.9-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-aead-encryption-invocations">
+<div id="read-indication-of-protection">
 <section id="section-7.10">
-        <h3 id="name-get-aead-encryption-invocat">
-<a href="#section-7.10" class="section-number selfRef">7.10. </a><a href="#name-get-aead-encryption-invocat" class="section-name selfRef">Get AEAD Encryption Invocations</a>
+        <h3 id="name-read-indication-of-protecti">
+<a href="#section-7.10" class="section-number selfRef">7.10. </a><a href="#name-read-indication-of-protecti" class="section-name selfRef">Read Indication of Protection</a>
         </h3>
-<p id="section-7.10-1">Get the number of AEAD encryption invocations (protected SCTP packets)
-for a given epoch.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
-<p id="section-7.10-2">Request : Get AEAD Encryption Invocations<a href="#section-7.10-2" class="pilcrow">¶</a></p>
-<p id="section-7.10-3">Parameters :<a href="#section-7.10-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.10-4.1">
-            <p id="section-7.10-4.1.1">SCTP Association<a href="#section-7.10-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.10-4.2">
-            <p id="section-7.10-4.2.1">Restart indication<a href="#section-7.10-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.10-4.3">
-            <p id="section-7.10-4.3.1">DTLS Epoch<a href="#section-7.10-4.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-7.10-5">Reply: AEAD Encryption Invocations<a href="#section-7.10-5" class="pilcrow">¶</a></p>
-<p id="section-7.10-6">Parameters : non-negative integer<a href="#section-7.10-6" class="pilcrow">¶</a></p>
+<p id="section-7.10-1">The API functions for receiving data should explicitly indicate if the
+data provided to the upper layer protocol was protected by the SCTP
+assocations.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-aead-decryption-invocations">
+<div id="get-aead-encryption-invocations">
 <section id="section-7.11">
-        <h3 id="name-get-aead-decryption-invocat">
-<a href="#section-7.11" class="section-number selfRef">7.11. </a><a href="#name-get-aead-decryption-invocat" class="section-name selfRef">Get AEAD Decryption Invocations</a>
+        <h3 id="name-get-aead-encryption-invocat">
+<a href="#section-7.11" class="section-number selfRef">7.11. </a><a href="#name-get-aead-encryption-invocat" class="section-name selfRef">Get AEAD Encryption Invocations</a>
         </h3>
-<p id="section-7.11-1">Get the number of AEAD decryption invocations for a given epoch.<a href="#section-7.11-1" class="pilcrow">¶</a></p>
-<p id="section-7.11-2">Request : Get AEAD Decryption Invocations<a href="#section-7.11-2" class="pilcrow">¶</a></p>
+<p id="section-7.11-1">Get the number of AEAD encryption invocations (protected SCTP packets)
+for a given epoch.<a href="#section-7.11-1" class="pilcrow">¶</a></p>
+<p id="section-7.11-2">Request : Get AEAD Encryption Invocations<a href="#section-7.11-2" class="pilcrow">¶</a></p>
 <p id="section-7.11-3">Parameters :<a href="#section-7.11-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.11-4.1">
@@ -3526,17 +3516,17 @@ for a given epoch.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
             <p id="section-7.11-4.3.1">DTLS Epoch<a href="#section-7.11-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.11-5">Reply: AEAD Decryption Invocations<a href="#section-7.11-5" class="pilcrow">¶</a></p>
+<p id="section-7.11-5">Reply: AEAD Encryption Invocations<a href="#section-7.11-5" class="pilcrow">¶</a></p>
 <p id="section-7.11-6">Parameters : non-negative integer<a href="#section-7.11-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="get-failed-aead-decryption-invocations">
+<div id="get-aead-decryption-invocations">
 <section id="section-7.12">
-        <h3 id="name-get-failed-aead-decryption-">
-<a href="#section-7.12" class="section-number selfRef">7.12. </a><a href="#name-get-failed-aead-decryption-" class="section-name selfRef">Get Failed AEAD Decryption Invocations</a>
+        <h3 id="name-get-aead-decryption-invocat">
+<a href="#section-7.12" class="section-number selfRef">7.12. </a><a href="#name-get-aead-decryption-invocat" class="section-name selfRef">Get AEAD Decryption Invocations</a>
         </h3>
-<p id="section-7.12-1">Get the number of failed AEAD decryption invocations for a given epoch.<a href="#section-7.12-1" class="pilcrow">¶</a></p>
-<p id="section-7.12-2">Request : Get Failed AEAD Decryption Invocations<a href="#section-7.12-2" class="pilcrow">¶</a></p>
+<p id="section-7.12-1">Get the number of AEAD decryption invocations for a given epoch.<a href="#section-7.12-1" class="pilcrow">¶</a></p>
+<p id="section-7.12-2">Request : Get AEAD Decryption Invocations<a href="#section-7.12-2" class="pilcrow">¶</a></p>
 <p id="section-7.12-3">Parameters :<a href="#section-7.12-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.12-4.1">
@@ -3549,16 +3539,39 @@ for a given epoch.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
             <p id="section-7.12-4.3.1">DTLS Epoch<a href="#section-7.12-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.12-5">Reply: Failed AEAD Decryption Invocations<a href="#section-7.12-5" class="pilcrow">¶</a></p>
+<p id="section-7.12-5">Reply: AEAD Decryption Invocations<a href="#section-7.12-5" class="pilcrow">¶</a></p>
 <p id="section-7.12-6">Parameters : non-negative integer<a href="#section-7.12-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="configure-replay-protection">
+<div id="get-failed-aead-decryption-invocations">
 <section id="section-7.13">
-        <h3 id="name-configure-replay-protection">
-<a href="#section-7.13" class="section-number selfRef">7.13. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        <h3 id="name-get-failed-aead-decryption-">
+<a href="#section-7.13" class="section-number selfRef">7.13. </a><a href="#name-get-failed-aead-decryption-" class="section-name selfRef">Get Failed AEAD Decryption Invocations</a>
         </h3>
-<p id="section-7.13-1">The DTLS replay protection in this usage is expected to be fairly
+<p id="section-7.13-1">Get the number of failed AEAD decryption invocations for a given epoch.<a href="#section-7.13-1" class="pilcrow">¶</a></p>
+<p id="section-7.13-2">Request : Get Failed AEAD Decryption Invocations<a href="#section-7.13-2" class="pilcrow">¶</a></p>
+<p id="section-7.13-3">Parameters :<a href="#section-7.13-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.13-4.1">
+            <p id="section-7.13-4.1.1">SCTP Association<a href="#section-7.13-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.13-4.2">
+            <p id="section-7.13-4.2.1">Restart indication<a href="#section-7.13-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.13-4.3">
+            <p id="section-7.13-4.3.1">DTLS Epoch<a href="#section-7.13-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.13-5">Reply: Failed AEAD Decryption Invocations<a href="#section-7.13-5" class="pilcrow">¶</a></p>
+<p id="section-7.13-6">Parameters : non-negative integer<a href="#section-7.13-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configure-replay-protection">
+<section id="section-7.14">
+        <h3 id="name-configure-replay-protection">
+<a href="#section-7.14" class="section-number selfRef">7.14. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
+        </h3>
+<p id="section-7.14-1">The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
 reordering that the receiver expects to see during the SCTP
 association. However as the actual reordering in number of packets is
@@ -3566,24 +3579,24 @@ a combination of how delayed one packet may be compared to another,
 times the actual packet rate. This value may become larger for some
 applications and may need to be tuned. Thus, having the potential for
 setting this a more suitable value depending on the use case should be
-supported.<a href="#section-7.13-1" class="pilcrow">¶</a></p>
-<p id="section-7.13-2">Note this sets the configuration across any DTLS key context for a
-given SCTP Association and both primary and restart usages.<a href="#section-7.13-2" class="pilcrow">¶</a></p>
-<p id="section-7.13-3">Request : Configure Replay Protection<a href="#section-7.13-3" class="pilcrow">¶</a></p>
-<p id="section-7.13-4">Parameters :<a href="#section-7.13-4" class="pilcrow">¶</a></p>
+supported.<a href="#section-7.14-1" class="pilcrow">¶</a></p>
+<p id="section-7.14-2">Note this sets the configuration across any DTLS key context for a
+given SCTP Association and both primary and restart usages.<a href="#section-7.14-2" class="pilcrow">¶</a></p>
+<p id="section-7.14-3">Request : Configure Replay Protection<a href="#section-7.14-3" class="pilcrow">¶</a></p>
+<p id="section-7.14-4">Parameters :<a href="#section-7.14-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.13-5.1">
-            <p id="section-7.13-5.1.1">SCTP Association<a href="#section-7.13-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.14-5.1">
+            <p id="section-7.14-5.1.1">SCTP Association<a href="#section-7.14-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.13-5.2">
-            <p id="section-7.13-5.2.1">Restart indication<a href="#section-7.13-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.14-5.2">
+            <p id="section-7.14-5.2.1">Restart indication<a href="#section-7.14-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.13-5.3">
-            <p id="section-7.13-5.3.1">Configuration parameters<a href="#section-7.13-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.14-5.3">
+            <p id="section-7.14-5.3.1">Configuration parameters<a href="#section-7.14-5.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.13-6">Reply: Replay Protection Configured<a href="#section-7.13-6" class="pilcrow">¶</a></p>
-<p id="section-7.13-7">Parameters : true or false<a href="#section-7.13-7" class="pilcrow">¶</a></p>
+<p id="section-7.14-6">Reply: Replay Protection Configured<a href="#section-7.14-6" class="pilcrow">¶</a></p>
+<p id="section-7.14-7">Parameters : true or false<a href="#section-7.14-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
