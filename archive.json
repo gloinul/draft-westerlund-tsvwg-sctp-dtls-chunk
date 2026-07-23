@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-05T02:30:56.220377+00:00",
+  "timestamp": "2026-07-23T02:08:37.291198+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2330,6 +2330,22 @@
           "updatedAt": "2026-07-02T14:32:50Z"
         }
       ]
+    },
+    {
+      "number": 164,
+      "id": "I_kwDOKszxDc8AAAABJk1S6g",
+      "title": "Clarify that any API section are informational",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/164",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "It was raised that it should be very clear that the API is informational. This should be clarified in the start of the Abstract API as well as in the introduction that both section 7 and 8 are Informational. ",
+      "createdAt": "2026-07-21T09:52:33Z",
+      "updatedAt": "2026-07-21T09:52:33Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
