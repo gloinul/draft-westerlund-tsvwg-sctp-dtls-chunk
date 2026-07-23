@@ -1255,6 +1255,12 @@ Parameters:
 
 Reply: Acknowledgement
 
+## Read Indication of Protection
+
+The API functions for receiving data should explicitly indicate if the
+data provided to the upper layer protocol was protected by the SCTP
+assocations.
+
 ## Get AEAD Encryption Invocations
 
 Get the number of AEAD encryption invocations (protected SCTP packets)
