@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-23T02:08:37.291198+00:00",
+  "timestamp": "2026-07-26T02:08:29.113578+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2312,15 +2312,15 @@
       "id": "I_kwDOKszxDc8AAAABHczv6w",
       "title": "Remove Abstract API",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/162",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "With the Socket API being solid, that functions quite well as an example API. Having both abstract and socket makes the draft quite a bit thicker for little extra value at this point. ",
       "createdAt": "2026-07-02T13:37:52Z",
-      "updatedAt": "2026-07-02T14:32:50Z",
-      "closedAt": null,
+      "updatedAt": "2026-07-23T13:10:53Z",
+      "closedAt": "2026-07-23T13:10:53Z",
       "comments": [
         {
           "author": "gloinul",
@@ -2328,6 +2328,13 @@
           "body": "Unclear, we will ask the WG what need they see for the abstract API. ",
           "createdAt": "2026-07-02T14:32:50Z",
           "updatedAt": "2026-07-02T14:32:50Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "Based on the lack of feedback and the fact that the text is there we will leave it in. ",
+          "createdAt": "2026-07-23T13:10:53Z",
+          "updatedAt": "2026-07-23T13:10:53Z"
         }
       ]
     },
@@ -9087,6 +9094,73 @@
           "createdAt": "2026-07-03T09:51:52Z",
           "updatedAt": "2026-07-03T09:51:52Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 165,
+      "id": "PR_kwDOKszxDc71YTxk",
+      "title": "Clarify that APIs are informational only and adding data was protected. ",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/165",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This addresses both #164 and #161. ",
+      "createdAt": "2026-07-23T13:10:21Z",
+      "updatedAt": "2026-07-23T13:16:23Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "abstract-api-info",
+      "headRefOid": "421d2c83c54df3fdbf4fc7666a90e55b1235cccc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABG_r8gQ",
+          "commit": {
+            "abbreviatedOid": "421d2c8"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-23T13:16:09Z",
+          "updatedAt": "2026-07-23T13:16:09Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Isn't it between the SCTP implementation and its upper layer. You provide a protected indication to the reader which might not be the key management method.",
+              "createdAt": "2026-07-23T13:16:09Z",
+              "updatedAt": "2026-07-23T13:16:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABG_sGsg",
+          "commit": {
+            "abbreviatedOid": "421d2c8"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-23T13:16:23Z",
+          "updatedAt": "2026-07-23T13:16:23Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Same as above.",
+              "createdAt": "2026-07-23T13:16:23Z",
+              "updatedAt": "2026-07-23T13:16:23Z"
+            }
+          ]
         }
       ]
     }
