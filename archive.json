@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-26T02:08:29.113578+00:00",
+  "timestamp": "2026-08-04T01:55:23.358595+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -9109,7 +9109,7 @@
       "labels": [],
       "body": "This addresses both #164 and #161. ",
       "createdAt": "2026-07-23T13:10:21Z",
-      "updatedAt": "2026-07-23T13:16:23Z",
+      "updatedAt": "2026-08-03T08:24:45Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
@@ -9161,6 +9161,19 @@
               "updatedAt": "2026-07-23T13:16:23Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABIJzdwg",
+          "commit": {
+            "abbreviatedOid": "421d2c8"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "In my opinion we should still clarify the API meaning and role at the design team.",
+          "createdAt": "2026-08-03T08:24:45Z",
+          "updatedAt": "2026-08-03T08:24:45Z",
+          "comments": []
         }
       ]
     }
