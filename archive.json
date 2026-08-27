@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-04T01:55:23.358595+00:00",
+  "timestamp": "2026-08-27T06:39:48.718010+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2351,6 +2351,24 @@
       "body": "It was raised that it should be very clear that the API is informational. This should be clarified in the start of the Abstract API as well as in the introduction that both section 7 and 8 are Informational. ",
       "createdAt": "2026-07-21T09:52:33Z",
       "updatedAt": "2026-07-21T09:52:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 166,
+      "id": "I_kwDOKszxDc8AAAABOWm-Fw",
+      "title": "Comments from Russ Housley",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/166",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "The below review comments was provided by Russ Housley.\n\nThese are my comments on draft-ietf-tsvwg-sctp-dtls-chunk.  I hope to look at the other document soon.\n\nSection 1: The concept of \"association\" needs some definition.  I assume it is similar to the IPsec security association.  I think it should be defined before the 4th paragraph.  If there is a difference between \"Protected Association\" and \"SCTP Association\", please explain it here too.\n\nSection 1: Why mandate Diffie-Hellman?  I realize it is a separate document, but you ought to allow any PQC KEMs as well.\n\nSection 1.1: I'd prefer two sections, one that talks about obsoleting RFC 6083 and a seprate section about the updates to RFC 5061.\n\nSection 2.1: Please add a discussion of SCTP association to this section.\n\nSection 3.1: I'm confused by the third paragraph. The phrase \"the DTLS key context anyway can be identified\" completely lost me.  Do you has advice about what should be used fDTLS Chunk identifier?\n\nSection 3.1.1: I suggest that you delete \"taking into account its inherent security properties\" from the last sentence\n\nSection 3.2: s/It should be noted that/Note that/\n\nSection 5.1: s/First the Key Management role/First, the Key Management role/\n\nSection 5.1: I think the second sentence of the same paragraph would be more clear as: This is done by evaluating the S and C bits of the parameters provided by each endpoints.\n\nSection 6: s/Every DTLS Key Management Method/Every DTLS Key Management Method:/\n\nSection 7: Is there a way to achieve this goal at a higher level? My concern is that the discussion includes details that are the result of the chosen cipher suire (like the XOR discussion) that are not really a consequence of picking DTLS.\n\nSection 8: I did not review this section.  This is not really my area.\n\nSection 10: Please put a reference [RFC9147] here.\n\nSection 10: Please state that replay protection is handled by SCTP (see Section 7.13); then the DTLS replay protection MUST be turned off.",
+      "createdAt": "2026-08-26T14:27:19Z",
+      "updatedAt": "2026-08-26T14:44:54Z",
       "closedAt": null,
       "comments": []
     }
