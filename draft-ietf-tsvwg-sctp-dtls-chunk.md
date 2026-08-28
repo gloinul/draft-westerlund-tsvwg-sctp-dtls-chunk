@@ -172,7 +172,7 @@ This results in a DTLS 1.3 record encapsulated in a DTLS chunk.
 
 The method of secure key-management, e.g. based on DTLS 1.3, providing
 initial mutual authentication, key establishment, and periodic
-re-authentication and rekeying with Diffie-Hellman of the DTLS chunk
+re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 {{key-management-considerations}}).  To prevent downgrade attacks
 affecting the DTLS Key Management negotiation the DTLS Key Management
@@ -201,7 +201,7 @@ SCTP and its extensions. However, the following limitations apply:
 * The use of the lookup address in the Dynamic Address Reconfiguration
   extension as specified in {{RFC5061}} is not supported.
 
-## Relationship to RFC 6083 and RFC 5061
+## Relationship to RFC 6083
 
 This document obsoletes {{RFC6083}}, which defined the use of DTLS
 over SCTP by encapsulating user data in DTLS records and sending the
@@ -214,6 +214,8 @@ mechanism defined in this document replaces {{RFC6083}} by integrating
 DTLS 1.3 record protection directly at the chunk level, providing
 confidentiality and integrity for both user data and SCTP control
 chunks without dependency on SCTP-AUTH.
+
+## Relationship to RFC 5061
 
 This document updates {{RFC5061}} by restricting the use of the Dynamic
 Address Reconfiguration extension when the DTLS chunk is in use.
@@ -228,6 +230,7 @@ authenticating ASCONF chunks, is incompatible with this extension.
 {::boilerplate bcp14}
 
 ## Terminology
+
 
 Chunk Protection Operator:
 
@@ -270,6 +273,13 @@ Key Material:
 : Key material is all cryptographic information needed for protection
   operation in one direction.
 
+Protected SCTP Association:
+
+: an SCTP Association implementing Crypto Chunk as described in this recommendation.
+
+SCTP Association:
+
+: an association as defined in {{{{RFC9260}}}}
 
 # Protocol Considerations
 
@@ -293,8 +303,9 @@ indicator, and the DTLS epoch.
 The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
 the DTLS Chunk as the full DTLS connection state is not used in the
-DTLS Chunk and the DTLS key context anyway can be identified. The
-length field MUST NOT be used as the DTLS chunk provides record length
+DTLS Chunk and the DTLS key context anyway can be identified by means
+of the Association identifiers and the Epoch.
+The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
 to ensure the 32-bit alignment for the encrypted record.
@@ -322,8 +333,7 @@ TLS_CHACHA20_POLY1305_SHA256 cipher suites, using the identifiers
 defined by {{TLS-CIPHER-SUITES}}.
 
 In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the TLS
-cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable, taking
-into account its inherent security properties.
+cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable.
 
 
 ## SCTP Considerations
@@ -353,7 +363,7 @@ Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.
 
-It should be noted that regardless of whether SCTP padding or DTLS padding
+Note that regardless of whether SCTP padding or DTLS padding
 is used, the additional bytes are not accounted for by the SCTP congestion control.
 Extensive use of padding has potential to worsen congestion situations, as the
 SCTP association will consume more bandwidth than its fair share as determined by
@@ -706,9 +716,9 @@ To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
 executed by both endpoints before entering the ESTABLISHED state.
 
-First the Key Management role of each endpoint is determined. This is
-done by evaluating the S and C bits in the two endpoints'
-parameters. This falls into the following cases:
+First, the Key Management role of each endpoint is determined. This is done by
+evaluating the S and C bits of the parameters provided by each endpoints.
+This falls into the following cases:
 
 1. At least one endpoint indicates a single role (client or server) and the peer
    supports the other role. In this case the endpoint indicating a single role
@@ -961,7 +971,7 @@ mutual authentication and rekeying) are defined:
 An SCTP endpoint MAY support multiple DTLS Key Management Methods subject to
 implementation requirements and local security policies.
 
-Every DTLS Key Management Method
+Every DTLS Key Management Method:
 
 * MUST be registered in the IANA Registry {{IANA-Protection-Solution-ID}}
   to receive a unique identifier, enabling negotiation during the SCTP handshake.
@@ -1302,7 +1312,7 @@ Reply: Failed AEAD Decryption Invocations
 
 Parameters : non-negative integer
 
-## Configure Replay Protection
+## Configure Replay Protection {#conf_replay_protect}
 
 The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
@@ -1957,7 +1967,8 @@ reference to this document.
 All the security and privacy considerations of the security protocol
 used as the Chunk Protection Operator apply.
 
-DTLS replay protection MUST NOT be turned off.
+Replay protection is handled by SCTP (see {{#conf_replay_protect}}); then the DTLS
+replay protection MUST be turned off.
 
 ## Privacy Considerations
 
