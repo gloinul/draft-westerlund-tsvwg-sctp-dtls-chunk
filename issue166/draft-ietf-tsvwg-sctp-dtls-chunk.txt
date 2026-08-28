@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 3 January 2027                  Münster Univ. of Appl. Sciences
-                                                             2 July 2026
+Expires: 1 March 2027                    Münster Univ. of Appl. Sciences
+                                                          28 August 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2027.
+   This Internet-Draft will expire on 1 March 2027.
 
 Copyright Notice
 
@@ -86,11 +86,13 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction and Protocol Overview
-     1.1.  Relationship to RFC 6083 and RFC 5061
+     1.1.  Relationship to RFC 6083
+     1.2.  Relationship to RFC 5061
    2.  Conventions
      2.1.  Terminology
    3.  Protocol Considerations
      3.1.  DTLS Considerations
+       3.1.1.  Mandatory-to-Implement Cipher Suites
      3.2.  SCTP Considerations
    4.  New Chunk, Parameter and Error Causes
      4.1.  DTLS Key Management Parameter
@@ -169,17 +171,18 @@ Table of Contents
    the secure transfer of SCTP packets (including both control and DATA
    chunks).
 
-   The DTLS chunk protects a sequence of SCTP chunks by encapsulating
-   their DTLS-based ciphertext.  This processing is based on DTLS 1.3,
-   as specified in [RFC9147].
+   The DTLS chunk protects a sequence of SCTP chunks by encrypting the
+   plain text into encrypted ciphertext using the DTLS record format and
+   its processing.  This processing is based on DTLS 1.3, as specified
+   in [RFC9147].
 
    Key management is performed outside of the SCTP implementation and is
    out of scope of this document.  This process is referred to as the
    DTLS Key Management Method.  While these methods can also be based on
    DTLS 1.3, it is not a requirement.
 
-   The DTLS chunk in combination with the DTLS Key Management Method
-   provides mutual authentication, confidentiality, DTLS based data
+   The DTLS chunk in combination with the DTLS Key Management Method can
+   provide mutual authentication, confidentiality, DTLS based data
    origin authentication, integrity, and replay protection for SCTP
    packets.  The DTLS Key Management Method utilizes an API to provision
    the SCTP association's DTLS chunk protection with key material to
@@ -187,37 +190,40 @@ Table of Contents
 
    Figure 1 is an example illustrating the DTLS chunk processing in
    regard to SCTP and the Upper Layer Protocol (ULP) using DTLS 1.3 as
-   the DTLS Key Management Method.  Here the DTLS Key Management Method
-   provides validation, i.e. using certificates, handshaking, updating
-   policies etc.
+   the crytptographic core of the DTLS Key Management Method.  Here the
+   DTLS Key Management Method provides validation, i.e. using
+   certificates, handshaking, updating policies etc.
 
-          +---------------+ +-------------------------------+
-          |      ULP      | |            DTLS 1.3           |
-          |               | |    +---------------------+    |
-          |               | | +->+    Key Exporter     +--+ |
-          |               | | |  +---------------------+  | |
-          |               | | |                           | |
-          |               | | |  +---------------------+  | |
-          |               | | +--+    Key Management   +  | |
-          |               | | |  +----------+----------+  | |
-          |               | | |             |             | |
-          |               | | | ContentType |             | |
-          |               | | |  +----------+----------+  | |
-          |               | | +->|        Record       |  | |
-          |               | |    | Protection Operator |  | |
-          |               | |    +----------+----------+  | |
-          +-------+-------+ +-----------------------------+-+
-                  ^                         ^             |
-                  |                         |             |
-                  +--+----------------------+             | keys
-                PPID |                                    |
-                     V                                    V
-          +-----------------------------------------------+-+
-          |                    +---------------------+    | |
-          |        SCTP        |         Chunk       |<---+ |
-          |                    | Protection Operator |      |
-          |                    +---------------------+      |
-          +-------------------------------------------------+
+         +---------------+ +----------------------------------+
+         |      ULP      | |        Key Management Method     |
+         |               | | +----------------------------+   |
+         |               | | |             DTLS 1.3       |   |
+         |               | | |    +---------------------+ |   |
+         |               | | | +->+    Key Exporter     +-+-+ |
+         |               | | | |  +---------------------+ | | |
+         |               | | | |                          | | |
+         |               | | | |  +---------------------+ | | |
+         |               | | | +--+    Key Management   + | | |
+         |               | | | |  +----------+----------+ | | |
+         |               | | | |             |            | | |
+         |               | | | | ContentType |            | | |
+         |               | | | |  +----------+----------+ | | |
+         |               | | | +->|        Record       | | | |
+         |               | | |    | Protection Operator | | | |
+         |               | | |    +----------+----------+ | | |
+         |               | | +----------------------------+ | |
+         +-------+-------+ +--------------------------------+-+
+                 ^                         ^                |
+                 |                         |                |
+                 +--+----------------------+                | keys
+               PPID |                                       |
+                    V                                       V
+         +--------------------------------------------------+-+
+         |                      +---------------------+     | |
+         |        SCTP          |         Chunk       |<----+ |
+         |                      | Protection Operator |       |
+         |                      +---------------------+       |
+         +----------------------------------------------------+
 
           Figure 1: DTLS Chunk Layering in Regard to SCTP and ULP
 
@@ -235,11 +241,11 @@ Table of Contents
 
    The method of secure key-management, e.g. based on DTLS 1.3,
    providing initial mutual authentication, key establishment, and
-   periodic re-authentication and rekeying with Diffie-Hellman of the
-   DTLS chunk protection is defined in separate documents (see
-   Section 6).  To prevent downgrade attacks affecting the DTLS Key
-   Management negotiation the DTLS Key Management Method should
-   implement specific procedures when deriving keys.
+   periodic re-authentication and rekeying of the DTLS chunk protection
+   is defined in separate documents (see Section 6).  To prevent
+   downgrade attacks affecting the DTLS Key Management negotiation the
+   DTLS Key Management Method should implement specific procedures when
+   deriving keys.
 
    The Chunk Protection Operator performs protection operations on all
    chunks of an SCTP packet.  No information is sent in plain text
@@ -272,18 +278,21 @@ Table of Contents
       Reconfiguration extension as specified in [RFC5061] is not
       supported.
 
-1.1.  Relationship to RFC 6083 and RFC 5061
+1.1.  Relationship to RFC 6083
 
    This document obsoletes [RFC6083], which defined the use of DTLS over
-   SCTP by encapsulating DTLS records as SCTP user data using the SCTP-
-   AUTH extension ([RFC4895]) for integrity protection of the SCTP
-   headers.  That approach suffered from several limitations: it could
-   not support SCTP user messages above 16384 bytes, it could not
-   protect SCTP control chunks, and it exposed significant SCTP metadata
-   in clear text.  The mechanism defined in this document replaces
-   [RFC6083] by integrating DTLS 1.3 record protection directly at the
-   chunk level, providing confidentiality and integrity for both user
-   data and SCTP control chunks without dependency on SCTP-AUTH.
+   SCTP by encapsulating user data in DTLS records and sending the DTLS
+   records as SCTP user data using the SCTP-AUTH extension ([RFC4895])
+   for integrity protection of the SCTP packets.  That approach suffered
+   from several limitations: it could not support SCTP user messages
+   above 16384 bytes, it could not encrypt SCTP control chunks, and it
+   exposed significant SCTP metadata in clear text.  The mechanism
+   defined in this document replaces [RFC6083] by integrating DTLS 1.3
+   record protection directly at the chunk level, providing
+   confidentiality and integrity for both user data and SCTP control
+   chunks without dependency on SCTP-AUTH.
+
+1.2.  Relationship to RFC 5061
 
    This document updates [RFC5061] by restricting the use of the Dynamic
    Address Reconfiguration extension when the DTLS chunk is in use.
@@ -334,6 +343,11 @@ Table of Contents
    Key Material:  Key material is all cryptographic information needed
       for protection operation in one direction.
 
+   Protected SCTP Association:  an SCTP Association implementing Crypto
+      Chunk as described in this recommendation.
+
+   SCTP Association:  an association as defined in {RFC9260}
+
 3.  Protocol Considerations
 
 3.1.  DTLS Considerations
@@ -356,11 +370,12 @@ Table of Contents
    The DTLS Chunk uses a single configuration of the DTLS record format.
    The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
    the DTLS Chunk as the full DTLS connection state is not used in the
-   DTLS Chunk and the DTLS key context anyway can be identified.  The
-   length field MUST NOT be used as the DTLS chunk provides record
-   length information.  Finally 16-bit Sequence Numbers are used as they
-   give maximum support for reordering and there are no byte savings
-   possible to ensure the 32-bit alignment for the encrypted record.
+   DTLS Chunk and the DTLS key context anyway can be identified by means
+   of the Association identifiers and the Epoch.  The length field MUST
+   NOT be used as the DTLS chunk provides record length information.
+   Finally 16-bit Sequence Numbers are used as they give maximum support
+   for reordering and there are no byte savings possible to ensure the
+   32-bit alignment for the encrypted record.
 
    The first DTLS key context established for any SCTP association MUST
    use epoch 3.  Each subsequent DTLS key context will use the next
@@ -376,6 +391,19 @@ Table of Contents
 
    Endpoints implementing DTLS chunk MUST support DTLS records
    containing up to 2^14 (16384) bytes of plain text.
+
+3.1.1.  Mandatory-to-Implement Cipher Suites
+
+   In the absence of an application profile standard specifying
+   otherwise:
+
+   A SCTP DTLS chunk implementation MUST implement the
+   TLS_AES_128_GCM_SHA256 cipher suite and SHOULD implement the
+   TLS_AES_256_GCM_SHA384 and TLS_CHACHA20_POLY1305_SHA256 cipher
+   suites, using the identifiers defined by [TLS-CIPHER-SUITES].
+
+   In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the
+   TLS cipher suit table [TLS-CIPHER-SUITES] is expected to be usable.
 
 3.2.  SCTP Considerations
 
@@ -406,12 +434,11 @@ Table of Contents
    Chunk.  However, if the PAD chunk is not supported DTLS padding MAY
    be used.
 
-   It should be noted that regardless of whether SCTP padding or DTLS
-   padding is used, the additional bytes are not accounted for by the
-   SCTP congestion control.  Extensive use of padding has potential to
-   worsen congestion situations, as the SCTP association will consume
-   more bandwidth than its fair share as determined by congestion
-   control.
+   Note that regardless of whether SCTP padding or DTLS padding is used,
+   the additional bytes are not accounted for by the SCTP congestion
+   control.  Extensive use of padding has potential to worsen congestion
+   situations, as the SCTP association will consume more bandwidth than
+   its fair share as determined by congestion control.
 
    The use of the SCTP PAD chunk is preferred, as it remains visible at
    the SCTP layer.  This enables future extensions or SCTP
@@ -732,7 +759,7 @@ Table of Contents
    send an SCTP packet with an ABORT chunk.  It MAY include the
    appropriate error cause "Missing DTLS Chunk Support" (see
    Section 4.3.1), "No Common DTLS Key Management Method" (see
-   Section 4.3.2), or "No Common DTLS Key Management Method" (see
+   Section 4.3.2), or "Incompatible DTLS Key Management Roles" (see
    Section 4.3.4).
 
    If an SCTP endpoint operates in loose DTLS mode, it MAY continue with
@@ -743,9 +770,9 @@ Table of Contents
    below procedure MUST be executed by both endpoints before entering
    the ESTABLISHED state.
 
-   First the Key Management role of each endpoint is determined.  This
-   is done by evaluating the S and C bits in the two endpoints'
-   parameters.  This falls into the following cases:
+   First, the Key Management role of each endpoint is determined.  This
+   is done by evaluating the S and C bits of the parameters provided by
+   each endpoints.  This falls into the following cases:
 
    1.  At least one endpoint indicates a single role (client or server)
        and the peer supports the other role.  In this case the endpoint
@@ -830,9 +857,11 @@ Table of Contents
    Upon receipt of an SCTP packet in which a DTLS chunk is bundled with
    any other chunk, the entire packet MUST be silently discarded.
 
-   After the application has restricted the SCTP packet handling to
-   protected SCTP packets only, an SCTP packet not containing a DTLS
-   chunk MUST be silently discarded.
+   After the application or key managment method has restricted the SCTP
+   packet handling to protected SCTP packets only, an SCTP packet not
+   containing a DTLS chunk MUST be silently discarded unless they
+   contain an INIT or INIT-ACK chunk.  The later may be received during
+   a SCTP restart procedure, see Section 5.4.
 
    When processing the payload of the DTLS chunk (i.e. the
    DTLSCiphertext), the Restart flag in addition to the unified_hdr is
@@ -848,10 +877,10 @@ Table of Contents
 
 5.3.  Termination of a Protected Association
 
-   Note that the closure of any DTLS Key Management Method doesn't
-   compromise the capability of terminating the SCTP association
-   gracefully as that capability only relies on the Key Context and not
-   on the DTLS Key Management Method from where it has been derived.
+   Note that the state of any DTLS Key Management Method doesn't impact
+   the capability of terminating the SCTP association gracefully as that
+   capability only relies on the Key Context and not on the DTLS Key
+   Management Method from where it has been derived.
 
 5.4.  SCTP Restart Considerations
 
@@ -867,7 +896,7 @@ Table of Contents
    required, as it relies on the availability of persistent secure
    storage for the restart DTLS key context.  An endpoint will know that
    its peer supports this protected SCTP restart procedure from the DTLS
-   Key Management Parameter's R bit Figure 2.
+   Key Management Parameter's R bit (Section 4.1).
 
    The protected SCTP restart procedure keeps the security
    characteristics of an SCTP association using DTLS chunks.
@@ -963,7 +992,7 @@ Table of Contents
    i.e. the epoch value is reset.  After having derived a new primary
    DTLS key context, the endpoint installs it and starts using it.  The
    new restart DTLS key context is only installed after all old in-
-   flight restart packets have been received.
+   flight restart packets are expected to have been received.
 
    An SCTP endpoint supporting only normal SCTP restart and involved in
    an SCTP association using DTLS chunks SHOULD NOT attempt to restart
@@ -973,10 +1002,11 @@ Table of Contents
    lack of any response from the restarting node.
 
    An SCTP endpoint supporting only legacy SCTP restart and involved in
-   an SCTP association using DTLS chunks, when receiving a COOKIE ECHO
-   chunk protected by DTLS chunk as described above, thus having the R
-   bit (Restart Indicator) set in the DTLS chunk (see Figure 3), MUST
-   silently discard it.
+   an SCTP association using DTLS chunks, when receiving what is
+   expected to be an COOKIE ECHO chunk protected by DTLS chunk as
+   described above, in other words if it receives a SCTP packet with a
+   DTLS chunk having the R bit (Restart Indicator) set in the DTLS chunk
+   (see Figure 3), MUST silently discard it.
 
 6.  DTLS Key Management Method Considerations
 
@@ -999,7 +1029,7 @@ Table of Contents
    An SCTP endpoint MAY support multiple DTLS Key Management Methods
    subject to implementation requirements and local security policies.
 
-   Every DTLS Key Management Method
+   Every DTLS Key Management Method:
 
    *  MUST be registered in the IANA Registry Section 9.1 to receive a
       unique identifier, enabling negotiation during the SCTP handshake.
@@ -1139,13 +1169,13 @@ Table of Contents
    corresponding key materials.  Some limitations do exists when
    establishing Key Material to avoid issues:
 
-   *  Primary Keys MUST be installed prior to Restart Keys for each
+   *  Primary Keys have to be installed prior to Restart Keys for each
       epoch to avoid them being used unless this endpoint is attempting
       a restart.
 
    *  With the exception of restart keys when this endpoint attempts
       restart of the SCTP association, the first DTLS epoch set in an
-      association MUST be 3.  Any subsequent epoch must be the next
+      association needs to be 3.  Any subsequent epoch uses the next
       consecutive number compared to the previously used.
 
    The following information needs to be provided when setting send key
@@ -1197,9 +1227,13 @@ Table of Contents
    *  Restart indication:  A bit indicating whether the key material is
          for restart purposes
 
-   *  DTLS Epoch:  The DTLS epoch these keys are valid for.  Note that
-         Epoch lower than 3 are not expected as they are used during
-         DTLS handshake.  The DTLS epoch must be the next in turn.
+   *  DTLS Epoch:  The DTLS epoch these keys are valid for.  With the
+         exception of restart keys when this endpoint attempts restart
+         of the SCTP association, the first DTLS epoch set in an
+         association needs to be
+
+      1.  Any subsequent epoch uses the next consecutive number compared
+          to the previously used.
 
    *  Cipher Suite:  2 bytes cipher suite identification for the DTLS
          1.3 cipher suite used to identify the DTLS AEAD algorithm to
@@ -1260,9 +1294,8 @@ Table of Contents
    Material which immediately enables the primary key for the next epoch
    when installed.
 
-   Setting the restart keys to be used instead of primary keys SHALL
-   only be done when attempting to perform a restart of the SCTP
-   association.
+   Setting the restart keys to be used instead of primary keys can only
+   be done when attempting to perform a restart of the SCTP association.
 
    Request: Set Key used
 
@@ -2030,7 +2063,8 @@ Table of Contents
    All the security and privacy considerations of the security protocol
    used as the Chunk Protection Operator apply.
 
-   DTLS replay protection MUST NOT be turned off.
+   Replay protection is handled by SCTP (see Section 7.13); then the
+   DTLS replay protection MUST be turned off.
 
 10.1.  Privacy Considerations
 
@@ -2191,9 +2225,9 @@ Table of Contents
               "Transport Layer Security (TLS) based key-management of
               the Stream Control Transmission Protocol (SCTP) DTLS
               Chunk", Work in Progress, Internet-Draft, draft-porfiri-
-              tsvwg-sctp-dtls-handshake-00, 18 June 2026,
+              tsvwg-sctp-dtls-handshake-01, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-porfiri-
-              tsvwg-sctp-dtls-handshake-00>.
+              tsvwg-sctp-dtls-handshake-01>.
 
    [ETSI-TS-38.413]
               "NG Application Protocol (NGAP) version 18.5.0 Release
