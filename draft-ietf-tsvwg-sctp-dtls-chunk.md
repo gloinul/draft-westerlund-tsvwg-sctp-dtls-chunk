@@ -1967,7 +1967,7 @@ reference to this document.
 All the security and privacy considerations of the security protocol
 used as the Chunk Protection Operator apply.
 
-Replay protection is handled by SCTP (see {{#conf_replay_protect}}); then the DTLS
+Replay protection is handled by SCTP (see {{conf_replay_protect}}); then the DTLS
 replay protection MUST be turned off.
 
 ## Privacy Considerations
