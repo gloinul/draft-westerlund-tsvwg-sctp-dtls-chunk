@@ -201,12 +201,13 @@ SCTP and its extensions. However, the following limitations apply:
 * The use of the lookup address in the Dynamic Address Reconfiguration
   extension as specified in {{RFC5061}} is not supported.
 
-This document also includes two informational sections: an Abstract API
-({{abstract-api}}) describing an example interface between the DTLS Key
-Management Method and the DTLS chunk protection operations, and Socket API
-Considerations ({{socket-api}}) describing extensions to the socket API
-defined in {{RFC6458}}.  These sections are informational only and are not
-normative requirements of this specification.
+This document also includes two informational sections: an Abstract
+API ({{abstract-api}}) describing an example interface between the
+upper layer (including any DTLS Key Management Method) and the SCTP
+implementation with it DTLS chunk protection, and Socket API
+Considerations ({{socket-api}}) describing extensions to the socket
+API defined in {{RFC6458}}.  These sections are informational only and
+are not normative requirements of this specification.
 
 ## Relationship to RFC 6083 and RFC 5061
 
@@ -983,9 +984,10 @@ Every DTLS Key Management Method
 
 # Abstract API  {#abstract-api}
 
-This section describes an abstract API that is needed between a DTLS
-Key Management Method and the DTLS chunk.  Please note that this
-section is an informational example API only and there are alternative
+This section describes an abstract API between the upper layer,
+including a DTLS Key Management Method, and the SCTP implementation
+with the DTLS chunk.  Please note that this section is an
+informational example API only and there are alternative
 implementations.
 
 This API enables the cryptographic protection operations by setting
