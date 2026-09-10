@@ -105,7 +105,8 @@ secure transfer of SCTP packets (including both control and DATA chunks).
 The DTLS chunk protects a sequence of SCTP chunks by encrypting the
 plain text into encrypted ciphertext using the DTLS record format and
 its processing. This processing is based on DTLS 1.3, as specified in
-{{RFC9147}}.
+{{RFC9147}}. Resulting in an protected SCTP association instead of
+an SCTP association where all the SCTP protocol details are in plain text.
 
 Key management is performed outside of the SCTP implementation and is out of scope
 of this document. This process is referred to as the DTLS Key Management Method.
@@ -275,11 +276,13 @@ Key Material:
 
 Protected SCTP Association:
 
-: an SCTP Association implementing Crypto Chunk as described in this recommendation.
+: an SCTP Association implementing DTLS Chunk as described in this document
+  providing encryption, integrity protection and replay protection to all
+  SCTP chunks in SCTP packets.
 
 SCTP Association:
 
-: an association as defined in {{{{RFC9260}}}}
+: an association as defined in {{{{RFC9260}}}}.
 
 # Protocol Considerations
 
@@ -303,8 +306,8 @@ indicator, and the DTLS epoch.
 The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
 the DTLS Chunk as the full DTLS connection state is not used in the
-DTLS Chunk and the DTLS key context anyway can be identified by means
-of the Association identifiers and the Epoch.
+DTLS Chunk and the DTLS key context is identified by means
+of the Association identifiers (port and VTAG) and the Epoch.
 The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
@@ -1967,8 +1970,7 @@ reference to this document.
 All the security and privacy considerations of the security protocol
 used as the Chunk Protection Operator apply.
 
-Replay protection is handled by SCTP (see {{conf_replay_protect}}); then the DTLS
-replay protection MUST be turned off.
+The record layer security considerations from {{RFC9147}} apply including rekeying.
 
 ## Privacy Considerations
 
