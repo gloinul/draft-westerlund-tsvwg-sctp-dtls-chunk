@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 1 March 2027                    Münster Univ. of Appl. Sciences
-                                                          28 August 2026
+Expires: 14 March 2027                   Münster Univ. of Appl. Sciences
+                                                       10 September 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 March 2027.
+   This Internet-Draft will expire on 14 March 2027.
 
 Copyright Notice
 
@@ -174,7 +174,9 @@ Table of Contents
    The DTLS chunk protects a sequence of SCTP chunks by encrypting the
    plain text into encrypted ciphertext using the DTLS record format and
    its processing.  This processing is based on DTLS 1.3, as specified
-   in [RFC9147].
+   in [RFC9147].  Resulting in an protected SCTP association instead of
+   an SCTP association where all the SCTP protocol details are in plain
+   text.
 
    Key management is performed outside of the SCTP implementation and is
    out of scope of this document.  This process is referred to as the
@@ -343,10 +345,12 @@ Table of Contents
    Key Material:  Key material is all cryptographic information needed
       for protection operation in one direction.
 
-   Protected SCTP Association:  an SCTP Association implementing Crypto
-      Chunk as described in this recommendation.
+   Protected SCTP Association:  an SCTP Association implementing DTLS
+      Chunk as described in this document providing encryption,
+      integrity protection and replay protection to all SCTP chunks in
+      SCTP packets.
 
-   SCTP Association:  an association as defined in {RFC9260}
+   SCTP Association:  an association as defined in {RFC9260}.
 
 3.  Protocol Considerations
 
@@ -370,12 +374,12 @@ Table of Contents
    The DTLS Chunk uses a single configuration of the DTLS record format.
    The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
    the DTLS Chunk as the full DTLS connection state is not used in the
-   DTLS Chunk and the DTLS key context anyway can be identified by means
-   of the Association identifiers and the Epoch.  The length field MUST
-   NOT be used as the DTLS chunk provides record length information.
-   Finally 16-bit Sequence Numbers are used as they give maximum support
-   for reordering and there are no byte savings possible to ensure the
-   32-bit alignment for the encrypted record.
+   DTLS Chunk and the DTLS key context is identified by means of the
+   Association identifiers (port and VTAG) and the Epoch.  The length
+   field MUST NOT be used as the DTLS chunk provides record length
+   information.  Finally 16-bit Sequence Numbers are used as they give
+   maximum support for reordering and there are no byte savings possible
+   to ensure the 32-bit alignment for the encrypted record.
 
    The first DTLS key context established for any SCTP association MUST
    use epoch 3.  Each subsequent DTLS key context will use the next
@@ -2063,8 +2067,8 @@ Table of Contents
    All the security and privacy considerations of the security protocol
    used as the Chunk Protection Operator apply.
 
-   Replay protection is handled by SCTP (see Section 7.13); then the
-   DTLS replay protection MUST be turned off.
+   The record layer security considerations from [RFC9147] apply
+   including rekeying.
 
 10.1.  Privacy Considerations
 
