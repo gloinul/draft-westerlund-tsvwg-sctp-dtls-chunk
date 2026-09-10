@@ -1333,7 +1333,7 @@ Table of Contents
 
    The API functions for receiving data should explicitly indicate if
    the data provided to the upper layer protocol was protected by the
-   SCTP assocations.
+   SCTP assocation using DTLS chunk.
 
 7.11.  Get AEAD Encryption Invocations
 
