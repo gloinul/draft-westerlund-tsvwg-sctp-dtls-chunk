@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-27T06:39:48.718010+00:00",
+  "timestamp": "2026-09-13T02:36:18.557266+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2368,7 +2368,77 @@
       "labels": [],
       "body": "The below review comments was provided by Russ Housley.\n\nThese are my comments on draft-ietf-tsvwg-sctp-dtls-chunk.  I hope to look at the other document soon.\n\nSection 1: The concept of \"association\" needs some definition.  I assume it is similar to the IPsec security association.  I think it should be defined before the 4th paragraph.  If there is a difference between \"Protected Association\" and \"SCTP Association\", please explain it here too.\n\nSection 1: Why mandate Diffie-Hellman?  I realize it is a separate document, but you ought to allow any PQC KEMs as well.\n\nSection 1.1: I'd prefer two sections, one that talks about obsoleting RFC 6083 and a seprate section about the updates to RFC 5061.\n\nSection 2.1: Please add a discussion of SCTP association to this section.\n\nSection 3.1: I'm confused by the third paragraph. The phrase \"the DTLS key context anyway can be identified\" completely lost me.  Do you has advice about what should be used fDTLS Chunk identifier?\n\nSection 3.1.1: I suggest that you delete \"taking into account its inherent security properties\" from the last sentence\n\nSection 3.2: s/It should be noted that/Note that/\n\nSection 5.1: s/First the Key Management role/First, the Key Management role/\n\nSection 5.1: I think the second sentence of the same paragraph would be more clear as: This is done by evaluating the S and C bits of the parameters provided by each endpoints.\n\nSection 6: s/Every DTLS Key Management Method/Every DTLS Key Management Method:/\n\nSection 7: Is there a way to achieve this goal at a higher level? My concern is that the discussion includes details that are the result of the chosen cipher suire (like the XOR discussion) that are not really a consequence of picking DTLS.\n\nSection 8: I did not review this section.  This is not really my area.\n\nSection 10: Please put a reference [RFC9147] here.\n\nSection 10: Please state that replay protection is handled by SCTP (see Section 7.13); then the DTLS replay protection MUST be turned off.",
       "createdAt": "2026-08-26T14:27:19Z",
-      "updatedAt": "2026-08-26T14:44:54Z",
+      "updatedAt": "2026-09-10T09:18:30Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "I have spun out two comments into individual issues as they will require a bit more discussion. Please see #167 and #168 .",
+          "createdAt": "2026-09-10T09:18:30Z",
+          "updatedAt": "2026-09-10T09:18:30Z"
+        }
+      ]
+    },
+    {
+      "number": 167,
+      "id": "I_kwDOKszxDc8AAAABQnjYDA",
+      "title": "Generalization of AEAD interface in the APIs",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/167",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "gloinul"
+      ],
+      "labels": [],
+      "body": "Russ Housley made the following comment:\n\nSection 7: Is there a way to achieve this goal at a higher level? My concern is that the discussion includes details that are the result of the chosen cipher suire (like the XOR discussion) that are not really a consequence of picking DTLS.\n\nMy interpretation is the text that is problematic is the following:\n\nThis API enables the cryptographic protection operations by setting\nrecord payload key, sequence number keys, and initialization vector\n(IV) for primary and restart DTLS contexts in both send and receive\ndirection. The record payload key is used by the cipher suite for DTLS\nrecord protection ({{Section 5.2 of RFC8446}}). The initialization\nvector (IV) is random material used to XOR with the sequence number to\ncreate the nonce per {{Section 5.3 of RFC8446}}.  The sequence number\nkey is used to encrypt the sequence number ({{Section 4.2.3 of\nRFC9147}}).\n\nIf one review [RFC 5116](https://www.rfc-editor.org/info/rfc5116/) how the IV Is derived is outside. Lets figure out if we can generalize this text. ",
+      "createdAt": "2026-09-10T09:06:30Z",
+      "updatedAt": "2026-09-10T14:11:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 168,
+      "id": "I_kwDOKszxDc8AAAABQnnjcg",
+      "title": "Clarify that Replay Protection is using the DTLS Record level",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/168",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "A comment from Russ Housley indicate that we are not particular clear on how the DTLS replay protection is integrated with the DTLS chunk. I think we need a paragraph in DTLS Chunk Handling section. ",
+      "createdAt": "2026-09-10T09:13:53Z",
+      "updatedAt": "2026-09-10T14:10:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "body": "This should result in dropping the DTLS chunk.",
+          "createdAt": "2026-09-10T14:10:27Z",
+          "updatedAt": "2026-09-10T14:10:27Z"
+        }
+      ]
+    },
+    {
+      "number": 170,
+      "id": "I_kwDOKszxDc8AAAABQqgwFw",
+      "title": "Assign IANA section values",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/170",
+      "state": "OPEN",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-09-10T14:12:41Z",
+      "updatedAt": "2026-09-10T14:12:41Z",
       "closedAt": null,
       "comments": []
     }
@@ -9127,13 +9197,13 @@
       "labels": [],
       "body": "This addresses both #164 and #161. ",
       "createdAt": "2026-07-23T13:10:21Z",
-      "updatedAt": "2026-08-03T08:24:45Z",
+      "updatedAt": "2026-09-10T08:40:39Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "abstract-api-info",
-      "headRefOid": "421d2c83c54df3fdbf4fc7666a90e55b1235cccc",
+      "headRefOid": "d7d826cbb5d29bcd1ce904d7f5ccb446c84018ff",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9191,6 +9261,66 @@
           "body": "In my opinion we should still clarify the API meaning and role at the design team.",
           "createdAt": "2026-08-03T08:24:45Z",
           "updatedAt": "2026-08-03T08:24:45Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 169,
+      "id": "PR_kwDOKszxDc8AAAABC93ZYA",
+      "title": "Addressing most of Russ Housley's comments",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/169",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This addresses most of the comments from Russ Housley in #166. ",
+      "createdAt": "2026-09-10T09:17:28Z",
+      "updatedAt": "2026-09-10T12:38:48Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue166",
+      "headRefOid": "03daab94bdb9c0c01a8869f54091684ced0e23c0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABM963hA",
+          "commit": {
+            "abbreviatedOid": "d367c18"
+          },
+          "author": "github-actions",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-10T09:18:00Z",
+          "updatedAt": "2026-09-10T09:18:01Z",
+          "comments": [
+            {
+              "originalPosition": 138,
+              "body": "````suggestion\nthank Russ Housley for his review.\n````",
+              "createdAt": "2026-09-10T09:18:00Z",
+              "updatedAt": "2026-09-10T09:18:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABM98TPw",
+          "commit": {
+            "abbreviatedOid": "d367c18"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-10T09:20:29Z",
+          "updatedAt": "2026-09-10T09:20:29Z",
           "comments": []
         }
       ]
