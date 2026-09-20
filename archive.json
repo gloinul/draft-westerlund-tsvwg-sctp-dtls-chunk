@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-15T02:54:30.088682+00:00",
+  "timestamp": "2026-09-20T02:51:42.569950+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -9277,7 +9277,7 @@
       "labels": [],
       "body": "This addresses most of the comments from Russ Housley in #166. ",
       "createdAt": "2026-09-10T09:17:28Z",
-      "updatedAt": "2026-09-10T12:38:48Z",
+      "updatedAt": "2026-09-17T09:41:15Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
@@ -9322,6 +9322,19 @@
           "createdAt": "2026-09-10T09:20:29Z",
           "updatedAt": "2026-09-10T09:20:29Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABN_WDxA",
+          "commit": {
+            "abbreviatedOid": "03daab9"
+          },
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-17T09:41:15Z",
+          "updatedAt": "2026-09-17T09:41:15Z",
+          "comments": []
         }
       ]
     },
@@ -9337,7 +9350,7 @@
       "labels": [],
       "body": "Addresses #167 ",
       "createdAt": "2026-09-14T12:51:33Z",
-      "updatedAt": "2026-09-14T12:53:34Z",
+      "updatedAt": "2026-09-17T09:41:00Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
@@ -9361,6 +9374,19 @@
           "body": "",
           "createdAt": "2026-09-14T12:53:34Z",
           "updatedAt": "2026-09-14T12:53:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABN_V6Ug",
+          "commit": {
+            "abbreviatedOid": "8dbc27d"
+          },
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-17T09:41:00Z",
+          "updatedAt": "2026-09-17T09:41:00Z",
           "comments": []
         }
       ]
