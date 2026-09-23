@@ -3079,16 +3079,14 @@ to mitigate downgrade attacks.<a href="#section-6-6.4.1" class="pilcrow">¶</a><
 <p id="section-7-1">This section describes an abstract API that is needed between a
 DTLS Key Management Method and the DTLS chunk. This is an
 example API and there are alternative implementations.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">This API enables the cryptographic protection operations performed to
-allow transmission and reception of the DTLS Records in the DTLS
-chunk. This API includes the information necessary to handle any AEAD
-cipher suit defined to work with DTLS. The API enable setting record
-payload key, sequence number keys, and initialization vector (IV) for
-primary and restart DTLS contexts in both send and receive
-direction. This is the traffic keying materal required for the record
-proptection per Section 5.2 and 5.3 of TLS 1.3 <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span> and the
-record sequence number protection per Section 4.2.3 of DTLS 1.3
-<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-2">This API enables the cryptographic protection operations by setting
+record payload key, sequence number keys, and initialization vector
+(IV) for primary and restart DTLS contexts in both send and receive
+direction. The record payload key is used by the cipher suite for DTLS
+record protection (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>). The initialization
+vector (IV) is random material used to XOR with the sequence number to
+create the nonce per <span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.  The sequence number
+key is used to encrypt the sequence number (<span><a href="https://rfc-editor.org/rfc/rfc9147#section-4.2.3" class="relref">Section 4.2.3</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>).<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">As this API references the key material as for send or receive, it will
 be the responsibility of the Key Management Method used to define how
 it maps the endpoint's role to which keys are for send and receive
@@ -4948,9 +4946,9 @@ thank Russ Housley for his review.<a href="#section-11-1" class="pilcrow">¶</a>
         <dd>
 <span class="refAuthor">Stewart, R.</span>, <span class="refAuthor">Tuexen, M.</span>, <span class="refAuthor">Poon, K.</span>, <span class="refAuthor">Lei, P.</span>, and <span class="refAuthor">V. Yasevich</span>, <span class="refTitle">"Sockets API Extensions for the Stream Control Transmission Protocol (SCTP)"</span>, <span class="seriesInfo">RFC 6458</span>, <span class="seriesInfo">DOI 10.17487/RFC6458</span>, <time datetime="2011-12" class="refDate">December 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6458">https://www.rfc-editor.org/info/rfc6458</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC9846">[RFC9846]</dt>
+<dt id="RFC8446">[RFC8446]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9846</span>, <span class="seriesInfo">DOI 10.17487/RFC9846</span>, <time datetime="2026-07" class="refDate">July 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9846">https://www.rfc-editor.org/info/rfc9846</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tsvwg-rfc4895-bis">[I-D.ietf-tsvwg-rfc4895-bis]</dt>
         <dd>
