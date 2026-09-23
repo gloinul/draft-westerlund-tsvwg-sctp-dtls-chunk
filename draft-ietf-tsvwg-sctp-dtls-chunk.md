@@ -509,8 +509,8 @@ Post-Padding: 0, 8, 16, or 24 bits
   be ignored by the receiver.
 
 
-From {{Section 4 of RFC9147}}, the DTLS record header has variable length and
-is depicted in {{DTLSCiphertext-record-struct}}.
+From {{Section 4 of RFC9147}}, the `DTLSCiphertext` has variable length
+and is depicted in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
     struct {
@@ -520,25 +520,24 @@ is depicted in {{DTLSCiphertext-record-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
 
-The DTLSCiphertext contains the unified_hdr followed by the
-encrypted_record, where unified_hdr has variable format but a single
+The `DTLSCiphertext` contains the `unified_hdr` followed by the
+`encrypted_record`, where `unified_hdr` has variable format but a single
 selected configuration is used in the DTLS Chunk. The use of one byte
-of Pre-Padding ensures 32-bit alignment of the encrypted_record in
+of Pre-Padding ensures 32-bit alignment of the `encrypted_record` in
 relation to the start of the DTLS chunk, which allows a receiver to
 perform an in-place decryption and then process the sequence of
 chunks.  SCTP as specified in {{RFC9260}} guarantees that chunks start
 on a 32-bit boundary.
 
-The used DTLSCiphertext configuration contains the unified_hdr with
+The used `DTLSCiphertext` configuration contains the `unified_hdr` with
 flags and the two least significant bits of the DTLS Epoch, a 16-bit
 sequence number (S=1), no length field (L=0), and no Connection ID
-(C=0). This results in a 3-byte unified_hdr (1 byte fixed header plus
+(C=0). This results in a 3-byte `unified_hdr` (1 byte fixed header plus
 2 bytes sequence number) and consequently 1 byte of Pre-Padding to
-achieve 32-bit alignment of the encrypted_record. The used
-DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
+achieve 32-bit alignment of the `encrypted_record`. The used
+`DTLSCiphertext` is shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
-
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
 |0|0|1|0|1|0|E E|
@@ -547,14 +546,10 @@ DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 |Sequence Number|
 +-+-+-+-+-+-+-+-+
 |               |
-|  Encrypted    |
-/  Record       /
+|   Encrypted   |
+|     Record    |
 |               |
 +-+-+-+-+-+-+-+-+
-
-  DTLSCiphertext
-    Structure
-  (Used Configuration)
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext used structure" artwork-align="center"}
 
