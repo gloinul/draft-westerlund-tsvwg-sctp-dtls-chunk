@@ -44,7 +44,7 @@ author:
 informative:
   RFC6083:
   RFC6458:
-  RFC8446:
+  RFC9846:
   I-D.ietf-tsvwg-rfc4895-bis:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
@@ -993,15 +993,16 @@ This section describes an abstract API that is needed between a
 DTLS Key Management Method and the DTLS chunk. This is an
 example API and there are alternative implementations.
 
-This API enables the cryptographic protection operations by setting
-record payload key, sequence number keys, and initialization vector
-(IV) for primary and restart DTLS contexts in both send and receive
-direction. The record payload key is used by the cipher suite for DTLS
-record protection ({{Section 5.2 of RFC8446}}). The initialization
-vector (IV) is random material used to XOR with the sequence number to
-create the nonce per {{Section 5.3 of RFC8446}}.  The sequence number
-key is used to encrypt the sequence number ({{Section 4.2.3 of
-RFC9147}}).
+This API enables the cryptographic protection operations performed to
+allow transmission and reception of the DTLS Records in the DTLS
+chunk. This API includes the information necessary to handle any AEAD
+cipher suit defined to work with DTLS. The API enable setting record
+payload key, sequence number keys, and initialization vector (IV) for
+primary and restart DTLS contexts in both send and receive
+direction. This is the traffic keying materal required for the record
+proptection per Section 5.2 and 5.3 of TLS 1.3 {{RFC9846}} and the
+record sequence number protection per Section 4.2.3 of DTLS 1.3
+{{RFC9147}}.
 
 As this API references the key material as for send or receive, it will
 be the responsibility of the Key Management Method used to define how
