@@ -810,8 +810,11 @@ the Restart flag in addition to the `unified_hdr` is used to find the keys for
 processing the `encrypted_record` following DTLS 1.3 {{RFC9147}}.
 
 After the `encrypted_record` has been verified and decrypted, the
-corresponding chunks (the `DTLSInnerPlaintext.content`) are processed as
-defined in the corresponding specifications.
+replay protection is performed.
+If a replay of the DTLS record is detected, further processing of the
+`DTLSInnerPlaintext.content` MUST NOT be performed.
+Otherwise, the corresponding chunks (the `DTLSInnerPlaintext.content`)
+are processed as defined in the corresponding specifications.
 
 If the Chunk Protection Operator experiences a non-critical error,
 it MUST NOT abort the association.
