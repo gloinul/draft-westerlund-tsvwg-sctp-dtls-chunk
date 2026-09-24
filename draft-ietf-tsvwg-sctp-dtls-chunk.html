@@ -2119,8 +2119,8 @@ be ignored by the receiver.<a href="#section-4.2-3.14.1" class="pilcrow">¶</a><
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-4.2-4">From <span><a href="https://rfc-editor.org/rfc/rfc9147#section-4" class="relref">Section 4</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, the DTLS record header has variable length and
-is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref">Figure 4</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">From <span><a href="https://rfc-editor.org/rfc/rfc9147#section-4" class="relref">Section 4</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, the <code>DTLSCiphertext</code> has variable length
+and is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref">Figure 4</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <span id="name-dtls-dtlsciphertext"></span><div id="DTLSCiphertext-record-struct">
 <figure id="figure-4">
           <div id="section-4.2-5.1">
@@ -2143,36 +2143,34 @@ is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref
 <a href="#name-dtls-dtlsciphertext" class="selfRef">DTLS DTLSCiphertext</a>
           </figcaption></figure>
 </div>
-<p id="section-4.2-6">The DTLSCiphertext contains the unified_hdr followed by the
-encrypted_record, where unified_hdr has variable format but a single
+<p id="section-4.2-6">The <code>DTLSCiphertext</code> contains the <code>unified_hdr</code> followed by the
+<code>encrypted_record</code>, where <code>unified_hdr</code> has variable format but a single
 selected configuration is used in the DTLS Chunk. The use of one byte
-of Pre-Padding ensures 32-bit alignment of the encrypted_record in
+of Pre-Padding ensures 32-bit alignment of the <code>encrypted_record</code> in
 relation to the start of the DTLS chunk, which allows a receiver to
 perform an in-place decryption and then process the sequence of
 chunks.  SCTP as specified in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> guarantees that chunks start
 on a 32-bit boundary.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<p id="section-4.2-7">The used DTLSCiphertext configuration contains the unified_hdr with
+<p id="section-4.2-7">The used <code>DTLSCiphertext</code> configuration contains the <code>unified_hdr</code> with
 flags and the two least significant bits of the DTLS Epoch, a 16-bit
 sequence number (S=1), no length field (L=0), and no Connection ID
-(C=0). This results in a 3-byte unified_hdr (1 byte fixed header plus
+(C=0). This results in a 3-byte <code>unified_hdr</code> (1 byte fixed header plus
 2 bytes sequence number) and consequently 1 byte of Pre-Padding to
-achieve 32-bit alignment of the encrypted_record. The used
-DTLSCiphertext are shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 5</a>.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+achieve 32-bit alignment of the <code>encrypted_record</code>. The used
+<code>DTLSCiphertext</code> is shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 5</a>.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
 <span id="name-dtlsciphertext-used-structu"></span><div id="DTLSCiphertext-recommended">
 <figure id="figure-5">
           <div id="section-4.2-8.1">
             <div class="alignCenter art-svg artwork" id="section-4.2-8.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="184" viewBox="0 0 184 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 8,48 L 8,160" fill="none" stroke="black"></path>
-                <path d="M 8,192 L 8,208" fill="none" stroke="black"></path>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="144" viewBox="0 0 144 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,208" fill="none" stroke="black"></path>
                 <path d="M 24,48 L 24,80" fill="none" stroke="black"></path>
                 <path d="M 40,48 L 40,80" fill="none" stroke="black"></path>
                 <path d="M 56,48 L 56,80" fill="none" stroke="black"></path>
                 <path d="M 72,48 L 72,80" fill="none" stroke="black"></path>
                 <path d="M 88,48 L 88,80" fill="none" stroke="black"></path>
                 <path d="M 104,48 L 104,80" fill="none" stroke="black"></path>
-                <path d="M 136,48 L 136,160" fill="none" stroke="black"></path>
-                <path d="M 136,192 L 136,208" fill="none" stroke="black"></path>
+                <path d="M 136,48 L 136,208" fill="none" stroke="black"></path>
                 <path d="M 8,48 L 136,48" fill="none" stroke="black"></path>
                 <path d="M 8,80 L 136,80" fill="none" stroke="black"></path>
                 <path d="M 8,128 L 136,128" fill="none" stroke="black"></path>
@@ -2198,14 +2196,8 @@ DTLSCiphertext are shown in <a href="#DTLSCiphertext-recommended" class="auto in
                   <text x="80" y="100">bit</text>
                   <text x="44" y="116">Sequence</text>
                   <text x="108" y="116">Number</text>
-                  <text x="64" y="164">Encrypted</text>
-                  <text x="8" y="180">/</text>
-                  <text x="52" y="180">Record</text>
-                  <text x="136" y="180">/</text>
-                  <text x="76" y="244">DTLSCiphertext</text>
-                  <text x="72" y="260">Structure</text>
-                  <text x="40" y="276">(Used</text>
-                  <text x="124" y="276">Configuration)</text>
+                  <text x="72" y="164">Encrypted</text>
+                  <text x="76" y="180">Record</text>
                 </g>
               </svg><a href="#section-4.2-8.1.1" class="pilcrow">¶</a>
 </div>
