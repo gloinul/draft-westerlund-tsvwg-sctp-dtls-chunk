@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-20T02:51:42.569950+00:00",
+  "timestamp": "2026-09-24T02:39:44.347846+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2359,7 +2359,7 @@
       "id": "I_kwDOKszxDc8AAAABOWm-Fw",
       "title": "Comments from Russ Housley",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/166",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "teiclap",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -2368,8 +2368,8 @@
       "labels": [],
       "body": "The below review comments was provided by Russ Housley.\n\nThese are my comments on draft-ietf-tsvwg-sctp-dtls-chunk.  I hope to look at the other document soon.\n\nSection 1: The concept of \"association\" needs some definition.  I assume it is similar to the IPsec security association.  I think it should be defined before the 4th paragraph.  If there is a difference between \"Protected Association\" and \"SCTP Association\", please explain it here too.\n\nSection 1: Why mandate Diffie-Hellman?  I realize it is a separate document, but you ought to allow any PQC KEMs as well.\n\nSection 1.1: I'd prefer two sections, one that talks about obsoleting RFC 6083 and a seprate section about the updates to RFC 5061.\n\nSection 2.1: Please add a discussion of SCTP association to this section.\n\nSection 3.1: I'm confused by the third paragraph. The phrase \"the DTLS key context anyway can be identified\" completely lost me.  Do you has advice about what should be used fDTLS Chunk identifier?\n\nSection 3.1.1: I suggest that you delete \"taking into account its inherent security properties\" from the last sentence\n\nSection 3.2: s/It should be noted that/Note that/\n\nSection 5.1: s/First the Key Management role/First, the Key Management role/\n\nSection 5.1: I think the second sentence of the same paragraph would be more clear as: This is done by evaluating the S and C bits of the parameters provided by each endpoints.\n\nSection 6: s/Every DTLS Key Management Method/Every DTLS Key Management Method:/\n\nSection 7: Is there a way to achieve this goal at a higher level? My concern is that the discussion includes details that are the result of the chosen cipher suire (like the XOR discussion) that are not really a consequence of picking DTLS.\n\nSection 8: I did not review this section.  This is not really my area.\n\nSection 10: Please put a reference [RFC9147] here.\n\nSection 10: Please state that replay protection is handled by SCTP (see Section 7.13); then the DTLS replay protection MUST be turned off.",
       "createdAt": "2026-08-26T14:27:19Z",
-      "updatedAt": "2026-09-10T09:18:30Z",
-      "closedAt": null,
+      "updatedAt": "2026-09-23T05:36:19Z",
+      "closedAt": "2026-09-23T05:36:19Z",
       "comments": [
         {
           "author": "gloinul",
@@ -2385,7 +2385,7 @@
       "id": "I_kwDOKszxDc8AAAABQnjYDA",
       "title": "Generalization of AEAD interface in the APIs",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/167",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -2394,8 +2394,8 @@
       "labels": [],
       "body": "Russ Housley made the following comment:\n\nSection 7: Is there a way to achieve this goal at a higher level? My concern is that the discussion includes details that are the result of the chosen cipher suire (like the XOR discussion) that are not really a consequence of picking DTLS.\n\nMy interpretation is the text that is problematic is the following:\n\nThis API enables the cryptographic protection operations by setting\nrecord payload key, sequence number keys, and initialization vector\n(IV) for primary and restart DTLS contexts in both send and receive\ndirection. The record payload key is used by the cipher suite for DTLS\nrecord protection ({{Section 5.2 of RFC8446}}). The initialization\nvector (IV) is random material used to XOR with the sequence number to\ncreate the nonce per {{Section 5.3 of RFC8446}}.  The sequence number\nkey is used to encrypt the sequence number ({{Section 4.2.3 of\nRFC9147}}).\n\nIf one review [RFC 5116](https://www.rfc-editor.org/info/rfc5116/) how the IV Is derived is outside. Lets figure out if we can generalize this text. ",
       "createdAt": "2026-09-10T09:06:30Z",
-      "updatedAt": "2026-09-10T14:11:21Z",
-      "closedAt": null,
+      "updatedAt": "2026-09-23T05:36:53Z",
+      "closedAt": "2026-09-23T05:36:53Z",
       "comments": []
     },
     {
@@ -9197,7 +9197,7 @@
       "labels": [],
       "body": "This addresses both #164 and #161. ",
       "createdAt": "2026-07-23T13:10:21Z",
-      "updatedAt": "2026-09-10T08:40:39Z",
+      "updatedAt": "2026-09-23T05:34:00Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
@@ -9262,6 +9262,32 @@
           "createdAt": "2026-08-03T08:24:45Z",
           "updatedAt": "2026-08-03T08:24:45Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABOt0PRA",
+          "commit": {
+            "abbreviatedOid": "d7d826c"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-22T19:11:31Z",
+          "updatedAt": "2026-09-22T19:11:31Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABOyV0-w",
+          "commit": {
+            "abbreviatedOid": "d7d826c"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-23T05:34:00Z",
+          "updatedAt": "2026-09-23T05:34:00Z",
+          "comments": []
         }
       ]
     },
@@ -9270,24 +9296,26 @@
       "id": "PR_kwDOKszxDc8AAAABC93ZYA",
       "title": "Addressing most of Russ Housley's comments",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/169",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This addresses most of the comments from Russ Housley in #166. ",
       "createdAt": "2026-09-10T09:17:28Z",
-      "updatedAt": "2026-09-17T09:41:15Z",
+      "updatedAt": "2026-09-23T05:38:16Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue166",
       "headRefOid": "03daab94bdb9c0c01a8869f54091684ced0e23c0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-23T05:36:18Z",
+      "mergedAt": "2026-09-23T05:36:18Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "c3bdf4f5dfd846622d77e6a0ed14586afdd15948"
+      },
       "comments": [],
       "reviews": [
         {
@@ -9335,6 +9363,46 @@
           "createdAt": "2026-09-17T09:41:15Z",
           "updatedAt": "2026-09-17T09:41:15Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABOvHn6A",
+          "commit": {
+            "abbreviatedOid": "03daab9"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-22T21:19:19Z",
+          "updatedAt": "2026-09-22T21:19:19Z",
+          "comments": [
+            {
+              "originalPosition": 68,
+              "body": "Aren't the ports and IP addresses the data identifying an SCTP association?",
+              "createdAt": "2026-09-22T21:19:19Z",
+              "updatedAt": "2026-09-22T21:19:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABOyXNNQ",
+          "commit": {
+            "abbreviatedOid": "03daab9"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-23T05:38:16Z",
+          "updatedAt": "2026-09-23T05:38:16Z",
+          "comments": [
+            {
+              "originalPosition": 68,
+              "body": "I have merged this by accident. I am not closing this issue now.\r\n\r\nSorry,\r\nClaudio",
+              "createdAt": "2026-09-23T05:38:16Z",
+              "updatedAt": "2026-09-23T05:38:16Z"
+            }
+          ]
         }
       ]
     },
@@ -9343,24 +9411,26 @@
       "id": "PR_kwDOKszxDc8AAAABDc2ElA",
       "title": "Reformulated intro to not overstep AEAD API.",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/171",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Addresses #167 ",
       "createdAt": "2026-09-14T12:51:33Z",
-      "updatedAt": "2026-09-17T09:41:00Z",
+      "updatedAt": "2026-09-23T05:36:52Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "dfc66a0cefccd2f2e5a378d5de7a95cc57628c3c",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue167",
       "headRefOid": "8dbc27d6d4bf2242d4ccb9ef754e168b442f2cd6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-23T05:36:52Z",
+      "mergedAt": "2026-09-23T05:36:52Z",
+      "mergedBy": "teiclap",
+      "mergeCommit": {
+        "oid": "794b080b09f27cb304ce551fc08b8c86cbe79be3"
+      },
       "comments": [],
       "reviews": [
         {
@@ -9388,8 +9458,99 @@
           "createdAt": "2026-09-17T09:41:00Z",
           "updatedAt": "2026-09-17T09:41:00Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABOvImNA",
+          "commit": {
+            "abbreviatedOid": "8dbc27d"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-22T21:21:13Z",
+          "updatedAt": "2026-09-22T21:21:13Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 172,
+      "id": "PR_kwDOKszxDc8AAAABEzF_dw",
+      "title": "The error cause codes are early assigned.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/172",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes #170.",
+      "createdAt": "2026-09-23T18:07:16Z",
+      "updatedAt": "2026-09-23T18:07:17Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "794b080b09f27cb304ce551fc08b8c86cbe79be3",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue170",
+      "headRefOid": "205707e8b9685eb86b34b74538ecaa91fcd29d80",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 173,
+      "id": "PR_kwDOKszxDc8AAAABEz0ikQ",
+      "title": "Improve description of replay protection",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/173",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fix #168.",
+      "createdAt": "2026-09-23T19:27:47Z",
+      "updatedAt": "2026-09-23T19:27:48Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "794b080b09f27cb304ce551fc08b8c86cbe79be3",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue168",
+      "headRefOid": "daf5fae5130b16607fe231fb6f65e3431aca5538",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 174,
+      "id": "PR_kwDOKszxDc8AAAABEz9igQ",
+      "title": "Improve formatting",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/174",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-09-23T19:42:13Z",
+      "updatedAt": "2026-09-23T19:42:14Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "794b080b09f27cb304ce551fc08b8c86cbe79be3",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "cleanup",
+      "headRefOid": "9d91d1480510957fcec63bdd35968bcf35dc69b9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
