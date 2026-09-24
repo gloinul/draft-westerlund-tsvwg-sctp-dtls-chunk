@@ -574,14 +574,14 @@ the INIT chunk.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 100 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 100        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-missing-dtls-chunk-support title="Error Missing DTLS Chunk Support" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 100 (TBC).
+: This value MUST be set to 100.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -602,14 +602,14 @@ The format of this error cause is depicted in {{error-cause-no-common-method}}.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 101 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 101        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-no-common-method title="Error Cause No Common DTLS Key Management Method" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 101 (TBC).
+: This value MUST be set to 101.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -628,14 +628,14 @@ The format of this error cause is depicted in {{error-cause-tie-breaker-collisio
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 102 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 102        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-tie-breaker-collision title="Error Cause DTLS Key Management Tie Breaker Collision" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 102 (TBC).
+: This value MUST be set to 102.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -654,14 +654,14 @@ The format of this error cause is depicted in {{error-cause-incompat-roles}}.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 103 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 103        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-incompat-roles title="Error Cause Incompatible DTLS Key Management Roles" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 103 (TBC).
+: This value MUST be set to 103.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -1942,18 +1942,16 @@ reference to this document.
 ## SCTP Error Cause Codes {#IANA-Extra-Cause}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Error Cause Codes" registry, IANA is requested to add the new
-entries depicted below in {{iana-error-cause-codes}} with a
-reference to this document.
+"Error Cause Codes" registry, IANA is requested to update the reference
+for the four error cause codes depicted in {{iana-error-cause-codes}}
+with a reference to this document.
 
-| ID Value     | Error Cause Codes                         | Reference |
-| 100 (TBC)    | Missing DTLS Chunk Support                | RFC-To-Be |
-| 101 (TBC)    | No Common DTLS Key Management Method      | RFC-To-Be |
-| 102 (TBC)    | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
-| 103 (TBC)    | Incompatible DTLS Key Management Roles    | RFC-To-Be |
+| ID Value | Error Cause Codes                         | Reference |
+| 100      | Missing DTLS Chunk Support                | RFC-To-Be |
+| 101      | No Common DTLS Key Management Method      | RFC-To-Be |
+| 102      | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
+| 103      | Incompatible DTLS Key Management Roles    | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
-
-The suggested cause code will need to be confirmed by IANA.
 
 ## SCTP Payload Protocol Identifier {#sec-iana-ppid}
 
