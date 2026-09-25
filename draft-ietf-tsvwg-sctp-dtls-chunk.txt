@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 28 March 2027                   Münster Univ. of Appl. Sciences
-                                                       24 September 2026
+Expires: 29 March 2027                   Münster Univ. of Appl. Sciences
+                                                       25 September 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2027.
+   This Internet-Draft will expire on 29 March 2027.
 
 Copyright Notice
 
@@ -375,11 +375,11 @@ Table of Contents
    The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
    the DTLS Chunk as the full DTLS connection state is not used in the
    DTLS Chunk and the DTLS key context is identified by means of the
-   Association identifiers (port and VTAG) and the Epoch.  The length
-   field MUST NOT be used as the DTLS chunk provides record length
-   information.  Finally 16-bit Sequence Numbers are used as they give
-   maximum support for reordering and there are no byte savings possible
-   to ensure the 32-bit alignment for the encrypted record.
+   Association identifiers and the Epoch.  The length field MUST NOT be
+   used as the DTLS chunk provides record length information.  Finally
+   16-bit Sequence Numbers are used as they give maximum support for
+   reordering and there are no byte savings possible to ensure the
+   32-bit alignment for the encrypted record.
 
    The first DTLS key context established for any SCTP association MUST
    use epoch 3.  Each subsequent DTLS key context will use the next
