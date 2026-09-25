@@ -118,10 +118,11 @@ Table of Contents
      7.7.  Destroy Receive Key Material
      7.8.  Set Key to Use
      7.9.  Require Protected SCTP Packets
-     7.10. Get AEAD Encryption Invocations
-     7.11. Get AEAD Decryption Invocations
-     7.12. Get Failed AEAD Decryption Invocations
-     7.13. Configure Replay Protection
+     7.10. Read Indication of Protection
+     7.11. Get AEAD Encryption Invocations
+     7.12. Get AEAD Decryption Invocations
+     7.13. Get Failed AEAD Decryption Invocations
+     7.14. Configure Replay Protection
    8.  Socket API Considerations
      8.1.  SCTP_ASSOC_CHANGE Notification
      8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
@@ -1052,9 +1053,11 @@ Table of Contents
 
 7.  Abstract API
 
-   This section describes an abstract API that is needed between a DTLS
-   Key Management Method and the DTLS chunk.  This is an example API and
-   there are alternative implementations.
+   This section describes an abstract API between the upper layer,
+   including a DTLS Key Management Method, and the SCTP implementation
+   with the DTLS chunk.  Please note that this section is an
+   informational example API only and there are alternative
+   implementations.
 
    This API enables the cryptographic protection operations performed to
    allow transmission and reception of the DTLS Records in the DTLS
@@ -1329,7 +1332,13 @@ Table of Contents
 
    Reply: Acknowledgement
 
-7.10.  Get AEAD Encryption Invocations
+7.10.  Read Indication of Protection
+
+   The API functions for receiving data should explicitly indicate if
+   the data provided to the upper layer protocol was protected by the
+   SCTP assocation using DTLS chunk.
+
+7.11.  Get AEAD Encryption Invocations
 
    Get the number of AEAD encryption invocations (protected SCTP
    packets) for a given epoch.
@@ -1348,7 +1357,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.11.  Get AEAD Decryption Invocations
+7.12.  Get AEAD Decryption Invocations
 
    Get the number of AEAD decryption invocations for a given epoch.
 
@@ -1366,7 +1375,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.12.  Get Failed AEAD Decryption Invocations
+7.13.  Get Failed AEAD Decryption Invocations
 
    Get the number of failed AEAD decryption invocations for a given
    epoch.
@@ -1385,7 +1394,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.13.  Configure Replay Protection
+7.14.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
