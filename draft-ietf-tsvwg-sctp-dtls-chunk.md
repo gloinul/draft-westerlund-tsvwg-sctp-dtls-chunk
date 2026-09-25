@@ -307,7 +307,7 @@ The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
 the DTLS Chunk as the full DTLS connection state is not used in the
 DTLS Chunk and the DTLS key context is identified by means
-of the Association identifiers (port and VTAG) and the Epoch.
+of the Association identifiers and the Epoch.
 The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
