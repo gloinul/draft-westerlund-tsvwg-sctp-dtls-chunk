@@ -987,9 +987,11 @@ Every DTLS Key Management Method:
 
 # Abstract API  {#abstract-api}
 
-This section describes an abstract API that is needed between a
-DTLS Key Management Method and the DTLS chunk. This is an
-example API and there are alternative implementations.
+This section describes an abstract API between the upper layer,
+including a DTLS Key Management Method, and the SCTP implementation
+with the DTLS chunk.  Please note that this section is an
+informational example API only and there are alternative
+implementations.
 
 This API enables the cryptographic protection operations performed to
 allow transmission and reception of the DTLS Records in the DTLS
@@ -1258,6 +1260,12 @@ Parameters:
 * SCTP Association
 
 Reply: Acknowledgement
+
+## Read Indication of Protection
+
+The API functions for receiving data should explicitly indicate if the
+data provided to the upper layer protocol was protected by the SCTP
+assocation using DTLS chunk.
 
 ## Get AEAD Encryption Invocations
 
