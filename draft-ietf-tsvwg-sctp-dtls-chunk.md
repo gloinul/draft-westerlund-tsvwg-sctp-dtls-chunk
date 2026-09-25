@@ -44,7 +44,7 @@ author:
 informative:
   RFC6083:
   RFC6458:
-  RFC8446:
+  RFC9846:
   I-D.ietf-tsvwg-rfc4895-bis:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
@@ -105,7 +105,8 @@ secure transfer of SCTP packets (including both control and DATA chunks).
 The DTLS chunk protects a sequence of SCTP chunks by encrypting the
 plain text into encrypted ciphertext using the DTLS record format and
 its processing. This processing is based on DTLS 1.3, as specified in
-{{RFC9147}}.
+{{RFC9147}}. Resulting in an protected SCTP association instead of
+an SCTP association where all the SCTP protocol details are in plain text.
 
 Key management is performed outside of the SCTP implementation and is out of scope
 of this document. This process is referred to as the DTLS Key Management Method.
@@ -172,7 +173,7 @@ This results in a DTLS 1.3 record encapsulated in a DTLS chunk.
 
 The method of secure key-management, e.g. based on DTLS 1.3, providing
 initial mutual authentication, key establishment, and periodic
-re-authentication and rekeying with Diffie-Hellman of the DTLS chunk
+re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 {{key-management-considerations}}).  To prevent downgrade attacks
 affecting the DTLS Key Management negotiation the DTLS Key Management
@@ -201,15 +202,7 @@ SCTP and its extensions. However, the following limitations apply:
 * The use of the lookup address in the Dynamic Address Reconfiguration
   extension as specified in {{RFC5061}} is not supported.
 
-This document also includes two informational sections: an Abstract
-API ({{abstract-api}}) describing an example interface between the
-upper layer (including any DTLS Key Management Method) and the SCTP
-implementation with it DTLS chunk protection, and Socket API
-Considerations ({{socket-api}}) describing extensions to the socket
-API defined in {{RFC6458}}.  These sections are informational only and
-are not normative requirements of this specification.
-
-## Relationship to RFC 6083 and RFC 5061
+## Relationship to RFC 6083
 
 This document obsoletes {{RFC6083}}, which defined the use of DTLS
 over SCTP by encapsulating user data in DTLS records and sending the
@@ -222,6 +215,8 @@ mechanism defined in this document replaces {{RFC6083}} by integrating
 DTLS 1.3 record protection directly at the chunk level, providing
 confidentiality and integrity for both user data and SCTP control
 chunks without dependency on SCTP-AUTH.
+
+## Relationship to RFC 5061
 
 This document updates {{RFC5061}} by restricting the use of the Dynamic
 Address Reconfiguration extension when the DTLS chunk is in use.
@@ -236,6 +231,7 @@ authenticating ASCONF chunks, is incompatible with this extension.
 {::boilerplate bcp14}
 
 ## Terminology
+
 
 Chunk Protection Operator:
 
@@ -278,6 +274,15 @@ Key Material:
 : Key material is all cryptographic information needed for protection
   operation in one direction.
 
+Protected SCTP Association:
+
+: an SCTP Association implementing DTLS Chunk as described in this document
+  providing encryption, integrity protection and replay protection to all
+  SCTP chunks in SCTP packets.
+
+SCTP Association:
+
+: an association as defined in {{{{RFC9260}}}}.
 
 # Protocol Considerations
 
@@ -301,8 +306,9 @@ indicator, and the DTLS epoch.
 The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
 the DTLS Chunk as the full DTLS connection state is not used in the
-DTLS Chunk and the DTLS key context anyway can be identified. The
-length field MUST NOT be used as the DTLS chunk provides record length
+DTLS Chunk and the DTLS key context is identified by means
+of the Association identifiers and the Epoch.
+The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
 to ensure the 32-bit alignment for the encrypted record.
@@ -330,8 +336,7 @@ TLS_CHACHA20_POLY1305_SHA256 cipher suites, using the identifiers
 defined by {{TLS-CIPHER-SUITES}}.
 
 In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the TLS
-cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable, taking
-into account its inherent security properties.
+cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable.
 
 
 ## SCTP Considerations
@@ -361,7 +366,7 @@ Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.
 
-It should be noted that regardless of whether SCTP padding or DTLS padding
+Note that regardless of whether SCTP padding or DTLS padding
 is used, the additional bytes are not accounted for by the SCTP congestion control.
 Extensive use of padding has potential to worsen congestion situations, as the
 SCTP association will consume more bandwidth than its fair share as determined by
@@ -504,8 +509,8 @@ Post-Padding: 0, 8, 16, or 24 bits
   be ignored by the receiver.
 
 
-From {{Section 4 of RFC9147}}, the DTLS record header has variable length and
-is depicted in {{DTLSCiphertext-record-struct}}.
+From {{Section 4 of RFC9147}}, the `DTLSCiphertext` has variable length
+and is depicted in {{DTLSCiphertext-record-struct}}.
 
 ~~~~~~~~~~~ aasvg
     struct {
@@ -515,25 +520,24 @@ is depicted in {{DTLSCiphertext-record-struct}}.
 ~~~~~~~~~~~
 {: #DTLSCiphertext-record-struct title="DTLS DTLSCiphertext" artwork-align="center"}
 
-The DTLSCiphertext contains the unified_hdr followed by the
-encrypted_record, where unified_hdr has variable format but a single
+The `DTLSCiphertext` contains the `unified_hdr` followed by the
+`encrypted_record`, where `unified_hdr` has variable format but a single
 selected configuration is used in the DTLS Chunk. The use of one byte
-of Pre-Padding ensures 32-bit alignment of the encrypted_record in
+of Pre-Padding ensures 32-bit alignment of the `encrypted_record` in
 relation to the start of the DTLS chunk, which allows a receiver to
 perform an in-place decryption and then process the sequence of
 chunks.  SCTP as specified in {{RFC9260}} guarantees that chunks start
 on a 32-bit boundary.
 
-The used DTLSCiphertext configuration contains the unified_hdr with
+The used `DTLSCiphertext` configuration contains the `unified_hdr` with
 flags and the two least significant bits of the DTLS Epoch, a 16-bit
 sequence number (S=1), no length field (L=0), and no Connection ID
-(C=0). This results in a 3-byte unified_hdr (1 byte fixed header plus
+(C=0). This results in a 3-byte `unified_hdr` (1 byte fixed header plus
 2 bytes sequence number) and consequently 1 byte of Pre-Padding to
-achieve 32-bit alignment of the encrypted_record. The used
-DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
+achieve 32-bit alignment of the `encrypted_record`. The used
+`DTLSCiphertext` is shown in {{DTLSCiphertext-recommended}}.
 
 ~~~~~~~~~~~ aasvg
-
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
 |0|0|1|0|1|0|E E|
@@ -542,14 +546,10 @@ DTLSCiphertext are shown in {{DTLSCiphertext-recommended}}.
 |Sequence Number|
 +-+-+-+-+-+-+-+-+
 |               |
-|  Encrypted    |
-/  Record       /
+|   Encrypted   |
+|     Record    |
 |               |
 +-+-+-+-+-+-+-+-+
-
-  DTLSCiphertext
-    Structure
-  (Used Configuration)
 ~~~~~~~~~~~
 {: #DTLSCiphertext-recommended title="DTLSCiphertext used structure" artwork-align="center"}
 
@@ -569,14 +569,14 @@ the INIT chunk.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 100 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 100        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-missing-dtls-chunk-support title="Error Missing DTLS Chunk Support" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 100 (TBC).
+: This value MUST be set to 100.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -597,14 +597,14 @@ The format of this error cause is depicted in {{error-cause-no-common-method}}.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 101 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 101        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-no-common-method title="Error Cause No Common DTLS Key Management Method" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 101 (TBC).
+: This value MUST be set to 101.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -623,14 +623,14 @@ The format of this error cause is depicted in {{error-cause-tie-breaker-collisio
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 102 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 102        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-tie-breaker-collision title="Error Cause DTLS Key Management Tie Breaker Collision" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 102 (TBC).
+: This value MUST be set to 102.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -649,14 +649,14 @@ The format of this error cause is depicted in {{error-cause-incompat-roles}}.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    Cause Code = 103 (TBC)     |       Cause Length = 4        |
+|       Cause Code = 103        |       Cause Length = 4        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~~~~~~~~
 {: #error-cause-incompat-roles title="Error Cause Incompatible DTLS Key Management Roles" artwork-align="center"}
 
 {: vspace="0"}
 Cause Code: 16 bits (unsigned integer)
-: This value MUST be set to 103 (TBC).
+: This value MUST be set to 103.
 
 Cause Length: 16 bits (unsigned integer)
 : This value MUST be set to 4.
@@ -714,9 +714,9 @@ To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
 executed by both endpoints before entering the ESTABLISHED state.
 
-First the Key Management role of each endpoint is determined. This is
-done by evaluating the S and C bits in the two endpoints'
-parameters. This falls into the following cases:
+First, the Key Management role of each endpoint is determined. This is done by
+evaluating the S and C bits of the parameters provided by each endpoints.
+This falls into the following cases:
 
 1. At least one endpoint indicates a single role (client or server) and the peer
    supports the other role. In this case the endpoint indicating a single role
@@ -810,8 +810,11 @@ the Restart flag in addition to the `unified_hdr` is used to find the keys for
 processing the `encrypted_record` following DTLS 1.3 {{RFC9147}}.
 
 After the `encrypted_record` has been verified and decrypted, the
-corresponding chunks (the `DTLSInnerPlaintext.content`) are processed as
-defined in the corresponding specifications.
+replay protection is performed.
+If a replay of the DTLS record is detected, further processing of the
+`DTLSInnerPlaintext.content` MUST NOT be performed.
+Otherwise, the corresponding chunks (the `DTLSInnerPlaintext.content`)
+are processed as defined in the corresponding specifications.
 
 If the Chunk Protection Operator experiences a non-critical error,
 it MUST NOT abort the association.
@@ -969,7 +972,7 @@ mutual authentication and rekeying) are defined:
 An SCTP endpoint MAY support multiple DTLS Key Management Methods subject to
 implementation requirements and local security policies.
 
-Every DTLS Key Management Method
+Every DTLS Key Management Method:
 
 * MUST be registered in the IANA Registry {{IANA-Protection-Solution-ID}}
   to receive a unique identifier, enabling negotiation during the SCTP handshake.
@@ -990,15 +993,16 @@ with the DTLS chunk.  Please note that this section is an
 informational example API only and there are alternative
 implementations.
 
-This API enables the cryptographic protection operations by setting
-record payload key, sequence number keys, and initialization vector
-(IV) for primary and restart DTLS contexts in both send and receive
-direction. The record payload key is used by the cipher suite for DTLS
-record protection ({{Section 5.2 of RFC8446}}). The initialization
-vector (IV) is random material used to XOR with the sequence number to
-create the nonce per {{Section 5.3 of RFC8446}}.  The sequence number
-key is used to encrypt the sequence number ({{Section 4.2.3 of
-RFC9147}}).
+This API enables the cryptographic protection operations performed to
+allow transmission and reception of the DTLS Records in the DTLS
+chunk. This API includes the information necessary to handle any AEAD
+cipher suit defined to work with DTLS. The API enable setting record
+payload key, sequence number keys, and initialization vector (IV) for
+primary and restart DTLS contexts in both send and receive
+direction. This is the traffic keying materal required for the record
+proptection per Section 5.2 and 5.3 of TLS 1.3 {{RFC9846}} and the
+record sequence number protection per Section 4.2.3 of DTLS 1.3
+{{RFC9147}}.
 
 As this API references the key material as for send or receive, it will
 be the responsibility of the Key Management Method used to define how
@@ -1318,7 +1322,7 @@ Reply: Failed AEAD Decryption Invocations
 
 Parameters : non-negative integer
 
-## Configure Replay Protection
+## Configure Replay Protection {#conf_replay_protect}
 
 The DTLS replay protection in this usage is expected to be fairly
 robust. Its depth of handling is related to maximum network path
@@ -1944,18 +1948,16 @@ reference to this document.
 ## SCTP Error Cause Codes {#IANA-Extra-Cause}
 
 In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Error Cause Codes" registry, IANA is requested to add the new
-entries depicted below in {{iana-error-cause-codes}} with a
-reference to this document.
+"Error Cause Codes" registry, IANA is requested to update the reference
+for the four error cause codes depicted in {{iana-error-cause-codes}}
+with a reference to this document.
 
-| ID Value     | Error Cause Codes                         | Reference |
-| 100 (TBC)    | Missing DTLS Chunk Support                | RFC-To-Be |
-| 101 (TBC)    | No Common DTLS Key Management Method      | RFC-To-Be |
-| 102 (TBC)    | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
-| 103 (TBC)    | Incompatible DTLS Key Management Roles    | RFC-To-Be |
+| ID Value | Error Cause Codes                         | Reference |
+| 100      | Missing DTLS Chunk Support                | RFC-To-Be |
+| 101      | No Common DTLS Key Management Method      | RFC-To-Be |
+| 102      | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
+| 103      | Incompatible DTLS Key Management Roles    | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
-
-The suggested cause code will need to be confirmed by IANA.
 
 ## SCTP Payload Protocol Identifier {#sec-iana-ppid}
 
@@ -1973,7 +1975,7 @@ reference to this document.
 All the security and privacy considerations of the security protocol
 used as the Chunk Protection Operator apply.
 
-DTLS replay protection MUST NOT be turned off.
+The record layer security considerations from {{RFC9147}} apply including rekeying.
 
 ## Privacy Considerations
 
@@ -2042,4 +2044,5 @@ ULP State if that is sufficiently secure.
 The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
 participation in the design team and their contributions to this document.
 We also like to thank Xin Long for his contributions to this document and
-Amanda Baber with IANA for feedback on our IANA registry.
+Amanda Baber with IANA for feedback on our IANA registry. We also like to
+thank Russ Housley for his review.
