@@ -28,22 +28,22 @@ This implies that the Dynamic Address Reconfiguration as specified in RFC 5061
 can only be used as described in this document. 
        This document obsoletes RFC 6083 and updates RFC 5061. 
     " name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="draft-ietf-tsvwg-sctp-dtls-chunk-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
+  xml2rfc 3.34.1
     Python 3.14.7
-    ConfigArgParse 1.7.5
+    ConfigArgParse 1.7.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.7
+    platformdirs 4.11.10
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.3
+    wcwidth 0.8.4
 -->
 <link href="draft-ietf-tsvwg-sctp-dtls-chunk.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1063,7 +1063,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Westerlund, et al.</td>
-<td class="center">Expires 14 March 2027</td>
+<td class="center">Expires 29 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1082,12 +1082,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfcRFC5061" class="eref">RFC5061</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-10" class="published">10 September 2026</time>
+<time datetime="2026-09-25" class="published">25 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-14">14 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-29">29 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1164,7 +1164,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1197,7 +1197,10 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction-and-protocol-o" class="internal xref">Introduction and Protocol Overview</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-relationship-to-rfc-6083-an" class="internal xref">Relationship to RFC 6083 and RFC 5061</a></p>
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-relationship-to-rfc-6083" class="internal xref">Relationship to RFC 6083</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-relationship-to-rfc-5061" class="internal xref">Relationship to RFC 5061</a></p>
 </li>
             </ul>
 </li>
@@ -1205,7 +1208,7 @@ can only be used as described in this document.<a href="#section-abstract-3" cla
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions" class="internal xref">Conventions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
             </ul>
 </li>
@@ -1448,7 +1451,8 @@ secure transfer of SCTP packets (including both control and DATA chunks).<a href
 <p id="section-1-2">The DTLS chunk protects a sequence of SCTP chunks by encrypting the
 plain text into encrypted ciphertext using the DTLS record format and
 its processing. This processing is based on DTLS 1.3, as specified in
-<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Resulting in an protected SCTP association instead of
+an SCTP association where all the SCTP protocol details are in plain text.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Key management is performed outside of the SCTP implementation and is out of scope
 of this document. This process is referred to as the DTLS Key Management Method.
 While these methods can also be based on DTLS 1.3, it is not a requirement.<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1559,7 +1563,7 @@ processed by the Chunk Protection Operator for protection.
 This results in a DTLS 1.3 record encapsulated in a DTLS chunk.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9">The method of secure key-management, e.g. based on DTLS 1.3, providing
 initial mutual authentication, key establishment, and periodic
-re-authentication and rekeying with Diffie-Hellman of the DTLS chunk
+re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 <a href="#key-management-considerations" class="auto internal xref">Section 6</a>).  To prevent downgrade attacks
 affecting the DTLS Key Management negotiation the DTLS Key Management
@@ -1598,17 +1602,10 @@ SCTP and its extensions. However, the following limitations apply:<a href="#sect
 extension as specified in <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> is not supported.<a href="#section-1-14.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-1-15">This document also includes two informational sections: an Abstract
-API (<a href="#abstract-api" class="auto internal xref">Section 7</a>) describing an example interface between the
-upper layer (including any DTLS Key Management Method) and the SCTP
-implementation with it DTLS chunk protection, and Socket API
-Considerations (<a href="#socket-api" class="auto internal xref">Section 8</a>) describing extensions to the socket
-API defined in <span>[<a href="#RFC6458" class="cite xref">RFC6458</a>]</span>.  These sections are informational only and
-are not normative requirements of this specification.<a href="#section-1-15" class="pilcrow">¶</a></p>
-<div id="relationship-to-rfc-6083-and-rfc-5061">
+<div id="relationship-to-rfc-6083">
 <section id="section-1.1">
-        <h3 id="name-relationship-to-rfc-6083-an">
-<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-relationship-to-rfc-6083-an" class="section-name selfRef">Relationship to RFC 6083 and RFC 5061</a>
+        <h3 id="name-relationship-to-rfc-6083">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-relationship-to-rfc-6083" class="section-name selfRef">Relationship to RFC 6083</a>
         </h3>
 <p id="section-1.1-1">This document obsoletes <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span>, which defined the use of DTLS
 over SCTP by encapsulating user data in DTLS records and sending the
@@ -1621,13 +1618,20 @@ mechanism defined in this document replaces <span>[<a href="#RFC6083" class="cit
 DTLS 1.3 record protection directly at the chunk level, providing
 confidentiality and integrity for both user data and SCTP control
 chunks without dependency on SCTP-AUTH.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
-<p id="section-1.1-2">This document updates <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> by restricting the use of the Dynamic
+</section>
+</div>
+<div id="relationship-to-rfc-5061">
+<section id="section-1.2">
+        <h3 id="name-relationship-to-rfc-5061">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-relationship-to-rfc-5061" class="section-name selfRef">Relationship to RFC 5061</a>
+        </h3>
+<p id="section-1.2-1">This document updates <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> by restricting the use of the Dynamic
 Address Reconfiguration extension when the DTLS chunk is in use.
 Specifically, the lookup address feature of <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> MUST NOT be used,
 and the dynamic address reconfiguration extension MUST NOT be used unless
 DTLS chunk handling is enabled in both directions. These restrictions
 are necessary because SCTP-AUTH, which <span>[<a href="#RFC5061" class="cite xref">RFC5061</a>]</span> relies on for
-authenticating ASCONF chunks, is incompatible with this extension.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+authenticating ASCONF chunks, is incompatible with this extension.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1695,6 +1699,18 @@ handshake via the DTLS Key Management Parameter.<a href="#section-2.1-1.12.1" cl
             <p id="section-2.1-1.14.1">Key material is all cryptographic information needed for protection
 operation in one direction.<a href="#section-2.1-1.14.1" class="pilcrow">¶</a></p>
 </dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.15">Protected SCTP Association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.16">
+            <p id="section-2.1-1.16.1">an SCTP Association implementing DTLS Chunk as described in this document
+providing encryption, integrity protection and replay protection to all
+SCTP chunks in SCTP packets.<a href="#section-2.1-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.17">SCTP Association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.18">
+            <p id="section-2.1-1.18.1">an association as defined in <span class="contact-name">{RFC9260</span>}.<a href="#section-2.1-1.18.1" class="pilcrow">¶</a></p>
+</dd>
         <dd class="break"></dd>
 </dl>
 </section>
@@ -1727,8 +1743,9 @@ indicator, and the DTLS epoch.<a href="#section-3.1-2" class="pilcrow">¶</a></p
 <p id="section-3.1-3">The DTLS Chunk uses a single configuration of the DTLS record format.
 The DTLS Connection ID in the DTLS Record layer MUST NOT be used in
 the DTLS Chunk as the full DTLS connection state is not used in the
-DTLS Chunk and the DTLS key context anyway can be identified. The
-length field MUST NOT be used as the DTLS chunk provides record length
+DTLS Chunk and the DTLS key context is identified by means
+of the Association identifiers and the Epoch.
+The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
 to ensure the 32-bit alignment for the encrypted record.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
@@ -1753,8 +1770,7 @@ cipher suite and SHOULD implement the TLS_AES_256_GCM_SHA384 and
 TLS_CHACHA20_POLY1305_SHA256 cipher suites, using the identifiers
 defined by <span>[<a href="#TLS-CIPHER-SUITES" class="cite xref">TLS-CIPHER-SUITES</a>]</span>.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-3">In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the TLS
-cipher suit table <span>[<a href="#TLS-CIPHER-SUITES" class="cite xref">TLS-CIPHER-SUITES</a>]</span> is expected to be usable, taking
-into account its inherent security properties.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+cipher suit table <span>[<a href="#TLS-CIPHER-SUITES" class="cite xref">TLS-CIPHER-SUITES</a>]</span> is expected to be usable.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1790,7 +1806,7 @@ SCTP payload size.
 Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">It should be noted that regardless of whether SCTP padding or DTLS padding
+<p id="section-3.2-6">Note that regardless of whether SCTP padding or DTLS padding
 is used, the additional bytes are not accounted for by the SCTP congestion control.
 Extensive use of padding has potential to worsen congestion situations, as the
 SCTP association will consume more bandwidth than its fair share as determined by
@@ -2106,8 +2122,8 @@ be ignored by the receiver.<a href="#section-4.2-3.14.1" class="pilcrow">¶</a><
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-4.2-4">From <span><a href="https://rfc-editor.org/rfc/rfc9147#section-4" class="relref">Section 4</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, the DTLS record header has variable length and
-is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref">Figure 4</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">From <span><a href="https://rfc-editor.org/rfc/rfc9147#section-4" class="relref">Section 4</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, the <code>DTLSCiphertext</code> has variable length
+and is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref">Figure 4</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <span id="name-dtls-dtlsciphertext"></span><div id="DTLSCiphertext-record-struct">
 <figure id="figure-4">
           <div id="section-4.2-5.1">
@@ -2130,36 +2146,34 @@ is depicted in <a href="#DTLSCiphertext-record-struct" class="auto internal xref
 <a href="#name-dtls-dtlsciphertext" class="selfRef">DTLS DTLSCiphertext</a>
           </figcaption></figure>
 </div>
-<p id="section-4.2-6">The DTLSCiphertext contains the unified_hdr followed by the
-encrypted_record, where unified_hdr has variable format but a single
+<p id="section-4.2-6">The <code>DTLSCiphertext</code> contains the <code>unified_hdr</code> followed by the
+<code>encrypted_record</code>, where <code>unified_hdr</code> has variable format but a single
 selected configuration is used in the DTLS Chunk. The use of one byte
-of Pre-Padding ensures 32-bit alignment of the encrypted_record in
+of Pre-Padding ensures 32-bit alignment of the <code>encrypted_record</code> in
 relation to the start of the DTLS chunk, which allows a receiver to
 perform an in-place decryption and then process the sequence of
 chunks.  SCTP as specified in <span>[<a href="#RFC9260" class="cite xref">RFC9260</a>]</span> guarantees that chunks start
 on a 32-bit boundary.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<p id="section-4.2-7">The used DTLSCiphertext configuration contains the unified_hdr with
+<p id="section-4.2-7">The used <code>DTLSCiphertext</code> configuration contains the <code>unified_hdr</code> with
 flags and the two least significant bits of the DTLS Epoch, a 16-bit
 sequence number (S=1), no length field (L=0), and no Connection ID
-(C=0). This results in a 3-byte unified_hdr (1 byte fixed header plus
+(C=0). This results in a 3-byte <code>unified_hdr</code> (1 byte fixed header plus
 2 bytes sequence number) and consequently 1 byte of Pre-Padding to
-achieve 32-bit alignment of the encrypted_record. The used
-DTLSCiphertext are shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 5</a>.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+achieve 32-bit alignment of the <code>encrypted_record</code>. The used
+<code>DTLSCiphertext</code> is shown in <a href="#DTLSCiphertext-recommended" class="auto internal xref">Figure 5</a>.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
 <span id="name-dtlsciphertext-used-structu"></span><div id="DTLSCiphertext-recommended">
 <figure id="figure-5">
           <div id="section-4.2-8.1">
             <div class="alignCenter art-svg artwork" id="section-4.2-8.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="184" viewBox="0 0 184 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 8,48 L 8,160" fill="none" stroke="black"></path>
-                <path d="M 8,192 L 8,208" fill="none" stroke="black"></path>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="144" viewBox="0 0 144 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,208" fill="none" stroke="black"></path>
                 <path d="M 24,48 L 24,80" fill="none" stroke="black"></path>
                 <path d="M 40,48 L 40,80" fill="none" stroke="black"></path>
                 <path d="M 56,48 L 56,80" fill="none" stroke="black"></path>
                 <path d="M 72,48 L 72,80" fill="none" stroke="black"></path>
                 <path d="M 88,48 L 88,80" fill="none" stroke="black"></path>
                 <path d="M 104,48 L 104,80" fill="none" stroke="black"></path>
-                <path d="M 136,48 L 136,160" fill="none" stroke="black"></path>
-                <path d="M 136,192 L 136,208" fill="none" stroke="black"></path>
+                <path d="M 136,48 L 136,208" fill="none" stroke="black"></path>
                 <path d="M 8,48 L 136,48" fill="none" stroke="black"></path>
                 <path d="M 8,80 L 136,80" fill="none" stroke="black"></path>
                 <path d="M 8,128 L 136,128" fill="none" stroke="black"></path>
@@ -2185,14 +2199,8 @@ DTLSCiphertext are shown in <a href="#DTLSCiphertext-recommended" class="auto in
                   <text x="80" y="100">bit</text>
                   <text x="44" y="116">Sequence</text>
                   <text x="108" y="116">Number</text>
-                  <text x="64" y="164">Encrypted</text>
-                  <text x="8" y="180">/</text>
-                  <text x="52" y="180">Record</text>
-                  <text x="136" y="180">/</text>
-                  <text x="76" y="244">DTLSCiphertext</text>
-                  <text x="72" y="260">Structure</text>
-                  <text x="40" y="276">(Used</text>
-                  <text x="124" y="276">Configuration)</text>
+                  <text x="72" y="164">Encrypted</text>
+                  <text x="76" y="180">Record</text>
                 </g>
               </svg><a href="#section-4.2-8.1.1" class="pilcrow">¶</a>
 </div>
@@ -2224,16 +2232,10 @@ the INIT chunk.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
               <div class="alignCenter art-svg artwork" id="section-4.3.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
-                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
-                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
-                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
-                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
                   <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                   <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
                   <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                   <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
                   <g class="text">
                     <text x="16" y="36">0</text>
                     <text x="176" y="36">1</text>
@@ -2271,11 +2273,10 @@ the INIT chunk.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
                     <text x="480" y="52">9</text>
                     <text x="496" y="52">0</text>
                     <text x="512" y="52">1</text>
-                    <text x="64" y="84">Cause</text>
-                    <text x="108" y="84">Code</text>
-                    <text x="136" y="84">=</text>
-                    <text x="160" y="84">100</text>
-                    <text x="200" y="84">TBC</text>
+                    <text x="88" y="84">Cause</text>
+                    <text x="132" y="84">Code</text>
+                    <text x="160" y="84">=</text>
+                    <text x="184" y="84">100</text>
                     <text x="344" y="84">Cause</text>
                     <text x="396" y="84">Length</text>
                     <text x="432" y="84">=</text>
@@ -2291,7 +2292,7 @@ the INIT chunk.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-4.3.1-3">
             <dt id="section-4.3.1-3.1">Cause Code: 16 bits (unsigned integer)</dt>
             <dd style="margin-left: 1.5em" id="section-4.3.1-3.2">
-              <p id="section-4.3.1-3.2.1">This value MUST be set to 100 (TBC).<a href="#section-4.3.1-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.1-3.2.1">This value MUST be set to 100.<a href="#section-4.3.1-3.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.1-3.3">Cause Length: 16 bits (unsigned integer)</dt>
@@ -2320,16 +2321,10 @@ containing the INIT chunk.<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
               <div class="alignCenter art-svg artwork" id="section-4.3.2-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
-                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
-                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
-                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
-                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
                   <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                   <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
                   <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                   <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
                   <g class="text">
                     <text x="16" y="36">0</text>
                     <text x="176" y="36">1</text>
@@ -2367,11 +2362,10 @@ containing the INIT chunk.<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
                     <text x="480" y="52">9</text>
                     <text x="496" y="52">0</text>
                     <text x="512" y="52">1</text>
-                    <text x="64" y="84">Cause</text>
-                    <text x="108" y="84">Code</text>
-                    <text x="136" y="84">=</text>
-                    <text x="160" y="84">101</text>
-                    <text x="200" y="84">TBC</text>
+                    <text x="88" y="84">Cause</text>
+                    <text x="132" y="84">Code</text>
+                    <text x="160" y="84">=</text>
+                    <text x="184" y="84">101</text>
                     <text x="344" y="84">Cause</text>
                     <text x="396" y="84">Length</text>
                     <text x="432" y="84">=</text>
@@ -2387,7 +2381,7 @@ containing the INIT chunk.<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-4.3.2-4">
             <dt id="section-4.3.2-4.1">Cause Code: 16 bits (unsigned integer)</dt>
             <dd style="margin-left: 1.5em" id="section-4.3.2-4.2">
-              <p id="section-4.3.2-4.2.1">This value MUST be set to 101 (TBC).<a href="#section-4.3.2-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.2-4.2.1">This value MUST be set to 101.<a href="#section-4.3.2-4.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.2-4.3">Cause Length: 16 bits (unsigned integer)</dt>
@@ -2414,16 +2408,10 @@ indicate that both sides chose the same tie breaker.<a href="#section-4.3.3-1" c
               <div class="alignCenter art-svg artwork" id="section-4.3.3-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
-                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
-                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
-                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
-                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
                   <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                   <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
                   <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                   <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
                   <g class="text">
                     <text x="16" y="36">0</text>
                     <text x="176" y="36">1</text>
@@ -2461,11 +2449,10 @@ indicate that both sides chose the same tie breaker.<a href="#section-4.3.3-1" c
                     <text x="480" y="52">9</text>
                     <text x="496" y="52">0</text>
                     <text x="512" y="52">1</text>
-                    <text x="64" y="84">Cause</text>
-                    <text x="108" y="84">Code</text>
-                    <text x="136" y="84">=</text>
-                    <text x="160" y="84">102</text>
-                    <text x="200" y="84">TBC</text>
+                    <text x="88" y="84">Cause</text>
+                    <text x="132" y="84">Code</text>
+                    <text x="160" y="84">=</text>
+                    <text x="184" y="84">102</text>
                     <text x="344" y="84">Cause</text>
                     <text x="396" y="84">Length</text>
                     <text x="432" y="84">=</text>
@@ -2481,7 +2468,7 @@ indicate that both sides chose the same tie breaker.<a href="#section-4.3.3-1" c
 <span class="break"></span><dl class="dlNewline" id="section-4.3.3-4">
             <dt id="section-4.3.3-4.1">Cause Code: 16 bits (unsigned integer)</dt>
             <dd style="margin-left: 1.5em" id="section-4.3.3-4.2">
-              <p id="section-4.3.3-4.2.1">This value MUST be set to 102 (TBC).<a href="#section-4.3.3-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.3-4.2.1">This value MUST be set to 102.<a href="#section-4.3.3-4.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.3-4.3">Cause Length: 16 bits (unsigned integer)</dt>
@@ -2508,16 +2495,10 @@ indicate that the roles chosen are incompatible.<a href="#section-4.3.4-1" class
               <div class="alignCenter art-svg artwork" id="section-4.3.4-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="528" viewBox="0 0 528 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,64 L 8,96" fill="none" stroke="black"></path>
-                  <path d="M 184,64 L 184,72" fill="none" stroke="black"></path>
-                  <path d="M 184,88 L 184,96" fill="none" stroke="black"></path>
-                  <path d="M 216,64 L 216,72" fill="none" stroke="black"></path>
-                  <path d="M 216,88 L 216,96" fill="none" stroke="black"></path>
                   <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                   <path d="M 520,64 L 520,96" fill="none" stroke="black"></path>
                   <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                   <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 216,88 C 222,88 222,72 216,72" fill="none" stroke="black"></path>
-                  <path class="jump" d="M 184,88 C 178,88 178,72 184,72" fill="none" stroke="black"></path>
                   <g class="text">
                     <text x="16" y="36">0</text>
                     <text x="176" y="36">1</text>
@@ -2555,11 +2536,10 @@ indicate that the roles chosen are incompatible.<a href="#section-4.3.4-1" class
                     <text x="480" y="52">9</text>
                     <text x="496" y="52">0</text>
                     <text x="512" y="52">1</text>
-                    <text x="64" y="84">Cause</text>
-                    <text x="108" y="84">Code</text>
-                    <text x="136" y="84">=</text>
-                    <text x="160" y="84">103</text>
-                    <text x="200" y="84">TBC</text>
+                    <text x="88" y="84">Cause</text>
+                    <text x="132" y="84">Code</text>
+                    <text x="160" y="84">=</text>
+                    <text x="184" y="84">103</text>
                     <text x="344" y="84">Cause</text>
                     <text x="396" y="84">Length</text>
                     <text x="432" y="84">=</text>
@@ -2575,7 +2555,7 @@ indicate that the roles chosen are incompatible.<a href="#section-4.3.4-1" class
 <span class="break"></span><dl class="dlNewline" id="section-4.3.4-4">
             <dt id="section-4.3.4-4.1">Cause Code: 16 bits (unsigned integer)</dt>
             <dd style="margin-left: 1.5em" id="section-4.3.4-4.2">
-              <p id="section-4.3.4-4.2.1">This value MUST be set to 103 (TBC).<a href="#section-4.3.4-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.4-4.2.1">This value MUST be set to 103.<a href="#section-4.3.4-4.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.4-4.3">Cause Length: 16 bits (unsigned integer)</dt>
@@ -2651,9 +2631,9 @@ handshake in any case.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
 <p id="section-5.1-9">To ensure that each endpoint's Key Management Method knows which role it has and
 both endpoints agree on which method that was chosen the below procedure MUST be
 executed by both endpoints before entering the ESTABLISHED state.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.1-10">First the Key Management role of each endpoint is determined. This is
-done by evaluating the S and C bits in the two endpoints'
-parameters. This falls into the following cases:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">First, the Key Management role of each endpoint is determined. This is done by
+evaluating the S and C bits of the parameters provided by each endpoints.
+This falls into the following cases:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-11">
 <li id="section-5.1-11.1">
             <p id="section-5.1-11.1.1">At least one endpoint indicates a single role (client or server) and the peer
@@ -2842,8 +2822,11 @@ may be received during a SCTP restart procedure, see <a href="#sec-restart" clas
 the Restart flag in addition to the <code>unified_hdr</code> is used to find the keys for
 processing the <code>encrypted_record</code> following DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-5.2-11" class="pilcrow">¶</a></p>
 <p id="section-5.2-12">After the <code>encrypted_record</code> has been verified and decrypted, the
-corresponding chunks (the <code>DTLSInnerPlaintext.content</code>) are processed as
-defined in the corresponding specifications.<a href="#section-5.2-12" class="pilcrow">¶</a></p>
+replay protection is performed.
+If a replay of the DTLS record is detected, further processing of the
+<code>DTLSInnerPlaintext.content</code> MUST NOT be performed.
+Otherwise, the corresponding chunks (the <code>DTLSInnerPlaintext.content</code>)
+are processed as defined in the corresponding specifications.<a href="#section-5.2-12" class="pilcrow">¶</a></p>
 <p id="section-5.2-13">If the Chunk Protection Operator experiences a non-critical error,
 it MUST NOT abort the association.<a href="#section-5.2-13" class="pilcrow">¶</a></p>
 </section>
@@ -3035,7 +3018,7 @@ mutual authentication and rekeying) are defined:<a href="#section-6-2" class="pi
       </ul>
 <p id="section-6-4">An SCTP endpoint MAY support multiple DTLS Key Management Methods subject to
 implementation requirements and local security policies.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">Every DTLS Key Management Method<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-5">Every DTLS Key Management Method:<a href="#section-6-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-6.1">
           <p id="section-6-6.1.1">MUST be registered in the IANA Registry <a href="#IANA-Protection-Solution-ID" class="auto internal xref">Section 9.1</a>
@@ -3068,14 +3051,16 @@ including a DTLS Key Management Method, and the SCTP implementation
 with the DTLS chunk.  Please note that this section is an
 informational example API only and there are alternative
 implementations.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">This API enables the cryptographic protection operations by setting
-record payload key, sequence number keys, and initialization vector
-(IV) for primary and restart DTLS contexts in both send and receive
-direction. The record payload key is used by the cipher suite for DTLS
-record protection (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>). The initialization
-vector (IV) is random material used to XOR with the sequence number to
-create the nonce per <span><a href="https://rfc-editor.org/rfc/rfc8446#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.  The sequence number
-key is used to encrypt the sequence number (<span><a href="https://rfc-editor.org/rfc/rfc9147#section-4.2.3" class="relref">Section 4.2.3</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>).<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-2">This API enables the cryptographic protection operations performed to
+allow transmission and reception of the DTLS Records in the DTLS
+chunk. This API includes the information necessary to handle any AEAD
+cipher suit defined to work with DTLS. The API enable setting record
+payload key, sequence number keys, and initialization vector (IV) for
+primary and restart DTLS contexts in both send and receive
+direction. This is the traffic keying materal required for the record
+proptection per Section 5.2 and 5.3 of TLS 1.3 <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span> and the
+record sequence number protection per Section 4.2.3 of DTLS 1.3
+<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">As this API references the key material as for send or receive, it will
 be the responsibility of the Key Management Method used to define how
 it maps the endpoint's role to which keys are for send and receive
@@ -3565,7 +3550,7 @@ for a given epoch.<a href="#section-7.11-1" class="pilcrow">¶</a></p>
 <p id="section-7.13-6">Parameters : non-negative integer<a href="#section-7.13-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="configure-replay-protection">
+<div id="conf_replay_protect">
 <section id="section-7.14">
         <h3 id="name-configure-replay-protection">
 <a href="#section-7.14" class="section-number selfRef">7.14. </a><a href="#name-configure-replay-protection" class="section-name selfRef">Configure Replay Protection</a>
@@ -4707,9 +4692,9 @@ reference to this document.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 <a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-sctp-error-cause-codes" class="section-name selfRef">SCTP Error Cause Codes</a>
         </h3>
 <p id="section-9.4-1">In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Error Cause Codes" registry, IANA is requested to add the new
-entries depicted below in <a href="#iana-error-cause-codes" class="auto internal xref">Table 6</a> with a
-reference to this document.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+"Error Cause Codes" registry, IANA is requested to update the reference
+for the four error cause codes depicted in <a href="#iana-error-cause-codes" class="auto internal xref">Table 6</a>
+with a reference to this document.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
 <span id="name-error-cause-codes"></span><div id="iana-error-cause-codes">
 <table class="center" id="table-6">
           <caption>
@@ -4725,29 +4710,28 @@ reference to this document.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
           </thead>
           <tbody>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">100 (TBC)</td>
+              <td class="text-right" rowspan="1" colspan="1">100</td>
               <td class="text-left" rowspan="1" colspan="1">Missing DTLS Chunk Support</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">101 (TBC)</td>
+              <td class="text-right" rowspan="1" colspan="1">101</td>
               <td class="text-left" rowspan="1" colspan="1">No Common DTLS Key Management Method</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">102 (TBC)</td>
+              <td class="text-right" rowspan="1" colspan="1">102</td>
               <td class="text-left" rowspan="1" colspan="1">DTLS Key Management Tie Breaker Collision</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">103 (TBC)</td>
+              <td class="text-right" rowspan="1" colspan="1">103</td>
               <td class="text-left" rowspan="1" colspan="1">Incompatible DTLS Key Management Roles</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-To-Be</td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="section-9.4-3">The suggested cause code will need to be confirmed by IANA.<a href="#section-9.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-iana-ppid">
@@ -4792,7 +4776,7 @@ reference to this document.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-10-1">All the security and privacy considerations of the security protocol
 used as the Chunk Protection Operator apply.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">DTLS replay protection MUST NOT be turned off.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-2">The record layer security considerations from <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> apply including rekeying.<a href="#section-10-2" class="pilcrow">¶</a></p>
 <div id="privacy-considerations">
 <section id="section-10.1">
         <h3 id="name-privacy-considerations">
@@ -4877,7 +4861,8 @@ ULP State if that is sufficiently secure.<a href="#section-10.4-2" class="pilcro
 <p id="section-11-1">The authors thank Hannes Tschofenig and Tirumaleswar Reddy for their
 participation in the design team and their contributions to this document.
 We also like to thank Xin Long for his contributions to this document and
-Amanda Baber with IANA for feedback on our IANA registry.<a href="#section-11-1" class="pilcrow">¶</a></p>
+Amanda Baber with IANA for feedback on our IANA registry. We also like to
+thank Russ Housley for his review.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -4944,9 +4929,9 @@ Amanda Baber with IANA for feedback on our IANA registry.<a href="#section-11-1"
         <dd>
 <span class="refAuthor">Stewart, R.</span>, <span class="refAuthor">Tuexen, M.</span>, <span class="refAuthor">Poon, K.</span>, <span class="refAuthor">Lei, P.</span>, and <span class="refAuthor">V. Yasevich</span>, <span class="refTitle">"Sockets API Extensions for the Stream Control Transmission Protocol (SCTP)"</span>, <span class="seriesInfo">RFC 6458</span>, <span class="seriesInfo">DOI 10.17487/RFC6458</span>, <time datetime="2011-12" class="refDate">December 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6458">https://www.rfc-editor.org/info/rfc6458</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8446">[RFC8446]</dt>
+<dt id="RFC9846">[RFC9846]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9846</span>, <span class="seriesInfo">DOI 10.17487/RFC9846</span>, <time datetime="2026-07" class="refDate">July 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9846">https://www.rfc-editor.org/info/rfc9846</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tsvwg-rfc4895-bis">[I-D.ietf-tsvwg-rfc4895-bis]</dt>
         <dd>
