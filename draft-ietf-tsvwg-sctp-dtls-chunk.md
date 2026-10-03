@@ -192,8 +192,6 @@ Support of the DTLS chunk and the selection of a DTLS Key Management Method
 are negotiated during the SCTP handshake using a new parameter.
 DTLS Key Management and application traffic are then multiplexed
 using the Payload Protocol Identifier (PPID).
-This document defines the dedicated PPID 4242 for use by all DTLS Key Management
-Methods.
 
 Applications using the DTLS chunk can leverage most transport features provided by
 SCTP and its extensions. However, the following limitations apply:
@@ -976,7 +974,7 @@ Every DTLS Key Management Method:
 
 * MUST be registered in the IANA Registry {{IANA-Protection-Solution-ID}}
   to receive a unique identifier, enabling negotiation during the SCTP handshake.
-* SHOULD use the PPID from {{sec-iana-ppid}} to ensure that the DTLS Key
+* SHOULD use the its own PPIDs to ensure that the DTLS Key
   Management Method related user messages are processed by the relevant entity.
 * SHOULD ensure that the local receive keys are installed before the peer
   installs the corresponding send keys.
@@ -1958,17 +1956,6 @@ with a reference to this document.
 | 102      | DTLS Key Management Tie Breaker Collision | RFC-To-Be |
 | 103      | Incompatible DTLS Key Management Roles    | RFC-To-Be |
 {: #iana-error-cause-codes title="Error Cause Codes" cols="r l l"}
-
-## SCTP Payload Protocol Identifier {#sec-iana-ppid}
-
-In the Stream Control Transmission Protocol (SCTP) Parameters group's
-"Payload Protocol Identifiers" registry, IANA is requested to update the
-reference for the PPID 4242 as depicted in {{iana-payload-protection-id}} with a
-reference to this document.
-
-| ID Value | SCTP Payload Protocol Identifier | Reference |
-| 4242     | DTLS Key Management Messages     | RFC-To-Be |
-{: #iana-payload-protection-id title="Protection Operator Protocol Identifier Registered" cols="r l l"}
 
 # Security Considerations {#Security-Considerations}
 
