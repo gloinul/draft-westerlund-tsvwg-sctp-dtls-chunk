@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-27T03:05:06.998578+00:00",
+  "timestamp": "2026-10-04T03:46:52.769127+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -9695,6 +9695,32 @@
       "mergeCommit": {
         "oid": "fc96460dd313a892bcaf680a4f4f082995bfaed3"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 178,
+      "id": "PR_kwDOKszxDc8AAAABGd7Now",
+      "title": "Remove PPID 4242 text",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/178",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes #176.",
+      "createdAt": "2026-10-03T19:06:59Z",
+      "updatedAt": "2026-10-03T19:07:00Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "663078e7aab710321553c084b8d75d4b0b564ea7",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue176",
+      "headRefOid": "3bf4f6eef984c01b49f93aa82a0097e0ce33cdb6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
