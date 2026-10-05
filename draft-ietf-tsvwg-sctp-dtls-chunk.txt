@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: RFC5061 (if approved)                                  Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 29 March 2027                   Münster Univ. of Appl. Sciences
-                                                       25 September 2026
+Expires: 8 April 2027                    Münster Univ. of Appl. Sciences
+                                                          5 October 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 March 2027.
+   This Internet-Draft will expire on 8 April 2027.
 
 Copyright Notice
 
@@ -151,7 +151,6 @@ Table of Contents
      9.2.  SCTP Chunk Type
      9.3.  SCTP Chunk Parameter Types
      9.4.  SCTP Error Cause Codes
-     9.5.  SCTP Payload Protocol Identifier
    10. Security Considerations
      10.1.  Privacy Considerations
      10.2.  AEAD Limit Considerations
@@ -266,9 +265,7 @@ Table of Contents
    Support of the DTLS chunk and the selection of a DTLS Key Management
    Method are negotiated during the SCTP handshake using a new
    parameter.  DTLS Key Management and application traffic are then
-   multiplexed using the Payload Protocol Identifier (PPID).  This
-   document defines the dedicated PPID 4242 for use by all DTLS Key
-   Management Methods.
+   multiplexed using the Payload Protocol Identifier (PPID).
 
    Applications using the DTLS chunk can leverage most transport
    features provided by SCTP and its extensions.  However, the following
@@ -1038,7 +1035,7 @@ Table of Contents
    *  MUST be registered in the IANA Registry Section 9.1 to receive a
       unique identifier, enabling negotiation during the SCTP handshake.
 
-   *  SHOULD use the PPID from Section 9.5 to ensure that the DTLS Key
+   *  SHOULD use the its own PPIDs to ensure that the DTLS Key
       Management Method related user messages are processed by the
       relevant entity.
 
@@ -2052,21 +2049,6 @@ Table of Contents
    +----------+-------------------------------------------+-----------+
 
                         Table 6: Error Cause Codes
-
-9.5.  SCTP Payload Protocol Identifier
-
-   In the Stream Control Transmission Protocol (SCTP) Parameters group's
-   "Payload Protocol Identifiers" registry, IANA is requested to update
-   the reference for the PPID 4242 as depicted in Table 7 with a
-   reference to this document.
-
-        +==========+==================================+===========+
-        | ID Value | SCTP Payload Protocol Identifier | Reference |
-        +==========+==================================+===========+
-        |     4242 | DTLS Key Management Messages     | RFC-To-Be |
-        +----------+----------------------------------+-----------+
-
-        Table 7: Protection Operator Protocol Identifier Registered
 
 10.  Security Considerations
 
