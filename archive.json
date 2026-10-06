@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-04T03:46:52.769127+00:00",
+  "timestamp": "2026-10-06T04:18:54.270471+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2473,15 +2473,15 @@
       "id": "I_kwDOKszxDc8AAAABS__lMw",
       "title": "Remove PPID IANA and move to Handshake draft",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/176",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gloinul",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-09-24T14:39:45Z",
-      "updatedAt": "2026-09-24T14:39:45Z",
-      "closedAt": null,
+      "updatedAt": "2026-10-05T08:36:48Z",
+      "closedAt": "2026-10-05T08:36:48Z",
       "comments": []
     }
   ],
@@ -9703,26 +9703,55 @@
       "id": "PR_kwDOKszxDc8AAAABGd7Now",
       "title": "Remove PPID 4242 text",
       "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/178",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This fixes #176.",
       "createdAt": "2026-10-03T19:06:59Z",
-      "updatedAt": "2026-10-03T19:07:00Z",
+      "updatedAt": "2026-10-05T08:36:47Z",
       "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "baseRefName": "main",
       "baseRefOid": "663078e7aab710321553c084b8d75d4b0b564ea7",
       "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
       "headRefName": "issue176",
       "headRefOid": "3bf4f6eef984c01b49f93aa82a0097e0ce33cdb6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-10-05T08:36:47Z",
+      "mergedAt": "2026-10-05T08:36:47Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "615b7f3e930d2b3808b873469397f8608199b1e5"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABQouFQQ",
+          "commit": {
+            "abbreviatedOid": "3bf4f6e"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-05T07:46:51Z",
+          "updatedAt": "2026-10-05T07:46:51Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABQpM3qQ",
+          "commit": {
+            "abbreviatedOid": "3bf4f6e"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-05T08:33:52Z",
+          "updatedAt": "2026-10-05T08:33:52Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
