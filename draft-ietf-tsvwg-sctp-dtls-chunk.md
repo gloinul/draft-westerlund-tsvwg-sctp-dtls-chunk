@@ -45,7 +45,6 @@ informative:
   RFC6083:
   RFC6458:
   RFC9846:
-  I-D.ietf-tsvwg-rfc4895-bis:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
   ETSI-TS-38.413:
