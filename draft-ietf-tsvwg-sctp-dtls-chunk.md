@@ -279,7 +279,7 @@ Protected SCTP Association:
 
 SCTP Association:
 
-: an association as defined in {{{{RFC9260}}}}.
+: an association as defined in {{RFC9260}}.
 
 # Protocol Considerations
 
@@ -333,7 +333,7 @@ TLS_CHACHA20_POLY1305_SHA256 cipher suites, using the identifiers
 defined by {{TLS-CIPHER-SUITES}}.
 
 In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the TLS
-cipher suit table {{TLS-CIPHER-SUITES}} is expected to be usable.
+cipher suite table {{TLS-CIPHER-SUITES}} is expected to be usable.
 
 
 ## SCTP Considerations
@@ -973,7 +973,7 @@ Every DTLS Key Management Method:
 
 * MUST be registered in the IANA Registry {{IANA-Protection-Solution-ID}}
   to receive a unique identifier, enabling negotiation during the SCTP handshake.
-* SHOULD use the its own PPIDs to ensure that the DTLS Key
+* SHOULD use its own PPIDs to ensure that the DTLS Key
   Management Method related user messages are processed by the relevant entity.
 * SHOULD ensure that the local receive keys are installed before the peer
   installs the corresponding send keys.
@@ -993,11 +993,11 @@ implementations.
 This API enables the cryptographic protection operations performed to
 allow transmission and reception of the DTLS Records in the DTLS
 chunk. This API includes the information necessary to handle any AEAD
-cipher suit defined to work with DTLS. The API enable setting record
+cipher suite defined to work with DTLS. The API enable setting record
 payload key, sequence number keys, and initialization vector (IV) for
 primary and restart DTLS contexts in both send and receive
-direction. This is the traffic keying materal required for the record
-proptection per Section 5.2 and 5.3 of TLS 1.3 {{RFC9846}} and the
+direction. This is the traffic keying material required for the record
+protection per Section 5.2 and 5.3 of TLS 1.3 {{RFC9846}} and the
 record sequence number protection per Section 4.2.3 of DTLS 1.3
 {{RFC9147}}.
 
