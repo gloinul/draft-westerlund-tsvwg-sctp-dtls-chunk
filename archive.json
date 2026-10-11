@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-06T04:18:54.270471+00:00",
+  "timestamp": "2026-10-11T03:23:05.984032+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2482,6 +2482,24 @@
       "createdAt": "2026-09-24T14:39:45Z",
       "updatedAt": "2026-10-05T08:36:48Z",
       "closedAt": "2026-10-05T08:36:48Z",
+      "comments": []
+    },
+    {
+      "number": 180,
+      "id": "I_kwDOKszxDc8AAAABWC0Dog",
+      "title": "New typos to be fixed",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/180",
+      "state": "CLOSED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teiclap"
+      ],
+      "labels": [],
+      "body": "  1. Typo introduced: : an association as defined in {{{{RFC9260}}}}. \u2014 four braces. kramdown-rfc expects {{RFC9260}}. This will likely\n  render literally or break the xref.\n  2. Grammar nits in new text: \"SHOULD use the its own PPIDs\" (stray \"the\"); \"Resulting in an protected SCTP association\" (should be \"a\");\n  \"traffic keying materal\", \"record proptection\", \"cipher suit\" (recurring). These are in the newly added/edited passages.\n  3. Replay-protection normative strength moved: the hard \"MUST NOT be turned off\" left Security Considerations. Confirm the MUST in the\n  receive-path text + Configure Replay Protection section is the intended home.\n  4. RFC9846 as the TLS 1.3 reference: verify that's deliberate (replacing RFC8446 for the exporter/record-keying citations).",
+      "createdAt": "2026-10-09T07:07:10Z",
+      "updatedAt": "2026-10-09T07:28:52Z",
+      "closedAt": "2026-10-09T07:28:52Z",
       "comments": []
     }
   ],
@@ -9749,6 +9767,103 @@
           "body": "",
           "createdAt": "2026-10-05T08:33:52Z",
           "updatedAt": "2026-10-05T08:33:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 179,
+      "id": "PR_kwDOKszxDc8AAAABHW0tag",
+      "title": "Removed unreferenced draft for 4895bis.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/179",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-08T14:54:58Z",
+      "updatedAt": "2026-10-08T16:21:28Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "615b7f3e930d2b3808b873469397f8608199b1e5",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "id-nits",
+      "headRefOid": "499967364864cf4a0a14b9878140669acb0e5167",
+      "closedAt": "2026-10-08T16:15:51Z",
+      "mergedAt": "2026-10-08T16:15:51Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "15ea5069b9f2d5a3aa0d208534a75cda668da518"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABRWO79w",
+          "commit": {
+            "abbreviatedOid": "4999673"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-08T15:33:58Z",
+          "updatedAt": "2026-10-08T15:33:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 181,
+      "id": "PR_kwDOKszxDc8AAAABHfEZ8w",
+      "title": "Fixed some typos",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/181",
+      "state": "MERGED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-09T07:12:47Z",
+      "updatedAt": "2026-10-09T07:29:01Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "15ea5069b9f2d5a3aa0d208534a75cda668da518",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue180",
+      "headRefOid": "a510fb5a465c9b1dfe359b3480fe482b7d2853c0",
+      "closedAt": "2026-10-09T07:28:51Z",
+      "mergedAt": "2026-10-09T07:28:51Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "eec8aa0df0ba0c1e9bcdcb06958be56b531f7965"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABRdzzRw",
+          "commit": {
+            "abbreviatedOid": "a510fb5"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-09T07:22:46Z",
+          "updatedAt": "2026-10-09T07:22:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABRd219A",
+          "commit": {
+            "abbreviatedOid": "a510fb5"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-09T07:28:42Z",
+          "updatedAt": "2026-10-09T07:28:42Z",
           "comments": []
         }
       ]
