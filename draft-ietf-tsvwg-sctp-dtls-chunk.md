@@ -173,7 +173,7 @@ initial mutual authentication, key establishment, and periodic
 re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 {{key-management-considerations}}).  To prevent downgrade attacks
-affecting the DTLS Key Management negotiation the DTLS Key Management
+affecting the DTLS Key Management Method negotiation, the DTLS Key Management
 Method should implement specific procedures when deriving keys.
 
 The Chunk Protection Operator performs protection operations on all
@@ -181,7 +181,7 @@ chunks of an SCTP packet.
 No information is sent in plain text except for the following:
 
 * The initial SCTP handshake.
-* The initial DTLS Key Management traffic.
+* The DTLS Key Management Method's initial traffic.
 * The SCTP common header and the SCTP DTLS chunk header of protected packets.
 * The INIT and INIT ACK chunks during an SCTP restart procedure.
 
@@ -204,7 +204,7 @@ over SCTP by encapsulating user data in DTLS records and sending the
 DTLS records as SCTP user data using the SCTP-AUTH extension
 ({{RFC4895}}) for integrity protection of the SCTP packets.  That
 approach suffered from several limitations: it could not support SCTP
-user messages above 16384 bytes, it could not encrypt SCTP control
+user messages larger than 16384 bytes, it could not encrypt SCTP control
 chunks, and it exposed significant SCTP metadata in clear text.  The
 mechanism defined in this document replaces {{RFC6083}} by integrating
 DTLS 1.3 record protection directly at the chunk level, providing
@@ -306,7 +306,7 @@ of the Association identifiers and the Epoch.
 The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
-to ensure the 32-bit alignment for the encrypted record.
+due to the 32-bit alignment of the encrypted record.
 
 The first DTLS key context established for any SCTP association MUST
 use epoch 3. Each subsequent DTLS key context will use the next
@@ -351,13 +351,10 @@ This introduces the following limitations:
 To mitigate potential information leakage from packet size variations,
 implementations MAY pad SCTP packets to uniform sizes.
 However, the padding MUST be applied within the encryption envelope to ensure
-the padding itself is protected.
-
-Both SCTP and DTLS provide mechanisms for padding packets.
+the padding itself is protected. Both SCTP and DTLS provide mechanisms for padding packets.
 If padding of SCTP packets is desired to hide actual message sizes, it is
 RECOMMENDED to use the SCTP Padding Chunk {{RFC4820}} to generate a consistent
-SCTP payload size.
-Support of this chunk is only required on the sender side; any SCTP receiver
+SCTP payload size. Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.
 
@@ -1161,8 +1158,8 @@ Parameters :
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. With the exception of
   restart keys when this endpoint attempts restart of the SCTP
-  association, the first DTLS epoch set in an association needs to be
-  3. Any subsequent epoch uses the next consecutive number compared
+  association, the first DTLS epoch set in an association needs to
+  be 3. Any subsequent epoch uses the next consecutive number compared
   to the previously used.
 
 
