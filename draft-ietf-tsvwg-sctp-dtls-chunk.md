@@ -1872,9 +1872,7 @@ Transmission Protocol (SCTP) Parameters group handled by IANA:
 
 * One new SCTP Chunk Parameter Type
 
-* Two new SCTP Error Cause Codes
-
-* A new Payload Protocol Identifier
+* Four new SCTP Error Cause Codes
 
 ## DTLS Key Management Method Identifiers {#IANA-Protection-Solution-ID}
 
