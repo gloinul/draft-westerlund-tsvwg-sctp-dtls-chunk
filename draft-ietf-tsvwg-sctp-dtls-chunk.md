@@ -2,7 +2,7 @@
 docname: draft-ietf-tsvwg-sctp-dtls-chunk-latest
 title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
 abbrev: SCTP DTLS Chunk
-obsoletes: RFC6083
+obsoletes: 6083
 cat: std
 ipr: trust200902
 wg: TSVWG
@@ -64,8 +64,7 @@ normative:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
 
-updates:
-  RFC5061
+updates: 5061
 
 --- abstract
 
