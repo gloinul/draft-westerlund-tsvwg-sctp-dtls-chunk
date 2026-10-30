@@ -12,7 +12,7 @@ submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 venue:
   group: Transport Area Working Group (tsvwg)
   mail: tsvwg@ietf.org
-  github: gloinul/draft-westerlund-tsvwg-sctp-DTLS-chunk
+  github: gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk
 
 author:
 -
@@ -44,7 +44,6 @@ author:
 informative:
   RFC6083:
   RFC6458:
-  RFC9846:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
   ETSI-TS-38.413:
@@ -59,14 +58,13 @@ normative:
   RFC8126:
   RFC9147:
   RFC9260:
+  RFC9846:
 
   TLS-CIPHER-SUITES:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
-    date: Nov 2023
 
-updates:
-  RFC5061
+updates: 5061
 
 --- abstract
 
@@ -104,7 +102,7 @@ secure transfer of SCTP packets (including both control and DATA chunks).
 The DTLS chunk protects a sequence of SCTP chunks by encrypting the
 plain text into encrypted ciphertext using the DTLS record format and
 its processing. This processing is based on DTLS 1.3, as specified in
-{{RFC9147}}. Resulting in an protected SCTP association instead of
+{{RFC9147}}. Resulting in a protected SCTP association instead of
 an SCTP association where all the SCTP protocol details are in plain text.
 
 Key management is performed outside of the SCTP implementation and is out of scope
@@ -175,7 +173,7 @@ initial mutual authentication, key establishment, and periodic
 re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 {{key-management-considerations}}).  To prevent downgrade attacks
-affecting the DTLS Key Management negotiation the DTLS Key Management
+affecting the DTLS Key Management Method negotiation, the DTLS Key Management
 Method should implement specific procedures when deriving keys.
 
 The Chunk Protection Operator performs protection operations on all
@@ -183,7 +181,7 @@ chunks of an SCTP packet.
 No information is sent in plain text except for the following:
 
 * The initial SCTP handshake.
-* The initial DTLS Key Management traffic.
+* The DTLS Key Management Method's initial traffic.
 * The SCTP common header and the SCTP DTLS chunk header of protected packets.
 * The INIT and INIT ACK chunks during an SCTP restart procedure.
 
@@ -206,7 +204,7 @@ over SCTP by encapsulating user data in DTLS records and sending the
 DTLS records as SCTP user data using the SCTP-AUTH extension
 ({{RFC4895}}) for integrity protection of the SCTP packets.  That
 approach suffered from several limitations: it could not support SCTP
-user messages above 16384 bytes, it could not encrypt SCTP control
+user messages larger than 16384 bytes, it could not encrypt SCTP control
 chunks, and it exposed significant SCTP metadata in clear text.  The
 mechanism defined in this document replaces {{RFC6083}} by integrating
 DTLS 1.3 record protection directly at the chunk level, providing
@@ -308,7 +306,7 @@ of the Association identifiers and the Epoch.
 The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
-to ensure the 32-bit alignment for the encrypted record.
+due to the 32-bit alignment of the encrypted record.
 
 The first DTLS key context established for any SCTP association MUST
 use epoch 3. Each subsequent DTLS key context will use the next
@@ -353,13 +351,10 @@ This introduces the following limitations:
 To mitigate potential information leakage from packet size variations,
 implementations MAY pad SCTP packets to uniform sizes.
 However, the padding MUST be applied within the encryption envelope to ensure
-the padding itself is protected.
-
-Both SCTP and DTLS provide mechanisms for padding packets.
+the padding itself is protected. Both SCTP and DTLS provide mechanisms for padding packets.
 If padding of SCTP packets is desired to hide actual message sizes, it is
 RECOMMENDED to use the SCTP Padding Chunk {{RFC4820}} to generate a consistent
-SCTP payload size.
-Support of this chunk is only required on the sender side; any SCTP receiver
+SCTP payload size. Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
 supported DTLS padding MAY be used.
 
@@ -1080,7 +1075,7 @@ Parameters:
 : In network byte order the whole of the DTLS Key Management Parameter
   including header and excluding padding that the endpoint with the
   client role offered, followed by the corresponding parameter content
-  of the endpoint with the server role in seperable records.
+  of the endpoint with the server role in separable records.
 
 ## Cipher Suite Capabilities
 
@@ -1163,8 +1158,8 @@ Parameters :
 * DTLS Epoch:
 : The DTLS epoch these keys are valid for. With the exception of
   restart keys when this endpoint attempts restart of the SCTP
-  association, the first DTLS epoch set in an association needs to be
-  3. Any subsequent epoch uses the next consecutive number compared
+  association, the first DTLS epoch set in an association needs to
+  be 3. Any subsequent epoch uses the next consecutive number compared
   to the previously used.
 
 
@@ -1262,7 +1257,7 @@ Reply: Acknowledgement
 
 The API functions for receiving data should explicitly indicate if the
 data provided to the upper layer protocol was protected by the SCTP
-assocation using DTLS chunk.
+association using DTLS chunk.
 
 ## Get AEAD Encryption Invocations
 
@@ -1877,9 +1872,7 @@ Transmission Protocol (SCTP) Parameters group handled by IANA:
 
 * One new SCTP Chunk Parameter Type
 
-* Two new SCTP Error Cause Codes
-
-* A new Payload Protocol Identifier
+* Four new SCTP Error Cause Codes
 
 ## DTLS Key Management Method Identifiers {#IANA-Protection-Solution-ID}
 
