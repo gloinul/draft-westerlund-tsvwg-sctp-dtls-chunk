@@ -2,7 +2,7 @@
 docname: draft-ietf-tsvwg-sctp-dtls-chunk-latest
 title: Stream Control Transmission Protocol (SCTP) DTLS Chunk
 abbrev: SCTP DTLS Chunk
-obsoletes: 6083
+obsoletes: RFC6083
 cat: std
 ipr: trust200902
 wg: TSVWG
@@ -12,7 +12,7 @@ submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 venue:
   group: Transport Area Working Group (tsvwg)
   mail: tsvwg@ietf.org
-  github: gloinul/draft-westerlund-tsvwg-sctp-DTLS-chunk
+  github: gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk
 
 author:
 -
@@ -44,7 +44,6 @@ author:
 informative:
   RFC6083:
   RFC6458:
-  RFC9846:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
   ETSI-TS-38.413:
@@ -59,11 +58,11 @@ normative:
   RFC8126:
   RFC9147:
   RFC9260:
+  RFC9846:
 
   TLS-CIPHER-SUITES:
     target: "https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4"
     title: "TLS Cipher Suites"
-    date: Nov 2023
 
 updates:
   RFC5061
@@ -104,7 +103,7 @@ secure transfer of SCTP packets (including both control and DATA chunks).
 The DTLS chunk protects a sequence of SCTP chunks by encrypting the
 plain text into encrypted ciphertext using the DTLS record format and
 its processing. This processing is based on DTLS 1.3, as specified in
-{{RFC9147}}. Resulting in an protected SCTP association instead of
+{{RFC9147}}. Resulting in a protected SCTP association instead of
 an SCTP association where all the SCTP protocol details are in plain text.
 
 Key management is performed outside of the SCTP implementation and is out of scope
@@ -1080,7 +1079,7 @@ Parameters:
 : In network byte order the whole of the DTLS Key Management Parameter
   including header and excluding padding that the endpoint with the
   client role offered, followed by the corresponding parameter content
-  of the endpoint with the server role in seperable records.
+  of the endpoint with the server role in separable records.
 
 ## Cipher Suite Capabilities
 
@@ -1262,7 +1261,7 @@ Reply: Acknowledgement
 
 The API functions for receiving data should explicitly indicate if the
 data provided to the upper layer protocol was protected by the SCTP
-assocation using DTLS chunk.
+association using DTLS chunk.
 
 ## Get AEAD Encryption Invocations
 
