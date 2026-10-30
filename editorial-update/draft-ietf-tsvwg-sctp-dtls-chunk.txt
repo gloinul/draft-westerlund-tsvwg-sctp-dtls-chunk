@@ -1923,9 +1923,7 @@ Table of Contents
 
    *  One new SCTP Chunk Parameter Type
 
-   *  Two new SCTP Error Cause Codes
-
-   *  A new Payload Protocol Identifier
+   *  Four new SCTP Error Cause Codes
 
 9.1.  DTLS Key Management Method Identifiers
 
