@@ -1563,7 +1563,7 @@ initial mutual authentication, key establishment, and periodic
 re-authentication and rekeying of the DTLS chunk
 protection is defined in separate documents (see
 <a href="#key-management-considerations" class="auto internal xref">Section 6</a>).  To prevent downgrade attacks
-affecting the DTLS Key Management negotiation the DTLS Key Management
+affecting the DTLS Key Management Method negotiation, the DTLS Key Management
 Method should implement specific procedures when deriving keys.<a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">The Chunk Protection Operator performs protection operations on all
 chunks of an SCTP packet.
@@ -1573,7 +1573,7 @@ No information is sent in plain text except for the following:<a href="#section-
           <p id="section-1-11.1.1">The initial SCTP handshake.<a href="#section-1-11.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-11.2">
-          <p id="section-1-11.2.1">The initial DTLS Key Management traffic.<a href="#section-1-11.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-11.2.1">The DTLS Key Management Method's initial traffic.<a href="#section-1-11.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-11.3">
           <p id="section-1-11.3.1">The SCTP common header and the SCTP DTLS chunk header of protected packets.<a href="#section-1-11.3.1" class="pilcrow">¶</a></p>
@@ -1607,7 +1607,7 @@ over SCTP by encapsulating user data in DTLS records and sending the
 DTLS records as SCTP user data using the SCTP-AUTH extension
 (<span>[<a href="#RFC4895" class="cite xref">RFC4895</a>]</span>) for integrity protection of the SCTP packets.  That
 approach suffered from several limitations: it could not support SCTP
-user messages above 16384 bytes, it could not encrypt SCTP control
+user messages larger than 16384 bytes, it could not encrypt SCTP control
 chunks, and it exposed significant SCTP metadata in clear text.  The
 mechanism defined in this document replaces <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> by integrating
 DTLS 1.3 record protection directly at the chunk level, providing
@@ -1743,7 +1743,7 @@ of the Association identifiers and the Epoch.
 The length field MUST NOT be used as the DTLS chunk provides record length
 information. Finally 16-bit Sequence Numbers are used as they give
 maximum support for reordering and there are no byte savings possible
-to ensure the 32-bit alignment for the encrypted record.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+due to the 32-bit alignment of the encrypted record.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">The first DTLS key context established for any SCTP association MUST
 use epoch 3. Each subsequent DTLS key context will use the next
 consecutive epoch value. Following the DTLS 1.3 specification <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> the
@@ -1793,23 +1793,21 @@ DTLS chunk handling is enabled in both directions.<a href="#section-3.2-3.2.1" c
 <p id="section-3.2-4">To mitigate potential information leakage from packet size variations,
 implementations MAY pad SCTP packets to uniform sizes.
 However, the padding MUST be applied within the encryption envelope to ensure
-the padding itself is protected.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">Both SCTP and DTLS provide mechanisms for padding packets.
+the padding itself is protected. Both SCTP and DTLS provide mechanisms for padding packets.
 If padding of SCTP packets is desired to hide actual message sizes, it is
 RECOMMENDED to use the SCTP Padding Chunk <span>[<a href="#RFC4820" class="cite xref">RFC4820</a>]</span> to generate a consistent
-SCTP payload size.
-Support of this chunk is only required on the sender side; any SCTP receiver
+SCTP payload size. Support of this chunk is only required on the sender side; any SCTP receiver
 will safely ignore the PAD Chunk. However, if the PAD chunk is not
-supported DTLS padding MAY be used.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">Note that regardless of whether SCTP padding or DTLS padding
+supported DTLS padding MAY be used.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Note that regardless of whether SCTP padding or DTLS padding
 is used, the additional bytes are not accounted for by the SCTP congestion control.
 Extensive use of padding has potential to worsen congestion situations, as the
 SCTP association will consume more bandwidth than its fair share as determined by
-congestion control.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.2-7">The use of the SCTP PAD chunk is preferred, as it remains visible at the
+congestion control.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">The use of the SCTP PAD chunk is preferred, as it remains visible at the
 SCTP layer. This enables future extensions or SCTP implementations to
 correctly account for padding within congestion control mechanisms.
-In contrast, DTLS padding conceals this packet expansion from the SCTP layer.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+In contrast, DTLS padding conceals this packet expansion from the SCTP layer.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3331,16 +3329,12 @@ corresponding key materials.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
               <dd style="margin-left: 1.5em" id="section-7.5-5.3.1.2">
                 <p id="section-7.5-5.3.1.2.1">The DTLS epoch these keys are valid for. With the exception of
 restart keys when this endpoint attempts restart of the SCTP
-association, the first DTLS epoch set in an association needs to be<a href="#section-7.5-5.3.1.2.1" class="pilcrow">¶</a></p>
+association, the first DTLS epoch set in an association needs to
+be 3. Any subsequent epoch uses the next consecutive number compared
+to the previously used.<a href="#section-7.5-5.3.1.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 </dl>
-<ol start="1" type="1" class="normal type-1" id="section-7.5-5.3.2">
-<li id="section-7.5-5.3.2.1">
-                <p id="section-7.5-5.3.2.1.1">Any subsequent epoch uses the next consecutive number compared
-to the previously used.<a href="#section-7.5-5.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-            </ol>
 </li>
           <li class="normal" id="section-7.5-5.4">
             <span class="break"></span><dl class="dlParallel" id="section-7.5-5.4.1">
