@@ -4,8 +4,8 @@
 
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
-Obsoletes: RFC6083 (if approved)                              C. Porfiri
-Updates: RFC5061 (if approved)                                  Ericsson
+Obsoletes: 6083 (if approved)                                 C. Porfiri
+Updates: 5061 (if approved)                                     Ericsson
 Intended status: Standards Track                                M. Tüxen
 Expires: 3 May 2027                      Münster Univ. of Appl. Sciences
                                                          30 October 2026
