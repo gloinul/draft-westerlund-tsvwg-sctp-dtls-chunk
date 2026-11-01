@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-11T03:23:05.984032+00:00",
+  "timestamp": "2026-11-01T03:46:27.366753+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -9864,6 +9864,46 @@
           "body": "",
           "createdAt": "2026-10-09T07:28:42Z",
           "updatedAt": "2026-10-09T07:28:42Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 182,
+      "id": "PR_kwDOKszxDc8AAAABLx0W9g",
+      "title": "Editorial update",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/182",
+      "state": "OPEN",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR contains a couple of minor editorial fixes and improvements. ",
+      "createdAt": "2026-10-30T13:49:23Z",
+      "updatedAt": "2026-10-30T13:57:30Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "eec8aa0df0ba0c1e9bcdcb06958be56b531f7965",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "editorial-update",
+      "headRefOid": "ff93fd484fa59d57a75ad103ebf81afc4288fc49",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABVIqHiQ",
+          "commit": {
+            "abbreviatedOid": "ff93fd4"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-30T13:57:30Z",
+          "updatedAt": "2026-10-30T13:57:30Z",
           "comments": []
         }
       ]
