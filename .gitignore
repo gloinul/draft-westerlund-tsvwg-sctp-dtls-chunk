@@ -19,6 +19,7 @@
 /versioned/
 Gemfile.lock
 archive.json
+findings.md
 draft-ietf-tsvwg-sctp-dtls-chunk.xml
 draft-westerlund-tsvwg-sctp-dtls-chunk.xml
 package-lock.json

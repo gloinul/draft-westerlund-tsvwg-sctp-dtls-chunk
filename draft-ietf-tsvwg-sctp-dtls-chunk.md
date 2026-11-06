@@ -44,6 +44,7 @@ author:
 informative:
   RFC6083:
   RFC6458:
+  RFC8996:
   I-D.ietf-tsvwg-dtls-chunk-key-management:
   I-D.porfiri-tsvwg-sctp-dtls-handshake:
   ETSI-TS-38.413:
