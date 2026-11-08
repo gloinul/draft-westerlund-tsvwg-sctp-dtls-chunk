@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-03T04:54:19.580150+00:00",
+  "timestamp": "2026-11-08T03:50:47.987492+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -2500,6 +2500,40 @@
       "createdAt": "2026-10-09T07:07:10Z",
       "updatedAt": "2026-10-09T07:28:52Z",
       "closedAt": "2026-10-09T07:28:52Z",
+      "comments": []
+    },
+    {
+      "number": 183,
+      "id": "I_kwDOKszxDc8AAAABcxvB-Q",
+      "title": "Add new key used notifications",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/183",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "This requires a change in the handshake document.",
+      "createdAt": "2026-11-05T15:24:52Z",
+      "updatedAt": "2026-11-05T15:24:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 184,
+      "id": "I_kwDOKszxDc8AAAABc9cJeQ",
+      "title": "RFC obsoleted by this draft",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/issues/184",
+      "state": "CLOSED",
+      "author": "teiclap",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Since rfc6083 was updated by rfc8996, should we have it as informative, I guess",
+      "createdAt": "2026-11-06T07:11:19Z",
+      "updatedAt": "2026-11-06T09:16:22Z",
+      "closedAt": "2026-11-06T09:16:22Z",
       "comments": []
     }
   ],
