@@ -5,10 +5,10 @@
 TSVWG                                                      M. Westerlund
 Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
-Updates: RFC5061 (if approved)                                  Ericsson
+Updates: 5061 (if approved)                                     Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 11 April 2027                   Münster Univ. of Appl. Sciences
-                                                          8 October 2026
+Expires: 21 May 2027                     Münster Univ. of Appl. Sciences
+                                                        17 November 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -50,7 +50,7 @@ About This Document
    Subscribe at https://www.ietf.org/mailman/listinfo/tsvwg/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/gloinul/draft-westerlund-tsvwg-sctp-DTLS-chunk.
+   https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk.
 
 Status of This Memo
 
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 April 2027.
+   This Internet-Draft will expire on 21 May 2027.
 
 Copyright Notice
 
@@ -124,7 +124,9 @@ Table of Contents
      7.13. Get Failed AEAD Decryption Invocations
      7.14. Configure Replay Protection
    8.  Socket API Considerations
-     8.1.  SCTP_ASSOC_CHANGE Notification
+     8.1.  Notifications
+       8.1.1.  Update of SCTP_ASSOC_CHANGE Notification
+       8.1.2.  A New SCTP_DTLS_NEW_EPOCH_EVENT Notification
      8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
      8.3.  Functions
        8.3.1.  sctp_dtls_nr_cipher_suites()
@@ -174,7 +176,7 @@ Table of Contents
    The DTLS chunk protects a sequence of SCTP chunks by encrypting the
    plain text into encrypted ciphertext using the DTLS record format and
    its processing.  This processing is based on DTLS 1.3, as specified
-   in [RFC9147].  Resulting in an protected SCTP association instead of
+   in [RFC9147].  Resulting in a protected SCTP association instead of
    an SCTP association where all the SCTP protocol details are in plain
    text.
 
@@ -245,9 +247,9 @@ Table of Contents
    providing initial mutual authentication, key establishment, and
    periodic re-authentication and rekeying of the DTLS chunk protection
    is defined in separate documents (see Section 6).  To prevent
-   downgrade attacks affecting the DTLS Key Management negotiation the
-   DTLS Key Management Method should implement specific procedures when
-   deriving keys.
+   downgrade attacks affecting the DTLS Key Management Method
+   negotiation, the DTLS Key Management Method should implement specific
+   procedures when deriving keys.
 
    The Chunk Protection Operator performs protection operations on all
    chunks of an SCTP packet.  No information is sent in plain text
@@ -255,7 +257,7 @@ Table of Contents
 
    *  The initial SCTP handshake.
 
-   *  The initial DTLS Key Management traffic.
+   *  The DTLS Key Management Method's initial traffic.
 
    *  The SCTP common header and the SCTP DTLS chunk header of protected
       packets.
@@ -285,10 +287,10 @@ Table of Contents
    records as SCTP user data using the SCTP-AUTH extension ([RFC4895])
    for integrity protection of the SCTP packets.  That approach suffered
    from several limitations: it could not support SCTP user messages
-   above 16384 bytes, it could not encrypt SCTP control chunks, and it
-   exposed significant SCTP metadata in clear text.  The mechanism
-   defined in this document replaces [RFC6083] by integrating DTLS 1.3
-   record protection directly at the chunk level, providing
+   larger than 16384 bytes, it could not encrypt SCTP control chunks,
+   and it exposed significant SCTP metadata in clear text.  The
+   mechanism defined in this document replaces [RFC6083] by integrating
+   DTLS 1.3 record protection directly at the chunk level, providing
    confidentiality and integrity for both user data and SCTP control
    chunks without dependency on SCTP-AUTH.
 
@@ -348,7 +350,7 @@ Table of Contents
       integrity protection and replay protection to all SCTP chunks in
       SCTP packets.
 
-   SCTP Association:  an association as defined in {RFC9260}.
+   SCTP Association:  an association as defined in [RFC9260].
 
 3.  Protocol Considerations
 
@@ -376,8 +378,8 @@ Table of Contents
    Association identifiers and the Epoch.  The length field MUST NOT be
    used as the DTLS chunk provides record length information.  Finally
    16-bit Sequence Numbers are used as they give maximum support for
-   reordering and there are no byte savings possible to ensure the
-   32-bit alignment for the encrypted record.
+   reordering and there are no byte savings possible due to the 32-bit
+   alignment of the encrypted record.
 
    The first DTLS key context established for any SCTP association MUST
    use epoch 3.  Each subsequent DTLS key context will use the next
@@ -405,7 +407,7 @@ Table of Contents
    suites, using the identifiers defined by [TLS-CIPHER-SUITES].
 
    In general any TLS 1.3 cipher suite that is marked as DTLS-OK in the
-   TLS cipher suit table [TLS-CIPHER-SUITES] is expected to be usable.
+   TLS cipher suite table [TLS-CIPHER-SUITES] is expected to be usable.
 
 3.2.  SCTP Considerations
 
@@ -426,15 +428,13 @@ Table of Contents
    To mitigate potential information leakage from packet size
    variations, implementations MAY pad SCTP packets to uniform sizes.
    However, the padding MUST be applied within the encryption envelope
-   to ensure the padding itself is protected.
-
-   Both SCTP and DTLS provide mechanisms for padding packets.  If
-   padding of SCTP packets is desired to hide actual message sizes, it
-   is RECOMMENDED to use the SCTP Padding Chunk [RFC4820] to generate a
-   consistent SCTP payload size.  Support of this chunk is only required
-   on the sender side; any SCTP receiver will safely ignore the PAD
-   Chunk.  However, if the PAD chunk is not supported DTLS padding MAY
-   be used.
+   to ensure the padding itself is protected.  Both SCTP and DTLS
+   provide mechanisms for padding packets.  If padding of SCTP packets
+   is desired to hide actual message sizes, it is RECOMMENDED to use the
+   SCTP Padding Chunk [RFC4820] to generate a consistent SCTP payload
+   size.  Support of this chunk is only required on the sender side; any
+   SCTP receiver will safely ignore the PAD Chunk.  However, if the PAD
+   chunk is not supported DTLS padding MAY be used.
 
    Note that regardless of whether SCTP padding or DTLS padding is used,
    the additional bytes are not accounted for by the SCTP congestion
@@ -1035,9 +1035,8 @@ Table of Contents
    *  MUST be registered in the IANA Registry Section 9.1 to receive a
       unique identifier, enabling negotiation during the SCTP handshake.
 
-   *  SHOULD use the its own PPIDs to ensure that the DTLS Key
-      Management Method related user messages are processed by the
-      relevant entity.
+   *  SHOULD use its own PPIDs to ensure that the DTLS Key Management
+      Method related user messages are processed by the relevant entity.
 
    *  SHOULD ensure that the local receive keys are installed before the
       peer installs the corresponding send keys.
@@ -1059,11 +1058,11 @@ Table of Contents
    This API enables the cryptographic protection operations performed to
    allow transmission and reception of the DTLS Records in the DTLS
    chunk.  This API includes the information necessary to handle any
-   AEAD cipher suit defined to work with DTLS.  The API enable setting
+   AEAD cipher suite defined to work with DTLS.  The API enable setting
    record payload key, sequence number keys, and initialization vector
    (IV) for primary and restart DTLS contexts in both send and receive
-   direction.  This is the traffic keying materal required for the
-   record proptection per Section 5.2 and 5.3 of TLS 1.3 [RFC9846] and
+   direction.  This is the traffic keying material required for the
+   record protection per Section 5.2 and 5.3 of TLS 1.3 [RFC9846] and
    the record sequence number protection per Section 4.2.3 of DTLS 1.3
    [RFC9147].
 
@@ -1147,7 +1146,7 @@ Table of Contents
          the DTLS Key Management Parameter including header and
          excluding padding that the endpoint with the client role
          offered, followed by the corresponding parameter content of the
-         endpoint with the server role in seperable records.
+         endpoint with the server role in separable records.
 
 7.3.  Cipher Suite Capabilities
 
@@ -1234,10 +1233,8 @@ Table of Contents
    *  DTLS Epoch:  The DTLS epoch these keys are valid for.  With the
          exception of restart keys when this endpoint attempts restart
          of the SCTP association, the first DTLS epoch set in an
-         association needs to be
-
-      1.  Any subsequent epoch uses the next consecutive number compared
-          to the previously used.
+         association needs to be 3.  Any subsequent epoch uses the next
+         consecutive number compared to the previously used.
 
    *  Cipher Suite:  2 bytes cipher suite identification for the DTLS
          1.3 cipher suite used to identify the DTLS AEAD algorithm to
@@ -1333,7 +1330,7 @@ Table of Contents
 
    The API functions for receiving data should explicitly indicate if
    the data provided to the upper layer protocol was protected by the
-   SCTP assocation using DTLS chunk.
+   SCTP association using DTLS chunk.
 
 7.11.  Get AEAD Encryption Invocations
 
@@ -1441,13 +1438,67 @@ Table of Contents
    supporting several new IPPROTO_SCTP-level socket options and a new
    flag for recvmsg().
 
-8.1.  SCTP_ASSOC_CHANGE Notification
+8.1.  Notifications
+
+8.1.1.  Update of SCTP_ASSOC_CHANGE Notification
 
    When an SCTP_ASSOC_CHANGE notification (specified in Section 6.1.1 of
    [RFC6458]) is delivered indicating a sac_state of SCTP_COMM_UP or
    SCTP_RESTART for an SCTP association where both peers support the
    DTLS chunk, SCTP_ASSOC_SUPPORTS_DTLS should be listed in the sac_info
    field.
+
+8.1.2.  A New SCTP_DTLS_NEW_EPOCH_EVENT Notification
+
+   The union sctp_notification {} is extended to contain a new field
+   sn_dtls_new_epoch_event:
+
+   union sctp_notification {
+           struct sctp_tlv {
+                   uint16_t sn_type; /* Notification type. */
+                   uint16_t sn_flags;
+                   uint32_t sn_length;
+           } sn_header;
+           ...
+           struct sctp_dtls_new_epoch_event sn_dtls_new_epoch_event;
+           ...
+   }
+
+   This event uses the sn_type SCTP_DTLS_NEW_EPOCH_EVENT and is provided
+   whenever a received DTLS chunk was successfully processed with a
+   higher epoch than any previously successfully processed DTLS chunk.
+
+   struct sctp_dtls_new_epoch_event is defined as
+
+   struct sctp_dtls_new_epoch_event {
+           uint16_t sdne_type;
+           uint16_t sdne_flags;
+           uint32_t sdne_length;
+           sctp_assoc_t sdne_assoc_id;
+           uint32_t sdne_unused;
+           uint64_t sdne_epoch;
+   };
+
+   sdne_type:  This field is SCTP_DTLS_NEW_EPOCH_EVENT.
+
+   sdne_flags:  This field is 0.
+
+   sdne_length:  This field is the total length in bytes of the
+      delivered event, including the header.
+
+   sdne_assoc_id:  This association id field holds the identifier for
+      the association.  All notifications for a given association have
+      the same association identifier.  For one-to-one style sockets,
+      this field is ignored.
+
+   sdne_unused:  This field is ignored.
+
+   sdne_epoch:  The largest epoch for which a received DTLS chunk was
+      successfully processed.
+
+   The handling of the IPPROTO_SCTP-level socket option SCTP_EVENT in
+   getsockopt() and setsockopt() needs to be extended to support events
+   of type SCTP_DTLS_NEW_EPOCH_EVENT.
 
 8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
 
@@ -1928,9 +1979,7 @@ Table of Contents
 
    *  One new SCTP Chunk Parameter Type
 
-   *  Two new SCTP Error Cause Codes
-
-   *  A new Payload Protocol Identifier
+   *  Four new SCTP Error Cause Codes
 
 9.1.  DTLS Key Management Method Identifiers
 
@@ -2163,8 +2212,12 @@ Table of Contents
               Transmission Protocol", RFC 9260, DOI 10.17487/RFC9260,
               June 2022, <https://www.rfc-editor.org/info/rfc9260>.
 
+   [RFC9846]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 9846, DOI 10.17487/RFC9846, July 2026,
+              <https://www.rfc-editor.org/info/rfc9846>.
+
    [TLS-CIPHER-SUITES]
-              "TLS Cipher Suites", November 2023,
+              "TLS Cipher Suites", n.d.,
               <https://www.iana.org/assignments/tls-parameters/tls-
               parameters.xhtml#tls-parameters-4>.
 
@@ -2191,10 +2244,6 @@ Table of Contents
               DOI 10.17487/RFC6458, December 2011,
               <https://www.rfc-editor.org/info/rfc6458>.
 
-   [RFC9846]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
-              Version 1.3", RFC 9846, DOI 10.17487/RFC9846, July 2026,
-              <https://www.rfc-editor.org/info/rfc9846>.
-
    [I-D.ietf-tsvwg-dtls-chunk-key-management]
               Tüxen, M., Tschofenig, H., and T. Reddy.K, "Using Datagram
               Transport Layer Security (DTLS) for Key Management for the
@@ -2205,13 +2254,13 @@ Table of Contents
               dtls-chunk-key-management-01>.
 
    [I-D.porfiri-tsvwg-sctp-dtls-handshake]
-              Westerlund, M., Mattsson, J. P., and C. Porfiri,
-              "Transport Layer Security (TLS) based key-management of
-              the Stream Control Transmission Protocol (SCTP) DTLS
-              Chunk", Work in Progress, Internet-Draft, draft-porfiri-
-              tsvwg-sctp-dtls-handshake-01, 6 July 2026,
-              <https://datatracker.ietf.org/doc/html/draft-porfiri-
-              tsvwg-sctp-dtls-handshake-01>.
+              Westerlund, M., Mattsson, J. P., Porfiri, C., and M.
+              Tüxen, "Transport Layer Security (TLS) based Key
+              Management of the Stream Control Transmission Protocol
+              (SCTP) DTLS Chunk", Work in Progress, Internet-Draft,
+              draft-porfiri-tsvwg-sctp-dtls-handshake-03, 2 November
+              2026, <https://datatracker.ietf.org/doc/html/draft-
+              porfiri-tsvwg-sctp-dtls-handshake-03>.
 
    [ETSI-TS-38.413]
               "NG Application Protocol (NGAP) version 18.5.0 Release
