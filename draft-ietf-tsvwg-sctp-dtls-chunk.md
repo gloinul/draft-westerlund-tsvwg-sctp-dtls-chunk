@@ -1363,13 +1363,76 @@ A socket API implementation based on {{RFC6458}} is extended by supporting
 several new ``IPPROTO_SCTP``-level socket options and a new flag for
 ``recvmsg()``.
 
-## ``SCTP_ASSOC_CHANGE`` Notification
+## Notifications
+
+### Update of ``SCTP_ASSOC_CHANGE`` Notification
 
 When an ``SCTP_ASSOC_CHANGE`` notification (specified in {{Section 6.1.1 of
 RFC6458}}) is delivered indicating a ``sac_state`` of ``SCTP_COMM_UP`` or
 ``SCTP_RESTART`` for an SCTP association where both peers support the
 DTLS chunk, ``SCTP_ASSOC_SUPPORTS_DTLS`` should be listed in the
 ``sac_info`` field.
+
+### A New ``SCTP_DTLS_NEW_EPOCH_EVENT`` Notification
+The `union sctp_notification {}` is extended to contain a new field
+`sn_dtls_new_epoch_event`:
+
+~~~ c
+union sctp_notification {
+        struct sctp_tlv {
+                uint16_t sn_type; /* Notification type. */
+                uint16_t sn_flags;
+                uint32_t sn_length;
+        } sn_header;
+        ...
+        struct sctp_dtls_new_epoch_event sn_dtls_new_epoch_event;
+        ...
+}
+~~~
+
+This event uses the `sn_type` `SCTP_DTLS_NEW_EPOCH_EVENT` and is
+provided whenever a received DTLS chunk was successfully processed with
+a higher epoch than any previously successfully processed DTLS chunk.
+
+`struct sctp_dtls_new_epoch_event` is defined as
+
+~~~ c
+struct sctp_dtls_new_epoch_event {
+        uint16_t sdne_type;
+        uint16_t sdne_flags;
+        uint32_t sdne_length;
+        sctp_assoc_t sdne_assoc_id;
+        uint32_t sdne_unused;
+        uint64_t sdne_epoch;
+};
+~~~
+
+``sdne_type``:
+: This field is `SCTP_DTLS_NEW_EPOCH_EVENT`.
+
+``sdne_flags``:
+: This field is 0.
+
+``sdne_length``:
+: This field is the total length in bytes of the delivered event,
+  including the header.
+
+``sdne_assoc_id``:
+: This association id field holds the identifier for the association.
+  All notifications for a given association have the same association
+  identifier.
+  For one-to-one style sockets, this field is ignored.
+
+``sdne_unused``:
+: This field is ignored.
+
+``sdne_epoch``:
+: The largest epoch for which a received DTLS chunk was successfully
+  processed.
+
+The handling of the `IPPROTO_SCTP`-level socket option `SCTP_EVENT` in
+`getsockopt()` and `setsockopt()` needs to be extended to support events
+of type `SCTP_DTLS_NEW_EPOCH_EVENT`.
 
 ## A New Flag for ``recvmsg()`` (``MSG_PROTECTED``)
 
