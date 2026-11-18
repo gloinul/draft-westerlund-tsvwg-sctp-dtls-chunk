@@ -119,10 +119,11 @@ Table of Contents
      7.8.  Set Key to Use
      7.9.  Require Protected SCTP Packets
      7.10. Read Indication of Protection
-     7.11. Get AEAD Encryption Invocations
-     7.12. Get AEAD Decryption Invocations
-     7.13. Get Failed AEAD Decryption Invocations
-     7.14. Configure Replay Protection
+     7.11. Indication of First use of Key Epoch
+     7.12. Get AEAD Encryption Invocations
+     7.13. Get AEAD Decryption Invocations
+     7.14. Get Failed AEAD Decryption Invocations
+     7.15. Configure Replay Protection
    8.  Socket API Considerations
      8.1.  Notifications
        8.1.1.  Update of SCTP_ASSOC_CHANGE Notification
@@ -1332,7 +1333,23 @@ Table of Contents
    the data provided to the upper layer protocol was protected by the
    SCTP association using DTLS chunk.
 
-7.11.  Get AEAD Encryption Invocations
+7.11.  Indication of First use of Key Epoch
+
+   The API should provide an notification when the association receives
+   a SCTP packet with a DTLS Chunk using a new DKC, i.e. the DTLS
+   record's epoch field was larger in a successfully received and
+   decrypted DTLS chunk for primary.  First usage of a restart DKC
+   should also be indicated.
+
+   Notification:
+
+   *  SCTP Association
+
+   *  Restart bit
+
+   *  DTLS Epoch
+
+7.12.  Get AEAD Encryption Invocations
 
    Get the number of AEAD encryption invocations (protected SCTP
    packets) for a given epoch.
@@ -1351,7 +1368,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.12.  Get AEAD Decryption Invocations
+7.13.  Get AEAD Decryption Invocations
 
    Get the number of AEAD decryption invocations for a given epoch.
 
@@ -1369,7 +1386,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.13.  Get Failed AEAD Decryption Invocations
+7.14.  Get Failed AEAD Decryption Invocations
 
    Get the number of failed AEAD decryption invocations for a given
    epoch.
@@ -1388,7 +1405,7 @@ Table of Contents
 
    Parameters : non-negative integer
 
-7.14.  Configure Replay Protection
+7.15.  Configure Replay Protection
 
    The DTLS replay protection in this usage is expected to be fairly
    robust.  Its depth of handling is related to maximum network path
