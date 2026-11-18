@@ -1259,6 +1259,22 @@ The API functions for receiving data should explicitly indicate if the
 data provided to the upper layer protocol was protected by the SCTP
 association using DTLS chunk.
 
+## Indication of First use of Key Epoch
+
+The API should provide an notification when the association receives a
+new DKC, i.e. the DTLS record's epoch field was larger in a successfully
+received and decrypted DTLS chunk for primary. First usage of
+a restart DKC should also be indicated.
+
+Notification:
+
+* SCTP Association
+
+* Restart bit
+
+* DTLS Epoch
+
+
 ## Get AEAD Encryption Invocations
 
 Get the number of AEAD encryption invocations (protected SCTP packets)
