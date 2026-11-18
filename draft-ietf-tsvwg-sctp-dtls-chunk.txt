@@ -7,8 +7,8 @@ Internet-Draft                                         J. Preuß Mattsson
 Obsoletes: 6083 (if approved)                                 C. Porfiri
 Updates: 5061 (if approved)                                     Ericsson
 Intended status: Standards Track                                M. Tüxen
-Expires: 6 May 2027                      Münster Univ. of Appl. Sciences
-                                                         2 November 2026
+Expires: 22 May 2027                     Münster Univ. of Appl. Sciences
+                                                        18 November 2026
 
 
          Stream Control Transmission Protocol (SCTP) DTLS Chunk
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 May 2027.
+   This Internet-Draft will expire on 22 May 2027.
 
 Copyright Notice
 
@@ -124,7 +124,9 @@ Table of Contents
      7.13. Get Failed AEAD Decryption Invocations
      7.14. Configure Replay Protection
    8.  Socket API Considerations
-     8.1.  SCTP_ASSOC_CHANGE Notification
+     8.1.  Notifications
+       8.1.1.  Update of SCTP_ASSOC_CHANGE Notification
+       8.1.2.  A New SCTP_DTLS_NEW_EPOCH_EVENT Notification
      8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
      8.3.  Functions
        8.3.1.  sctp_dtls_nr_cipher_suites()
@@ -1436,13 +1438,67 @@ Table of Contents
    supporting several new IPPROTO_SCTP-level socket options and a new
    flag for recvmsg().
 
-8.1.  SCTP_ASSOC_CHANGE Notification
+8.1.  Notifications
+
+8.1.1.  Update of SCTP_ASSOC_CHANGE Notification
 
    When an SCTP_ASSOC_CHANGE notification (specified in Section 6.1.1 of
    [RFC6458]) is delivered indicating a sac_state of SCTP_COMM_UP or
    SCTP_RESTART for an SCTP association where both peers support the
    DTLS chunk, SCTP_ASSOC_SUPPORTS_DTLS should be listed in the sac_info
    field.
+
+8.1.2.  A New SCTP_DTLS_NEW_EPOCH_EVENT Notification
+
+   The union sctp_notification {} is extended to contain a new field
+   sn_dtls_new_epoch_event:
+
+   union sctp_notification {
+           struct sctp_tlv {
+                   uint16_t sn_type; /* Notification type. */
+                   uint16_t sn_flags;
+                   uint32_t sn_length;
+           } sn_header;
+           ...
+           struct sctp_dtls_new_epoch_event sn_dtls_new_epoch_event;
+           ...
+   }
+
+   This event uses the sn_type SCTP_DTLS_NEW_EPOCH_EVENT and is provided
+   whenever a received DTLS chunk was successfully processed with a
+   higher epoch than any previously successfully processed DTLS chunk.
+
+   struct sctp_dtls_new_epoch_event is defined as
+
+   struct sctp_dtls_new_epoch_event {
+           uint16_t sdne_type;
+           uint16_t sdne_flags;
+           uint32_t sdne_length;
+           sctp_assoc_t sdne_assoc_id;
+           uint32_t sdne_unused;
+           uint64_t sdne_epoch;
+   };
+
+   sdne_type:  This field is SCTP_DTLS_NEW_EPOCH_EVENT.
+
+   sdne_flags:  This field is 0.
+
+   sdne_length:  This field is the total length in bytes of the
+      delivered event, including the header.
+
+   sdne_assoc_id:  This association id field holds the identifier for
+      the association.  All notifications for a given association have
+      the same association identifier.  For one-to-one style sockets,
+      this field is ignored.
+
+   sdne_unused:  This field is ignored.
+
+   sdne_epoch:  The largest epoch for which a received DTLS chunk was
+      successfully processed.
+
+   The handling of the IPPROTO_SCTP-level socket option SCTP_EVENT in
+   getsockopt() and setsockopt() needs to be extended to support events
+   of type SCTP_DTLS_NEW_EPOCH_EVENT.
 
 8.2.  A New Flag for recvmsg() (MSG_PROTECTED)
 
@@ -2202,9 +2258,9 @@ Table of Contents
               Tüxen, "Transport Layer Security (TLS) based Key
               Management of the Stream Control Transmission Protocol
               (SCTP) DTLS Chunk", Work in Progress, Internet-Draft,
-              draft-porfiri-tsvwg-sctp-dtls-handshake-02, 8 October
+              draft-porfiri-tsvwg-sctp-dtls-handshake-03, 2 November
               2026, <https://datatracker.ietf.org/doc/html/draft-
-              porfiri-tsvwg-sctp-dtls-handshake-02>.
+              porfiri-tsvwg-sctp-dtls-handshake-03>.
 
    [ETSI-TS-38.413]
               "NG Application Protocol (NGAP) version 18.5.0 Release
