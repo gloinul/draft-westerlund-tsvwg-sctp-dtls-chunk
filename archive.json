@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-08T03:50:47.987492+00:00",
+  "timestamp": "2026-11-19T05:29:03.599438+00:00",
   "repo": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
   "labels": [
     {
@@ -9953,6 +9953,103 @@
           "body": "",
           "createdAt": "2026-11-02T07:02:40Z",
           "updatedAt": "2026-11-02T07:02:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 186,
+      "id": "PR_kwDOKszxDc8AAAABP8C7eg",
+      "title": "Add support for SCTP_DTLS_NEW_EPOCH_EVENT",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/186",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This addresses #183.",
+      "createdAt": "2026-11-17T20:36:13Z",
+      "updatedAt": "2026-11-18T15:45:36Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "72fab8bfd699e947dc1ad7acd83deee4f91038f7",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "issue183",
+      "headRefOid": "1447965e0e7e9b50120f31ba7bf8d6bc42f8494c",
+      "closedAt": "2026-11-18T15:45:36Z",
+      "mergedAt": "2026-11-18T15:45:36Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "101e37a5e4d62314fbe2842797daf4e49e4d9aef"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABYsIY7A",
+          "commit": {
+            "abbreviatedOid": "1447965"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-11-18T06:38:26Z",
+          "updatedAt": "2026-11-18T06:38:26Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKszxDc8AAAABYzrxpg",
+          "commit": {
+            "abbreviatedOid": "1447965"
+          },
+          "author": "gloinul",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-11-18T15:36:06Z",
+          "updatedAt": "2026-11-18T15:36:06Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 187,
+      "id": "PR_kwDOKszxDc8AAAABQKXgdw",
+      "title": "Text for abstract API.",
+      "url": "https://github.com/gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk/pull/187",
+      "state": "MERGED",
+      "author": "gloinul",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-11-18T16:08:47Z",
+      "updatedAt": "2026-11-18T18:13:08Z",
+      "baseRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "baseRefName": "main",
+      "baseRefOid": "101e37a5e4d62314fbe2842797daf4e49e4d9aef",
+      "headRepository": "gloinul/draft-westerlund-tsvwg-sctp-dtls-chunk",
+      "headRefName": "new-epoch-mw",
+      "headRefOid": "abaf54e2af35ed77a4980c864467a1fb1df6c772",
+      "closedAt": "2026-11-18T18:13:08Z",
+      "mergedAt": "2026-11-18T18:13:08Z",
+      "mergedBy": "gloinul",
+      "mergeCommit": {
+        "oid": "36d12afa8061e6475256c2c377f4721df73970a3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKszxDc8AAAABY0d7KQ",
+          "commit": {
+            "abbreviatedOid": "a7a2c82"
+          },
+          "author": "teiclap",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "when receives a message protected with a new DKC.\n",
+          "createdAt": "2026-11-18T16:17:30Z",
+          "updatedAt": "2026-11-18T16:17:30Z",
           "comments": []
         }
       ]
